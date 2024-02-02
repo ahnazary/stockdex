@@ -4,9 +4,9 @@ on:
   push:
     paths:
       - 'finance/**'
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
     paths:
       - 'finance/**'
   
