@@ -1,0 +1,30 @@
+---
+fail_fast: false
+repos:
+  - repo: https://github.com/psf/black
+    rev: 22.3.0
+    hooks:
+    - id: black
+      language: python
+      types: [python]
+      args: [--line-length=99, --diff]
+
+  - repo: https://github.com/pycqa/isort
+    rev: 5.13.2
+    hooks:
+    - id: isort
+      name: isort (python)
+      args:
+        - --profile=black
+        - --line-width=99
+        - --diff
+
+  - repo: https://github.com/pycqa/flake8
+    rev: 6.1.0
+    hooks:
+    - id: flake8
+      name: flake8 (python)
+      args: [
+             --max-line-length=99,
+              --extend-ignore=E402
+      ] 

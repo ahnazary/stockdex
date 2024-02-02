@@ -1,0 +1,11 @@
+**/__pycache__
+**/settings.json
+.vscode
+.env
+.DS_Store
+**/pytest_cache
+**/.pytest_cache
+**/*.ipynb
+**.log
+finance/src/data**
+.ruff_cache**
