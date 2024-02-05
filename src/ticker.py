@@ -132,9 +132,47 @@ class Ticker:
 
         return data_df.T
 
+    def balance_sheet(self) -> pd.DataFrame:
+        """
+        Get balance sheet for the ticker
 
+        Returns:
+        pd.DataFrame: A pandas DataFrame including the balance sheet
+        visible in the Yahoo Finance statistics page for the ticker
+        """
+
+        # URL of the website to scrape
+        url = f"https://finance.yahoo.com/quote/{self.ticker}/balance-sheet"
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
+        }
+        response = self.get_response(url, headers)
+
+        # Parse the HTML content of the website
+        soup = BeautifulSoup(response.content, "html.parser")
+
+        # <div class="" data-test="fin-row">
+        raw_data = soup.find_all("div", {"data-test": "fin-row"})
+
+        data_df = pd.DataFrame()
+        for item in raw_data:
+            # get criteria. e.g. "Total Revenue"
+            major_div = item.find_all("div", {"class": True})[0]
+            criteria = major_div.find_all("div", {"class": True})[0].find("span").text
+
+            # get data. e.g. "274515000000"
+            minor_div = major_div.find_all("div", {"class": "Ta(c)"})
+            data_list = []
+            for div in minor_div:
+                data_list.append(div.text)
+
+            data_df[criteria] = data_list
+
+        return data_df.T
+        
 if __name__ == "__main__":
     ticker = Ticker("AAPL")
     # ticker.summary()
     # ticker.statistics()
     ticker.income_stmt()
+    ticker.balance_sheet()
