@@ -2,7 +2,6 @@
 Moduel for the Ticker class
 """
 
-import httpx
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
