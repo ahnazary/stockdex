@@ -1,3 +1,4 @@
 pandas==2.0.3
 beautifulsoup4==4.12.2
 pytest
+requests==2.31.0

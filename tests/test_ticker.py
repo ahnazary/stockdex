@@ -1,12 +1,16 @@
-from src.ticker import Ticker
 import pytest
 
+from src.ticker import Ticker
 
-@pytest.mark.parametrize("ticker, expected_response", [
-    ("AAPL", 200),
-    ("GOOGL", 200),
-    ("MSFT", 200),
-])
+
+@pytest.mark.parametrize(
+    "ticker, expected_response",
+    [
+        ("AAPL", 200),
+        ("GOOGL", 200),
+        ("MSFT", 200),
+    ],
+)
 def test_get_response(ticker, expected_response):
     # Create a Ticker object
     ticker = Ticker(ticker)
