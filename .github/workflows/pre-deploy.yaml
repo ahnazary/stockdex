@@ -3,12 +3,14 @@ name: pre-deploy (linters)
 on:
   push:
     paths:
-      - 'finance/**'
+      - src/**.py
+      - tests/**.py
     branches: [ main ]
   pull_request:
     branches: [ main ]
     paths:
-      - 'finance/**'
+      - src/**.py
+      - tests/**.py
   
 jobs:
   pylint:
