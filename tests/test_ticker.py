@@ -1,6 +1,7 @@
 from src.ticker import Ticker
 import pytest
 
+
 @pytest.mark.parametrize("ticker, expected_response", [
     ("AAPL", 200),
     ("GOOGL", 200),

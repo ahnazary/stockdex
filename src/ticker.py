@@ -14,6 +14,10 @@ class Ticker:
 
     def __init__(self, ticker: str) -> None:
         self.ticker = ticker
+        self.request_headers = {
+            "User-Agent": """Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+            AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"""
+        }
 
     def get_response(self, url: str, headers: dict = None) -> requests.Response:
         """
@@ -76,10 +80,7 @@ class Ticker:
 
         # URL of the website to scrape
         url = f"https://finance.yahoo.com/quote/{self.ticker}/key-statistics"
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
-        }
-        response = self.get_response(url, headers)
+        response = self.get_response(url, self.request_headers)
 
         # Parse the HTML content of the website
         soup = BeautifulSoup(response.content, "html.parser")
@@ -104,10 +105,7 @@ class Ticker:
 
         # URL of the website to scrape
         url = f"https://finance.yahoo.com/quote/{self.ticker}/financials"
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
-        }
-        response = self.get_response(url, headers)
+        response = self.get_response(url, self.request_headers)
 
         # Parse the HTML content of the website
         soup = BeautifulSoup(response.content, "html.parser")
@@ -142,10 +140,7 @@ class Ticker:
 
         # URL of the website to scrape
         url = f"https://finance.yahoo.com/quote/{self.ticker}/balance-sheet"
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
-        }
-        response = self.get_response(url, headers)
+        response = self.get_response(url, self.request_headers)
 
         # Parse the HTML content of the website
         soup = BeautifulSoup(response.content, "html.parser")
@@ -180,10 +175,7 @@ class Ticker:
 
         # URL of the website to scrape
         url = f"https://finance.yahoo.com/quote/{self.ticker}/cash-flow"
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
-        }
-        response = self.get_response(url, headers)
+        response = self.get_response(url, self.request_headers)
 
         # Parse the HTML content of the website
         soup = BeautifulSoup(response.content, "html.parser")
@@ -218,10 +210,7 @@ class Ticker:
 
         # URL of the website to scrape
         url = f"https://finance.yahoo.com/quote/{self.ticker}/analysis"
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
-        }
-        response = self.get_response(url, headers)
+        response = self.get_response(url, self.request_headers)
 
         # Parse the HTML content of the website
         soup = BeautifulSoup(response.content, "html.parser")
@@ -242,12 +231,3 @@ class Ticker:
                 data_df[criteria] = data_list
 
         return data_df.T
-
-if __name__ == "__main__":
-    ticker = Ticker("AAPL")
-    # ticker.summary()
-    # ticker.statistics()
-    # ticker.income_stmt()
-    # ticker.balance_sheet()
-    # ticker.cash_flow()
-    ticker.analysis()
