@@ -1,6 +1,6 @@
 import pytest
 
-from src.ticker import Ticker
+from stockdex.ticker import Ticker
 
 
 @pytest.mark.parametrize(
