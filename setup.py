@@ -1,8 +1,8 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='stockex',
-    version='0.1',
+    name='stockdex',
+    version='0.1.0',
     packages=find_packages(),
     install_requires=[
         'pandas==2.0.3',

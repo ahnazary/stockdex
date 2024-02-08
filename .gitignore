@@ -10,3 +10,5 @@
 finance/src/data**
 .ruff_cache**
 *.html
+dist/
+*.egg-info
