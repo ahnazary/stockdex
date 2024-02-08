@@ -1,31 +1,26 @@
-# python-template-repo
-Python template repository: A ready-to-use template repository with generic Github action workflows, directory structure and files. 
+# Stockdex
 
-## Setup sphinx documentation
+Stockdex is a Python package that provides a simple interface to access financial data from Yahoo Finance.
 
-1. Install sphinx requirements (already in requirements.txt)
+# Installation 
 
-```bash
-pip install -r requirements.txt
-```
-
-2 . Create sphinx documentation base files
+Install the package using pip:
 
 ```bash
-sphinx-quickstart         
-sphinx-apidoc -o docs src
-```
+pip install stockdex
+``` 
 
-3. Build sphinx documentation
+# Usage
 
-```bash
-cd docs
-make html
-```
+```python
+from stockdex import Ticker
 
-or 
+ticker = Ticker('AAPL')
 
-```bash
-cd docs
-sphinx-build docs build    
+summary = ticker.summary()
+statistics = ticker.statistics()
+income_stmt = ticker.income_stmt()
+balance_sheet = ticker.balance_sheet()
+cash_flow = ticker.cash_flow()
+analysis = ticker.analysis()
 ```
