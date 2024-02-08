@@ -9,4 +9,4 @@
 **.log
 finance/src/data**
 .ruff_cache**
-*+.html
+*.html
