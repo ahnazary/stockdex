@@ -1,4 +1,4 @@
-[![Publish Python Package to PyPI](https://github.com/ahnazary/stockdex/actions/workflows/publish-package.yaml/badge.svg?branch=main)](https://github.com/ahnazary/stockdex/actions/workflows/publish-package.yaml)
+[![Publish Python Package to PyPI](https://github.com/ahnazary/stockdex/actions/workflows/publish-package.yaml/badge.svg)](https://github.com/ahnazary/stockdex/actions/workflows/publish-package.yaml)
 
 # Stockdex
 
