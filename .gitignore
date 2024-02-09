@@ -12,3 +12,4 @@ finance/src/data**
 *.html
 dist/
 *.egg-info
+__version__.py

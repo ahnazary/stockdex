@@ -1,9 +1,8 @@
 name: Publish Python Package to PyPI
 
 on:
-  push:
-    tags:
-      - '*'
+  release:
+    types: [created]
 
 jobs:
   build-and-publish:
@@ -13,11 +12,13 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.x'
+        python-version: '3.11'
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install setuptools wheel twine
+    - name: Extract tag name and set version
+      run: echo "VERSION=${GITHUB_REF#refs/tags/}" > __version__.py
     - name: Build and publish to PyPI
       env:
         TWINE_USERNAME: __token__

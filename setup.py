@@ -1,10 +1,10 @@
 from setuptools import find_packages, setup
 
-from __version__ import version
+from __version__ import VERSION
 
 setup(
     name="stockdex",
-    version=version,
+    version=VERSION,
     packages=find_packages(),
     install_requires=open("requirements.txt").read().splitlines(),
     python_requires=">=3.8",
