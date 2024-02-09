@@ -18,7 +18,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install setuptools wheel twine
     - name: Extract tag name and set version
-      run: echo "VERSION=${GITHUB_REF#refs/tags/}" > __version__.py
+      run: echo "VERSION=\"${GITHUB_REF#refs/tags/}\"" > __version__.py
     - name: Build and publish to PyPI
       env:
         TWINE_USERNAME: __token__
