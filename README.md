@@ -1,3 +1,5 @@
+[![Publish Python Package to PyPI](https://github.com/ahnazary/stockdex/actions/workflows/publish-package.yaml/badge.svg?branch=main)](https://github.com/ahnazary/stockdex/actions/workflows/publish-package.yaml)
+
 # Stockdex
 
 Stockdex is a Python package that provides a simple interface to access financial data from Yahoo Finance.
