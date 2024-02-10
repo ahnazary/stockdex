@@ -56,3 +56,54 @@ def test_analysis(ticker, expected_response):
     # Check if the response is as expected
     assert isinstance(analysis_df, pd.DataFrame)
     assert analysis_df.shape[0] > 0
+
+
+@pytest.mark.parametrize(
+    "ticker, expected_response",
+    [
+        ("AAPL", 200),
+        ("GOOGL", 200),
+        ("MSFT", 200),
+    ],
+)
+def test_summary(ticker, expected_response):
+    ticker = Ticker(ticker)
+    summary_df = ticker.summary()
+
+    # Check if the response is as expected
+    assert isinstance(summary_df, pd.DataFrame)
+    assert summary_df.shape[0] > 0
+
+
+@pytest.mark.parametrize(
+    "ticker, expected_response",
+    [
+        ("AAPL", 200),
+        ("GOOGL", 200),
+        ("MSFT", 200),
+    ],
+)
+def test_statistics(ticker, expected_response):
+    ticker = Ticker(ticker)
+    statistics_df = ticker.statistics()
+
+    # Check if the response is as expected
+    assert isinstance(statistics_df, pd.DataFrame)
+    assert statistics_df.shape[0] > 0
+
+
+@pytest.mark.parametrize(
+    "ticker, expected_response",
+    [
+        ("AAPL", 200),
+        ("GOOGL", 200),
+        ("MSFT", 200),
+    ],
+)
+def test_income_stmt(ticker, expected_response):
+    ticker = Ticker(ticker)
+    income_stmt_df = ticker.income_stmt()
+
+    # Check if the response is as expected
+    assert isinstance(income_stmt_df, pd.DataFrame)
+    assert income_stmt_df.shape[0] > 0
