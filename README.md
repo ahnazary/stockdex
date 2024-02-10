@@ -2,7 +2,7 @@
 
 # Stockdex
 
-Stockdex is a Python package that provides a simple interface to access financial data from Yahoo Finance.
+Stockdex is a Python package that provides a simple interface to access financial data from Yahoo Finance. Data is returned as a pandas DataFrame.
 
 # Installation 
 
