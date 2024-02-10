@@ -5,6 +5,7 @@ Moduel for the Ticker class
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
+import warnings
 
 
 class Ticker:
@@ -13,7 +14,13 @@ class Ticker:
     """
 
     def __init__(self, ticker: str) -> None:
-        self.ticker = ticker
+        if any(map(str.islower, ticker)):
+            warnings.warn(
+                """Ticker symbols are usually uppercase.
+                Please check your symbol or convert it to uppercase.""",
+                UserWarning
+            )
+        self.ticker = ticker.upper()
         self.request_headers = {
             "User-Agent": """Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"""  # noqa E501
         }
@@ -35,7 +42,7 @@ class Ticker:
 
         # If the HTTP GET request can't be served
         if response.status_code != 200:
-            raise Exception("Failed to load page")
+            raise Exception("Failed to load page, check if the ticker symbol exists")
 
         return response
 
@@ -230,3 +237,41 @@ class Ticker:
                 data_df[criteria] = data_list
 
         return data_df.T
+
+    def options(self) -> pd.DataFrame:
+        """
+        TODO: fix this method
+        Get options for the ticker
+
+        Returns:
+        pd.DataFrame: A pandas DataFrame including the options
+        visible in the Yahoo Finance statistics page for the ticker
+        """
+
+        # URL of the website to scrape
+        url = f"https://finance.yahoo.com/quote/{self.ticker}/options"
+        response = self.get_response(url, self.request_headers)
+
+        # Parse the HTML content of the website
+        soup = BeautifulSoup(response.content, "html.parser")
+
+        # gets calls and puts
+        tables = soup.find_all("table")
+        result, headers, data = [], [], []
+
+        for item in tables:
+            thead = item.find("thead")
+            tbody = item.find("tbody")
+
+            # get headers
+            for th in thead.find_all("th"):
+                headers.append(th.text)
+
+            # get data
+            for tr in tbody.find_all("tr"):
+                row = tr.find_all("td")
+                data.append([data.text for data in row])
+
+            result.append(pd.DataFrame(data, columns=headers))
+            headers, data = [], []
+        return result

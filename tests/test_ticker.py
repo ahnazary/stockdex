@@ -25,14 +25,14 @@ def test_get_response(ticker, expected_response):
 
 
 @pytest.mark.parametrize(
-    "ticker, expected_response",
+    "ticker",
     [
-        ("AAPL", 200),
-        ("GOOGL", 200),
-        ("MSFT", 200),
+        ("AAPL"),
+        ("GOOGL"),
+        ("MSFT"),
     ],
 )
-def test_cash_flow(ticker, expected_response):
+def test_cash_flow(ticker):
     ticker = Ticker(ticker)
     cash_flow_df = ticker.cash_flow()
 
@@ -42,14 +42,14 @@ def test_cash_flow(ticker, expected_response):
 
 
 @pytest.mark.parametrize(
-    "ticker, expected_response",
+    "ticker",
     [
-        ("AAPL", 200),
-        ("GOOGL", 200),
-        ("MSFT", 200),
+        ("AAPL"),
+        ("GOOGL"),
+        ("MSFT"),
     ],
 )
-def test_analysis(ticker, expected_response):
+def test_analysis(ticker):
     ticker = Ticker(ticker)
     analysis_df = ticker.analysis()
 
@@ -59,14 +59,14 @@ def test_analysis(ticker, expected_response):
 
 
 @pytest.mark.parametrize(
-    "ticker, expected_response",
+    "ticker",
     [
-        ("AAPL", 200),
-        ("GOOGL", 200),
-        ("MSFT", 200),
+        ("AAPL"),
+        ("GOOGL"),
+        ("MSFT"),
     ],
 )
-def test_summary(ticker, expected_response):
+def test_summary(ticker):
     ticker = Ticker(ticker)
     summary_df = ticker.summary()
 
@@ -76,14 +76,14 @@ def test_summary(ticker, expected_response):
 
 
 @pytest.mark.parametrize(
-    "ticker, expected_response",
+    "ticker",
     [
-        ("AAPL", 200),
-        ("GOOGL", 200),
-        ("MSFT", 200),
+        ("AAPL"),
+        ("GOOGL"),
+        ("MSFT"),
     ],
 )
-def test_statistics(ticker, expected_response):
+def test_statistics(ticker):
     ticker = Ticker(ticker)
     statistics_df = ticker.statistics()
 
@@ -93,14 +93,14 @@ def test_statistics(ticker, expected_response):
 
 
 @pytest.mark.parametrize(
-    "ticker, expected_response",
+    "ticker",
     [
-        ("AAPL", 200),
-        ("GOOGL", 200),
-        ("MSFT", 200),
+        ("AAPL"),
+        ("GOOGL"),
+        ("MSFT"),
     ],
 )
-def test_income_stmt(ticker, expected_response):
+def test_income_stmt(ticker):
     ticker = Ticker(ticker)
     income_stmt_df = ticker.income_stmt()
 
