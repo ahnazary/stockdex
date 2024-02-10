@@ -1,8 +1,7 @@
+import pandas as pd
 import pytest
 
 from stockdex.ticker import Ticker
-
-import pandas as pd
 
 
 @pytest.mark.parametrize(

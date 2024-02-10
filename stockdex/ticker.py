@@ -2,10 +2,13 @@
 Moduel for the Ticker class
 """
 
+import warnings
+
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
-import warnings
+
+from stockdex.lib import get_user_agent
 
 
 class Ticker:
@@ -18,11 +21,11 @@ class Ticker:
             warnings.warn(
                 """Ticker symbols are usually uppercase.
                 Please check your symbol or convert it to uppercase.""",
-                UserWarning
+                UserWarning,
             )
         self.ticker = ticker.upper()
         self.request_headers = {
-            "User-Agent": """Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"""  # noqa E501
+            "User-Agent": get_user_agent()[0],
         }
 
     def get_response(self, url: str, headers: dict = None) -> requests.Response:

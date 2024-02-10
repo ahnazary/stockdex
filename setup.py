@@ -1,6 +1,5 @@
-from setuptools import find_packages, setup
-
 from __version__ import VERSION
+from setuptools import find_packages, setup
 
 setup(
     name="stockdex",
