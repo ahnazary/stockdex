@@ -33,7 +33,7 @@ def test_get_response(ticker, expected_response):
 )
 def test_cash_flow(ticker):
     ticker = Ticker(ticker)
-    cash_flow_df = ticker.cash_flow()
+    cash_flow_df = ticker.cash_flow
 
     # Check if the response is as expected
     assert isinstance(cash_flow_df, pd.DataFrame)
@@ -50,7 +50,7 @@ def test_cash_flow(ticker):
 )
 def test_analysis(ticker):
     ticker = Ticker(ticker)
-    analysis_df = ticker.analysis()
+    analysis_df = ticker.analysis
 
     # Check if the response is as expected
     assert isinstance(analysis_df, pd.DataFrame)
@@ -67,7 +67,7 @@ def test_analysis(ticker):
 )
 def test_summary(ticker):
     ticker = Ticker(ticker)
-    summary_df = ticker.summary()
+    summary_df = ticker.summary
 
     # Check if the response is as expected
     assert isinstance(summary_df, pd.DataFrame)
@@ -104,8 +104,42 @@ def test_statistics(ticker):
 )
 def test_income_stmt(ticker):
     ticker = Ticker(ticker)
-    income_stmt_df = ticker.income_stmt()
+    income_stmt_df = ticker.income_stmt
 
     # Check if the response is as expected
     assert isinstance(income_stmt_df, pd.DataFrame)
     assert income_stmt_df.shape[0] > 0
+
+
+@pytest.mark.parametrize(
+    "ticker",
+    [
+        ("AAPL"),
+        ("GOOGL"),
+        ("MSFT"),
+    ],
+)
+def test_calls(ticker):
+    ticker = Ticker(ticker)
+    calls = ticker.calls
+
+    # Check if the response is as expected
+    assert isinstance(calls, pd.DataFrame)
+    assert calls.shape[0] > 0
+
+
+@pytest.mark.parametrize(
+    "ticker",
+    [
+        ("AAPL"),
+        ("GOOGL"),
+        ("MSFT"),
+    ],
+)
+def test_puts(ticker):
+    ticker = Ticker(ticker)
+    puts = ticker.puts
+
+    # Check if the response is as expected
+    assert isinstance(puts, pd.DataFrame)
+    assert puts.shape[0] > 0

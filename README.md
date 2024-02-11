@@ -21,12 +21,17 @@ pip install stockdex
 ```python
 from stockdex import Ticker
 
+# Pick arbitrary ticker
 ticker = Ticker('AAPL')
 
-summary = ticker.summary()
-statistics = ticker.statistics()
-income_stmt = ticker.income_stmt()
-balance_sheet = ticker.balance_sheet()
-cash_flow = ticker.cash_flow()
-analysis = ticker.analysis()
+summary = ticker.summary
+statistics = ticker.statistics
+income_stmt = ticker.income_stmt
+balance_sheet = ticker.balance_sheet
+cash_flow = ticker.cash_flow
+analysis = ticker.analysis
+
+# Options
+calls = ticker.calls
+puts = ticker.puts
 ```

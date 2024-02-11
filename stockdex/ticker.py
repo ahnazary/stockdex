@@ -49,6 +49,7 @@ class Ticker:
 
         return response
 
+    @property
     def summary(self) -> pd.DataFrame:
         """
         Get data for the ticker
@@ -78,6 +79,7 @@ class Ticker:
 
         return data_df.T
 
+    @property
     def statistics(self) -> pd.DataFrame:
         """
         Get statistics for the ticker
@@ -103,6 +105,7 @@ class Ticker:
 
         return data_df.T
 
+    @property
     def income_stmt(self) -> pd.DataFrame:
         """
         Get income statement for the ticker
@@ -138,6 +141,7 @@ class Ticker:
 
         return data_df.T
 
+    @property
     def balance_sheet(self) -> pd.DataFrame:
         """
         Get balance sheet for the ticker
@@ -173,6 +177,7 @@ class Ticker:
 
         return data_df.T
 
+    @property
     def cash_flow(self) -> pd.DataFrame:
         """
         Get cash flow for the ticker
@@ -208,6 +213,7 @@ class Ticker:
 
         return data_df.T
 
+    @property
     def analysis(self) -> pd.DataFrame:
         """
         Get analysis for the ticker
@@ -241,13 +247,13 @@ class Ticker:
 
         return data_df.T
 
-    def options(self) -> pd.DataFrame:
+    @property
+    def calls(self) -> pd.DataFrame:
         """
-        TODO: fix this method
-        Get options for the ticker
+        Get calls for the ticker
 
         Returns:
-        pd.DataFrame: A pandas DataFrame including the options
+        pd.DataFrame: A pandas DataFrame including the calls
         visible in the Yahoo Finance statistics page for the ticker
         """
 
@@ -260,21 +266,59 @@ class Ticker:
 
         # gets calls and puts
         tables = soup.find_all("table")
-        result, headers, data = [], [], []
+        headers, data = [], []
 
-        for item in tables:
-            thead = item.find("thead")
-            tbody = item.find("tbody")
+        thead = tables[0].find("thead")
+        tbody = tables[0].find("tbody")
+        data_df = pd.DataFrame()
 
-            # get headers
-            for th in thead.find_all("th"):
-                headers.append(th.text)
+        # get headers
+        for th in thead.find_all("th"):
+            headers.append(th.text)
 
-            # get data
-            for tr in tbody.find_all("tr"):
-                row = tr.find_all("td")
-                data.append([data.text for data in row])
+        # get data
+        for tr in tbody.find_all("tr"):
+            row = tr.find_all("td")
+            data.append([data.text for data in row])
 
-            result.append(pd.DataFrame(data, columns=headers))
-            headers, data = [], []
-        return result
+        data_df = pd.DataFrame(data, columns=headers)
+
+        return data_df
+
+    @property
+    def puts(self) -> pd.DataFrame:
+        """
+        Get puts for the ticker
+
+        Returns:
+        pd.DataFrame: A pandas DataFrame including the puts
+        visible in the Yahoo Finance statistics page for the ticker
+        """
+
+        # URL of the website to scrape
+        url = f"https://finance.yahoo.com/quote/{self.ticker}/options"
+        response = self.get_response(url, self.request_headers)
+
+        # Parse the HTML content of the website
+        soup = BeautifulSoup(response.content, "html.parser")
+
+        # gets calls and puts
+        tables = soup.find_all("table")
+        headers, data = [], []
+
+        thead = tables[1].find("thead")
+        tbody = tables[1].find("tbody")
+        data_df = pd.DataFrame()
+
+        # get headers
+        for th in thead.find_all("th"):
+            headers.append(th.text)
+
+        # get data
+        for tr in tbody.find_all("tr"):
+            row = tr.find_all("td")
+            data.append([data.text for data in row])
+
+        data_df = pd.DataFrame(data, columns=headers)
+
+        return data_df
