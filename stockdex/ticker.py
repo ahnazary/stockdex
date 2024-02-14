@@ -4,6 +4,7 @@ Moduel for the Ticker class
 
 import warnings
 
+import httpx
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
@@ -41,8 +42,7 @@ class Ticker:
         """
 
         # Send an HTTP GET request to the website
-        response = requests.get(url, headers=headers)
-
+        response = httpx.get(url, headers=headers)
         # If the HTTP GET request can't be served
         if response.status_code != 200:
             raise Exception("Failed to load page, check if the ticker symbol exists")
@@ -320,5 +320,35 @@ class Ticker:
             data.append([data.text for data in row])
 
         data_df = pd.DataFrame(data, columns=headers)
+
+        return data_df
+
+    @property
+    def profile_key_executives(self) -> pd.DataFrame:
+        """
+        Get profile key executives for the ticker
+
+        Returns:
+        pd.DataFrame: A pandas DataFrame including the profile key executives
+        visible in the Yahoo Finance statistics page for the ticker
+        """
+
+        # URL of the website to scrape
+        url = f"https://finance.yahoo.com/quote/{self.ticker}/profile"
+        response = self.get_response(url, self.request_headers)
+
+        # Parse the HTML content of the website
+        soup = BeautifulSoup(response.content, "html.parser")
+
+        raw_data = soup.find_all("table")
+
+        data_df = pd.DataFrame()
+        data = []
+
+        criteria = [th.text for th in raw_data[0].find_all("thead")[0].find_all("th")]
+        for tr in raw_data[0].find_all("tbody")[0].find_all("tr"):
+            data.append([td.text for td in tr.find_all("td")])
+
+        data_df = pd.DataFrame(data, columns=criteria)
 
         return data_df

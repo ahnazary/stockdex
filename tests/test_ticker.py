@@ -143,3 +143,20 @@ def test_puts(ticker):
     # Check if the response is as expected
     assert isinstance(puts, pd.DataFrame)
     assert puts.shape[0] > 0
+
+
+@pytest.mark.parametrize(
+    "ticker",
+    [
+        ("AAPL"),
+        ("GOOGL"),
+        ("ASML"),
+    ],
+)
+def test_profile_key_executivess(ticker):
+    ticker = Ticker(ticker)
+    profile_key_executives = ticker.profile_key_executives
+
+    # Check if the response is as expected
+    assert isinstance(profile_key_executives, pd.DataFrame)
+    assert profile_key_executives.shape[0] > 0
