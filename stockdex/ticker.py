@@ -4,7 +4,6 @@ Moduel for the Ticker class
 
 import warnings
 
-import httpx
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
@@ -42,7 +41,7 @@ class Ticker:
         """
 
         # Send an HTTP GET request to the website
-        response = httpx.get(url, headers=headers)
+        response = requests.get(url, headers=headers)
         # If the HTTP GET request can't be served
         if response.status_code != 200:
             raise Exception("Failed to load page, check if the ticker symbol exists")
