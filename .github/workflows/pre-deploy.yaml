@@ -2,9 +2,6 @@ name: pre-deploy (linters)
 
 on:
   push:
-    paths:
-      - src/**.py
-      - tests/**.py
     branches: [ main ]
   pull_request:
     branches: [ main ]
