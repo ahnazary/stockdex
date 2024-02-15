@@ -18,20 +18,46 @@ pip install stockdex
 
 # Usage
 
+Create a `Ticker` object by passing the ticker symbol of the stock you want to access. Then, you can access the following data:
+
 ```python
 from stockdex import Ticker
 
 # Pick arbitrary ticker
 ticker = Ticker('AAPL')
+```
 
+## Summary data:
+```python
 summary = ticker.summary
+```
+
+## Historical data:
+```python
 statistics = ticker.statistics
+```
+
+## Financial data:
+```python
 income_stmt = ticker.income_stmt
 balance_sheet = ticker.balance_sheet
 cash_flow = ticker.cash_flow
-analysis = ticker.analysis
+```
 
-# Options
+## Analyst data:
+```python
+analysis = ticker.analysis
+```
+
+## Option data:
+```python
 calls = ticker.calls
 puts = ticker.puts
+```
+
+## Profile data:
+```python
+key_executives = ticker.key_executives
+description = ticker.description
+corporate_governance = ticker.corporate_governance
 ```
