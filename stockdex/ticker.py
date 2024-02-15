@@ -323,7 +323,7 @@ class Ticker:
         return data_df
 
     @property
-    def profile_key_executives(self) -> pd.DataFrame:
+    def key_executives(self) -> pd.DataFrame:
         """
         Get profile key executives for the ticker
 

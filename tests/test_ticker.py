@@ -153,10 +153,10 @@ def test_puts(ticker):
         ("ASML"),
     ],
 )
-def test_profile_key_executivess(ticker):
+def test_key_executives(ticker):
     ticker = Ticker(ticker)
-    profile_key_executives = ticker.profile_key_executives
+    key_executives = ticker.key_executives
 
     # Check if the response is as expected
-    assert isinstance(profile_key_executives, pd.DataFrame)
-    assert profile_key_executives.shape[0] > 0
+    assert isinstance(key_executives, pd.DataFrame)
+    assert key_executives.shape[0] > 0
