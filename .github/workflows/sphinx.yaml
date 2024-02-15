@@ -3,6 +3,8 @@ name: Build sphinx docs and deploy to GitHub Pages
 on:
   release:
     types: [published, edited, deleted]
+  # manually trigger a workflow
+  workflow_dispatch:
 
 jobs:
   build:
