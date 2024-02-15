@@ -1,0 +1,35 @@
+name: Build sphinx docs and deploy to GitHub Pages
+
+on:
+  release:
+    types: [published, edited, deleted]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Build Sphinx documentation
+      run: |
+        cd docs
+        sphinx-build . build  
+        touch build/.nojekyll
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./docs/build/
+        publish_branch: gh-pages
+        destination_dir: docs
