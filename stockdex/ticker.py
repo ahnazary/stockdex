@@ -351,3 +351,45 @@ class Ticker:
         data_df = pd.DataFrame(data, columns=criteria)
 
         return data_df
+
+    @property
+    def description(self) -> str:
+        """
+        Get the description of the ticker
+
+        Returns:
+        str: A string including the description of the ticker
+        visible in the Yahoo Finance profile page for the ticker
+        """
+
+        # URL of the website to scrape
+        url = f"https://finance.yahoo.com/quote/{self.ticker}/profile"
+        response = self.get_response(url, self.request_headers)
+
+        # Parse the HTML content of the website
+        soup = BeautifulSoup(response.content, "html.parser")
+
+        raw_data = soup.find_all("p")
+
+        return raw_data[2].text
+
+    @property
+    def corporate_governance(self) -> str:
+        """
+        Get the description of the ticker
+
+        Returns:
+        str: A string including the description of the ticker
+        visible in the Yahoo Finance profile page for the ticker
+        """
+
+        # URL of the website to scrape
+        url = f"https://finance.yahoo.com/quote/{self.ticker}/profile"
+        response = self.get_response(url, self.request_headers)
+
+        # Parse the HTML content of the website
+        soup = BeautifulSoup(response.content, "html.parser")
+
+        raw_data = soup.find_all("p")
+
+        return raw_data[3].text

@@ -160,3 +160,39 @@ def test_key_executives(ticker):
     # Check if the response is as expected
     assert isinstance(key_executives, pd.DataFrame)
     assert key_executives.shape[0] > 0
+
+
+@pytest.mark.parametrize(
+    "ticker",
+    [
+        ("AAPL"),
+        ("GOOGL"),
+        ("ASML"),
+        ("TSLA"),
+    ],
+)
+def test_description(ticker):
+    ticker = Ticker(ticker)
+    description = ticker.description
+
+    # Check if the response is as expected
+    assert isinstance(description, str)
+    assert len(description) > 0
+
+
+@pytest.mark.parametrize(
+    "ticker",
+    [
+        ("AAPL"),
+        ("GOOGL"),
+        ("ASML"),
+        ("TSLA"),
+    ],
+)
+def test_corporate_governance(ticker):
+    ticker = Ticker(ticker)
+    corporate_governance = ticker.corporate_governance
+
+    # Check if the response is as expected
+    assert isinstance(corporate_governance, str)
+    assert len(corporate_governance) > 0
