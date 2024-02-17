@@ -1,16 +1,13 @@
-
-[![Documentation Status](https://readthedocs.org/projects/stockdex/badge/?version=latest)](https://ahnazary.github.io/stockdex/)
-
 [![Publish Python Package to PyPI](https://github.com/ahnazary/stockdex/actions/workflows/publish-package.yaml/badge.svg)](https://github.com/ahnazary/stockdex/actions/workflows/publish-package.yaml)
 [![PyPI version](https://badge.fury.io/py/stockdex.svg)](https://badge.fury.io/py/stockdex)
 ![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)
 ![Code style: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)
 
+[![Documentation Status](https://readthedocs.org/projects/stockdex/badge/?version=latest)](https://ahnazary.github.io/stockdex/)
+
 # Stockdex
 
 Stockdex is a Python package that provides a simple interface to access financial data from Yahoo Finance. Data is returned as a pandas DataFrame.
-
-Check out sphinx documentation [here](https://ahnazary.github.io/stockdex/) for more information about the package.
 
 # Installation 
 
@@ -72,3 +69,6 @@ major_holders = ticker.major_holders
 top_institutional_holders = ticker.top_institutional_holders
 top_mutual_fund_holders = ticker.top_mutual_fund_holders
 ```
+
+
+Check out sphinx documentation [here](https://ahnazary.github.io/stockdex/) for more information about the package.
