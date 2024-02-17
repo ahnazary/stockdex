@@ -65,3 +65,10 @@ key_executives = ticker.key_executives
 description = ticker.description
 corporate_governance = ticker.corporate_governance
 ```
+
+## Holders data:
+```python
+major_holders = ticker.major_holders
+top_institutional_holders = ticker.top_institutional_holders
+top_mutual_fund_holders = ticker.top_mutual_fund_holders
+```

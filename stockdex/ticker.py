@@ -393,3 +393,91 @@ class Ticker:
         raw_data = soup.find_all("p")
 
         return raw_data[3].text
+
+    @property
+    def major_holders(self) -> pd.DataFrame:
+        """
+        Get major holders for the ticker
+
+        Returns:
+        pd.DataFrame: A pandas DataFrame including the major holders
+        visible in the Yahoo Finance statistics page for the ticker
+        """
+
+        # URL of the website to scrape
+        url = f"https://finance.yahoo.com/quote/{self.ticker}/holders"
+        response = self.get_response(url, self.request_headers)
+
+        # Parse the HTML content of the website
+        soup = BeautifulSoup(response.content, "html.parser")
+
+        raw_data = soup.find_all("div", {"data-test": "holder-summary"})
+
+        data_df = pd.DataFrame()
+        data = []
+
+        table = raw_data[0].find_all("tr")
+        for tr in table:
+            data.append([td.text for td in tr.find_all("td")])
+
+        data_df = pd.DataFrame(data)
+        data_df.columns = ["percentage", "holders"]
+        return data_df
+
+    @property
+    def top_institutional_holders(self) -> pd.DataFrame:
+        """
+        Get top institutional holders for the ticker
+
+        Returns:
+        pd.DataFrame: A pandas DataFrame including the top institutional holders
+        visible in the Yahoo Finance statistics page for the ticker
+        """
+
+        # URL of the website to scrape
+        url = f"https://finance.yahoo.com/quote/{self.ticker}/holders"
+        response = self.get_response(url, self.request_headers)
+
+        # Parse the HTML content of the website
+        soup = BeautifulSoup(response.content, "html.parser")
+        raw_data = soup.find_all("table")
+
+        data_df = pd.DataFrame()
+        data = []
+
+        table = raw_data[1].find_all("tr")
+        for tr in table:
+            data.append([td.text for td in tr.find_all("td")])
+
+        data_df = pd.DataFrame(data)
+        data_df.columns = ["holder", "shares", "date_reported", "percentage", "value"]
+        return data_df
+
+    @property
+    def top_mutual_fund_holders(self) -> pd.DataFrame:
+        """
+        Get top mutual fund holders for the ticker
+
+        Returns:
+        pd.DataFrame: A pandas DataFrame including the top mutual fund holders
+        visible in the Yahoo Finance statistics page for the ticker
+        """
+
+        # URL of the website to scrape
+        url = f"https://finance.yahoo.com/quote/{self.ticker}/holders"
+        response = self.get_response(url, self.request_headers)
+
+        # Parse the HTML content of the website
+        soup = BeautifulSoup(response.content, "html.parser")
+        raw_data = soup.find_all("table")
+
+        data_df = pd.DataFrame()
+        data = []
+
+        table = raw_data[2].find_all("tr")
+        for tr in table:
+            data.append([td.text for td in tr.find_all("td")])
+
+        data_df = pd.DataFrame(data)
+        data_df.columns = ["holder", "shares", "date_reported", "percentage", "value"]
+        return data_df

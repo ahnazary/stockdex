@@ -196,3 +196,60 @@ def test_corporate_governance(ticker):
     # Check if the response is as expected
     assert isinstance(corporate_governance, str)
     assert len(corporate_governance) > 0
+
+
+@pytest.mark.parametrize(
+    "ticker",
+    [
+        ("AAPL"),
+        ("GOOGL"),
+        ("ASML"),
+        ("TSLA"),
+    ],
+)
+def test_major_holders(ticker):
+    ticker = Ticker(ticker)
+    major_holders = ticker.major_holders
+
+    # Check if the response is as expected
+    assert isinstance(major_holders, pd.DataFrame)
+    assert major_holders.shape[0] > 0
+    assert major_holders.shape[1] == 2
+
+
+@pytest.mark.parametrize(
+    "ticker",
+    [
+        ("AAPL"),
+        ("GOOGL"),
+        ("ASML"),
+        ("TSLA"),
+    ],
+)
+def test_top_institutional_holders(ticker):
+    ticker = Ticker(ticker)
+    top_institutional_holders = ticker.top_institutional_holders
+
+    # Check if the response is as expected
+    assert isinstance(top_institutional_holders, pd.DataFrame)
+    assert top_institutional_holders.shape[0] > 0
+    assert top_institutional_holders.shape[1] == 5
+
+
+@pytest.mark.parametrize(
+    "ticker",
+    [
+        ("AAPL"),
+        ("GOOGL"),
+        ("ASML"),
+        ("TSLA"),
+    ],
+)
+def test_top_mutual_fund_holders(ticker):
+    ticker = Ticker(ticker)
+    top_mutual_fund_holders = ticker.top_mutual_fund_holders
+
+    # Check if the response is as expected
+    assert isinstance(top_mutual_fund_holders, pd.DataFrame)
+    assert top_mutual_fund_holders.shape[0] > 0
+    assert top_mutual_fund_holders.shape[1] == 5
