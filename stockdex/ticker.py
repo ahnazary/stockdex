@@ -2,8 +2,6 @@
 Moduel for the Ticker class
 """
 
-import warnings
-
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
@@ -17,12 +15,6 @@ class Ticker:
     """
 
     def __init__(self, ticker: str) -> None:
-        if any(map(str.islower, ticker)):
-            warnings.warn(
-                """Ticker symbols are usually uppercase.
-                Please check your symbol or convert it to uppercase.""",
-                UserWarning,
-            )
         self.ticker = ticker.upper()
         self.request_headers = {
             "User-Agent": get_user_agent()[0],
