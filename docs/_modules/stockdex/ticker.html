@@ -463,7 +463,95 @@
 
         <span class="n">raw_data</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&quot;p&quot;</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">raw_data</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">text</span></div>
+        <span class="k">return</span> <span class="n">raw_data</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">major_holders</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get major holders for the ticker</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        pd.DataFrame: A pandas DataFrame including the major holders</span>
+<span class="sd">        visible in the Yahoo Finance statistics page for the ticker</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># URL of the website to scrape</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://finance.yahoo.com/quote/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/holders&quot;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">request_headers</span><span class="p">)</span>
+
+        <span class="c1"># Parse the HTML content of the website</span>
+        <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">,</span> <span class="s2">&quot;html.parser&quot;</span><span class="p">)</span>
+
+        <span class="n">raw_data</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&quot;div&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;data-test&quot;</span><span class="p">:</span> <span class="s2">&quot;holder-summary&quot;</span><span class="p">})</span>
+
+        <span class="n">data_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">table</span> <span class="o">=</span> <span class="n">raw_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&quot;tr&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">tr</span> <span class="ow">in</span> <span class="n">table</span><span class="p">:</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">td</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">td</span> <span class="ow">in</span> <span class="n">tr</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&quot;td&quot;</span><span class="p">)])</span>
+
+        <span class="n">data_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">data_df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;percentage&quot;</span><span class="p">,</span> <span class="s2">&quot;holders&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">data_df</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">top_institutional_holders</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get top institutional holders for the ticker</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        pd.DataFrame: A pandas DataFrame including the top institutional holders</span>
+<span class="sd">        visible in the Yahoo Finance statistics page for the ticker</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># URL of the website to scrape</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://finance.yahoo.com/quote/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/holders&quot;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">request_headers</span><span class="p">)</span>
+
+        <span class="c1"># Parse the HTML content of the website</span>
+        <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">,</span> <span class="s2">&quot;html.parser&quot;</span><span class="p">)</span>
+        <span class="n">raw_data</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&quot;table&quot;</span><span class="p">)</span>
+
+        <span class="n">data_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">table</span> <span class="o">=</span> <span class="n">raw_data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&quot;tr&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">tr</span> <span class="ow">in</span> <span class="n">table</span><span class="p">:</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">td</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">td</span> <span class="ow">in</span> <span class="n">tr</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&quot;td&quot;</span><span class="p">)])</span>
+
+        <span class="n">data_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">data_df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;holder&quot;</span><span class="p">,</span> <span class="s2">&quot;shares&quot;</span><span class="p">,</span> <span class="s2">&quot;date_reported&quot;</span><span class="p">,</span> <span class="s2">&quot;percentage&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">data_df</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">top_mutual_fund_holders</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get top mutual fund holders for the ticker</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        pd.DataFrame: A pandas DataFrame including the top mutual fund holders</span>
+<span class="sd">        visible in the Yahoo Finance statistics page for the ticker</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># URL of the website to scrape</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://finance.yahoo.com/quote/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/holders&quot;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">request_headers</span><span class="p">)</span>
+
+        <span class="c1"># Parse the HTML content of the website</span>
+        <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">,</span> <span class="s2">&quot;html.parser&quot;</span><span class="p">)</span>
+        <span class="n">raw_data</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&quot;table&quot;</span><span class="p">)</span>
+
+        <span class="n">data_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">table</span> <span class="o">=</span> <span class="n">raw_data</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&quot;tr&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">tr</span> <span class="ow">in</span> <span class="n">table</span><span class="p">:</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">td</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">td</span> <span class="ow">in</span> <span class="n">tr</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&quot;td&quot;</span><span class="p">)])</span>
+
+        <span class="n">data_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">data_df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;holder&quot;</span><span class="p">,</span> <span class="s2">&quot;shares&quot;</span><span class="p">,</span> <span class="s2">&quot;date_reported&quot;</span><span class="p">,</span> <span class="s2">&quot;percentage&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">data_df</span></div>
 </pre></div>
 
            </div>
