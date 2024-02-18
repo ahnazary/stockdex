@@ -161,6 +161,17 @@ str: A string including the description of the ticker
 visible in the Yahoo Finance profile page for the ticker</p>
 </dd></dl>
 
+<dl class="py property">
+<dt class="sig sig-object py" id="stockdex.ticker.Ticker.dividend">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dividend</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">DataFrame</span></em><a class="headerlink" href="#stockdex.ticker.Ticker.dividend" title="Permalink to this definition"></a></dt>
+<dd><p>Get dividends for the ticker</p>
+<p>Args:
+period (str): The period for the dividends</p>
+<p>Returns:
+pd.DataFrame: A pandas DataFrame including the dividends
+visible in the digrin website for the ticker</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="stockdex.ticker.Ticker.get_response">
 <span class="sig-name descname"><span class="pre">get_response</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Response</span></span></span><a class="reference internal" href="_modules/stockdex/ticker.html#Ticker.get_response"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.ticker.Ticker.get_response" title="Permalink to this definition"></a></dt>
