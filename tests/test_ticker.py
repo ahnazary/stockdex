@@ -253,3 +253,22 @@ def test_top_mutual_fund_holders(ticker):
     assert isinstance(top_mutual_fund_holders, pd.DataFrame)
     assert top_mutual_fund_holders.shape[0] > 0
     assert top_mutual_fund_holders.shape[1] == 5
+
+
+@pytest.mark.parametrize(
+    "ticker",
+    [
+        ("AAPL"),
+        ("ASML"),
+        ("CAT"),
+        ("BAC"),
+    ],
+)
+def test_dividends(ticker):
+    ticker = Ticker(ticker)
+    dividend = ticker.dividend
+
+    # Check if the response is as expected
+    assert isinstance(dividend, pd.DataFrame)
+    assert dividend.shape[0] > 0
+    assert dividend.shape[1] == 5
