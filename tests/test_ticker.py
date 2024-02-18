@@ -264,7 +264,7 @@ def test_top_mutual_fund_holders(ticker):
         ("BAC"),
     ],
 )
-def test_dividends(ticker):
+def test_dividend(ticker):
     ticker = Ticker(ticker)
     dividend = ticker.dividend
 
