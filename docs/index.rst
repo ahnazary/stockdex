@@ -1,18 +1,15 @@
 Welcome to stockdex's documentation!
 ====================================
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
 
 
-.. include modules.rst
 .. toctree::
    :maxdepth: 4
    :caption: Contents:
-
+   
+      
+   readme
    modules
-
 
 
 Indices and tables
