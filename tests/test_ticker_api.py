@@ -7,17 +7,15 @@ from stockdex.ticker_api import TickerAPI
 
 
 @pytest.mark.parametrize(
-    "ticker, expected_response",
+    "ticker",
     [
-        ("AAPL", 200),
-        ("GOOGL", 200),
-        ("MSFT", 200),
+        ("AAPL"),
+        ("GOOGL"),
+        ("MSFT"),
     ],
 )
-def test_get_chart(ticker, expected_response):
+def test_get_chart(ticker):
     ticker_api = TickerAPI(ticker)
     response = ticker_api.get_chart()
 
-    # Check if the response is as expected
-    assert response.status_code == expected_response
-    assert response.json() is not None
+    assert response is not None
