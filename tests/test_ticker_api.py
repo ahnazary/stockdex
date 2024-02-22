@@ -3,6 +3,7 @@ Module to test the TickerAPI class
 """
 
 import pytest
+
 from stockdex.ticker_api import TickerAPI
 
 
