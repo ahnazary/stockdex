@@ -10,7 +10,7 @@ class TickerAPI:
         self.ticker = ticker
         self.base_url = "https://query2.finance.yahoo.com/v8/finance/"
         self.headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'  # noqa E501
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"  # noqa E501
         }
 
     def get_chart(self):
