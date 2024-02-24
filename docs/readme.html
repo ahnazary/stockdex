@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project description &mdash; stockdex  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="stockdex" href="modules.html" />
+    <link rel="prev" title="Welcome to stockdex’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            stockdex
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Project description</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#stockdex">Stockdex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#chart-data">Chart data:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#summary-data">Summary data:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#historical-data">Historical data:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#financial-data">Financial data:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#analyst-data">Analyst data:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#option-data">Option data:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#profile-data">Profile data:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#holders-data">Holders data:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dividends-data-from-digrin-webstite">Dividends data from <code class="docutils literal notranslate"><span class="pre">Digrin</span></code> Webstite:</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">stockdex</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">stockdex</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Project description</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/readme.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="project-description">
+<h1>Project description<a class="headerlink" href="#project-description" title="Permalink to this heading"></a></h1>
+<p><a class="reference external" href="https://github.com/ahnazary/stockdex/actions/workflows/publish-package.yaml"><img alt="Publish Python Package to PyPI" src="https://github.com/ahnazary/stockdex/actions/workflows/publish-package.yaml/badge.svg" /></a>
+<a class="reference external" href="https://badge.fury.io/py/stockdex"><img alt="PyPI version" src="https://badge.fury.io/py/stockdex.svg" /></a></p>
+<p><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg" />
+<img alt="Code style: isort" src="https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&amp;labelColor=ef8336" />
+<img alt="flake8" src="https://img.shields.io/badge/flake8-checked-blue" /></p>
+<p><a class="reference external" href="https://ahnazary.github.io/stockdex/"><img alt="Documentation Status" src="https://readthedocs.org/projects/stockdex/badge/?version=latest" /></a></p>
+<section id="stockdex">
+<h2>Stockdex<a class="headerlink" href="#stockdex" title="Permalink to this heading"></a></h2>
+<p>Stockdex is a Python package that provides a simple interface to access financial data from Yahoo Finance. Data is returned as a pandas DataFrame.</p>
+</section>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h2>
+<p>Install the package using pip:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>stockdex
+</pre></div>
+</div>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h2>
+<p>Create a <code class="docutils literal notranslate"><span class="pre">Ticker</span></code> object by passing the ticker symbol of the stock you want to access. Then, you can access the following data:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">stockdex</span> <span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="c1"># Pick arbitrary ticker</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="s1">&#39;AAPL&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<section id="chart-data">
+<h3>Chart data:<a class="headerlink" href="#chart-data" title="Permalink to this heading"></a></h3>
+<p>Pass the range and interval (by default, range is ‘1d’ and interval is ‘1m’) to get a dataframe of the stock’s historical price data including open, high, low, close, and volume on each timestamp.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">chart</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">chart</span><span class="p">(</span><span class="nb">range</span><span class="o">=</span><span class="s1">&#39;1y&#39;</span><span class="p">,</span> <span class="n">dataGranularity</span><span class="o">=</span><span class="s1">&#39;1d&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="summary-data">
+<h3>Summary data:<a class="headerlink" href="#summary-data" title="Permalink to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">summary</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">summary</span>
+</pre></div>
+</div>
+</section>
+<section id="historical-data">
+<h3>Historical data:<a class="headerlink" href="#historical-data" title="Permalink to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">statistics</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">statistics</span>
+</pre></div>
+</div>
+</section>
+<section id="financial-data">
+<h3>Financial data:<a class="headerlink" href="#financial-data" title="Permalink to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">income_stmt</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">income_stmt</span>
+<span class="n">balance_sheet</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">balance_sheet</span>
+<span class="n">cash_flow</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">cash_flow</span>
+</pre></div>
+</div>
+</section>
+<section id="analyst-data">
+<h3>Analyst data:<a class="headerlink" href="#analyst-data" title="Permalink to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">analysis</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">analysis</span>
+</pre></div>
+</div>
+</section>
+<section id="option-data">
+<h3>Option data:<a class="headerlink" href="#option-data" title="Permalink to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">calls</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">calls</span>
+<span class="n">puts</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">puts</span>
+</pre></div>
+</div>
+</section>
+<section id="profile-data">
+<h3>Profile data:<a class="headerlink" href="#profile-data" title="Permalink to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">key_executives</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">key_executives</span>
+<span class="n">description</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">description</span>
+<span class="n">corporate_governance</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">corporate_governance</span>
+</pre></div>
+</div>
+</section>
+<section id="holders-data">
+<h3>Holders data:<a class="headerlink" href="#holders-data" title="Permalink to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">major_holders</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">major_holders</span>
+<span class="n">top_institutional_holders</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">top_institutional_holders</span>
+<span class="n">top_mutual_fund_holders</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">top_mutual_fund_holders</span>
+</pre></div>
+</div>
+</section>
+<section id="dividends-data-from-digrin-webstite">
+<h3>Dividends data from <code class="docutils literal notranslate"><span class="pre">Digrin</span></code> Webstite:<a class="headerlink" href="#dividends-data-from-digrin-webstite" title="Permalink to this heading"></a></h3>
+<p>History of dividends paid by the company.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dividend</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">dividend</span>
+</pre></div>
+</div>
+<br />
+<br />
+<p>Check out sphinx documentation <a class="reference external" href="https://ahnazary.github.io/stockdex/">here</a> for more information about the package.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to stockdex’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="modules.html" class="btn btn-neutral float-right" title="stockdex" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Amir Nazary.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

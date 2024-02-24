@@ -20,6 +20,14 @@ stockdex.ticker module
    :undoc-members:
    :show-inheritance:
 
+stockdex.ticker\_api module
+---------------------------
+
+.. automodule:: stockdex.ticker_api
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 
