@@ -30,6 +30,13 @@ from stockdex import Ticker
 ticker = Ticker('AAPL')
 ```
 
+## Chart data:
+Pass the range and interval (by default, range is '1d' and interval is '1m') to get a dataframe of the stock's historical price data including open, high, low, close, and volume on each timestamp.
+
+```python
+chart = ticker.chart(range='1y', interval='1d')
+```
+
 ## Summary data:
 ```python
 summary = ticker.summary

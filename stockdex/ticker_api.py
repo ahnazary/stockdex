@@ -32,7 +32,7 @@ class TickerAPI(TickerBase):
             "1wk",
             "1mo",
             "3mo",
-        ] = "1d",
+        ] = "1m",
     ) -> pd.DataFrame:
         """
         Get the chart data for the stock
