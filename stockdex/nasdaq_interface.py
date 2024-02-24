@@ -2,7 +2,6 @@
 Interface for NASDAQ stock data
 """
 
-import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 
@@ -13,18 +12,28 @@ class NASDAQInterface:
     def __init__(self, ticker):
         self.ticker = ticker
         self.base_url = "https://www.nasdaq.com/market-activity/stocks/"
-        self.headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"  # noqa E501
+        self.request_headers = {
+            "User-Agent": get_user_agent()[0],
         }
 
-    def get_chart(self):
+    def get_response(self, url: str, headers: dict = None) -> requests.Response:
         """
-        Get historical data for the stock
+        Send an HTTP GET request to the website
+
+        Args:
+        url (str): The URL of the website
+        headers (dict): The headers to be sent with the HTTP GET request
+
+        Returns:
+        requests.Response: The response of the HTTP GET request
         """
 
-        url = f"{self.base_url}/{self.ticker}/chart"
-        # send a get request to the website
-        response = requests.get(url=url, headers=self.headers).json()
+        # Send an HTTP GET request to the website
+        session = requests.Session()
+        response = session.get(url, headers=headers)
+        # If the HTTP GET request can't be served
+        if response.status_code != 200:
+            raise Exception("Failed to load page, check if the ticker symbol exists")
 
         return response
 
@@ -35,13 +44,14 @@ class NASDAQInterface:
 
         url = f"{self.base_url}/{self.ticker}/earnings"
         # send a get request to the website
-        response = requests.get(url=url, headers=self.headers).json()
+        response = self.get_response(url, headers=self.request_headers)
 
-        soup = BeautifulSoup(response, "html.parser")
+        soup = BeautifulSoup(response.content, "html.parser")
 
-        raw_data = soup.find_all("table", class_="earnings-surprise__table-body")
+        tables = soup.find_all("table")
 
-        headers = [
-            item.text
-            for item in soup.find_all("th", class_="earnings-surprise__table-header")
-        ]
+        # TODO: Fix this as it does not return anything now
+        headers = [header.content for header in tables[0].find_all("th")]
+        data = [data.content for data in tables[0].find_all("td")]
+
+        return headers, data
