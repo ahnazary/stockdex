@@ -275,20 +275,24 @@ def test_dividend(ticker):
 
 
 @pytest.mark.parametrize(
-    "ticker",
+    "ticker, range, dataGranularity",
     [
-        ("AAPL"),
-        ("GOOGL"),
-        ("MSFT"),
+        ("AAPL", "1d", "1h"),
+        ("GOOGL", "1d", "1h"),
+        ("MSFT", "1d", "1d"),
+        ("AAPL", "1h", "1m"),
+        ("GOOGL", "5d", "1d"),
+        ("MSFT", "1d", "1d"),
+        ("NVDA", "max", "3mo"),
     ],
 )
-def test_chart(ticker):
+def test_chart(ticker, range, dataGranularity):
     """
     Test the chart property of the TickerAPI class
     """
 
     ticker = Ticker(ticker)
-    chart = ticker.chart
+    chart = ticker.chart(range=range, dataGranularity=dataGranularity)
 
     assert chart.columns.tolist() == [
         "timestamp",
