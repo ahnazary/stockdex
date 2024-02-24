@@ -272,3 +272,30 @@ def test_dividend(ticker):
     assert isinstance(dividend, pd.DataFrame)
     assert dividend.shape[0] > 0
     assert dividend.shape[1] == 5
+
+
+@pytest.mark.parametrize(
+    "ticker",
+    [
+        ("AAPL"),
+        ("GOOGL"),
+        ("MSFT"),
+    ],
+)
+def test_chart(ticker):
+    """
+    Test the chart property of the TickerAPI class
+    """
+
+    ticker = Ticker(ticker)
+    chart = ticker.chart
+
+    assert chart.columns.tolist() == [
+        "timestamp",
+        "volume",
+        "close",
+        "open",
+        "high",
+        "low",
+    ]
+    assert len(chart) > 0
