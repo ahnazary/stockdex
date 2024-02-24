@@ -5,10 +5,10 @@ Moduel for the Ticker class
 import pandas as pd
 from bs4 import BeautifulSoup
 
-from stockdex.ticker_base import TickerBase
+from stockdex.ticker_api import TickerAPI
 
 
-class Ticker(TickerBase):
+class Ticker(TickerAPI):
     """
     Class for the Ticker
     """

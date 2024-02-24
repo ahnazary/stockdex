@@ -1,5 +1,6 @@
 """
 Module to retrieve stock data from Yahoo Finance API
+The main Ticker class inherits from this class
 """
 
 import pandas as pd
@@ -8,9 +9,7 @@ from stockdex.ticker_base import TickerBase
 
 
 class TickerAPI(TickerBase):
-    def __init__(self, ticker):
-        self.ticker = ticker
-        self.base_url = "https://query2.finance.yahoo.com/v8/finance/"
+    base_url = "https://query2.finance.yahoo.com/v8/finance/"
 
     @property
     def chart(self, range: str = "1d"):
