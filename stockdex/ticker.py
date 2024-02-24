@@ -3,42 +3,18 @@ Moduel for the Ticker class
 """
 
 import pandas as pd
-import requests
 from bs4 import BeautifulSoup
 
-from stockdex.lib import get_user_agent
+from stockdex.ticker_base import TickerBase
 
 
-class Ticker:
+class Ticker(TickerBase):
     """
     Class for the Ticker
     """
 
     def __init__(self, ticker: str) -> None:
         self.ticker = ticker.upper()
-        self.request_headers = {
-            "User-Agent": get_user_agent()[0],
-        }
-
-    def get_response(self, url: str, headers: dict = None) -> requests.Response:
-        """
-        Send an HTTP GET request to the website
-
-        Args:
-        url (str): The URL of the website
-        headers (dict): The headers to be sent with the HTTP GET request
-
-        Returns:
-        requests.Response: The response of the HTTP GET request
-        """
-
-        # Send an HTTP GET request to the website
-        response = requests.get(url, headers=headers)
-        # If the HTTP GET request can't be served
-        if response.status_code != 200:
-            raise Exception("Failed to load page, check if the ticker symbol exists")
-
-        return response
 
     @property
     def summary(self) -> pd.DataFrame:
@@ -82,7 +58,7 @@ class Ticker:
 
         # URL of the website to scrape
         url = f"https://finance.yahoo.com/quote/{self.ticker}/key-statistics"
-        response = self.get_response(url, self.request_headers)
+        response = self.get_response(url)
 
         # Parse the HTML content of the website
         soup = BeautifulSoup(response.content, "html.parser")
@@ -108,7 +84,7 @@ class Ticker:
 
         # URL of the website to scrape
         url = f"https://finance.yahoo.com/quote/{self.ticker}/financials"
-        response = self.get_response(url, self.request_headers)
+        response = self.get_response(url)
 
         # Parse the HTML content of the website
         soup = BeautifulSoup(response.content, "html.parser")
@@ -144,7 +120,7 @@ class Ticker:
 
         # URL of the website to scrape
         url = f"https://finance.yahoo.com/quote/{self.ticker}/balance-sheet"
-        response = self.get_response(url, self.request_headers)
+        response = self.get_response(url)
 
         # Parse the HTML content of the website
         soup = BeautifulSoup(response.content, "html.parser")
@@ -180,8 +156,7 @@ class Ticker:
 
         # URL of the website to scrape
         url = f"https://finance.yahoo.com/quote/{self.ticker}/cash-flow"
-        response = self.get_response(url, self.request_headers)
-
+        response = self.get_response(url)
         # Parse the HTML content of the website
         soup = BeautifulSoup(response.content, "html.parser")
 
@@ -216,7 +191,7 @@ class Ticker:
 
         # URL of the website to scrape
         url = f"https://finance.yahoo.com/quote/{self.ticker}/analysis"
-        response = self.get_response(url, self.request_headers)
+        response = self.get_response(url)
 
         # Parse the HTML content of the website
         soup = BeautifulSoup(response.content, "html.parser")
@@ -250,7 +225,7 @@ class Ticker:
 
         # URL of the website to scrape
         url = f"https://finance.yahoo.com/quote/{self.ticker}/options"
-        response = self.get_response(url, self.request_headers)
+        response = self.get_response(url)
 
         # Parse the HTML content of the website
         soup = BeautifulSoup(response.content, "html.parser")
@@ -288,7 +263,7 @@ class Ticker:
 
         # URL of the website to scrape
         url = f"https://finance.yahoo.com/quote/{self.ticker}/options"
-        response = self.get_response(url, self.request_headers)
+        response = self.get_response(url)
 
         # Parse the HTML content of the website
         soup = BeautifulSoup(response.content, "html.parser")
@@ -326,7 +301,7 @@ class Ticker:
 
         # URL of the website to scrape
         url = f"https://finance.yahoo.com/quote/{self.ticker}/profile"
-        response = self.get_response(url, self.request_headers)
+        response = self.get_response(url)
 
         # Parse the HTML content of the website
         soup = BeautifulSoup(response.content, "html.parser")
@@ -356,7 +331,7 @@ class Ticker:
 
         # URL of the website to scrape
         url = f"https://finance.yahoo.com/quote/{self.ticker}/profile"
-        response = self.get_response(url, self.request_headers)
+        response = self.get_response(url)
 
         # Parse the HTML content of the website
         soup = BeautifulSoup(response.content, "html.parser")
@@ -377,7 +352,7 @@ class Ticker:
 
         # URL of the website to scrape
         url = f"https://finance.yahoo.com/quote/{self.ticker}/profile"
-        response = self.get_response(url, self.request_headers)
+        response = self.get_response(url)
 
         # Parse the HTML content of the website
         soup = BeautifulSoup(response.content, "html.parser")
@@ -398,7 +373,7 @@ class Ticker:
 
         # URL of the website to scrape
         url = f"https://finance.yahoo.com/quote/{self.ticker}/holders"
-        response = self.get_response(url, self.request_headers)
+        response = self.get_response(url)
 
         # Parse the HTML content of the website
         soup = BeautifulSoup(response.content, "html.parser")
@@ -428,7 +403,7 @@ class Ticker:
 
         # URL of the website to scrape
         url = f"https://finance.yahoo.com/quote/{self.ticker}/holders"
-        response = self.get_response(url, self.request_headers)
+        response = self.get_response(url)
 
         # Parse the HTML content of the website
         soup = BeautifulSoup(response.content, "html.parser")
@@ -457,7 +432,7 @@ class Ticker:
 
         # URL of the website to scrape
         url = f"https://finance.yahoo.com/quote/{self.ticker}/holders"
-        response = self.get_response(url, self.request_headers)
+        response = self.get_response(url)
 
         # Parse the HTML content of the website
         soup = BeautifulSoup(response.content, "html.parser")
@@ -489,7 +464,7 @@ class Ticker:
 
         # URL of the website to scrape
         url = f"https://www.digrin.com/stocks/detail/{self.ticker}"
-        response = self.get_response(url, self.request_headers)
+        response = self.get_response(url)
 
         # Parse the HTML content of the website
         soup = BeautifulSoup(response.content, "html.parser")
