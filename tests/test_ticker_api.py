@@ -15,8 +15,20 @@ from stockdex.ticker_api import TickerAPI
         ("MSFT"),
     ],
 )
-def test_get_chart(ticker):
-    ticker_api = TickerAPI(ticker)
-    response = ticker_api.get_chart()
+def test_chart(ticker):
+    """
+    Test the chart property of the TickerAPI class
+    """
 
-    assert response is not None
+    api = TickerAPI(ticker)
+    chart = api.chart
+
+    assert chart.columns.tolist() == [
+        "timestamp",
+        "volume",
+        "close",
+        "open",
+        "high",
+        "low",
+    ]
+    assert len(chart) > 0

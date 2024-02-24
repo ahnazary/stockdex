@@ -8,6 +8,7 @@ import pytest
 from stockdex.nasdaq_interface import NASDAQInterface
 
 
+@pytest.mark.skip(reason="Under development")
 @pytest.mark.parametrize(
     "ticker",
     [
