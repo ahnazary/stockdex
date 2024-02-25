@@ -46,11 +46,9 @@ class TickerAPI(TickerBase):
         """
 
         url = f"{self.base_url}/chart/{self.ticker}?range={range}&interval={dataGranularity}"
-        # send a get request to the website
         response = self.get_response(url)
 
         timestamp = response.json()["chart"]["result"][0]["timestamp"]
-        # convert the timestamp to datetime
         timestamp = pd.to_datetime(timestamp, unit="s")
 
         indicators = response.json()["chart"]["result"][0]["indicators"]
@@ -68,5 +66,38 @@ class TickerAPI(TickerBase):
                 "open": open,
                 "high": high,
                 "low": low,
+            }
+        )
+
+    @property
+    def current_trading_period(self) -> pd.DataFrame:
+        """
+        Get the current trading period for the stock
+        """
+
+        url = f"{self.base_url}/chart/{self.ticker}"
+        response = self.get_response(url)
+
+        currentTradingPeriod = response.json()["chart"]["result"][0]["meta"][
+            "currentTradingPeriod"
+        ]
+
+        pre = currentTradingPeriod["pre"]
+        regular = currentTradingPeriod["regular"]
+        post = currentTradingPeriod["post"]
+
+        # convert timestamps to datetime
+        pre["start"] = pd.to_datetime(pre["start"], unit="s")
+        pre["end"] = pd.to_datetime(pre["end"], unit="s")
+        regular["start"] = pd.to_datetime(regular["start"], unit="s")
+        regular["end"] = pd.to_datetime(regular["end"], unit="s")
+        post["start"] = pd.to_datetime(post["start"], unit="s")
+        post["end"] = pd.to_datetime(post["end"], unit="s")
+
+        return pd.DataFrame(
+            {
+                "pre": pre,
+                "regular": regular,
+                "post": post,
             }
         )

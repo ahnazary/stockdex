@@ -303,3 +303,35 @@ def test_price(ticker, range, dataGranularity):
         "low",
     ]
     assert len(price) > 0
+
+
+@pytest.mark.parametrize(
+    "ticker",
+    [
+        ("AAPL"),
+        ("GOOGL"),
+        ("MSFT"),
+        ("NVDA"),
+        ("FMC"),
+    ],
+)
+def test_current_trading_period(ticker):
+    """
+    Test the price property of the TickerAPI class
+    """
+
+    ticker = Ticker(ticker)
+    current_trading_period = ticker.current_trading_period
+
+    assert current_trading_period.columns.tolist() == [
+        "pre",
+        "regular",
+        "post",
+    ]
+    assert len(current_trading_period) == 4
+    assert current_trading_period.index.tolist() == [
+        "timezone",
+        "start",
+        "end",
+        "gmtoffset",
+    ]
