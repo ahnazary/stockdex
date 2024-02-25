@@ -13,7 +13,7 @@ from stockdex.ticker_base import TickerBase
 class TickerAPI(TickerBase):
     base_url = "https://query2.finance.yahoo.com/v8/finance/"
 
-    def chart(
+    def price(
         self,
         range: Literal[
             "1d", "5d", "1mo", "3mo", "6mo", "1y", "2y", "5y", "10y", "ytd", "max"
@@ -35,10 +35,10 @@ class TickerAPI(TickerBase):
         ] = "1m",
     ) -> pd.DataFrame:
         """
-        Get the chart data for the stock
+        Get the price data for the stock
 
         Args:
-        range (str): The range of the chart data to retrieve
+        range (str): The range of the price data to retrieve
         valid values are "1d", "5d", "1mo", "3mo", "6mo", "1y", "2y", "5y", "10y", "ytd", "max"
 
         dataGranularity (str): The granularity of the data to retrieve (interval)

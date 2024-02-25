@@ -286,15 +286,15 @@ def test_dividend(ticker):
         ("NVDA", "max", "3mo"),
     ],
 )
-def test_chart(ticker, range, dataGranularity):
+def test_price(ticker, range, dataGranularity):
     """
-    Test the chart property of the TickerAPI class
+    Test the price property of the TickerAPI class
     """
 
     ticker = Ticker(ticker)
-    chart = ticker.chart(range=range, dataGranularity=dataGranularity)
+    price = ticker.price(range=range, dataGranularity=dataGranularity)
 
-    assert chart.columns.tolist() == [
+    assert price.columns.tolist() == [
         "timestamp",
         "volume",
         "close",
@@ -302,4 +302,4 @@ def test_chart(ticker, range, dataGranularity):
         "high",
         "low",
     ]
-    assert len(chart) > 0
+    assert len(price) > 0
