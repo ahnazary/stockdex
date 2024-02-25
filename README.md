@@ -37,6 +37,12 @@ Pass the range and interval (by default, range is '1d' and interval is '1m') to 
 price = ticker.price(range='1y', dataGranularity='1d')
 ```
 
+## Trading periods:
+Get the current trading period of the stock (pre-market, regular, post-market).
+```python
+current_trading_period = ticker.current_trading_period
+```
+
 ## Summary data:
 ```python
 summary = ticker.summary
