@@ -120,6 +120,13 @@
         <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="si">}</span><span class="s2">/chart/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">?range=</span><span class="si">{</span><span class="nb">range</span><span class="si">}</span><span class="s2">&amp;interval=</span><span class="si">{</span><span class="n">dataGranularity</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 
+        <span class="n">meta</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">&quot;chart&quot;</span><span class="p">][</span><span class="s2">&quot;result&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;meta&quot;</span><span class="p">]</span>
+        <span class="n">currency</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;currency&quot;</span><span class="p">]</span>
+        <span class="n">exchangeTimezoneName</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;exchangeTimezoneName&quot;</span><span class="p">]</span>
+        <span class="n">timezone</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;timezone&quot;</span><span class="p">]</span>
+        <span class="n">exchangeName</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;exchangeName&quot;</span><span class="p">]</span>
+        <span class="n">instrumentType</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;instrumentType&quot;</span><span class="p">]</span>
+
         <span class="n">timestamp</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">&quot;chart&quot;</span><span class="p">][</span><span class="s2">&quot;result&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;timestamp&quot;</span><span class="p">]</span>
         <span class="n">timestamp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">timestamp</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">)</span>
 
@@ -138,6 +145,11 @@
                 <span class="s2">&quot;open&quot;</span><span class="p">:</span> <span class="nb">open</span><span class="p">,</span>
                 <span class="s2">&quot;high&quot;</span><span class="p">:</span> <span class="n">high</span><span class="p">,</span>
                 <span class="s2">&quot;low&quot;</span><span class="p">:</span> <span class="n">low</span><span class="p">,</span>
+                <span class="s2">&quot;currency&quot;</span><span class="p">:</span> <span class="n">currency</span><span class="p">,</span>
+                <span class="s2">&quot;timezone&quot;</span><span class="p">:</span> <span class="n">timezone</span><span class="p">,</span>
+                <span class="s2">&quot;exchangeTimezoneName&quot;</span><span class="p">:</span> <span class="n">exchangeTimezoneName</span><span class="p">,</span>
+                <span class="s2">&quot;exchangeName&quot;</span><span class="p">:</span> <span class="n">exchangeName</span><span class="p">,</span>
+                <span class="s2">&quot;instrumentType&quot;</span><span class="p">:</span> <span class="n">instrumentType</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">)</span></div>
 
