@@ -21,7 +21,7 @@ pip install stockdex
 
 # Usage
 
-Create a `Ticker` object by passing the ticker symbol of the stock you want to access. Then, you can access the following data:
+Create a `Ticker` object by passing the ticker symbol. Ticker objects are the main interface to retrieve stock data.
 
 ```python
 from stockdex import Ticker
@@ -43,46 +43,35 @@ Get the current trading period of the stock (pre-market, regular, post-market).
 current_trading_period = ticker.current_trading_period
 ```
 
-## Summary data:
+## Fundamental data:
 ```python
+# Summary including general financial information
 summary = ticker.summary
-```
 
-## Historical data:
-```python
-statistics = ticker.statistics
-```
-
-## Financial data:
-```python
-income_stmt = ticker.income_stmt
+# Financial data
+income_stmt = ticker.income_stmt 
 balance_sheet = ticker.balance_sheet
 cash_flow = ticker.cash_flow
-```
 
-## Analyst data:
-```python
+# Analysts and estimates
 analysis = ticker.analysis
-```
 
-## Option data:
-```python
+# Data about options
 calls = ticker.calls
 puts = ticker.puts
-```
 
-## Profile data:
-```python
+# Profile data 
 key_executives = ticker.key_executives
 description = ticker.description
 corporate_governance = ticker.corporate_governance
-```
 
-## Holders data:
-```python
+# Data about shareholders
 major_holders = ticker.major_holders
 top_institutional_holders = ticker.top_institutional_holders
 top_mutual_fund_holders = ticker.top_mutual_fund_holders
+
+# Main statistics
+statistics = ticker.statistics 
 ```
 
 ## Dividends data from `Digrin` Webstite:
@@ -94,6 +83,7 @@ dividend = ticker.dividend
 ```
 
 <br />
-<br />
+
+---
 
 Check out sphinx documentation [here](https://ahnazary.github.io/stockdex/) for more information about the package.
