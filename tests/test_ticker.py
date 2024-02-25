@@ -284,6 +284,7 @@ def test_dividend(ticker):
         ("GOOGL", "5d", "1d"),
         ("MSFT", "1d", "1d"),
         ("NVDA", "max", "3mo"),
+        ("SAP", "1y", "1mo"),
     ],
 )
 def test_price(ticker, range, dataGranularity):
@@ -301,6 +302,11 @@ def test_price(ticker, range, dataGranularity):
         "open",
         "high",
         "low",
+        "currency",
+        "timezone",
+        "exchangeTimezoneName",
+        "exchangeName",
+        "instrumentType",
     ]
     assert len(price) > 0
 

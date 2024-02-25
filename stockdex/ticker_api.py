@@ -48,6 +48,13 @@ class TickerAPI(TickerBase):
         url = f"{self.base_url}/chart/{self.ticker}?range={range}&interval={dataGranularity}"
         response = self.get_response(url)
 
+        meta = response.json()["chart"]["result"][0]["meta"]
+        currency = meta["currency"]
+        exchangeTimezoneName = meta["exchangeTimezoneName"]
+        timezone = meta["timezone"]
+        exchangeName = meta["exchangeName"]
+        instrumentType = meta["instrumentType"]
+
         timestamp = response.json()["chart"]["result"][0]["timestamp"]
         timestamp = pd.to_datetime(timestamp, unit="s")
 
@@ -66,6 +73,11 @@ class TickerAPI(TickerBase):
                 "open": open,
                 "high": high,
                 "low": low,
+                "currency": currency,
+                "timezone": timezone,
+                "exchangeTimezoneName": exchangeTimezoneName,
+                "exchangeName": exchangeName,
+                "instrumentType": instrumentType,
             }
         )
 
