@@ -12,6 +12,14 @@ stockdex.lib module
    :undoc-members:
    :show-inheritance:
 
+stockdex.nasdaq\_interface module
+---------------------------------
+
+.. automodule:: stockdex.nasdaq_interface
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 stockdex.ticker module
 ----------------------
 
@@ -24,6 +32,14 @@ stockdex.ticker\_api module
 ---------------------------
 
 .. automodule:: stockdex.ticker_api
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+stockdex.ticker\_base module
+----------------------------
+
+.. automodule:: stockdex.ticker_base
    :members:
    :undoc-members:
    :show-inheritance:

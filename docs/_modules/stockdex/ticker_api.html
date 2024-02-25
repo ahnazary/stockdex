@@ -85,7 +85,7 @@
 <div class="viewcode-block" id="TickerAPI"><a class="viewcode-back" href="../../stockdex.html#stockdex.ticker_api.TickerAPI">[docs]</a><span class="k">class</span> <span class="nc">TickerAPI</span><span class="p">(</span><span class="n">TickerBase</span><span class="p">):</span>
     <span class="n">base_url</span> <span class="o">=</span> <span class="s2">&quot;https://query2.finance.yahoo.com/v8/finance/&quot;</span>
 
-<div class="viewcode-block" id="TickerAPI.chart"><a class="viewcode-back" href="../../stockdex.html#stockdex.ticker_api.TickerAPI.chart">[docs]</a>    <span class="k">def</span> <span class="nf">chart</span><span class="p">(</span>
+<div class="viewcode-block" id="TickerAPI.price"><a class="viewcode-back" href="../../stockdex.html#stockdex.ticker_api.TickerAPI.price">[docs]</a>    <span class="k">def</span> <span class="nf">price</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="nb">range</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span>
             <span class="s2">&quot;1d&quot;</span><span class="p">,</span> <span class="s2">&quot;5d&quot;</span><span class="p">,</span> <span class="s2">&quot;1mo&quot;</span><span class="p">,</span> <span class="s2">&quot;3mo&quot;</span><span class="p">,</span> <span class="s2">&quot;6mo&quot;</span><span class="p">,</span> <span class="s2">&quot;1y&quot;</span><span class="p">,</span> <span class="s2">&quot;2y&quot;</span><span class="p">,</span> <span class="s2">&quot;5y&quot;</span><span class="p">,</span> <span class="s2">&quot;10y&quot;</span><span class="p">,</span> <span class="s2">&quot;ytd&quot;</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span>
@@ -107,22 +107,20 @@
         <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;1m&quot;</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get the chart data for the stock</span>
+<span class="sd">        Get the price data for the stock</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">        range (str): The range of the chart data to retrieve</span>
-<span class="sd">            valid values are &quot;1d&quot;, &quot;5d&quot;, &quot;1mo&quot;, &quot;3mo&quot;, &quot;6mo&quot;, &quot;1y&quot;, &quot;2y&quot;, &quot;5y&quot;, &quot;10y&quot;, &quot;ytd&quot;, &quot;max&quot;</span>
+<span class="sd">        range (str): The range of the price data to retrieve</span>
+<span class="sd">        valid values are &quot;1d&quot;, &quot;5d&quot;, &quot;1mo&quot;, &quot;3mo&quot;, &quot;6mo&quot;, &quot;1y&quot;, &quot;2y&quot;, &quot;5y&quot;, &quot;10y&quot;, &quot;ytd&quot;, &quot;max&quot;</span>
 
 <span class="sd">        dataGranularity (str): The granularity of the data to retrieve (interval)</span>
-<span class="sd">            valid values are &quot;1m&quot;, &quot;2m&quot;, &quot;5m&quot;, &quot;15m&quot;, &quot;30m&quot;, &quot;60m&quot;, &quot;90m&quot;, &quot;1h&quot;, &quot;1d&quot;, &quot;5d&quot;, &quot;1wk&quot;, &quot;1mo&quot;, &quot;3mo&quot;&quot;  # noqa: E501</span>
+<span class="sd">        valid values are &quot;1m&quot;, &quot;2m&quot;, &quot;5m&quot;, &quot;15m&quot;, &quot;30m&quot;, &quot;60m&quot;, &quot;90m&quot;, &quot;1h&quot;, &quot;1d&quot;, &quot;5d&quot;, &quot;1wk&quot;, &quot;1mo&quot;, &quot;3mo&quot;&quot;  # noqa: E501</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="si">}</span><span class="s2">/chart/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">?range=</span><span class="si">{</span><span class="nb">range</span><span class="si">}</span><span class="s2">&amp;interval=</span><span class="si">{</span><span class="n">dataGranularity</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="c1"># send a get request to the website</span>
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 
         <span class="n">timestamp</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">&quot;chart&quot;</span><span class="p">][</span><span class="s2">&quot;result&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;timestamp&quot;</span><span class="p">]</span>
-        <span class="c1"># convert the timestamp to datetime</span>
         <span class="n">timestamp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">timestamp</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">)</span>
 
         <span class="n">indicators</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">&quot;chart&quot;</span><span class="p">][</span><span class="s2">&quot;result&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;indicators&quot;</span><span class="p">]</span>
@@ -141,7 +139,40 @@
                 <span class="s2">&quot;high&quot;</span><span class="p">:</span> <span class="n">high</span><span class="p">,</span>
                 <span class="s2">&quot;low&quot;</span><span class="p">:</span> <span class="n">low</span><span class="p">,</span>
             <span class="p">}</span>
-        <span class="p">)</span></div></div>
+        <span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">current_trading_period</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the current trading period for the stock</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="si">}</span><span class="s2">/chart/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+        <span class="n">currentTradingPeriod</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">&quot;chart&quot;</span><span class="p">][</span><span class="s2">&quot;result&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;meta&quot;</span><span class="p">][</span>
+            <span class="s2">&quot;currentTradingPeriod&quot;</span>
+        <span class="p">]</span>
+
+        <span class="n">pre</span> <span class="o">=</span> <span class="n">currentTradingPeriod</span><span class="p">[</span><span class="s2">&quot;pre&quot;</span><span class="p">]</span>
+        <span class="n">regular</span> <span class="o">=</span> <span class="n">currentTradingPeriod</span><span class="p">[</span><span class="s2">&quot;regular&quot;</span><span class="p">]</span>
+        <span class="n">post</span> <span class="o">=</span> <span class="n">currentTradingPeriod</span><span class="p">[</span><span class="s2">&quot;post&quot;</span><span class="p">]</span>
+
+        <span class="c1"># convert timestamps to datetime</span>
+        <span class="n">pre</span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">pre</span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">)</span>
+        <span class="n">pre</span><span class="p">[</span><span class="s2">&quot;end&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">pre</span><span class="p">[</span><span class="s2">&quot;end&quot;</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">)</span>
+        <span class="n">regular</span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">regular</span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">)</span>
+        <span class="n">regular</span><span class="p">[</span><span class="s2">&quot;end&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">regular</span><span class="p">[</span><span class="s2">&quot;end&quot;</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">)</span>
+        <span class="n">post</span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">post</span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">)</span>
+        <span class="n">post</span><span class="p">[</span><span class="s2">&quot;end&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">post</span><span class="p">[</span><span class="s2">&quot;end&quot;</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;pre&quot;</span><span class="p">:</span> <span class="n">pre</span><span class="p">,</span>
+                <span class="s2">&quot;regular&quot;</span><span class="p">:</span> <span class="n">regular</span><span class="p">,</span>
+                <span class="s2">&quot;post&quot;</span><span class="p">:</span> <span class="n">post</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">)</span></div>
 </pre></div>
 
            </div>

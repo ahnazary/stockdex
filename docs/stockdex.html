@@ -51,12 +51,20 @@
 <li class="toctree-l4"><a class="reference internal" href="#stockdex.lib.get_user_agent"><code class="docutils literal notranslate"><span class="pre">get_user_agent()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#module-stockdex.nasdaq_interface">stockdex.nasdaq_interface module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#stockdex.nasdaq_interface.NASDAQInterface"><code class="docutils literal notranslate"><span class="pre">NASDAQInterface</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#module-stockdex.ticker">stockdex.ticker module</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#stockdex.ticker.Ticker"><code class="docutils literal notranslate"><span class="pre">Ticker</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#module-stockdex.ticker_api">stockdex.ticker_api module</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#stockdex.ticker_api.TickerAPI"><code class="docutils literal notranslate"><span class="pre">TickerAPI</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-stockdex.ticker_base">stockdex.ticker_base module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#stockdex.ticker_base.TickerBase"><code class="docutils literal notranslate"><span class="pre">TickerBase</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#module-stockdex">Module contents</a></li>
@@ -102,6 +110,33 @@
 <dt class="sig sig-object py" id="stockdex.lib.get_user_agent">
 <span class="sig-prename descclassname"><span class="pre">stockdex.lib.</span></span><span class="sig-name descname"><span class="pre">get_user_agent</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/stockdex/lib.html#get_user_agent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.lib.get_user_agent" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
+
+</section>
+<section id="module-stockdex.nasdaq_interface">
+<span id="stockdex-nasdaq-interface-module"></span><h2>stockdex.nasdaq_interface module<a class="headerlink" href="#module-stockdex.nasdaq_interface" title="Permalink to this heading"></a></h2>
+<p>Interface for NASDAQ stock data</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="stockdex.nasdaq_interface.NASDAQInterface">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stockdex.nasdaq_interface.</span></span><span class="sig-name descname"><span class="pre">NASDAQInterface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ticker</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stockdex/nasdaq_interface.html#NASDAQInterface"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.nasdaq_interface.NASDAQInterface" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="stockdex.nasdaq_interface.NASDAQInterface.get_response">
+<span class="sig-name descname"><span class="pre">get_response</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Response</span></span></span><a class="reference internal" href="_modules/stockdex/nasdaq_interface.html#NASDAQInterface.get_response"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.nasdaq_interface.NASDAQInterface.get_response" title="Permalink to this definition"></a></dt>
+<dd><p>Send an HTTP GET request to the website</p>
+<p>Args:
+url (str): The URL of the website
+headers (dict): The headers to be sent with the HTTP GET request</p>
+<p>Returns:
+requests.Response: The response of the HTTP GET request</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="stockdex.nasdaq_interface.NASDAQInterface.quarterly_earnings">
+<span class="sig-name descname"><span class="pre">quarterly_earnings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/stockdex/nasdaq_interface.html#NASDAQInterface.quarterly_earnings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.nasdaq_interface.NASDAQInterface.quarterly_earnings" title="Permalink to this definition"></a></dt>
+<dd><p>Get quarterly earnings for the stock</p>
+</dd></dl>
+
+</dd></dl>
 
 </section>
 <section id="module-stockdex.ticker">
@@ -259,26 +294,54 @@ The main Ticker class inherits from this class</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="stockdex.ticker_api.TickerAPI">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stockdex.ticker_api.</span></span><span class="sig-name descname"><span class="pre">TickerAPI</span></span><a class="reference internal" href="_modules/stockdex/ticker_api.html#TickerAPI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.ticker_api.TickerAPI" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TickerBase</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="#stockdex.ticker_base.TickerBase" title="stockdex.ticker_base.TickerBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">TickerBase</span></code></a></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="stockdex.ticker_api.TickerAPI.base_url">
 <span class="sig-name descname"><span class="pre">base_url</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'https://query2.finance.yahoo.com/v8/finance/'</span></em><a class="headerlink" href="#stockdex.ticker_api.TickerAPI.base_url" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="stockdex.ticker_api.TickerAPI.chart">
-<span class="sig-name descname"><span class="pre">chart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'1d'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'5d'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'1mo'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'3mo'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'6mo'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'1y'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'2y'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'5y'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'10y'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'ytd'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'max'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'1d'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataGranularity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'1m'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'2m'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'5m'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'15m'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'30m'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'60m'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'90m'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'1h'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'1d'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'5d'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'1wk'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'1mo'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'3mo'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'1m'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/stockdex/ticker_api.html#TickerAPI.chart"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.ticker_api.TickerAPI.chart" title="Permalink to this definition"></a></dt>
-<dd><p>Get the chart data for the stock</p>
-<p>Args:
-range (str): The range of the chart data to retrieve</p>
-<blockquote>
-<div><p>valid values are “1d”, “5d”, “1mo”, “3mo”, “6mo”, “1y”, “2y”, “5y”, “10y”, “ytd”, “max”</p>
-</div></blockquote>
-<dl class="simple">
-<dt>dataGranularity (str): The granularity of the data to retrieve (interval)</dt><dd><p>valid values are “1m”, “2m”, “5m”, “15m”, “30m”, “60m”, “90m”, “1h”, “1d”, “5d”, “1wk”, “1mo”, “3mo””  # noqa: E501</p>
-</dd>
-</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="stockdex.ticker_api.TickerAPI.current_trading_period">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">current_trading_period</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">DataFrame</span></em><a class="headerlink" href="#stockdex.ticker_api.TickerAPI.current_trading_period" title="Permalink to this definition"></a></dt>
+<dd><p>Get the current trading period for the stock</p>
 </dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="stockdex.ticker_api.TickerAPI.price">
+<span class="sig-name descname"><span class="pre">price</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'1d'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'5d'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'1mo'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'3mo'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'6mo'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'1y'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'2y'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'5y'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'10y'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'ytd'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'max'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'1d'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataGranularity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'1m'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'2m'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'5m'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'15m'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'30m'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'60m'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'90m'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'1h'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'1d'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'5d'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'1wk'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'1mo'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'3mo'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'1m'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/stockdex/ticker_api.html#TickerAPI.price"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.ticker_api.TickerAPI.price" title="Permalink to this definition"></a></dt>
+<dd><p>Get the price data for the stock</p>
+<p>Args:
+range (str): The range of the price data to retrieve
+valid values are “1d”, “5d”, “1mo”, “3mo”, “6mo”, “1y”, “2y”, “5y”, “10y”, “ytd”, “max”</p>
+<p>dataGranularity (str): The granularity of the data to retrieve (interval)
+valid values are “1m”, “2m”, “5m”, “15m”, “30m”, “60m”, “90m”, “1h”, “1d”, “5d”, “1wk”, “1mo”, “3mo””  # noqa: E501</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-stockdex.ticker_base">
+<span id="stockdex-ticker-base-module"></span><h2>stockdex.ticker_base module<a class="headerlink" href="#module-stockdex.ticker_base" title="Permalink to this heading"></a></h2>
+<p>Base class for ticker objects to inherit from</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="stockdex.ticker_base.TickerBase">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stockdex.ticker_base.</span></span><span class="sig-name descname"><span class="pre">TickerBase</span></span><a class="reference internal" href="_modules/stockdex/ticker_base.html#TickerBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.ticker_base.TickerBase" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="stockdex.ticker_base.TickerBase.get_response">
+<span class="sig-name descname"><span class="pre">get_response</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Response</span></span></span><a class="reference internal" href="_modules/stockdex/ticker_base.html#TickerBase.get_response"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.ticker_base.TickerBase.get_response" title="Permalink to this definition"></a></dt>
+<dd><p>Send an HTTP GET request to the website</p>
+<p>Args:
+url (str): The URL of the website
+headers (dict): The headers to be sent with the HTTP GET request</p>
+<p>Returns:
+requests.Response: The response of the HTTP GET request</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stockdex.ticker_base.TickerBase.request_headers">
+<span class="sig-name descname"><span class="pre">request_headers</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'User-Agent':</span> <span class="pre">'Mozilla/5.0</span> <span class="pre">(X11;</span> <span class="pre">Linux</span> <span class="pre">x86_64)</span> <span class="pre">AppleWebKit/537.36</span> <span class="pre">(KHTML,</span> <span class="pre">like</span> <span class="pre">Gecko)</span> <span class="pre">Chrome/98.0.4758.102</span> <span class="pre">Safari/537.36'}</span></em><a class="headerlink" href="#stockdex.ticker_base.TickerBase.request_headers" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 

@@ -48,7 +48,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#stockdex">Stockdex</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#chart-data">Chart data:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#price-data">price data:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#trading-periods">Trading periods:</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#summary-data">Summary data:</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#historical-data">Historical data:</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#financial-data">Financial data:</a></li>
@@ -116,10 +117,17 @@
 <span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="s1">&#39;AAPL&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<section id="chart-data">
-<h3>Chart data:<a class="headerlink" href="#chart-data" title="Permalink to this heading"></a></h3>
+<section id="price-data">
+<h3>price data:<a class="headerlink" href="#price-data" title="Permalink to this heading"></a></h3>
 <p>Pass the range and interval (by default, range is ‘1d’ and interval is ‘1m’) to get a dataframe of the stock’s historical price data including open, high, low, close, and volume on each timestamp.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">chart</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">chart</span><span class="p">(</span><span class="nb">range</span><span class="o">=</span><span class="s1">&#39;1y&#39;</span><span class="p">,</span> <span class="n">dataGranularity</span><span class="o">=</span><span class="s1">&#39;1d&#39;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">price</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">price</span><span class="p">(</span><span class="nb">range</span><span class="o">=</span><span class="s1">&#39;1y&#39;</span><span class="p">,</span> <span class="n">dataGranularity</span><span class="o">=</span><span class="s1">&#39;1d&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="trading-periods">
+<h3>Trading periods:<a class="headerlink" href="#trading-periods" title="Permalink to this heading"></a></h3>
+<p>Get the current trading period of the stock (pre-market, regular, post-market).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">current_trading_period</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">current_trading_period</span>
 </pre></div>
 </div>
 </section>
