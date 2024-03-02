@@ -7,11 +7,16 @@ from typing import Literal
 
 import pandas as pd
 
+from stockdex import config
 from stockdex.ticker_base import TickerBase
 
 
 class TickerAPI(TickerBase):
-    base_url = "https://query2.finance.yahoo.com/v8/finance/"
+    base_url = "https://query2.finance.yahoo.com/v8/finance"
+    fundamentals_base_url = "https://query2.finance.yahoo.com/ws/fundamentals-timeseries/v1/finance/timeseries"  # noqa: E501
+
+    current_timestamp = int(pd.Timestamp("now").timestamp())
+    five_years_ago = int(pd.Timestamp("now").timestamp()) - 5 * 365 * 24 * 60 * 60
 
     def price(
         self,
@@ -113,3 +118,29 @@ class TickerAPI(TickerBase):
                 "post": post,
             }
         )
+
+    def income_statement(
+        self, frequency: Literal["annual", "quarterly"] = "annual"
+    ) -> pd.DataFrame:
+        """
+        Get the income statement for the stock
+
+        Args:
+        frequency (str): The frequency of the data to retrieve
+        valid values are "annual", "quarterly"
+        """
+        # concat all the columns into one single string
+        columns = ",".join(
+            getattr(config, f"{frequency.upper()}_INCOME_STATEMENT_COLUMNS")
+        )
+        url = f"{self.fundamentals_base_url}/{self.ticker}/?symbol={self.ticker}"
+
+        # add the columns to the url
+        url += f"&type={columns}"
+
+        # add the start and end period
+        url += f"&period1={self.five_years_ago}&period2={self.current_timestamp}"
+
+        response = self.get_response(url)
+
+        return response
