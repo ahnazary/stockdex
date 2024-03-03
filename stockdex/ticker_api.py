@@ -120,7 +120,9 @@ class TickerAPI(TickerBase):
         )
 
     def income_statement(
-        self, frequency: Literal["annual", "quarterly"] = "annual"
+        self,
+        frequency: Literal["annual", "quarterly"] = "annual",
+        format: Literal["fmt", "raw"] = "fmt",
     ) -> pd.DataFrame:
         """
         Get the income statement for the stock
@@ -141,6 +143,19 @@ class TickerAPI(TickerBase):
         # add the start and end period
         url += f"&period1={self.five_years_ago}&period2={self.current_timestamp}"
 
-        response = self.get_response(url)
+        response = self.get_response(url).json()["timeseries"]["result"]
 
-        return response
+        result, row = pd.DataFrame(), {}
+        for item in response:
+            # append values in item["timestamp"] list to rows
+            column = item["meta"]["type"][0]
+            data = item[column]
+            for i in data:
+                # set row as i["asOfDate"]
+                index = {"asOfDate": i["asOfDate"]}
+                # set row[column] as i["reportedValue"]["raw"] or i["reportedValue"]["fmt"]
+                row[column] = i["reportedValue"][format]
+                # add row to result dataframe with index as index and column as column
+                result[column] = pd.DataFrame(row, index.values())
+
+        return pd.DataFrame(result).T
