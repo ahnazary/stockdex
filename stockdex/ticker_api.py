@@ -145,17 +145,18 @@ class TickerAPI(TickerBase):
 
         response = self.get_response(url).json()["timeseries"]["result"]
 
-        result, row = pd.DataFrame(), {}
+        row = {}
         for item in response:
-            # append values in item["timestamp"] list to rows
             column = item["meta"]["type"][0]
-            data = item[column]
-            for i in data:
-                # set row as i["asOfDate"]
-                index = {"asOfDate": i["asOfDate"]}
-                # set row[column] as i["reportedValue"]["raw"] or i["reportedValue"]["fmt"]
-                row[column] = i["reportedValue"][format]
-                # add row to result dataframe with index as index and column as column
-                result[column] = pd.DataFrame(row, index.values())
 
-        return pd.DataFrame(result).T
+            # skip if there is no data for in the response
+            if column not in item:
+                continue
+
+            data = item[column]
+            dated_index = [i["asOfDate"] for i in data]
+            values = [i["reportedValue"][format] for i in data]
+
+            row[column] = pd.Series(values, index=dated_index)
+
+        return pd.DataFrame(row, index=dated_index)

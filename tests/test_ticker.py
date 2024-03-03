@@ -357,4 +357,6 @@ def test_income_statement(ticker, frequency):
     ticker = Ticker(ticker)
     income_statement = ticker.income_statement(frequency=frequency)  # noqa F841
 
-    pass
+    assert isinstance(income_statement, pd.DataFrame)
+    assert income_statement.shape[0] > 0
+    assert income_statement.shape[1] > 0
