@@ -130,6 +130,11 @@ class TickerAPI(TickerBase):
         Args:
         frequency (str): The frequency of the data to retrieve
         valid values are "annual", "quarterly"
+
+        format (str): The format of the data to retrieve
+        valid values are "fmt", "raw"
+        if "fmt" is used, the data will be in a human readable format, e.g. 1B
+        if "raw" is used, the data will be in a raw format, e.g. 1000000000
         """
         # concat all the columns into one single string
         columns = ",".join(

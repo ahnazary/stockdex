@@ -344,18 +344,18 @@ def test_current_trading_period(ticker):
 
 
 @pytest.mark.parametrize(
-    "ticker, frequency",
+    "ticker, frequency, format",
     [
-        ("AAPL", "quarterly"),
-        ("GOOGL", "quarterly"),
-        ("MSFT", "quarterly"),
-        ("NVDA", "quarterly"),
-        ("FMC", "quarterly"),
+        ("AAPL", "quarterly", "fmt"),
+        ("GOOGL", "quarterly", "fmt"),
+        ("MSFT", "quarterly", "fmt"),
+        ("NVDA", "quarterly", "raw"),
+        ("FMC", "quarterly", "raw"),
     ],
 )
-def test_income_statement(ticker, frequency):
+def test_income_statement(ticker, frequency, format):
     ticker = Ticker(ticker)
-    income_statement = ticker.income_statement(frequency=frequency)  # noqa F841
+    income_statement = ticker.income_statement(frequency=frequency, format=format)
 
     assert isinstance(income_statement, pd.DataFrame)
     assert income_statement.shape[0] > 0
