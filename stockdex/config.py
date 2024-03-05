@@ -203,7 +203,7 @@ ANNUAL_INCOME_STATEMENT_COLUMNS = [
     "annualOperatingRevenue",
 ]
 
-ANNUAL_CASHFLOW = [
+ANNUAL_CASHFLOW_COLUMNS = [
     "annualForeignSales",
     "annualDomesticSales",
     "annualAdjustedGeographySegmentData",
@@ -329,7 +329,7 @@ ANNUAL_CASHFLOW = [
     "annualReceiptsfromCustomers",
 ]
 
-QUARTERLY_CASHFLOW = [
+QUARTERLY_CASHFLOW_COLUMNS = [
     "quarterlyForeignSales",
     "quarterlyDomesticSales",
     "quarterlyAdjustedGeographySegmentData",
