@@ -1,5 +1,10 @@
 # File for configuration of the stockdex package
 
+BASE_URL = "https://query2.finance.yahoo.com/v8/finance"
+FUNDAMENTALS_BASE_URL = (
+    "https://query2.finance.yahoo.com/ws/fundamentals-timeseries/v1/finance/timeseries"
+)
+
 QUARTERLY_INCOME_STATEMENT_COLUMNS = [
     "quarterlyTaxEffectOfUnusualItems",
     "quarterlyTaxRateForCalcs",
