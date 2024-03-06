@@ -12,9 +12,6 @@ from stockdex.ticker_base import TickerBase
 
 
 class TickerAPI(TickerBase):
-    base_url = "https://query2.finance.yahoo.com/v8/finance"
-    fundamentals_base_url = "https://query2.finance.yahoo.com/ws/fundamentals-timeseries/v1/finance/timeseries"  # noqa: E501
-
     current_timestamp = int(pd.Timestamp("now").timestamp())
     five_years_ago = int(pd.Timestamp("now").timestamp()) - 5 * 365 * 24 * 60 * 60
 
@@ -123,6 +120,8 @@ class TickerAPI(TickerBase):
         self,
         frequency: Literal["annual", "quarterly"] = "annual",
         format: Literal["fmt", "raw"] = "fmt",
+        period1: int = five_years_ago,
+        period2: int = current_timestamp,
     ) -> pd.DataFrame:
         """
         Get the income statement for the stock
@@ -136,20 +135,34 @@ class TickerAPI(TickerBase):
         if "fmt" is used, the data will be in a human readable format, e.g. 1B
         if "raw" is used, the data will be in a raw format, e.g. 1000000000
         """
-        # concat all the columns into one single string
-        columns = ",".join(
-            getattr(config, f"{frequency.upper()}_INCOME_STATEMENT_COLUMNS")
-        )
-        url = f"{self.fundamentals_base_url}/{self.ticker}/?symbol={self.ticker}"
-
-        # add the columns to the url
-        url += f"&type={columns}"
-
-        # add the start and end period
-        url += f"&period1={self.five_years_ago}&period2={self.current_timestamp}"
+        url = self.build_url(frequency, period1, period2, "income_statement")
 
         response = self.get_response(url).json()["timeseries"]["result"]
 
+        return self.extract_dataframe(response, format)
+
+    def build_url(
+        self,
+        frequency: str,
+        period1: int,
+        period2: int,
+        desired_entity: str,
+    ) -> str:
+        """
+        Build the URL for the income statement, balance sheet, and cash flow statement
+        """
+        columns = ",".join(
+            getattr(config, f"{frequency.upper()}_{desired_entity.upper()}_COLUMNS")
+        )
+        url = f"{config.FUNDAMENTALS_BASE_URL}/{self.ticker}/?symbol={self.ticker}"
+        url += f"&type={columns}"
+        url += f"&period1={period1}&period2={period2}"
+        return url
+
+    def extract_dataframe(self, response, format="fmt") -> pd.DataFrame:
+        """
+        Extract the dataframes from the response
+        """
         row = {}
         for item in response:
             column = item["meta"]["type"][0]
