@@ -26,7 +26,7 @@ class TickerBase:
 
         # Send an HTTP GET request to the website
         session = requests.Session()
-        response = session.get(url, headers=self.request_headers, timeout=5)
+        response = session.get(url, headers=self.request_headers, timeout=2)
         # If the HTTP GET request can't be served
         if response.status_code != 200:
             raise Exception("Failed to load page, check if the ticker symbol exists")
