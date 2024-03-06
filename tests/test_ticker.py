@@ -31,13 +31,13 @@ def test_get_response(ticker, expected_response):
         ("MSFT"),
     ],
 )
-def test_cash_flow(ticker):
+def test_cashflow_web(ticker):
     ticker = Ticker(ticker)
-    cash_flow_df = ticker.cash_flow
+    cashflow_web_df = ticker.cashflow_web
 
     # Check if the response is as expected
-    assert isinstance(cash_flow_df, pd.DataFrame)
-    assert cash_flow_df.shape[0] > 0
+    assert isinstance(cashflow_web_df, pd.DataFrame)
+    assert cashflow_web_df.shape[0] > 0
 
 
 @pytest.mark.parametrize(
@@ -360,3 +360,22 @@ def test_income_statement(ticker, frequency, format):
     assert isinstance(income_statement, pd.DataFrame)
     assert income_statement.shape[0] > 0
     assert income_statement.shape[1] > 0
+
+
+@pytest.mark.parametrize(
+    "ticker, frequency, format",
+    [
+        ("AAPL", "quarterly", "fmt"),
+        ("GOOGL", "quarterly", "fmt"),
+        ("MSFT", "quarterly", "fmt"),
+        ("NVDA", "quarterly", "raw"),
+        ("FMC", "quarterly", "raw"),
+    ],
+)
+def test_cash_flow(ticker, frequency, format):
+    ticker = Ticker(ticker)
+    cash_flow = ticker.cash_flow(frequency=frequency, format=format)
+
+    assert isinstance(cash_flow, pd.DataFrame)
+    assert cash_flow.shape[0] > 0
+    assert cash_flow.shape[1] > 0

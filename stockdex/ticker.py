@@ -145,7 +145,7 @@ class Ticker(TickerAPI):
         return data_df.T
 
     @property
-    def cash_flow(self) -> pd.DataFrame:
+    def cashflow_web(self) -> pd.DataFrame:
         """
         Get cash flow for the ticker
 
