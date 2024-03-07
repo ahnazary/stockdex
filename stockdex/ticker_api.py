@@ -192,6 +192,31 @@ class TickerAPI(TickerBase):
 
         return self.extract_dataframe(response, format)
 
+    def financials(
+        self,
+        frequency: Literal["annual", "quarterly"] = "annual",
+        format: Literal["fmt", "raw"] = "fmt",
+        period1: int = five_years_ago,
+        period2: int = current_timestamp,
+    ) -> pd.DataFrame:
+        """
+        Get the financials for the stock
+
+        Args:
+        frequency (str): The frequency of the data to retrieve
+        valid values are "annual", "quarterly"
+
+        format (str): The format of the data to retrieve
+        valid values are "fmt", "raw"
+        if "fmt" is used, the data will be in a human readable format, e.g. 1B
+        if "raw" is used, the data will be in a raw format, e.g. 1000000000
+        """
+        url = self.build_url(frequency, period1, period2, "financials")
+
+        response = self.get_response(url).json()["timeseries"]["result"]
+
+        return self.extract_dataframe(response, format)
+
     def build_url(
         self,
         frequency: str,
