@@ -47,7 +47,7 @@ class TickerAPI(TickerBase):
         valid values are "1m", "2m", "5m", "15m", "30m", "60m", "90m", "1h", "1d", "5d", "1wk", "1mo", "3mo""  # noqa: E501
         """
 
-        url = f"{self.base_url}/chart/{self.ticker}?range={range}&interval={dataGranularity}"
+        url = f"{config.BASE_URL}/chart/{self.ticker}?range={range}&interval={dataGranularity}"
         response = self.get_response(url)
 
         meta = response.json()["chart"]["result"][0]["meta"]
@@ -89,7 +89,7 @@ class TickerAPI(TickerBase):
         Get the current trading period for the stock
         """
 
-        url = f"{self.base_url}/chart/{self.ticker}"
+        url = f"{config.BASE_URL}/chart/{self.ticker}"
         response = self.get_response(url)
 
         currentTradingPeriod = response.json()["chart"]["result"][0]["meta"][
