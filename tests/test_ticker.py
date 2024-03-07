@@ -415,3 +415,22 @@ def test_balance_sheet(ticker, frequency, format):
     assert isinstance(balance_sheet, pd.DataFrame)
     assert balance_sheet.shape[0] > 0
     assert balance_sheet.shape[1] > 0
+
+
+@pytest.mark.parametrize(
+    "ticker, frequency, format",
+    [
+        ("AAPL", "quarterly", "fmt"),
+        ("GOOGL", "quarterly", "fmt"),
+        ("MSFT", "quarterly", "fmt"),
+        ("NVDA", "quarterly", "raw"),
+        ("FMC", "quarterly", "raw"),
+    ],
+)
+def test_financials(ticker, frequency, format):
+    ticker = Ticker(ticker)
+    financials = ticker.financials(frequency=frequency, format=format)
+
+    assert isinstance(financials, pd.DataFrame)
+    assert financials.shape[0] > 0
+    assert financials.shape[1] > 0
