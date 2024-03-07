@@ -30,28 +30,31 @@ from stockdex import Ticker
 ticker = Ticker('AAPL')
 ```
 
-## price data:
-Pass the range and interval (by default, range is '1d' and interval is '1m') to get a dataframe of the stock's historical price data including open, high, low, close, and volume on each timestamp.
-
+## Fundamental data from `Yahoo Finance` API (fast queries):
 ```python
+
+# Price data
 price = ticker.price(range='1y', dataGranularity='1d')
-```
 
-## Trading periods:
-Get the current trading period of the stock (pre-market, regular, post-market).
-```python
+# Current trading period of the stock (pre-market, regular, post-market)
 current_trading_period = ticker.current_trading_period
+
+income_statement = ticker.income_statement()
+cash_flow = ticker.cash_flow()
+balance_sheet = ticker.balance_sheet()
+financials = ticker.financials()
 ```
 
-## Fundamental data:
+
+## Fundamental data that is seen in the `Yahoo Finance` website:
 ```python
 # Summary including general financial information
 summary = ticker.summary
 
-# Financial data
+# Financial data as it is seen in the yahoo finance website
 income_stmt = ticker.income_stmt 
-balance_sheet = ticker.balance_sheet
-cash_flow = ticker.cash_flow
+balance_sheet = ticker.balance_sheet_web
+cash_flow = ticker.cash_flow_web
 
 # Analysts and estimates
 analysis = ticker.analysis
@@ -76,7 +79,7 @@ statistics = ticker.statistics
 
 ## Dividends data from `Digrin` Webstite:
 
-History of dividends paid by the company.
+All dividends paid by the company are returned as a pandas DataFrame. 
 
 ```python
 dividend = ticker.dividend
