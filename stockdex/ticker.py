@@ -109,7 +109,7 @@ class Ticker(TickerAPI):
         return data_df.T
 
     @property
-    def balance_sheet(self) -> pd.DataFrame:
+    def balance_sheet_web(self) -> pd.DataFrame:
         """
         Get balance sheet for the ticker
 
