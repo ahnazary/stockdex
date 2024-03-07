@@ -848,7 +848,7 @@ ANNUAL_FINANCIALS_COLUMNS = [
     "annualOperatingRevenue",
 ]
 
-QUARETRLY_FINANCIALS_COLUMNS = [
+QUARTERLY_FINANCIALS_COLUMNS = [
     "quarterlyTaxEffectOfUnusualItems",
     "quarterlyTaxRateForCalcs",
     "quarterlyNormalizedEBITDA",
