@@ -48,15 +48,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#stockdex">Stockdex</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#price-data">price data:</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#trading-periods">Trading periods:</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#summary-data">Summary data:</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#historical-data">Historical data:</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#financial-data">Financial data:</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#analyst-data">Analyst data:</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#option-data">Option data:</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#profile-data">Profile data:</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#holders-data">Holders data:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fundamental-data-from-yahoo-finance-api-fast-queries">Fundamental data from <code class="docutils literal notranslate"><span class="pre">Yahoo</span> <span class="pre">Finance</span></code> API (fast queries):</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fundamental-data-that-is-seen-in-the-yahoo-finance-website">Fundamental data that is seen in the <code class="docutils literal notranslate"><span class="pre">Yahoo</span> <span class="pre">Finance</span></code> website:</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#dividends-data-from-digrin-webstite">Dividends data from <code class="docutils literal notranslate"><span class="pre">Digrin</span></code> Webstite:</a></li>
 </ul>
 </li>
@@ -110,84 +103,69 @@
 </section>
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h2>
-<p>Create a <code class="docutils literal notranslate"><span class="pre">Ticker</span></code> object by passing the ticker symbol of the stock you want to access. Then, you can access the following data:</p>
+<p>Create a <code class="docutils literal notranslate"><span class="pre">Ticker</span></code> object by passing the ticker symbol. Ticker objects are the main interface to retrieve stock data.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">stockdex</span> <span class="kn">import</span> <span class="n">Ticker</span>
 
 <span class="c1"># Pick arbitrary ticker</span>
 <span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="s1">&#39;AAPL&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<section id="price-data">
-<h3>price data:<a class="headerlink" href="#price-data" title="Permalink to this heading"></a></h3>
-<p>Pass the range and interval (by default, range is ‘1d’ and interval is ‘1m’) to get a dataframe of the stock’s historical price data including open, high, low, close, and volume on each timestamp.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">price</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">price</span><span class="p">(</span><span class="nb">range</span><span class="o">=</span><span class="s1">&#39;1y&#39;</span><span class="p">,</span> <span class="n">dataGranularity</span><span class="o">=</span><span class="s1">&#39;1d&#39;</span><span class="p">)</span>
+<section id="fundamental-data-from-yahoo-finance-api-fast-queries">
+<h3>Fundamental data from <code class="docutils literal notranslate"><span class="pre">Yahoo</span> <span class="pre">Finance</span></code> API (fast queries):<a class="headerlink" href="#fundamental-data-from-yahoo-finance-api-fast-queries" title="Permalink to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<span class="c1"># Price data</span>
+<span class="n">price</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">price</span><span class="p">(</span><span class="nb">range</span><span class="o">=</span><span class="s1">&#39;1y&#39;</span><span class="p">,</span> <span class="n">dataGranularity</span><span class="o">=</span><span class="s1">&#39;1d&#39;</span><span class="p">)</span>
+
+<span class="c1"># Current trading period of the stock (pre-market, regular, post-market)</span>
+<span class="n">current_trading_period</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">current_trading_period</span>
+
+<span class="n">income_statement</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">income_statement</span><span class="p">()</span>
+<span class="n">cash_flow</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">cash_flow</span><span class="p">()</span>
+<span class="n">balance_sheet</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">balance_sheet</span><span class="p">()</span>
+<span class="n">financials</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">financials</span><span class="p">()</span>
 </pre></div>
 </div>
 </section>
-<section id="trading-periods">
-<h3>Trading periods:<a class="headerlink" href="#trading-periods" title="Permalink to this heading"></a></h3>
-<p>Get the current trading period of the stock (pre-market, regular, post-market).</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">current_trading_period</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">current_trading_period</span>
-</pre></div>
-</div>
-</section>
-<section id="summary-data">
-<h3>Summary data:<a class="headerlink" href="#summary-data" title="Permalink to this heading"></a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">summary</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">summary</span>
-</pre></div>
-</div>
-</section>
-<section id="historical-data">
-<h3>Historical data:<a class="headerlink" href="#historical-data" title="Permalink to this heading"></a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">statistics</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">statistics</span>
-</pre></div>
-</div>
-</section>
-<section id="financial-data">
-<h3>Financial data:<a class="headerlink" href="#financial-data" title="Permalink to this heading"></a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">income_stmt</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">income_stmt</span>
-<span class="n">balance_sheet</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">balance_sheet</span>
-<span class="n">cash_flow</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">cash_flow</span>
-</pre></div>
-</div>
-</section>
-<section id="analyst-data">
-<h3>Analyst data:<a class="headerlink" href="#analyst-data" title="Permalink to this heading"></a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">analysis</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">analysis</span>
-</pre></div>
-</div>
-</section>
-<section id="option-data">
-<h3>Option data:<a class="headerlink" href="#option-data" title="Permalink to this heading"></a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">calls</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">calls</span>
+<section id="fundamental-data-that-is-seen-in-the-yahoo-finance-website">
+<h3>Fundamental data that is seen in the <code class="docutils literal notranslate"><span class="pre">Yahoo</span> <span class="pre">Finance</span></code> website:<a class="headerlink" href="#fundamental-data-that-is-seen-in-the-yahoo-finance-website" title="Permalink to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Summary including general financial information</span>
+<span class="n">summary</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">summary</span>
+
+<span class="c1"># Financial data as it is seen in the yahoo finance website</span>
+<span class="n">income_stmt</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">income_stmt</span>
+<span class="n">balance_sheet</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">balance_sheet_web</span>
+<span class="n">cash_flow</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">cash_flow_web</span>
+
+<span class="c1"># Analysts and estimates</span>
+<span class="n">analysis</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">analysis</span>
+
+<span class="c1"># Data about options</span>
+<span class="n">calls</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">calls</span>
 <span class="n">puts</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">puts</span>
-</pre></div>
-</div>
-</section>
-<section id="profile-data">
-<h3>Profile data:<a class="headerlink" href="#profile-data" title="Permalink to this heading"></a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">key_executives</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">key_executives</span>
+
+<span class="c1"># Profile data</span>
+<span class="n">key_executives</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">key_executives</span>
 <span class="n">description</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">description</span>
 <span class="n">corporate_governance</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">corporate_governance</span>
-</pre></div>
-</div>
-</section>
-<section id="holders-data">
-<h3>Holders data:<a class="headerlink" href="#holders-data" title="Permalink to this heading"></a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">major_holders</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">major_holders</span>
+
+<span class="c1"># Data about shareholders</span>
+<span class="n">major_holders</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">major_holders</span>
 <span class="n">top_institutional_holders</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">top_institutional_holders</span>
 <span class="n">top_mutual_fund_holders</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">top_mutual_fund_holders</span>
+
+<span class="c1"># Main statistics</span>
+<span class="n">statistics</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">statistics</span>
 </pre></div>
 </div>
 </section>
 <section id="dividends-data-from-digrin-webstite">
 <h3>Dividends data from <code class="docutils literal notranslate"><span class="pre">Digrin</span></code> Webstite:<a class="headerlink" href="#dividends-data-from-digrin-webstite" title="Permalink to this heading"></a></h3>
-<p>History of dividends paid by the company.</p>
+<p>All dividends paid by the company are returned as a pandas DataFrame.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dividend</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">dividend</span>
 </pre></div>
 </div>
 <br />
-<br />
+<hr class="docutils" />
 <p>Check out sphinx documentation <a class="reference external" href="https://ahnazary.github.io/stockdex/">here</a> for more information about the package.</p>
 </section>
 </section>

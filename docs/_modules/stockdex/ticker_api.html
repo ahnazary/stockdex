@@ -79,11 +79,13 @@
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
+<span class="kn">from</span> <span class="nn">stockdex</span> <span class="kn">import</span> <span class="n">config</span>
 <span class="kn">from</span> <span class="nn">stockdex.ticker_base</span> <span class="kn">import</span> <span class="n">TickerBase</span>
 
 
 <div class="viewcode-block" id="TickerAPI"><a class="viewcode-back" href="../../stockdex.html#stockdex.ticker_api.TickerAPI">[docs]</a><span class="k">class</span> <span class="nc">TickerAPI</span><span class="p">(</span><span class="n">TickerBase</span><span class="p">):</span>
-    <span class="n">base_url</span> <span class="o">=</span> <span class="s2">&quot;https://query2.finance.yahoo.com/v8/finance/&quot;</span>
+    <span class="n">current_timestamp</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="s2">&quot;now&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">timestamp</span><span class="p">())</span>
+    <span class="n">five_years_ago</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="s2">&quot;now&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">timestamp</span><span class="p">())</span> <span class="o">-</span> <span class="mi">5</span> <span class="o">*</span> <span class="mi">365</span> <span class="o">*</span> <span class="mi">24</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span>
 
 <div class="viewcode-block" id="TickerAPI.price"><a class="viewcode-back" href="../../stockdex.html#stockdex.ticker_api.TickerAPI.price">[docs]</a>    <span class="k">def</span> <span class="nf">price</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -184,7 +186,146 @@
                 <span class="s2">&quot;regular&quot;</span><span class="p">:</span> <span class="n">regular</span><span class="p">,</span>
                 <span class="s2">&quot;post&quot;</span><span class="p">:</span> <span class="n">post</span><span class="p">,</span>
             <span class="p">}</span>
-        <span class="p">)</span></div>
+        <span class="p">)</span>
+
+    <span class="c1"># TODO: periods must be strings</span>
+<div class="viewcode-block" id="TickerAPI.income_statement"><a class="viewcode-back" href="../../stockdex.html#stockdex.ticker_api.TickerAPI.income_statement">[docs]</a>    <span class="k">def</span> <span class="nf">income_statement</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">frequency</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;annual&quot;</span><span class="p">,</span> <span class="s2">&quot;quarterly&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;annual&quot;</span><span class="p">,</span>
+        <span class="nb">format</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;fmt&quot;</span><span class="p">,</span> <span class="s2">&quot;raw&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;fmt&quot;</span><span class="p">,</span>
+        <span class="n">period1</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">five_years_ago</span><span class="p">,</span>
+        <span class="n">period2</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">current_timestamp</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the income statement for the stock</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">        frequency (str): The frequency of the data to retrieve</span>
+<span class="sd">        valid values are &quot;annual&quot;, &quot;quarterly&quot;</span>
+
+<span class="sd">        format (str): The format of the data to retrieve</span>
+<span class="sd">        valid values are &quot;fmt&quot;, &quot;raw&quot;</span>
+<span class="sd">        if &quot;fmt&quot; is used, the data will be in a human readable format, e.g. 1B</span>
+<span class="sd">        if &quot;raw&quot; is used, the data will be in a raw format, e.g. 1000000000</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_url</span><span class="p">(</span><span class="n">frequency</span><span class="p">,</span> <span class="n">period1</span><span class="p">,</span> <span class="n">period2</span><span class="p">,</span> <span class="s2">&quot;income_statement&quot;</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">&quot;timeseries&quot;</span><span class="p">][</span><span class="s2">&quot;result&quot;</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_dataframe</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="nb">format</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TickerAPI.cash_flow"><a class="viewcode-back" href="../../stockdex.html#stockdex.ticker_api.TickerAPI.cash_flow">[docs]</a>    <span class="k">def</span> <span class="nf">cash_flow</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">frequency</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;annual&quot;</span><span class="p">,</span> <span class="s2">&quot;quarterly&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;annual&quot;</span><span class="p">,</span>
+        <span class="nb">format</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;fmt&quot;</span><span class="p">,</span> <span class="s2">&quot;raw&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;fmt&quot;</span><span class="p">,</span>
+        <span class="n">period1</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">five_years_ago</span><span class="p">,</span>
+        <span class="n">period2</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">current_timestamp</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the cash flow statement for the stock</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">        frequency (str): The frequency of the data to retrieve</span>
+<span class="sd">        valid values are &quot;annual&quot;, &quot;quarterly&quot;</span>
+
+<span class="sd">        format (str): The format of the data to retrieve</span>
+<span class="sd">        valid values are &quot;fmt&quot;, &quot;raw&quot;</span>
+<span class="sd">        if &quot;fmt&quot; is used, the data will be in a human readable format, e.g. 1B</span>
+<span class="sd">        if &quot;raw&quot; is used, the data will be in a raw format, e.g. 1000000000</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_url</span><span class="p">(</span><span class="n">frequency</span><span class="p">,</span> <span class="n">period1</span><span class="p">,</span> <span class="n">period2</span><span class="p">,</span> <span class="s2">&quot;cash_flow&quot;</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">&quot;timeseries&quot;</span><span class="p">][</span><span class="s2">&quot;result&quot;</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_dataframe</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="nb">format</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TickerAPI.balance_sheet"><a class="viewcode-back" href="../../stockdex.html#stockdex.ticker_api.TickerAPI.balance_sheet">[docs]</a>    <span class="k">def</span> <span class="nf">balance_sheet</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">frequency</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;annual&quot;</span><span class="p">,</span> <span class="s2">&quot;quarterly&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;annual&quot;</span><span class="p">,</span>
+        <span class="nb">format</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;fmt&quot;</span><span class="p">,</span> <span class="s2">&quot;raw&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;fmt&quot;</span><span class="p">,</span>
+        <span class="n">period1</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">five_years_ago</span><span class="p">,</span>
+        <span class="n">period2</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">current_timestamp</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the balance sheet for the stock</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">        frequency (str): The frequency of the data to retrieve</span>
+<span class="sd">        valid values are &quot;annual&quot;, &quot;quarterly&quot;</span>
+
+<span class="sd">        format (str): The format of the data to retrieve</span>
+<span class="sd">        valid values are &quot;fmt&quot;, &quot;raw&quot;</span>
+<span class="sd">        if &quot;fmt&quot; is used, the data will be in a human readable format, e.g. 1B</span>
+<span class="sd">        if &quot;raw&quot; is used, the data will be in a raw format, e.g. 1000000000</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_url</span><span class="p">(</span><span class="n">frequency</span><span class="p">,</span> <span class="n">period1</span><span class="p">,</span> <span class="n">period2</span><span class="p">,</span> <span class="s2">&quot;balance_sheet&quot;</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">&quot;timeseries&quot;</span><span class="p">][</span><span class="s2">&quot;result&quot;</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_dataframe</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="nb">format</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TickerAPI.financials"><a class="viewcode-back" href="../../stockdex.html#stockdex.ticker_api.TickerAPI.financials">[docs]</a>    <span class="k">def</span> <span class="nf">financials</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">frequency</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;annual&quot;</span><span class="p">,</span> <span class="s2">&quot;quarterly&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;annual&quot;</span><span class="p">,</span>
+        <span class="nb">format</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;fmt&quot;</span><span class="p">,</span> <span class="s2">&quot;raw&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;fmt&quot;</span><span class="p">,</span>
+        <span class="n">period1</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">five_years_ago</span><span class="p">,</span>
+        <span class="n">period2</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">current_timestamp</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the financials for the stock</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">        frequency (str): The frequency of the data to retrieve</span>
+<span class="sd">        valid values are &quot;annual&quot;, &quot;quarterly&quot;</span>
+
+<span class="sd">        format (str): The format of the data to retrieve</span>
+<span class="sd">        valid values are &quot;fmt&quot;, &quot;raw&quot;</span>
+<span class="sd">        if &quot;fmt&quot; is used, the data will be in a human readable format, e.g. 1B</span>
+<span class="sd">        if &quot;raw&quot; is used, the data will be in a raw format, e.g. 1000000000</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_url</span><span class="p">(</span><span class="n">frequency</span><span class="p">,</span> <span class="n">period1</span><span class="p">,</span> <span class="n">period2</span><span class="p">,</span> <span class="s2">&quot;financials&quot;</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">&quot;timeseries&quot;</span><span class="p">][</span><span class="s2">&quot;result&quot;</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_dataframe</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="nb">format</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TickerAPI.build_url"><a class="viewcode-back" href="../../stockdex.html#stockdex.ticker_api.TickerAPI.build_url">[docs]</a>    <span class="k">def</span> <span class="nf">build_url</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">frequency</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">period1</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">period2</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">desired_entity</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Build the URL for the income statement, balance sheet, and cash flow statement</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">columns</span> <span class="o">=</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="nb">getattr</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">frequency</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">desired_entity</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2">_COLUMNS&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">config</span><span class="o">.</span><span class="n">FUNDAMENTALS_BASE_URL</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/?symbol=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">url</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;&amp;type=</span><span class="si">{</span><span class="n">columns</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">url</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;&amp;period1=</span><span class="si">{</span><span class="n">period1</span><span class="si">}</span><span class="s2">&amp;period2=</span><span class="si">{</span><span class="n">period2</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="n">url</span></div>
+
+<div class="viewcode-block" id="TickerAPI.extract_dataframe"><a class="viewcode-back" href="../../stockdex.html#stockdex.ticker_api.TickerAPI.extract_dataframe">[docs]</a>    <span class="k">def</span> <span class="nf">extract_dataframe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;fmt&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extract the dataframes from the response</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">response</span><span class="p">:</span>
+            <span class="n">column</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="s2">&quot;meta&quot;</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="c1"># skip if there is no data for in the response</span>
+            <span class="k">if</span> <span class="n">column</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">item</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="n">data</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="n">column</span><span class="p">]</span>
+            <span class="n">dated_index</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="s2">&quot;asOfDate&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="s2">&quot;reportedValue&quot;</span><span class="p">][</span><span class="nb">format</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+
+            <span class="n">row</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">dated_index</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">dated_index</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>
