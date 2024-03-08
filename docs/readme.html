@@ -48,9 +48,9 @@
 <li class="toctree-l2"><a class="reference internal" href="#stockdex">Stockdex</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#fundamental-data-from-yahoo-finance-api-fast-queries">Fundamental data from <code class="docutils literal notranslate"><span class="pre">Yahoo</span> <span class="pre">Finance</span></code> API (fast queries):</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#fundamental-data-that-is-seen-in-the-yahoo-finance-website">Fundamental data that is seen in the <code class="docutils literal notranslate"><span class="pre">Yahoo</span> <span class="pre">Finance</span></code> website:</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#dividends-data-from-digrin-webstite">Dividends data from <code class="docutils literal notranslate"><span class="pre">Digrin</span></code> Webstite:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fundamental-data-from-yahoo-finance-api-fast-queries-through-yahoo-finance-api">Fundamental data from <code class="docutils literal notranslate"><span class="pre">Yahoo</span> <span class="pre">Finance</span></code> API (fast queries through Yahoo Finance API):</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fundamental-data-with-criteria-from-yahoo-finance-website-web-scraping">Fundamental data with criteria from <code class="docutils literal notranslate"><span class="pre">Yahoo</span> <span class="pre">Finance</span></code> website (web scraping):</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#historical-dividends-data">Historical dividends data</a></li>
 </ul>
 </li>
 </ul>
@@ -103,31 +103,32 @@
 </section>
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h2>
-<p>Create a <code class="docutils literal notranslate"><span class="pre">Ticker</span></code> object by passing the ticker symbol. Ticker objects are the main interface to retrieve stock data.</p>
+<p>Create <code class="docutils literal notranslate"><span class="pre">Ticker</span></code> object by passing the ticker symbol. Ticker objects are the main interface to retrieve stock data.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">stockdex</span> <span class="kn">import</span> <span class="n">Ticker</span>
 
 <span class="c1"># Pick arbitrary ticker</span>
 <span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="s1">&#39;AAPL&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<section id="fundamental-data-from-yahoo-finance-api-fast-queries">
-<h3>Fundamental data from <code class="docutils literal notranslate"><span class="pre">Yahoo</span> <span class="pre">Finance</span></code> API (fast queries):<a class="headerlink" href="#fundamental-data-from-yahoo-finance-api-fast-queries" title="Permalink to this heading"></a></h3>
+<section id="fundamental-data-from-yahoo-finance-api-fast-queries-through-yahoo-finance-api">
+<h3>Fundamental data from <code class="docutils literal notranslate"><span class="pre">Yahoo</span> <span class="pre">Finance</span></code> API (fast queries through Yahoo Finance API):<a class="headerlink" href="#fundamental-data-from-yahoo-finance-api-fast-queries-through-yahoo-finance-api" title="Permalink to this heading"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
-<span class="c1"># Price data</span>
+<span class="c1"># Price data (use range and dataGranularity to make range and granularity more specific)</span>
 <span class="n">price</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">price</span><span class="p">(</span><span class="nb">range</span><span class="o">=</span><span class="s1">&#39;1y&#39;</span><span class="p">,</span> <span class="n">dataGranularity</span><span class="o">=</span><span class="s1">&#39;1d&#39;</span><span class="p">)</span>
 
-<span class="c1"># Current trading period of the stock (pre-market, regular, post-market)</span>
+<span class="c1"># Current trading period of the stock (pre-market, regular, post-market trading periods)</span>
 <span class="n">current_trading_period</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">current_trading_period</span>
 
-<span class="n">income_statement</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">income_statement</span><span class="p">()</span>
-<span class="n">cash_flow</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">cash_flow</span><span class="p">()</span>
-<span class="n">balance_sheet</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">balance_sheet</span><span class="p">()</span>
-<span class="n">financials</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">financials</span><span class="p">()</span>
+<span class="c1"># Fundamental data (use frequency, format, period1 and period2 to fine-tune the returned data)</span>
+<span class="n">income_statement</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">income_statement</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="s1">&#39;quarterly&#39;</span><span class="p">)</span>
+<span class="n">cash_flow</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">cash_flow</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;raw&#39;</span><span class="p">)</span>
+<span class="n">balance_sheet</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">balance_sheet</span><span class="p">(</span><span class="n">period1</span><span class="o">=</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2020</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">financials</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">financials</span><span class="p">(</span><span class="n">period1</span><span class="o">=</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2022</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">period2</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">today</span><span class="p">())</span>
 </pre></div>
 </div>
 </section>
-<section id="fundamental-data-that-is-seen-in-the-yahoo-finance-website">
-<h3>Fundamental data that is seen in the <code class="docutils literal notranslate"><span class="pre">Yahoo</span> <span class="pre">Finance</span></code> website:<a class="headerlink" href="#fundamental-data-that-is-seen-in-the-yahoo-finance-website" title="Permalink to this heading"></a></h3>
+<section id="fundamental-data-with-criteria-from-yahoo-finance-website-web-scraping">
+<h3>Fundamental data with criteria from <code class="docutils literal notranslate"><span class="pre">Yahoo</span> <span class="pre">Finance</span></code> website (web scraping):<a class="headerlink" href="#fundamental-data-with-criteria-from-yahoo-finance-website-web-scraping" title="Permalink to this heading"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Summary including general financial information</span>
 <span class="n">summary</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">summary</span>
 
@@ -158,9 +159,9 @@
 </pre></div>
 </div>
 </section>
-<section id="dividends-data-from-digrin-webstite">
-<h3>Dividends data from <code class="docutils literal notranslate"><span class="pre">Digrin</span></code> Webstite:<a class="headerlink" href="#dividends-data-from-digrin-webstite" title="Permalink to this heading"></a></h3>
-<p>All dividends paid by the company are returned as a pandas DataFrame.</p>
+<section id="historical-dividends-data">
+<h3>Historical dividends data<a class="headerlink" href="#historical-dividends-data" title="Permalink to this heading"></a></h3>
+<p>All dividends paid by the company returned as a pandas DataFrame.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dividend</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">dividend</span>
 </pre></div>
 </div>

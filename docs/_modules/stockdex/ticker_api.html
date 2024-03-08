@@ -75,6 +75,7 @@
 <span class="sd">The main Ticker class inherits from this class</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Literal</span>
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -84,8 +85,11 @@
 
 
 <div class="viewcode-block" id="TickerAPI"><a class="viewcode-back" href="../../stockdex.html#stockdex.ticker_api.TickerAPI">[docs]</a><span class="k">class</span> <span class="nc">TickerAPI</span><span class="p">(</span><span class="n">TickerBase</span><span class="p">):</span>
-    <span class="n">current_timestamp</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="s2">&quot;now&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">timestamp</span><span class="p">())</span>
-    <span class="n">five_years_ago</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="s2">&quot;now&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">timestamp</span><span class="p">())</span> <span class="o">-</span> <span class="mi">5</span> <span class="o">*</span> <span class="mi">365</span> <span class="o">*</span> <span class="mi">24</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span>
+    <span class="c1"># current_timestamp = int(pd.Timestamp(&quot;now&quot;).timestamp())</span>
+    <span class="c1"># five_years_ago = int(pd.Timestamp(&quot;now&quot;).timestamp()) - 5 * 365 * 24 * 60 * 60</span>
+
+    <span class="n">today</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">today</span><span class="p">()</span>
+    <span class="n">five_years_ago</span> <span class="o">=</span> <span class="n">today</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="n">today</span><span class="o">.</span><span class="n">year</span> <span class="o">-</span> <span class="mi">5</span><span class="p">)</span>
 
 <div class="viewcode-block" id="TickerAPI.price"><a class="viewcode-back" href="../../stockdex.html#stockdex.ticker_api.TickerAPI.price">[docs]</a>    <span class="k">def</span> <span class="nf">price</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -188,13 +192,12 @@
             <span class="p">}</span>
         <span class="p">)</span>
 
-    <span class="c1"># TODO: periods must be strings</span>
 <div class="viewcode-block" id="TickerAPI.income_statement"><a class="viewcode-back" href="../../stockdex.html#stockdex.ticker_api.TickerAPI.income_statement">[docs]</a>    <span class="k">def</span> <span class="nf">income_statement</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">frequency</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;annual&quot;</span><span class="p">,</span> <span class="s2">&quot;quarterly&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;annual&quot;</span><span class="p">,</span>
         <span class="nb">format</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;fmt&quot;</span><span class="p">,</span> <span class="s2">&quot;raw&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;fmt&quot;</span><span class="p">,</span>
-        <span class="n">period1</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">five_years_ago</span><span class="p">,</span>
-        <span class="n">period2</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">current_timestamp</span><span class="p">,</span>
+        <span class="n">period1</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="n">five_years_ago</span><span class="p">,</span>
+        <span class="n">period2</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="n">today</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the income statement for the stock</span>
@@ -207,6 +210,12 @@
 <span class="sd">        valid values are &quot;fmt&quot;, &quot;raw&quot;</span>
 <span class="sd">        if &quot;fmt&quot; is used, the data will be in a human readable format, e.g. 1B</span>
 <span class="sd">        if &quot;raw&quot; is used, the data will be in a raw format, e.g. 1000000000</span>
+
+<span class="sd">        period1 (datetime): The start date of the data to retrieve</span>
+<span class="sd">        default is five years ago as that is the maximum period the API supports data retrieval for</span>
+
+<span class="sd">        period2 (datetime): The end date of the data to retrieve</span>
+<span class="sd">        default is the current date</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_url</span><span class="p">(</span><span class="n">frequency</span><span class="p">,</span> <span class="n">period1</span><span class="p">,</span> <span class="n">period2</span><span class="p">,</span> <span class="s2">&quot;income_statement&quot;</span><span class="p">)</span>
 
@@ -218,8 +227,8 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">frequency</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;annual&quot;</span><span class="p">,</span> <span class="s2">&quot;quarterly&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;annual&quot;</span><span class="p">,</span>
         <span class="nb">format</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;fmt&quot;</span><span class="p">,</span> <span class="s2">&quot;raw&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;fmt&quot;</span><span class="p">,</span>
-        <span class="n">period1</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">five_years_ago</span><span class="p">,</span>
-        <span class="n">period2</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">current_timestamp</span><span class="p">,</span>
+        <span class="n">period1</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="n">five_years_ago</span><span class="p">,</span>
+        <span class="n">period2</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="n">today</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the cash flow statement for the stock</span>
@@ -232,6 +241,12 @@
 <span class="sd">        valid values are &quot;fmt&quot;, &quot;raw&quot;</span>
 <span class="sd">        if &quot;fmt&quot; is used, the data will be in a human readable format, e.g. 1B</span>
 <span class="sd">        if &quot;raw&quot; is used, the data will be in a raw format, e.g. 1000000000</span>
+
+<span class="sd">        period1 (datetime): The start date of the data to retrieve</span>
+<span class="sd">        default is five years ago as that is the maximum period the API supports data retrieval for</span>
+
+<span class="sd">        period2 (datetime): The end date of the data to retrieve</span>
+<span class="sd">        default is the current date</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_url</span><span class="p">(</span><span class="n">frequency</span><span class="p">,</span> <span class="n">period1</span><span class="p">,</span> <span class="n">period2</span><span class="p">,</span> <span class="s2">&quot;cash_flow&quot;</span><span class="p">)</span>
 
@@ -243,8 +258,8 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">frequency</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;annual&quot;</span><span class="p">,</span> <span class="s2">&quot;quarterly&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;annual&quot;</span><span class="p">,</span>
         <span class="nb">format</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;fmt&quot;</span><span class="p">,</span> <span class="s2">&quot;raw&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;fmt&quot;</span><span class="p">,</span>
-        <span class="n">period1</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">five_years_ago</span><span class="p">,</span>
-        <span class="n">period2</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">current_timestamp</span><span class="p">,</span>
+        <span class="n">period1</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="n">five_years_ago</span><span class="p">,</span>
+        <span class="n">period2</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="n">today</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the balance sheet for the stock</span>
@@ -257,6 +272,12 @@
 <span class="sd">        valid values are &quot;fmt&quot;, &quot;raw&quot;</span>
 <span class="sd">        if &quot;fmt&quot; is used, the data will be in a human readable format, e.g. 1B</span>
 <span class="sd">        if &quot;raw&quot; is used, the data will be in a raw format, e.g. 1000000000</span>
+
+<span class="sd">        period1 (datetime): The start date of the data to retrieve</span>
+<span class="sd">        default is five years ago as that is the maximum period the API supports data retrieval for</span>
+
+<span class="sd">        period2 (datetime): The end date of the data to retrieve</span>
+<span class="sd">        default is the current date</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_url</span><span class="p">(</span><span class="n">frequency</span><span class="p">,</span> <span class="n">period1</span><span class="p">,</span> <span class="n">period2</span><span class="p">,</span> <span class="s2">&quot;balance_sheet&quot;</span><span class="p">)</span>
 
@@ -268,8 +289,8 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">frequency</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;annual&quot;</span><span class="p">,</span> <span class="s2">&quot;quarterly&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;annual&quot;</span><span class="p">,</span>
         <span class="nb">format</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;fmt&quot;</span><span class="p">,</span> <span class="s2">&quot;raw&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;fmt&quot;</span><span class="p">,</span>
-        <span class="n">period1</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">five_years_ago</span><span class="p">,</span>
-        <span class="n">period2</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">current_timestamp</span><span class="p">,</span>
+        <span class="n">period1</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="n">five_years_ago</span><span class="p">,</span>
+        <span class="n">period2</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="n">today</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the financials for the stock</span>
@@ -282,6 +303,12 @@
 <span class="sd">        valid values are &quot;fmt&quot;, &quot;raw&quot;</span>
 <span class="sd">        if &quot;fmt&quot; is used, the data will be in a human readable format, e.g. 1B</span>
 <span class="sd">        if &quot;raw&quot; is used, the data will be in a raw format, e.g. 1000000000</span>
+
+<span class="sd">        period1 (datetime): The start date of the data to retrieve</span>
+<span class="sd">        default is five years ago as that is the maximum period the API supports data retrieval for</span>
+
+<span class="sd">        period2 (datetime): The end date of the data to retrieve</span>
+<span class="sd">        default is the current date</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_url</span><span class="p">(</span><span class="n">frequency</span><span class="p">,</span> <span class="n">period1</span><span class="p">,</span> <span class="n">period2</span><span class="p">,</span> <span class="s2">&quot;financials&quot;</span><span class="p">)</span>
 
@@ -292,13 +319,17 @@
 <div class="viewcode-block" id="TickerAPI.build_url"><a class="viewcode-back" href="../../stockdex.html#stockdex.ticker_api.TickerAPI.build_url">[docs]</a>    <span class="k">def</span> <span class="nf">build_url</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">frequency</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">period1</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-        <span class="n">period2</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">period1</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span>
+        <span class="n">period2</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span>
         <span class="n">desired_entity</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Build the URL for the income statement, balance sheet, and cash flow statement</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># convert period1 and period2 to timestamps</span>
+        <span class="n">period1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="n">period1</span><span class="p">)</span><span class="o">.</span><span class="n">timestamp</span><span class="p">())</span>
+        <span class="n">period2</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="n">period2</span><span class="p">)</span><span class="o">.</span><span class="n">timestamp</span><span class="p">())</span>
+
         <span class="n">columns</span> <span class="o">=</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
             <span class="nb">getattr</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">frequency</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">desired_entity</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2">_COLUMNS&quot;</span><span class="p">)</span>
         <span class="p">)</span>
