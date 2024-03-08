@@ -21,7 +21,7 @@ pip install stockdex
 
 # Usage
 
-Create a `Ticker` object by passing the ticker symbol. Ticker objects are the main interface to retrieve stock data.
+Create `Ticker` object by passing the ticker symbol. Ticker objects are the main interface to retrieve stock data.
 
 ```python
 from stockdex import Ticker
@@ -30,23 +30,24 @@ from stockdex import Ticker
 ticker = Ticker('AAPL')
 ```
 
-## Fundamental data from `Yahoo Finance` API (fast queries):
+## Fundamental data from `Yahoo Finance` API (fast queries through Yahoo Finance API):
 ```python
 
-# Price data
+# Price data (use range and dataGranularity to make range and granularity more specific)
 price = ticker.price(range='1y', dataGranularity='1d')
 
-# Current trading period of the stock (pre-market, regular, post-market)
+# Current trading period of the stock (pre-market, regular, post-market trading periods)
 current_trading_period = ticker.current_trading_period
 
-income_statement = ticker.income_statement()
-cash_flow = ticker.cash_flow()
-balance_sheet = ticker.balance_sheet()
-financials = ticker.financials()
+# Fundamental data (use frequency, format, period1 and period2 to fine-tune the returned data)
+income_statement = ticker.income_statement(frequency='quarterly')
+cash_flow = ticker.cash_flow(format='raw')
+balance_sheet = ticker.balance_sheet(period1=datetime(2020, 1, 1))
+financials = ticker.financials(period1=datetime(2022, 1, 1), period2=datetime.today())
 ```
 
 
-## Fundamental data that is seen in the `Yahoo Finance` website:
+## Fundamental data with criteria from `Yahoo Finance` website (web scraping):
 ```python
 # Summary including general financial information
 summary = ticker.summary
@@ -77,9 +78,9 @@ top_mutual_fund_holders = ticker.top_mutual_fund_holders
 statistics = ticker.statistics 
 ```
 
-## Dividends data from `Digrin` Webstite:
+## Historical dividends data
 
-All dividends paid by the company are returned as a pandas DataFrame. 
+All dividends paid by the company returned as a pandas DataFrame.
 
 ```python
 dividend = ticker.dividend
