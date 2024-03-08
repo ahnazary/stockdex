@@ -55,7 +55,7 @@ summary = ticker.summary
 # Financial data as it is seen in the yahoo finance website
 income_stmt = ticker.income_stmt 
 balance_sheet = ticker.balance_sheet_web
-cash_flow = ticker.cash_flow_web
+cash_flow = ticker.cashflow_web
 
 # Analysts and estimates
 analysis = ticker.analysis
