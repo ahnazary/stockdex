@@ -3,6 +3,7 @@ Module to retrieve stock data from Yahoo Finance API
 The main Ticker class inherits from this class
 """
 
+from datetime import datetime
 from typing import Literal
 
 import pandas as pd
@@ -12,8 +13,11 @@ from stockdex.ticker_base import TickerBase
 
 
 class TickerAPI(TickerBase):
-    current_timestamp = int(pd.Timestamp("now").timestamp())
-    five_years_ago = int(pd.Timestamp("now").timestamp()) - 5 * 365 * 24 * 60 * 60
+    # current_timestamp = int(pd.Timestamp("now").timestamp())
+    # five_years_ago = int(pd.Timestamp("now").timestamp()) - 5 * 365 * 24 * 60 * 60
+
+    today = datetime.today()
+    five_years_ago = today.replace(year=today.year - 5)
 
     def price(
         self,
@@ -116,13 +120,12 @@ class TickerAPI(TickerBase):
             }
         )
 
-    # TODO: periods must be strings
     def income_statement(
         self,
         frequency: Literal["annual", "quarterly"] = "annual",
         format: Literal["fmt", "raw"] = "fmt",
-        period1: int = five_years_ago,
-        period2: int = current_timestamp,
+        period1: datetime = five_years_ago,
+        period2: datetime = today,
     ) -> pd.DataFrame:
         """
         Get the income statement for the stock
@@ -135,6 +138,12 @@ class TickerAPI(TickerBase):
         valid values are "fmt", "raw"
         if "fmt" is used, the data will be in a human readable format, e.g. 1B
         if "raw" is used, the data will be in a raw format, e.g. 1000000000
+
+        period1 (datetime): The start date of the data to retrieve
+        default is five years ago as that is the maximum period the API supports data retrieval for
+
+        period2 (datetime): The end date of the data to retrieve
+        default is the current date
         """
         url = self.build_url(frequency, period1, period2, "income_statement")
 
@@ -146,8 +155,8 @@ class TickerAPI(TickerBase):
         self,
         frequency: Literal["annual", "quarterly"] = "annual",
         format: Literal["fmt", "raw"] = "fmt",
-        period1: int = five_years_ago,
-        period2: int = current_timestamp,
+        period1: datetime = five_years_ago,
+        period2: datetime = today,
     ) -> pd.DataFrame:
         """
         Get the cash flow statement for the stock
@@ -160,6 +169,12 @@ class TickerAPI(TickerBase):
         valid values are "fmt", "raw"
         if "fmt" is used, the data will be in a human readable format, e.g. 1B
         if "raw" is used, the data will be in a raw format, e.g. 1000000000
+
+        period1 (datetime): The start date of the data to retrieve
+        default is five years ago as that is the maximum period the API supports data retrieval for
+
+        period2 (datetime): The end date of the data to retrieve
+        default is the current date
         """
         url = self.build_url(frequency, period1, period2, "cash_flow")
 
@@ -171,8 +186,8 @@ class TickerAPI(TickerBase):
         self,
         frequency: Literal["annual", "quarterly"] = "annual",
         format: Literal["fmt", "raw"] = "fmt",
-        period1: int = five_years_ago,
-        period2: int = current_timestamp,
+        period1: datetime = five_years_ago,
+        period2: datetime = today,
     ) -> pd.DataFrame:
         """
         Get the balance sheet for the stock
@@ -185,6 +200,12 @@ class TickerAPI(TickerBase):
         valid values are "fmt", "raw"
         if "fmt" is used, the data will be in a human readable format, e.g. 1B
         if "raw" is used, the data will be in a raw format, e.g. 1000000000
+
+        period1 (datetime): The start date of the data to retrieve
+        default is five years ago as that is the maximum period the API supports data retrieval for
+
+        period2 (datetime): The end date of the data to retrieve
+        default is the current date
         """
         url = self.build_url(frequency, period1, period2, "balance_sheet")
 
@@ -196,8 +217,8 @@ class TickerAPI(TickerBase):
         self,
         frequency: Literal["annual", "quarterly"] = "annual",
         format: Literal["fmt", "raw"] = "fmt",
-        period1: int = five_years_ago,
-        period2: int = current_timestamp,
+        period1: datetime = five_years_ago,
+        period2: datetime = today,
     ) -> pd.DataFrame:
         """
         Get the financials for the stock
@@ -210,6 +231,12 @@ class TickerAPI(TickerBase):
         valid values are "fmt", "raw"
         if "fmt" is used, the data will be in a human readable format, e.g. 1B
         if "raw" is used, the data will be in a raw format, e.g. 1000000000
+
+        period1 (datetime): The start date of the data to retrieve
+        default is five years ago as that is the maximum period the API supports data retrieval for
+
+        period2 (datetime): The end date of the data to retrieve
+        default is the current date
         """
         url = self.build_url(frequency, period1, period2, "financials")
 
@@ -220,13 +247,17 @@ class TickerAPI(TickerBase):
     def build_url(
         self,
         frequency: str,
-        period1: int,
-        period2: int,
+        period1: datetime,
+        period2: datetime,
         desired_entity: str,
     ) -> str:
         """
         Build the URL for the income statement, balance sheet, and cash flow statement
         """
+        # convert period1 and period2 to timestamps
+        period1 = int(pd.Timestamp(period1).timestamp())
+        period2 = int(pd.Timestamp(period2).timestamp())
+
         columns = ",".join(
             getattr(config, f"{frequency.upper()}_{desired_entity.upper()}_COLUMNS")
         )
