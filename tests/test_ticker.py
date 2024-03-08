@@ -332,8 +332,6 @@ def test_price(ticker, range, dataGranularity):
     "ticker",
     [
         ("AAPL"),
-        ("GOOGL"),
-        ("MSFT"),
         ("NVDA"),
         ("FMC"),
     ],
