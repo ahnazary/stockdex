@@ -258,9 +258,10 @@ class TickerAPI(TickerBase):
         period1 = int(pd.Timestamp(period1).timestamp())
         period2 = int(pd.Timestamp(period2).timestamp())
 
-        columns = ",".join(
-            getattr(config, f"{frequency.upper()}_{desired_entity.upper()}_COLUMNS")
-        )
+        columns = ",".join(getattr(config, f"{desired_entity.upper()}_COLUMNS"))
+
+        columns = ",".join([f"{frequency}{i}" for i in columns.split(",")])
+
         url = f"{config.FUNDAMENTALS_BASE_URL}/{self.ticker}/?symbol={self.ticker}"
         url += f"&type={columns}"
         url += f"&period1={period1}&period2={period2}"

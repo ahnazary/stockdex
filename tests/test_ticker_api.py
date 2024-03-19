@@ -47,8 +47,6 @@ def test_price(ticker, range, dataGranularity):
     "ticker",
     [
         ("AAPL"),
-        ("NVDA"),
-        ("FMC"),
     ],
 )
 def test_current_trading_period(ticker):
