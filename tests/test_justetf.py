@@ -5,7 +5,7 @@ Module to test the justetf module.
 import pandas as pd
 import pytest
 
-from stockdex.justetf import JustETF
+from stockdex.ticker import Ticker
 
 
 @pytest.mark.parametrize(
@@ -18,7 +18,7 @@ def test_general_info(isin: str) -> None:
     """
     Test the ter property of the JustETF class
     """
-    etf = JustETF(isin)
+    etf = Ticker(isin=isin, security_type="etf")
 
     general_info = etf.general_info
     assert isinstance(general_info, pd.DataFrame)
@@ -36,8 +36,16 @@ def test_wkn(isin: str, expected: str) -> None:
     """
     Test the wkn property of the JustETF class
     """
-    etf = JustETF(isin)
+    etf = Ticker(isin=isin, security_type="etf")
 
     wkn = etf.wkn
     assert isinstance(wkn, str)
     assert wkn == expected
+
+
+def test_no_isin() -> None:
+    """
+    Test the NoISINError exception
+    """
+    with pytest.raises(Exception):
+        Ticker(isin="", security_type="etf")
