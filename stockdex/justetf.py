@@ -6,12 +6,15 @@ import pandas as pd
 from bs4 import BeautifulSoup
 
 from stockdex import config
+from stockdex.exceptions import NoISINError
 from stockdex.ticker_base import TickerBase
 
 
 class JustETF(TickerBase):
     def __init__(self, isin: str) -> None:
         self.isin = isin
+        if not isin:
+            raise NoISINError("No ISIN provided, please provide an ISIN")
 
     @property
     def general_info(self) -> pd.DataFrame:
