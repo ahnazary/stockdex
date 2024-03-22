@@ -40,9 +40,9 @@ class Ticker(TickerAPI, JustETF):
             raise Exception("Please provide either a ticker or an ISIN")
 
         if security_type == "etf":
-            super().__init__(isin)
+            super().__init__(isin=isin)
         else:
-            super().__init__(ticker)
+            super().__init__(ticker=ticker)
 
     @property
     def summary(self) -> pd.DataFrame:
@@ -356,6 +356,8 @@ class Ticker(TickerAPI, JustETF):
         str: A string including the description of the ticker
         visible in the Yahoo Finance profile page for the ticker
         """
+        if self.security_type == "etf":
+            return self.etf_description
 
         # URL of the website to scrape
         url = f"https://finance.yahoo.com/quote/{self.ticker}/profile"
