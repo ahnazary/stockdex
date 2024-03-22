@@ -49,3 +49,20 @@ def test_no_isin() -> None:
     """
     with pytest.raises(Exception):
         Ticker(isin="", security_type="etf")
+
+
+@pytest.mark.parametrize(
+    "isin",
+    [
+        ("IE00B4L5Y983"),
+    ],
+)
+def test_description(isin: str) -> None:
+    """
+    Test the description property of the JustETF class
+    """
+    etf = Ticker(isin=isin, security_type="etf")
+
+    description = etf.description
+    assert isinstance(description, str)
+    assert len(description) > 0

@@ -13,8 +13,15 @@ from stockdex.ticker_base import TickerBase
 
 
 class TickerAPI(TickerBase):
-    # current_timestamp = int(pd.Timestamp("now").timestamp())
-    # five_years_ago = int(pd.Timestamp("now").timestamp()) - 5 * 365 * 24 * 60 * 60
+    def __init__(
+        self,
+        ticker: str = "",
+        isin: str = "",
+        security_type: str = Literal["stock", "etf"],
+    ) -> None:
+        self.ticker = ticker
+        self.isin = isin
+        self.security_type = security_type
 
     today = datetime.today()
     five_years_ago = today.replace(year=today.year - 5)
