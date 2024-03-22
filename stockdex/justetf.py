@@ -2,6 +2,8 @@
 Module for extracting ETF data from JustETF website
 """
 
+from typing import Literal
+
 import pandas as pd
 from bs4 import BeautifulSoup
 
@@ -11,8 +13,15 @@ from stockdex.ticker_base import TickerBase
 
 
 class JustETF(TickerBase):
-    def __init__(self, isin: str) -> None:
+    def __init__(
+        self,
+        ticker: str = "",
+        isin: str = "",
+        security_type: str = Literal["stock", "etf"],
+    ) -> None:
         self.isin = isin
+        self.ticker = ticker
+        self.security_type = security_type
         if not isin:
             raise NoISINError("No ISIN provided, please provide an ISIN")
 
@@ -53,3 +62,17 @@ class JustETF(TickerBase):
         wkn = soup.find("span", {"id": "etf-second-id"}).text
 
         return wkn
+
+    @property
+    def etf_description(self) -> str:
+        """
+        Get the description of the ETF
+        """
+        url = f"{config.JUSTETF_BASE_URL}/etf-profile.html?isin={self.isin}"
+        response = self.get_response(url)
+
+        soup = BeautifulSoup(response.text, "html.parser")
+
+        description = soup.find("div", {"id": "etf-description"}).text
+
+        return description
