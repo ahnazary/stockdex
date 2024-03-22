@@ -2,19 +2,47 @@
 Moduel for the Ticker class
 """
 
+from typing import Literal
+
 import pandas as pd
 from bs4 import BeautifulSoup
 
+from stockdex.justetf import JustETF
 from stockdex.ticker_api import TickerAPI
 
 
-class Ticker(TickerAPI):
+class Ticker(TickerAPI, JustETF):
     """
     Class for the Ticker
     """
 
-    def __init__(self, ticker: str) -> None:
-        self.ticker = ticker.upper()
+    def __init__(
+        self,
+        ticker: str = "",
+        isin: str = "",
+        security_type: str = Literal["stock", "etf"],
+    ) -> None:
+        """
+        Initialize the Ticker class
+
+        Args:
+        ticker (str): The ticker of the stock
+        isin (str): The ISIN of the etf
+        security_type (str): The security type of the ticker
+            default is "stock"
+        """
+
+        self.ticker = ticker
+        self.isin = isin
+        self.security_type = security_type if security_type else "stock"
+
+        if not ticker and not isin:
+            raise Exception("Please provide either a ticker or an ISIN")
+
+        if security_type == "etf":
+            super().__init__(isin)
+        else:
+            super().__init__(ticker)
 
     @property
     def summary(self) -> pd.DataFrame:
