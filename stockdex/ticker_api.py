@@ -51,11 +51,16 @@ class TickerAPI(TickerBase):
         Get the price data for the stock
 
         Args:
+        ----------------
         range (str): The range of the price data to retrieve
         valid values are "1d", "5d", "1mo", "3mo", "6mo", "1y", "2y", "5y", "10y", "ytd", "max"
 
         dataGranularity (str): The granularity of the data to retrieve (interval)
         valid values are "1m", "2m", "5m", "15m", "30m", "60m", "90m", "1h", "1d", "5d", "1wk", "1mo", "3mo""  # noqa: E501
+
+        Returns:
+        ----------------
+        pd.DataFrame: The price data
         """
 
         url = f"{config.BASE_URL}/chart/{self.ticker}?range={range}&interval={dataGranularity}"
@@ -138,6 +143,7 @@ class TickerAPI(TickerBase):
         Get the income statement for the stock
 
         Args:
+        ----------------
         frequency (str): The frequency of the data to retrieve
         valid values are "annual", "quarterly"
 
@@ -151,6 +157,10 @@ class TickerAPI(TickerBase):
 
         period2 (datetime): The end date of the data to retrieve
         default is the current date
+
+        Returns:
+        ----------------
+        pd.DataFrame: The income statement data
         """
         url = self.build_url(frequency, period1, period2, "income_statement")
 
@@ -169,6 +179,7 @@ class TickerAPI(TickerBase):
         Get the cash flow statement for the stock
 
         Args:
+        ----------------
         frequency (str): The frequency of the data to retrieve
         valid values are "annual", "quarterly"
 
@@ -182,6 +193,10 @@ class TickerAPI(TickerBase):
 
         period2 (datetime): The end date of the data to retrieve
         default is the current date
+
+        Returns:
+        ----------------
+        pd.DataFrame: The cash flow statement data
         """
         url = self.build_url(frequency, period1, period2, "cash_flow")
 
@@ -200,6 +215,7 @@ class TickerAPI(TickerBase):
         Get the balance sheet for the stock
 
         Args:
+        ----------------
         frequency (str): The frequency of the data to retrieve
         valid values are "annual", "quarterly"
 
@@ -213,6 +229,10 @@ class TickerAPI(TickerBase):
 
         period2 (datetime): The end date of the data to retrieve
         default is the current date
+
+        Returns:
+        ----------------
+        pd.DataFrame: The balance sheet data
         """
         url = self.build_url(frequency, period1, period2, "balance_sheet")
 
@@ -231,6 +251,7 @@ class TickerAPI(TickerBase):
         Get the financials for the stock
 
         Args:
+        ----------------
         frequency (str): The frequency of the data to retrieve
         valid values are "annual", "quarterly"
 
@@ -244,6 +265,10 @@ class TickerAPI(TickerBase):
 
         period2 (datetime): The end date of the data to retrieve
         default is the current date
+
+        Returns:
+        ----------------
+        pd.DataFrame: The financials data
         """
         url = self.build_url(frequency, period1, period2, "financials")
 
@@ -260,6 +285,21 @@ class TickerAPI(TickerBase):
     ) -> str:
         """
         Build the URL for the income statement, balance sheet, and cash flow statement
+
+        Args:
+        ----------------
+        frequency (str): The frequency of the data to retrieve
+        valid values are "annual", "quarterly"
+
+        period1 (datetime): The start date of the data to retrieve
+
+        period2 (datetime): The end date of the data to retrieve
+
+        desired_entity (str): The entity to retrieve the data for
+
+        Returns:
+        ----------------
+        str: The URL to retrieve the data from
         """
         # convert period1 and period2 to timestamps
         period1 = int(pd.Timestamp(period1).timestamp())
@@ -277,6 +317,16 @@ class TickerAPI(TickerBase):
     def extract_dataframe(self, response, format="fmt") -> pd.DataFrame:
         """
         Extract the dataframes from the response
+
+        Args:
+        ----------------
+        response (dict): The response from the API
+
+        format (str): The format of the data to retrieve
+
+        Returns:
+        ----------------
+        pd.DataFrame: The data in a dataframe
         """
         row = {}
         for item in response:
