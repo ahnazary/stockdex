@@ -164,7 +164,7 @@
 <h3>ETF data from justETF website:<a class="headerlink" href="#etf-data-from-justetf-website" title="Permalink to this heading"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
 <span class="c1"># build the ETF object, make sure to pass the ETF ISIN and use security_type to &quot;etf&quot;</span>
-<span class="n">etf</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="s1">&#39;IE00B4L5Y983&#39;</span><span class="p">,</span> <span class="n">security_type</span><span class="o">=</span><span class="s1">&#39;etf&#39;</span><span class="p">)</span>
+<span class="n">etf</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">isin</span><span class="o">=</span><span class="s1">&#39;IE00B4L5Y983&#39;</span><span class="p">,</span> <span class="n">security_type</span><span class="o">=</span><span class="s1">&#39;etf&#39;</span><span class="p">)</span>
 
 <span class="n">etf_general_info</span> <span class="o">=</span> <span class="n">etf</span><span class="o">.</span><span class="n">etf_general_info</span>
 <span class="n">etf_wkn</span> <span class="o">=</span> <span class="n">etf</span><span class="o">.</span><span class="n">etf_wkn</span>
