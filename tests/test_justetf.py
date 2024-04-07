@@ -12,21 +12,22 @@ from stockdex.ticker import Ticker
     "isin",
     [
         ("IE00B4L5Y983"),
+        ("IE00B53SZB19"),
     ],
 )
-def test_general_info(isin: str) -> None:
+def test_etf_general_info(isin: str) -> None:
     """
     Test the ter property of the JustETF class
     """
     etf = Ticker(isin=isin, security_type="etf")
 
-    general_info = etf.general_info
-    assert isinstance(general_info, pd.DataFrame)
-    assert general_info.shape[0] == 1
-    assert general_info.shape[1] >= 5
-    assert general_info.iloc[0]["TER"] != ""
-    for i in range(1, general_info.shape[1]):
-        assert general_info.iloc[0][i] != ""
+    etf_general_info = etf.etf_general_info
+    assert isinstance(etf_general_info, pd.DataFrame)
+    assert etf_general_info.shape[0] == 1
+    assert etf_general_info.shape[1] >= 5
+    assert etf_general_info.iloc[0]["TER"] != ""
+    for i in range(1, etf_general_info.shape[1]):
+        assert etf_general_info.iloc[0][i] != ""
 
 
 @pytest.mark.parametrize(
@@ -36,15 +37,15 @@ def test_general_info(isin: str) -> None:
         ("IE00B53SZB19", "A0YEDL"),
     ],
 )
-def test_wkn(isin: str, expected: str) -> None:
+def test_etf_wkn(isin: str, expected: str) -> None:
     """
     Test the wkn property of the JustETF class
     """
     etf = Ticker(isin=isin, security_type="etf")
 
-    wkn = etf.wkn
-    assert isinstance(wkn, str)
-    assert wkn == expected
+    etf_wkn = etf.etf_wkn
+    assert isinstance(etf_wkn, str)
+    assert etf_wkn == expected
 
 
 def test_no_isin() -> None:
@@ -62,15 +63,15 @@ def test_no_isin() -> None:
         ("IE00B53SZB19"),
     ],
 )
-def test_description(isin: str) -> None:
+def test_etf_description(isin: str) -> None:
     """
     Test the description property of the JustETF class
     """
     etf = Ticker(isin=isin, security_type="etf")
 
-    description = etf.description
-    assert isinstance(description, str)
-    assert len(description) > 0
+    etf_description = etf.etf_description
+    assert isinstance(etf_description, str)
+    assert len(etf_description) > 0
 
 
 # @pytest.mark.parametrize(

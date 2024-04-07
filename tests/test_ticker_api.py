@@ -47,6 +47,7 @@ def test_price(ticker, range, dataGranularity):
     "ticker",
     [
         ("AAPL"),
+        ("ASML"),
     ],
 )
 def test_current_trading_period(ticker):
@@ -63,12 +64,16 @@ def test_current_trading_period(ticker):
         "post",
     ]
     assert len(current_trading_period) == 4
-    assert current_trading_period.index.tolist() == [
+
+    expected_columns = [
         "timezone",
         "start",
         "end",
         "gmtoffset",
     ]
+
+    for column in expected_columns:
+        assert column in current_trading_period.index.tolist()
 
 
 @pytest.mark.parametrize(
