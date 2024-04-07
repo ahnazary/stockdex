@@ -78,6 +78,26 @@ top_mutual_fund_holders = ticker.top_mutual_fund_holders
 statistics = ticker.statistics 
 ```
 
+## ETF data from justETF website:
+```python
+
+# build the ETF object, make sure to pass the ETF ISIN and use security_type to "etf"
+etf = Ticker('IE00B4L5Y983', security_type='etf')
+
+etf_general_info = etf.etf_general_info
+etf_wkn = etf.etf_wkn
+etf_description = etf.etf_description
+
+# Basic data about the ETF
+etf_basics = etf.etf_basics
+
+# Holdings of the ETF by company, country and sector
+etf_holdings_companies = etf.etf_holdings_companies
+etf_holdings_countries = etf.etf_holdings_countries
+etf_holdings_sectors = etf.etf_holdings_sectors
+```
+
+
 ## Historical dividends data
 
 All dividends paid by the company returned as a pandas DataFrame.
