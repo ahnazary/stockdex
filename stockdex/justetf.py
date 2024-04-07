@@ -27,7 +27,7 @@ class JustETF(TickerBase):
             raise NoISINError("No ISIN provided, please provide an ISIN")
 
     @property
-    def general_info(self) -> pd.DataFrame:
+    def etf_general_info(self) -> pd.DataFrame:
         """
         Get the general information of the ETF
         genral information includes TER, distribution policy, replication method, etc.
@@ -51,7 +51,7 @@ class JustETF(TickerBase):
         return data_df
 
     @property
-    def wkn(self) -> str:
+    def etf_wkn(self) -> str:
         """
         Get the WKN of the ETF
         """
