@@ -189,11 +189,103 @@ class JustETF(TickerBase):
 
         for row in table_body.find_all("tr"):
             columns = row.find_all("td")
-            companies.append(columns[0].text)
-            shares_percent.append(columns[1].text)
+            companies.append(columns[0].text.strip())
+            shares_percent.append(columns[1].text.strip())
 
         data_df["company name"] = companies
         data_df["shares in percent"] = shares_percent
         data_df.set_index("company name", inplace=True)
+
+        return data_df
+
+    @property
+    def etf_holdings_countries(self) -> pd.DataFrame:
+        """
+        Get the top 10 holdings of the ETF by countries
+
+        columns may include:
+        - country name
+        - shares in percent
+
+        Args:
+        ----------------
+        isin (str): ISIN of the ETF
+
+        Returns:
+        ----------------
+        pd.DataFrame: DataFrame containing the holdings of the ETF
+        """
+        url = f"{config.JUSTETF_BASE_URL}/etf-profile.html?isin={self.isin}#holdings"
+
+        # build selenium interface object if not already built
+        if not hasattr(self, "selenium_interface"):
+            self.selenium_interface = selenium_interface()
+
+        soup = self.selenium_interface.get_html_content(url)
+
+        data_df = pd.DataFrame()
+        countries = []
+        shares_percent = []
+
+        table_body = (
+            soup.find(lambda tag: tag.name == "h3" and "Countries" in tag.text)
+            .find_next("table")
+            .find("tbody")
+        )
+
+        for row in table_body.find_all("tr"):
+            columns = row.find_all("td")
+            countries.append(columns[0].text.strip())
+            shares_percent.append(columns[1].text.strip())
+
+        data_df["country name"] = countries
+        data_df["shares in percent"] = shares_percent
+        data_df.set_index("country name", inplace=True)
+
+        return data_df
+
+    @property
+    def etf_holdings_sectors(self) -> pd.DataFrame:
+        """
+        Get the top 10 holdings of the ETF by sectors
+
+        columns may include:
+        - sector name
+        - shares in percent
+
+        Args:
+        ----------------
+        isin (str): ISIN of the ETF
+
+        Returns:
+        ----------------
+        pd.DataFrame: DataFrame containing the holdings of the ETF
+        """
+        url = f"{config.JUSTETF_BASE_URL}/etf-profile.html?isin={self.isin}#holdings"
+
+        # build selenium interface object if not already built
+        if not hasattr(self, "selenium_interface"):
+            self.selenium_interface = selenium_interface()
+
+        soup = self.selenium_interface.get_html_content(url)
+
+        data_df = pd.DataFrame()
+        sectors = []
+        shares_percent = []
+
+        table_body = (
+            soup.find(lambda tag: tag.name == "h3" and "Sectors" in tag.text)
+            .find_next("table")
+            .find("tbody")
+        )
+
+        for row in table_body.find_all("tr"):
+            columns = row.find_all("td")
+            sectors.append(columns[0].text.strip())
+            shares_percent.append(columns[1].text.strip())
+
+        data_df["sector name"] = sectors
+        data_df["shares in percent"] = shares_percent
+        data_df.set_index("sector name", inplace=True)
 
         return data_df
