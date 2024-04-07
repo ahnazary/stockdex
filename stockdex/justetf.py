@@ -23,7 +23,7 @@ class JustETF(TickerBase):
         self.isin = isin
         self.ticker = ticker
         self.security_type = security_type
-        if not isin:
+        if not isin or isin == "":
             raise NoISINError("No ISIN provided, please provide an ISIN")
 
     @property
