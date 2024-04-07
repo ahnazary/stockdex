@@ -5,6 +5,7 @@ FUNDAMENTALS_BASE_URL = (
     "https://query2.finance.yahoo.com/ws/fundamentals-timeseries/v1/finance/timeseries"
 )
 JUSTETF_BASE_URL = "https://www.justetf.com/en"
+NASDAQ_BASE_URL = "https://www.nasdaq.com/market-activity/stocks"
 
 INCOME_STATEMENT_COLUMNS = [
     "TaxEffectOfUnusualItems",
