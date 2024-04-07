@@ -85,8 +85,15 @@
 
 
 <div class="viewcode-block" id="TickerAPI"><a class="viewcode-back" href="../../stockdex.html#stockdex.ticker_api.TickerAPI">[docs]</a><span class="k">class</span> <span class="nc">TickerAPI</span><span class="p">(</span><span class="n">TickerBase</span><span class="p">):</span>
-    <span class="c1"># current_timestamp = int(pd.Timestamp(&quot;now&quot;).timestamp())</span>
-    <span class="c1"># five_years_ago = int(pd.Timestamp(&quot;now&quot;).timestamp()) - 5 * 365 * 24 * 60 * 60</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">ticker</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">isin</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">security_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;stock&quot;</span><span class="p">,</span> <span class="s2">&quot;etf&quot;</span><span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ticker</span> <span class="o">=</span> <span class="n">ticker</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">isin</span> <span class="o">=</span> <span class="n">isin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">security_type</span> <span class="o">=</span> <span class="n">security_type</span>
 
     <span class="n">today</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">today</span><span class="p">()</span>
     <span class="n">five_years_ago</span> <span class="o">=</span> <span class="n">today</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="n">today</span><span class="o">.</span><span class="n">year</span> <span class="o">-</span> <span class="mi">5</span><span class="p">)</span>
@@ -116,11 +123,16 @@
 <span class="sd">        Get the price data for the stock</span>
 
 <span class="sd">        Args:</span>
+<span class="sd">        ----------------</span>
 <span class="sd">        range (str): The range of the price data to retrieve</span>
 <span class="sd">        valid values are &quot;1d&quot;, &quot;5d&quot;, &quot;1mo&quot;, &quot;3mo&quot;, &quot;6mo&quot;, &quot;1y&quot;, &quot;2y&quot;, &quot;5y&quot;, &quot;10y&quot;, &quot;ytd&quot;, &quot;max&quot;</span>
 
 <span class="sd">        dataGranularity (str): The granularity of the data to retrieve (interval)</span>
 <span class="sd">        valid values are &quot;1m&quot;, &quot;2m&quot;, &quot;5m&quot;, &quot;15m&quot;, &quot;30m&quot;, &quot;60m&quot;, &quot;90m&quot;, &quot;1h&quot;, &quot;1d&quot;, &quot;5d&quot;, &quot;1wk&quot;, &quot;1mo&quot;, &quot;3mo&quot;&quot;  # noqa: E501</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        ----------------</span>
+<span class="sd">        pd.DataFrame: The price data</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">config</span><span class="o">.</span><span class="n">BASE_URL</span><span class="si">}</span><span class="s2">/chart/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">?range=</span><span class="si">{</span><span class="nb">range</span><span class="si">}</span><span class="s2">&amp;interval=</span><span class="si">{</span><span class="n">dataGranularity</span><span class="si">}</span><span class="s2">&quot;</span>
@@ -203,6 +215,7 @@
 <span class="sd">        Get the income statement for the stock</span>
 
 <span class="sd">        Args:</span>
+<span class="sd">        ----------------</span>
 <span class="sd">        frequency (str): The frequency of the data to retrieve</span>
 <span class="sd">        valid values are &quot;annual&quot;, &quot;quarterly&quot;</span>
 
@@ -216,6 +229,10 @@
 
 <span class="sd">        period2 (datetime): The end date of the data to retrieve</span>
 <span class="sd">        default is the current date</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        ----------------</span>
+<span class="sd">        pd.DataFrame: The income statement data</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_url</span><span class="p">(</span><span class="n">frequency</span><span class="p">,</span> <span class="n">period1</span><span class="p">,</span> <span class="n">period2</span><span class="p">,</span> <span class="s2">&quot;income_statement&quot;</span><span class="p">)</span>
 
@@ -234,6 +251,7 @@
 <span class="sd">        Get the cash flow statement for the stock</span>
 
 <span class="sd">        Args:</span>
+<span class="sd">        ----------------</span>
 <span class="sd">        frequency (str): The frequency of the data to retrieve</span>
 <span class="sd">        valid values are &quot;annual&quot;, &quot;quarterly&quot;</span>
 
@@ -247,6 +265,10 @@
 
 <span class="sd">        period2 (datetime): The end date of the data to retrieve</span>
 <span class="sd">        default is the current date</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        ----------------</span>
+<span class="sd">        pd.DataFrame: The cash flow statement data</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_url</span><span class="p">(</span><span class="n">frequency</span><span class="p">,</span> <span class="n">period1</span><span class="p">,</span> <span class="n">period2</span><span class="p">,</span> <span class="s2">&quot;cash_flow&quot;</span><span class="p">)</span>
 
@@ -265,6 +287,7 @@
 <span class="sd">        Get the balance sheet for the stock</span>
 
 <span class="sd">        Args:</span>
+<span class="sd">        ----------------</span>
 <span class="sd">        frequency (str): The frequency of the data to retrieve</span>
 <span class="sd">        valid values are &quot;annual&quot;, &quot;quarterly&quot;</span>
 
@@ -278,6 +301,10 @@
 
 <span class="sd">        period2 (datetime): The end date of the data to retrieve</span>
 <span class="sd">        default is the current date</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        ----------------</span>
+<span class="sd">        pd.DataFrame: The balance sheet data</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_url</span><span class="p">(</span><span class="n">frequency</span><span class="p">,</span> <span class="n">period1</span><span class="p">,</span> <span class="n">period2</span><span class="p">,</span> <span class="s2">&quot;balance_sheet&quot;</span><span class="p">)</span>
 
@@ -296,6 +323,7 @@
 <span class="sd">        Get the financials for the stock</span>
 
 <span class="sd">        Args:</span>
+<span class="sd">        ----------------</span>
 <span class="sd">        frequency (str): The frequency of the data to retrieve</span>
 <span class="sd">        valid values are &quot;annual&quot;, &quot;quarterly&quot;</span>
 
@@ -309,6 +337,10 @@
 
 <span class="sd">        period2 (datetime): The end date of the data to retrieve</span>
 <span class="sd">        default is the current date</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        ----------------</span>
+<span class="sd">        pd.DataFrame: The financials data</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_url</span><span class="p">(</span><span class="n">frequency</span><span class="p">,</span> <span class="n">period1</span><span class="p">,</span> <span class="n">period2</span><span class="p">,</span> <span class="s2">&quot;financials&quot;</span><span class="p">)</span>
 
@@ -325,6 +357,21 @@
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Build the URL for the income statement, balance sheet, and cash flow statement</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">        ----------------</span>
+<span class="sd">        frequency (str): The frequency of the data to retrieve</span>
+<span class="sd">        valid values are &quot;annual&quot;, &quot;quarterly&quot;</span>
+
+<span class="sd">        period1 (datetime): The start date of the data to retrieve</span>
+
+<span class="sd">        period2 (datetime): The end date of the data to retrieve</span>
+
+<span class="sd">        desired_entity (str): The entity to retrieve the data for</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        ----------------</span>
+<span class="sd">        str: The URL to retrieve the data from</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># convert period1 and period2 to timestamps</span>
         <span class="n">period1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="n">period1</span><span class="p">)</span><span class="o">.</span><span class="n">timestamp</span><span class="p">())</span>
@@ -342,6 +389,16 @@
 <div class="viewcode-block" id="TickerAPI.extract_dataframe"><a class="viewcode-back" href="../../stockdex.html#stockdex.ticker_api.TickerAPI.extract_dataframe">[docs]</a>    <span class="k">def</span> <span class="nf">extract_dataframe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;fmt&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Extract the dataframes from the response</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">        ----------------</span>
+<span class="sd">        response (dict): The response from the API</span>
+
+<span class="sd">        format (str): The format of the data to retrieve</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        ----------------</span>
+<span class="sd">        pd.DataFrame: The data in a dataframe</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">row</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">response</span><span class="p">:</span>

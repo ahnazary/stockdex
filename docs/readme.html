@@ -50,6 +50,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#fundamental-data-from-yahoo-finance-api-fast-queries-through-yahoo-finance-api">Fundamental data from <code class="docutils literal notranslate"><span class="pre">Yahoo</span> <span class="pre">Finance</span></code> API (fast queries through Yahoo Finance API):</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fundamental-data-with-criteria-from-yahoo-finance-website-web-scraping">Fundamental data with criteria from <code class="docutils literal notranslate"><span class="pre">Yahoo</span> <span class="pre">Finance</span></code> website (web scraping):</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#etf-data-from-justetf-website">ETF data from justETF website:</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#historical-dividends-data">Historical dividends data</a></li>
 </ul>
 </li>
@@ -156,6 +157,26 @@
 
 <span class="c1"># Main statistics</span>
 <span class="n">statistics</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">statistics</span>
+</pre></div>
+</div>
+</section>
+<section id="etf-data-from-justetf-website">
+<h3>ETF data from justETF website:<a class="headerlink" href="#etf-data-from-justetf-website" title="Permalink to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<span class="c1"># build the ETF object, make sure to pass the ETF ISIN and use security_type to &quot;etf&quot;</span>
+<span class="n">etf</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="s1">&#39;IE00B4L5Y983&#39;</span><span class="p">,</span> <span class="n">security_type</span><span class="o">=</span><span class="s1">&#39;etf&#39;</span><span class="p">)</span>
+
+<span class="n">etf_general_info</span> <span class="o">=</span> <span class="n">etf</span><span class="o">.</span><span class="n">etf_general_info</span>
+<span class="n">etf_wkn</span> <span class="o">=</span> <span class="n">etf</span><span class="o">.</span><span class="n">etf_wkn</span>
+<span class="n">etf_description</span> <span class="o">=</span> <span class="n">etf</span><span class="o">.</span><span class="n">etf_description</span>
+
+<span class="c1"># Basic data about the ETF</span>
+<span class="n">etf_basics</span> <span class="o">=</span> <span class="n">etf</span><span class="o">.</span><span class="n">etf_basics</span>
+
+<span class="c1"># Holdings of the ETF by company, country and sector</span>
+<span class="n">etf_holdings_companies</span> <span class="o">=</span> <span class="n">etf</span><span class="o">.</span><span class="n">etf_holdings_companies</span>
+<span class="n">etf_holdings_countries</span> <span class="o">=</span> <span class="n">etf</span><span class="o">.</span><span class="n">etf_holdings_countries</span>
+<span class="n">etf_holdings_sectors</span> <span class="o">=</span> <span class="n">etf</span><span class="o">.</span><span class="n">etf_holdings_sectors</span>
 </pre></div>
 </div>
 </section>
