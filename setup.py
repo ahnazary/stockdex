@@ -17,5 +17,5 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    package_data={"stockdex": ["chromedriver_linux64"]},
+    package_data={"stockdex": ["chromedriver_linux64/*"]},
 )
