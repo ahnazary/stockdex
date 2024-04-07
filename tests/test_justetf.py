@@ -138,3 +138,43 @@ def test_etf_holdings_companies(isin: str) -> None:
     assert isinstance(etf_holdings, pd.DataFrame)
     assert etf_holdings.shape[0] == 10
     assert etf_holdings.shape[1] == 1
+
+
+@pytest.mark.parametrize(
+    "isin",
+    [
+        ("IE00B4L5Y983"),
+        ("IE00B53SZB19"),
+    ],
+)
+def test_etf_holdings_countries(isin: str) -> None:
+    """
+    Test the etf_holdings property of the JustETF class
+    """
+
+    etf = Ticker(isin=isin, security_type="etf")
+
+    etf_holdings = etf.etf_holdings_countries
+    assert isinstance(etf_holdings, pd.DataFrame)
+    assert etf_holdings.shape[0] >= 2
+    assert etf_holdings.shape[1] == 1
+
+
+@pytest.mark.parametrize(
+    "isin",
+    [
+        ("IE00B4L5Y983"),
+        ("IE00B53SZB19"),
+    ],
+)
+def test_etf_holdings_sectors(isin: str) -> None:
+    """
+    Test the etf_holdings property of the JustETF class
+    """
+
+    etf = Ticker(isin=isin, security_type="etf")
+
+    etf_holdings = etf.etf_holdings_sectors
+    assert isinstance(etf_holdings, pd.DataFrame)
+    assert etf_holdings.shape[0] >= 2
+    assert etf_holdings.shape[1] == 1
