@@ -82,7 +82,7 @@ statistics = ticker.statistics
 ```python
 
 # build the ETF object, make sure to pass the ETF ISIN and use security_type to "etf"
-etf = Ticker('IE00B4L5Y983', security_type='etf')
+etf = Ticker(isin='IE00B4L5Y983', security_type='etf')
 
 etf_general_info = etf.etf_general_info
 etf_wkn = etf.etf_wkn
