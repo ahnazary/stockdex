@@ -2,17 +2,27 @@
 Interface for NASDAQ stock data
 """
 
+from typing import Literal
+
 import pandas as pd
 
 from stockdex.config import NASDAQ_BASE_URL
 from stockdex.lib import get_user_agent
 from stockdex.selenium_interface import selenium_interface
+from stockdex.ticker_base import TickerBase
 
 
-class NASDAQInterface:
-    def __init__(self, ticker):
+class NASDAQInterface(TickerBase):
+    def __init__(
+        self,
+        ticker: str = "",
+        isin: str = "",
+        security_type: str = Literal["stock", "etf"],
+    ) -> None:
+        self.isin = isin
         self.ticker = ticker
-        self.base_url = NASDAQ_BASE_URL
+        self.security_type = security_type
+
         self.request_headers = {
             "User-Agent": get_user_agent()[0],
         }
@@ -32,7 +42,7 @@ class NASDAQInterface:
         - '% Surprise'
         """
 
-        url = f"{self.base_url}/{self.ticker.lower()}/earnings"
+        url = f"{NASDAQ_BASE_URL}/{self.ticker.lower()}/earnings"
 
         # build selenium interface object if not already built
         if not hasattr(self, "selenium_interface"):
@@ -75,7 +85,7 @@ class NASDAQInterface:
         - Over The Last 4 Weeks Number Of Revisions - Down
         """
 
-        url = f"{self.base_url}/{self.ticker.lower()}/earnings"
+        url = f"{NASDAQ_BASE_URL}/{self.ticker.lower()}/earnings"
 
         # build selenium interface object if not already built
         if not hasattr(self, "selenium_interface"):
@@ -118,7 +128,7 @@ class NASDAQInterface:
         - Over The Last 4 Weeks Number Of Revisions - Down
         """
 
-        url = f"{self.base_url}/{self.ticker.lower()}/earnings"
+        url = f"{NASDAQ_BASE_URL}/{self.ticker.lower()}/earnings"
 
         # build selenium interface object if not already built
         if not hasattr(self, "selenium_interface"):
