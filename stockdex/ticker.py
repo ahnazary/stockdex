@@ -8,10 +8,11 @@ import pandas as pd
 from bs4 import BeautifulSoup
 
 from stockdex.justetf import JustETF
+from stockdex.nasdaq_interface import NASDAQInterface
 from stockdex.ticker_api import TickerAPI
 
 
-class Ticker(TickerAPI, JustETF):
+class Ticker(TickerAPI, JustETF, NASDAQInterface):
     """
     Class for the Ticker
     """
