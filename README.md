@@ -79,6 +79,9 @@ statistics = ticker.statistics
 ```
 
 ## NASDAQ data from `NASDAQ` (web scraping):
+
+Data on NASDAQ website gets updated more frequently than Yahoo Finance data. Below are some of the data that can be retrieved from the NASDAQ website.
+
 ```python
 # Data about quarterly and yearly earnings, updated on the same day as the earnings release (yahoo finance data is updated after a few days)
 
