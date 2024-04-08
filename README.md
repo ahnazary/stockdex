@@ -78,10 +78,20 @@ top_mutual_fund_holders = ticker.top_mutual_fund_holders
 statistics = ticker.statistics 
 ```
 
-## ETF data from justETF website:
+## NASDAQ data from `NASDAQ` (web scraping):
 ```python
+# Data about quarterly and yearly earnings, updated on the same day as the earnings release (yahoo finance data is updated after a few days)
 
-# build the ETF object, make sure to pass the ETF ISIN and use security_type to "etf"
+quarterly_earnings_surprise = ticker.quarterly_earnings_surprise
+yearly_earnings_forecast = ticker.yearly_earnings_forecast
+quarterly_earnings_forecast = ticker.quarterly_earnings_forecast
+```
+
+## EU ETF data from justETF (web scraping):
+
+For EU ETFS, the `isin` and `security_type` should be passed to the `Ticker` object. The `isin` is the International Securities Identification Number of the ETF and the `security_type` should be set to `etf`.
+
+```python
 etf = Ticker(isin='IE00B4L5Y983', security_type='etf')
 
 etf_general_info = etf.etf_general_info
