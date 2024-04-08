@@ -5,7 +5,7 @@ Module to test the NasdaqInterface class
 import pandas as pd
 import pytest
 
-from stockdex.nasdaq_interface import NASDAQInterface
+from stockdex.ticker import Ticker
 
 
 @pytest.mark.parametrize(
@@ -18,8 +18,8 @@ from stockdex.nasdaq_interface import NASDAQInterface
     ],
 )
 def test_quarterly_earnings_surprise(ticker):
-    nasdaq_interface = NASDAQInterface(ticker)
-    response = nasdaq_interface.quarterly_earnings_surprise()
+    ticker = Ticker(ticker)
+    response = ticker.quarterly_earnings_surprise()
 
     assert response is not None
     assert isinstance(response, pd.DataFrame)
@@ -46,8 +46,8 @@ def test_quarterly_earnings_surprise(ticker):
     ],
 )
 def test_yearly_earnings_forecast(ticker):
-    nasdaq_interface = NASDAQInterface(ticker)
-    response = nasdaq_interface.yearly_earnings_forecast()
+    ticker = Ticker(ticker)
+    response = ticker.yearly_earnings_forecast()
 
     assert response is not None
     assert isinstance(response, pd.DataFrame)
@@ -75,8 +75,8 @@ def test_yearly_earnings_forecast(ticker):
     ],
 )
 def test_quarterly_earnings_forecast(ticker):
-    nasdaq_interface = NASDAQInterface(ticker)
-    response = nasdaq_interface.quarterly_earnings_forecast()
+    ticker = Ticker(ticker)
+    response = ticker.quarterly_earnings_forecast()
 
     assert response is not None
     assert isinstance(response, pd.DataFrame)
