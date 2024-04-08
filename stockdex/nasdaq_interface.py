@@ -2,56 +2,58 @@
 Interface for NASDAQ stock data
 """
 
-import requests
-from bs4 import BeautifulSoup
+import pandas as pd
 
+from stockdex.config import NASDAQ_BASE_URL
 from stockdex.lib import get_user_agent
+from stockdex.selenium_interface import selenium_interface
 
 
 class NASDAQInterface:
     def __init__(self, ticker):
         self.ticker = ticker
-        self.base_url = "https://www.nasdaq.com/market-activity/stocks/"
+        self.base_url = NASDAQ_BASE_URL
         self.request_headers = {
             "User-Agent": get_user_agent()[0],
         }
 
-    def get_response(self, url: str, headers: dict = None) -> requests.Response:
-        """
-        Send an HTTP GET request to the website
-
-        Args:
-        url (str): The URL of the website
-        headers (dict): The headers to be sent with the HTTP GET request
-
-        Returns:
-        requests.Response: The response of the HTTP GET request
-        """
-
-        # Send an HTTP GET request to the website
-        session = requests.Session()
-        response = session.get(url, headers=headers)
-        # If the HTTP GET request can't be served
-        if response.status_code != 200:
-            raise Exception("Failed to load page, check if the ticker symbol exists")
-
-        return response
-
-    def quarterly_earnings(self):
+    def quarterly_earnings_surprise(self) -> pd.DataFrame:
         """
         Get quarterly earnings for the stock
+
+        Returns:
+        ----------------
+        pd.DataFrame: Quarterly earnings surprise data
+        The columns might include:
+        - 'Fiscal Quarter End'
+        - 'Date Reported'
+        - 'Earnings Per Share*'
+        - 'Consensus EPS* Forecast'
+        - '% Surprise'
         """
 
-        url = f"{self.base_url}/{self.ticker}/earnings"
-        # send a get request to the website
-        response = self.get_response(url, headers=self.request_headers)
+        url = f"{self.base_url}/{self.ticker.lower()}/earnings"
 
-        soup = BeautifulSoup(response.content, "html.parser")
+        # build selenium interface object if not already built
+        if not hasattr(self, "selenium_interface"):
+            self.selenium_interface = selenium_interface(use_custom_user_agent=True)
 
-        tables = soup.find_all("table")
+        soup = self.selenium_interface.get_html_content(url)
 
-        # TODO: Fix this as it does not return anything now
-        headers = [header.content for header in tables[0].find_all("th")]
-        data = [data.content for data in tables[0].find_all("td")]
+        earnings_table = soup.find("table", {"class": "earnings-surprise__table"})
+        columns = earnings_table.find(
+            "tr", {"class": "earnings-surprise__header"}
+        ).find_all("th")
+        columns = [column.text for column in columns]
 
-        return headers, data
+        data = []
+        table_body = earnings_table.find(
+            "tbody", {"class": "earnings-surprise__table-body"}
+        )
+        for row in table_body.find_all("tr"):
+            row_data_th = [cell.text for cell in row.find_all("th")]
+            row_data_td = [cell.text for cell in row.find_all("td")]
+            row_data = row_data_th + row_data_td
+            data.append(row_data)
+
+        return pd.DataFrame(data, columns=columns)
