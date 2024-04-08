@@ -27,6 +27,7 @@ class NASDAQInterface(TickerBase):
             "User-Agent": get_user_agent()[0],
         }
 
+    @property
     def quarterly_earnings_surprise(self) -> pd.DataFrame:
         """
         Get quarterly earnings for the stock
@@ -68,6 +69,7 @@ class NASDAQInterface(TickerBase):
 
         return pd.DataFrame(data, columns=columns)
 
+    @property
     def yearly_earnings_forecast(self) -> pd.DataFrame:
         """
         Get yearly earnings for the stock
@@ -111,6 +113,7 @@ class NASDAQInterface(TickerBase):
 
         return pd.DataFrame(data, columns=columns)
 
+    @property
     def quarterly_earnings_forecast(self) -> pd.DataFrame:
         """
         Get quarterly earnings forecast for the stock

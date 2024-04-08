@@ -19,7 +19,7 @@ from stockdex.ticker import Ticker
 )
 def test_quarterly_earnings_surprise(ticker):
     ticker = Ticker(ticker)
-    response = ticker.quarterly_earnings_surprise()
+    response = ticker.quarterly_earnings_surprise
 
     assert response is not None
     assert isinstance(response, pd.DataFrame)
@@ -47,7 +47,7 @@ def test_quarterly_earnings_surprise(ticker):
 )
 def test_yearly_earnings_forecast(ticker):
     ticker = Ticker(ticker)
-    response = ticker.yearly_earnings_forecast()
+    response = ticker.yearly_earnings_forecast
 
     assert response is not None
     assert isinstance(response, pd.DataFrame)
@@ -76,7 +76,7 @@ def test_yearly_earnings_forecast(ticker):
 )
 def test_quarterly_earnings_forecast(ticker):
     ticker = Ticker(ticker)
-    response = ticker.quarterly_earnings_forecast()
+    response = ticker.quarterly_earnings_forecast
 
     assert response is not None
     assert isinstance(response, pd.DataFrame)
