@@ -1,11 +1,16 @@
 # File for configuration of the stockdex package
 
+from typing import Literal
+
+SECURITY_TYPE = Literal["stock", "etf", "cryptocurrency", "index", "commodity"]
+
 BASE_URL = "https://query2.finance.yahoo.com/v8/finance"
 FUNDAMENTALS_BASE_URL = (
     "https://query2.finance.yahoo.com/ws/fundamentals-timeseries/v1/finance/timeseries"
 )
 JUSTETF_BASE_URL = "https://www.justetf.com/en"
 NASDAQ_BASE_URL = "https://www.nasdaq.com/market-activity/stocks"
+DIGRIN_BASE_URL = "https://www.digrin.com/stocks/detail"
 
 INCOME_STATEMENT_COLUMNS = [
     "TaxEffectOfUnusualItems",
