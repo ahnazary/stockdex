@@ -78,7 +78,7 @@ top_mutual_fund_holders = ticker.top_mutual_fund_holders
 statistics = ticker.statistics 
 ```
 
-## NASDAQ data from `NASDAQ` (web scraping):
+## NASDAQ data from `NASDAQ` website (web scraping):
 
 Data on NASDAQ website gets updated more frequently than Yahoo Finance data. Below are some of the data that can be retrieved from the NASDAQ website.
 
@@ -90,7 +90,18 @@ yearly_earnings_forecast = ticker.yearly_earnings_forecast
 quarterly_earnings_forecast = ticker.quarterly_earnings_forecast
 ```
 
-## EU ETF data from justETF (web scraping):
+## Stocks data from `Digrin` (web scraping):
+
+Data on Digrin website includes all historical data of the stock in certain categories, unlike Yahoo Finance which only provides the last 5 years of data at most.
+
+```python
+# Complete historical data of the stock in certain categories
+dividend = ticker.dividend
+payout_ratio = ticker.payout_ratio
+stock_splits = ticker.stock_splits
+```
+
+## EU ETF data from `justETF` (web scraping):
 
 For EU ETFS, the `isin` and `security_type` should be passed to the `Ticker` object. The `isin` is the International Securities Identification Number of the ETF and the `security_type` should be set to `etf`.
 
@@ -108,15 +119,6 @@ etf_basics = etf.etf_basics
 etf_holdings_companies = etf.etf_holdings_companies
 etf_holdings_countries = etf.etf_holdings_countries
 etf_holdings_sectors = etf.etf_holdings_sectors
-```
-
-
-## Historical dividends data
-
-All dividends paid by the company returned as a pandas DataFrame.
-
-```python
-dividend = ticker.dividend
 ```
 
 <br />
