@@ -2,11 +2,9 @@
 Interface for NASDAQ stock data
 """
 
-from typing import Literal
-
 import pandas as pd
 
-from stockdex.config import NASDAQ_BASE_URL
+from stockdex.config import NASDAQ_BASE_URL, SECURITY_TYPE
 from stockdex.lib import get_user_agent
 from stockdex.selenium_interface import selenium_interface
 from stockdex.ticker_base import TickerBase
@@ -17,7 +15,7 @@ class NASDAQInterface(TickerBase):
         self,
         ticker: str = "",
         isin: str = "",
-        security_type: str = Literal["stock", "etf"],
+        security_type: str = SECURITY_TYPE,
     ) -> None:
         self.isin = isin
         self.ticker = ticker

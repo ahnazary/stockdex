@@ -7,12 +7,13 @@ from typing import Literal
 import pandas as pd
 from bs4 import BeautifulSoup
 
+from stockdex.digrin_interface import Digrin_Interface
 from stockdex.justetf import JustETF
 from stockdex.nasdaq_interface import NASDAQInterface
 from stockdex.ticker_api import TickerAPI
 
 
-class Ticker(TickerAPI, JustETF, NASDAQInterface):
+class Ticker(TickerAPI, JustETF, NASDAQInterface, Digrin_Interface):
     """
     Class for the Ticker
     """
@@ -478,39 +479,4 @@ class Ticker(TickerAPI, JustETF, NASDAQInterface):
 
         data_df = pd.DataFrame(data)
         data_df.columns = ["holder", "shares", "date_reported", "percentage", "value"]
-        return data_df
-
-    @property
-    def dividend(self) -> pd.DataFrame:
-        """
-        Get dividends for the ticker
-
-        Args:
-        period (str): The period for the dividends
-
-        Returns:
-        pd.DataFrame: A pandas DataFrame including the dividends
-        visible in the digrin website for the ticker
-        """
-
-        # URL of the website to scrape
-        url = f"https://www.digrin.com/stocks/detail/{self.ticker}"
-        response = self.get_response(url)
-
-        # Parse the HTML content of the website
-        soup = BeautifulSoup(response.content, "html.parser")
-
-        try:
-            table = soup.find_all("table")[0]
-        except IndexError:
-            raise Exception(f"There is no dividend data for the ticker {self.ticker}")
-
-        data_df = pd.DataFrame()
-        data = []
-
-        headers = [th.text for th in table.find_all("thead")[0].find_all("th")]
-        for tr in table.find_all("tbody")[0].find_all("tr"):
-            data.append([td.text for td in tr.find_all("td")])
-
-        data_df = pd.DataFrame(data, columns=headers)
         return data_df
