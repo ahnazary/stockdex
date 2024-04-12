@@ -35,6 +35,6 @@ class WrongSecurityType(Exception):
 
     def __str__(self) -> str:
         return f"""
-                {self.message}. Wrong security type has been used,
-                make sure to use one of the following: {self.valid_types}
-                """
+            {self.message}. Wrong security type has been used,
+            make sure to use one of the following: {self.valid_types}
+            """
