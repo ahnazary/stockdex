@@ -2,13 +2,12 @@
 Module for extracting ETF data from JustETF website
 """
 
-from typing import Literal
-
 import pandas as pd
 from bs4 import BeautifulSoup
 
-from stockdex import config
+from stockdex.config import JUSTETF_BASE_URL, SECURITY_TYPE
 from stockdex.exceptions import NoISINError
+from stockdex.lib import check_security_type
 from stockdex.selenium_interface import selenium_interface
 from stockdex.ticker_base import TickerBase
 
@@ -18,7 +17,7 @@ class JustETF(TickerBase):
         self,
         ticker: str = "",
         isin: str = "",
-        security_type: str = Literal["stock", "etf"],
+        security_type: str = SECURITY_TYPE,
     ) -> None:
         self.isin = isin
         self.ticker = ticker
@@ -32,7 +31,9 @@ class JustETF(TickerBase):
         Get the general information of the ETF
         genral information includes TER, distribution policy, replication method, etc.
         """
-        url = f"{config.JUSTETF_BASE_URL}/etf-profile.html?isin={self.isin}"
+        check_security_type(self.security_type, valid_types=["etf"])
+
+        url = f"{JUSTETF_BASE_URL}/etf-profile.html?isin={self.isin}"
         response = self.get_response(url)
 
         soup = BeautifulSoup(response.text, "html.parser")
@@ -55,7 +56,9 @@ class JustETF(TickerBase):
         """
         Get the WKN of the ETF
         """
-        url = f"{config.JUSTETF_BASE_URL}/etf-profile.html?isin={self.isin}"
+        check_security_type(self.security_type, valid_types=["etf"])
+
+        url = f"{JUSTETF_BASE_URL}/etf-profile.html?isin={self.isin}"
         response = self.get_response(url)
 
         soup = BeautifulSoup(response.text, "html.parser")
@@ -69,7 +72,7 @@ class JustETF(TickerBase):
         """
         Get the description of the ETF
         """
-        url = f"{config.JUSTETF_BASE_URL}/etf-profile.html?isin={self.isin}"
+        url = f"{JUSTETF_BASE_URL}/etf-profile.html?isin={self.isin}"
         response = self.get_response(url)
 
         soup = BeautifulSoup(response.text, "html.parser")
@@ -95,7 +98,7 @@ class JustETF(TickerBase):
     #     ----------------
     #     pd.DataFrame: DataFrame containing the quote of the ETF
     #     """
-    #     url = f"{config.JUSTETF_BASE_URL}/etf-profile.html?isin={self.isin}"
+    #     url = f"{JUSTETF_BASE_URL}/etf-profile.html?isin={self.isin}"
 
     #     # build selenium interface object if not already built
     #     if not hasattr(self, "selenium_interface"):
@@ -134,7 +137,7 @@ class JustETF(TickerBase):
         ----------------
         pd.DataFrame: DataFrame containing the basic information of the ETF
         """
-        url = f"{config.JUSTETF_BASE_URL}/etf-profile.html?isin={self.isin}#basics"
+        url = f"{JUSTETF_BASE_URL}/etf-profile.html?isin={self.isin}#basics"
 
         # build selenium interface object if not already built
         if not hasattr(self, "selenium_interface"):
@@ -169,7 +172,7 @@ class JustETF(TickerBase):
         ----------------
         pd.DataFrame: DataFrame containing the holdings of the ETF
         """
-        url = f"{config.JUSTETF_BASE_URL}/etf-profile.html?isin={self.isin}#holdings"
+        url = f"{JUSTETF_BASE_URL}/etf-profile.html?isin={self.isin}#holdings"
 
         # build selenium interface object if not already built
         if not hasattr(self, "selenium_interface"):
@@ -215,7 +218,7 @@ class JustETF(TickerBase):
         ----------------
         pd.DataFrame: DataFrame containing the holdings of the ETF
         """
-        url = f"{config.JUSTETF_BASE_URL}/etf-profile.html?isin={self.isin}#holdings"
+        url = f"{JUSTETF_BASE_URL}/etf-profile.html?isin={self.isin}#holdings"
 
         # build selenium interface object if not already built
         if not hasattr(self, "selenium_interface"):
@@ -261,7 +264,7 @@ class JustETF(TickerBase):
         ----------------
         pd.DataFrame: DataFrame containing the holdings of the ETF
         """
-        url = f"{config.JUSTETF_BASE_URL}/etf-profile.html?isin={self.isin}#holdings"
+        url = f"{JUSTETF_BASE_URL}/etf-profile.html?isin={self.isin}#holdings"
 
         # build selenium interface object if not already built
         if not hasattr(self, "selenium_interface"):
