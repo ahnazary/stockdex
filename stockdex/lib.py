@@ -1,5 +1,7 @@
 import platform
 
+from stockdex.exceptions import WrongSecurityType
+
 
 def get_user_agent():
     os_name = platform.system().lower()
@@ -12,3 +14,11 @@ def get_user_agent():
     else:
         # Fallback User-Agent
         return """Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"""  # noqa E501
+
+
+def check_security_type(security_type: str, valid_types: list) -> None:
+    """
+    Check if the security type is valid
+    """
+    if security_type not in valid_types:
+        raise WrongSecurityType(valid_types=valid_types, given_type=security_type)
