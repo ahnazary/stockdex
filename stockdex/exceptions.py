@@ -27,10 +27,14 @@ class WrongSecurityType(Exception):
     """
 
     def __init__(
-        self, message: str = "Wrong security type", valid_types: list = None
+        self,
+        message: str = "Wrong security type",
+        valid_types: list = None,
+        given_type: str = None,
     ) -> None:
         self.message = message
         self.valid_types = valid_types
+        self.given_type = given_type
         super().__init__(self.message)
 
     def __str__(self) -> str:
