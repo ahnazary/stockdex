@@ -2,11 +2,10 @@
 Moduel for the Ticker class
 """
 
-from typing import Literal
-
 import pandas as pd
 from bs4 import BeautifulSoup
 
+from stockdex.config import SECURITY_TYPE
 from stockdex.digrin_interface import Digrin_Interface
 from stockdex.justetf import JustETF
 from stockdex.nasdaq_interface import NASDAQInterface
@@ -22,7 +21,7 @@ class Ticker(TickerAPI, JustETF, NASDAQInterface, Digrin_Interface):
         self,
         ticker: str = "",
         isin: str = "",
-        security_type: str = Literal["stock", "etf"],
+        security_type: str = SECURITY_TYPE,
     ) -> None:
         """
         Initialize the Ticker class
@@ -42,9 +41,9 @@ class Ticker(TickerAPI, JustETF, NASDAQInterface, Digrin_Interface):
             raise Exception("Please provide either a ticker or an ISIN")
 
         if security_type == "etf":
-            super().__init__(isin=isin)
+            super().__init__(isin=isin, security_type=security_type)
         else:
-            super().__init__(ticker=ticker)
+            super().__init__(ticker=ticker, security_type=security_type)
 
     @property
     def summary(self) -> pd.DataFrame:

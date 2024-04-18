@@ -9,6 +9,7 @@ from typing import Literal
 import pandas as pd
 
 from stockdex import config
+from stockdex.config import SECURITY_TYPE
 from stockdex.ticker_base import TickerBase
 
 
@@ -17,7 +18,7 @@ class TickerAPI(TickerBase):
         self,
         ticker: str = "",
         isin: str = "",
-        security_type: str = Literal["stock", "etf"],
+        security_type: str = SECURITY_TYPE,
     ) -> None:
         self.ticker = ticker
         self.isin = isin
