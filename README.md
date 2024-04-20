@@ -30,7 +30,7 @@ from stockdex import Ticker
 ticker = Ticker('AAPL')
 ```
 
-## Fundamental data from `Yahoo Finance` API (fast queries through Yahoo Finance API):
+## Data from `Yahoo Finance` API (fast queries through Yahoo Finance API):
 ```python
 
 # Price data (use range and dataGranularity to make range and granularity more specific)
@@ -47,7 +47,7 @@ financials = ticker.financials(period1=datetime(2022, 1, 1), period2=datetime.to
 ```
 
 
-## Fundamental data from `Yahoo Finance` website (web scraping):
+## Data from `Yahoo Finance` website (web scraping):
 ```python
 # Summary including general financial information
 summary = ticker.summary
