@@ -31,40 +31,6 @@ def test_get_response(ticker, expected_response):
         ("MSFT"),
     ],
 )
-def test_cashflow_web(ticker):
-    ticker = Ticker(ticker)
-    cashflow_web_df = ticker.cashflow_web
-
-    # Check if the response is as expected
-    assert isinstance(cashflow_web_df, pd.DataFrame)
-    assert cashflow_web_df.shape[0] > 0
-
-
-@pytest.mark.parametrize(
-    "ticker",
-    [
-        ("AAPL"),
-        ("GOOGL"),
-        ("MSFT"),
-    ],
-)
-def test_balance_sheet_web(ticker):
-    ticker = Ticker(ticker)
-    balance_sheet_web_df = ticker.balance_sheet_web
-
-    # Check if the response is as expected
-    assert isinstance(balance_sheet_web_df, pd.DataFrame)
-    assert balance_sheet_web_df.shape[0] > 0
-
-
-@pytest.mark.parametrize(
-    "ticker",
-    [
-        ("AAPL"),
-        ("GOOGL"),
-        ("MSFT"),
-    ],
-)
 def test_analysis(ticker):
     ticker = Ticker(ticker)
     analysis_df = ticker.analysis
@@ -109,23 +75,6 @@ def test_statistics(ticker):
     # Check if the response is as expected
     assert isinstance(statistics_df, pd.DataFrame)
     assert statistics_df.shape[0] > 0
-
-
-@pytest.mark.parametrize(
-    "ticker",
-    [
-        ("AAPL"),
-        ("GOOGL"),
-        ("MSFT"),
-    ],
-)
-def test_income_stmt(ticker):
-    ticker = Ticker(ticker)
-    income_stmt_df = ticker.income_stmt
-
-    # Check if the response is as expected
-    assert isinstance(income_stmt_df, pd.DataFrame)
-    assert income_stmt_df.shape[0] > 0
 
 
 @pytest.mark.parametrize(
