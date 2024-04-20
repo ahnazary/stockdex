@@ -88,6 +88,9 @@ Data on NASDAQ website gets updated more frequently than Yahoo Finance data. Bel
 quarterly_earnings_surprise = ticker.quarterly_earnings_surprise
 yearly_earnings_forecast = ticker.yearly_earnings_forecast
 quarterly_earnings_forecast = ticker.quarterly_earnings_forecast
+
+price_to_earnings_ratio = ticker.price_to_earnings_ratio
+forecast_price_to_earnings__growth_rates = ticker.forecast_peg_rate
 ```
 
 ## Stocks data from `Digrin` (web scraping):
