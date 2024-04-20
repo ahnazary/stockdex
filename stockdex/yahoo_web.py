@@ -343,7 +343,8 @@ class YahooWeb(TickerBase):
         for tr in table:
             data.append([td.text for td in tr.find_all("td")])
 
-        data_df = pd.DataFrame(data)
+        # drop the first row as it is none
+        data_df = pd.DataFrame(data[1:])
         data_df.columns = ["holder", "shares", "date_reported", "percentage", "value"]
         return data_df
 
@@ -412,3 +413,99 @@ class YahooWeb(TickerBase):
                 data_df[criteria] = data_list
 
         return data_df.T
+
+    @property
+    def valuation_measures(self) -> pd.DataFrame:
+        """
+        Get valuation measures for the ticker
+
+        Returns:
+        pd.DataFrame: A pandas DataFrame including the valuation measures
+        visible in the Yahoo Finance statistics page for the ticker
+        """
+        check_security_type(security_type=self.security_type, valid_types=["stock"])
+
+        # URL of the website to scrape
+        url = f"https://finance.yahoo.com/quote/{self.ticker}/key-statistics"
+        response = self.get_response(url)
+
+        # Parse the HTML content of the website
+        soup = BeautifulSoup(response.content, "html.parser")
+
+        table = soup.find("table", {"class": "table svelte-179gefj"})
+
+        data_df = pd.DataFrame()
+
+        headers = [item.text for item in table.find("thead").find("tr").find_all("th")]
+        data_df = pd.DataFrame(columns=headers)
+
+        for row in table.find("tbody").find_all("tr"):
+            data = [item.text for item in row.find_all("td")]
+            data_df.loc[len(data_df)] = data
+
+        return data_df.set_index("")
+
+    @property
+    def financial_highlights(self) -> pd.DataFrame:
+        """
+        Get financial highlights for the ticker
+
+        Returns:
+        pd.DataFrame: A pandas DataFrame including the financial highlights
+        """
+
+        check_security_type(security_type=self.security_type, valid_types=["stock"])
+
+        # URL of the website to scrape
+        url = f"https://finance.yahoo.com/quote/{self.ticker}/key-statistics"
+        response = self.get_response(url)
+
+        # Parse the HTML content of the website
+        soup = BeautifulSoup(response.content, "html.parser")
+
+        raw_data = soup.find("div", {"data-testid": "stats-highlight"}).find_all(
+            "section", recursive=False
+        )[0]
+        data_df = pd.DataFrame(columns=["Criteria", "Value"])
+
+        sections = raw_data.find_all("section")
+        for section in sections:
+            for row in section.find("table").find("tbody").find_all("tr"):
+                data = [item.text.strip() for item in row.find_all("td")]
+                data_df.loc[len(data_df)] = data
+
+        return data_df.set_index("Criteria")
+
+    @property
+    def trading_information(self) -> pd.DataFrame:
+        """
+        Get trading information for the ticker
+
+        Returns:
+        pd.DataFrame: A pandas DataFrame including the trading information
+        visible in the Yahoo Finance statistics page for the ticker
+        """
+        check_security_type(security_type=self.security_type, valid_types=["stock"])
+
+        # URL of the website to scrape
+        url = f"https://finance.yahoo.com/quote/{self.ticker}/key-statistics"
+        response = self.get_response(url)
+
+        # Parse the HTML content of the website
+        soup = BeautifulSoup(response.content, "html.parser")
+
+        with open("yahoo.html", "w") as file:
+            file.write(str(soup.prettify()))
+
+        raw_data = soup.find("div", {"data-testid": "stats-highlight"}).find_all(
+            "section", recursive=False
+        )[1]
+        data_df = pd.DataFrame(columns=["Criteria", "Value"])
+
+        sections = raw_data.find_all("section")
+        for section in sections:
+            for row in section.find("table").find("tbody").find_all("tr"):
+                data = [item.text.strip() for item in row.find_all("td")]
+                data_df.loc[len(data_df)] = data
+
+        return data_df.set_index("Criteria")

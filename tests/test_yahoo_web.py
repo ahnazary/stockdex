@@ -304,3 +304,81 @@ def test_analysis_wrong_security_type():
     with pytest.raises(WrongSecurityType):
         ticker = Ticker(isin="AAPL", security_type="etf")
         ticker.analysis
+
+
+# @pytest.mark.skip(
+#     reason="This test is skipped because github actions is not able to access the yahoo finance page"  # noqa E501
+# )
+@pytest.mark.parametrize(
+    "ticker",
+    [
+        ("AAPL"),
+        ("GOOGL"),
+        ("MSFT"),
+    ],
+)
+def test_valuation_measures(ticker):
+    ticker = Ticker(ticker)
+    valuation_measures_df = ticker.valuation_measures
+
+    # Check if the response is as expected
+    assert isinstance(valuation_measures_df, pd.DataFrame)
+    assert valuation_measures_df.shape[0] > 0
+    assert valuation_measures_df.shape[1] > 3
+    assert isinstance(valuation_measures_df.iloc[0, 0], (int, float, str))
+
+
+def test_valuation_measures_wrong_security_type():
+    with pytest.raises(WrongSecurityType):
+        ticker = Ticker(isin="AAPL", security_type="etf")
+        ticker.valuation_measures
+
+
+@pytest.mark.parametrize(
+    "ticker",
+    [
+        ("AAPL"),
+        ("GOOGL"),
+        ("MSFT"),
+    ],
+)
+def test_financial_highlights(ticker):
+    ticker = Ticker(ticker)
+    financial_highlights_df = ticker.financial_highlights
+
+    # Check if the response is as expected
+    assert isinstance(financial_highlights_df, pd.DataFrame)
+    assert financial_highlights_df.shape[0] > 0
+    assert financial_highlights_df.shape[1] == 1
+    assert isinstance(financial_highlights_df.iloc[0, 0], (int, float, str))
+
+
+def test_financial_highlights_wrong_security_type():
+    with pytest.raises(WrongSecurityType):
+        ticker = Ticker(isin="AAPL", security_type="etf")
+        ticker.financial_highlights
+
+
+@pytest.mark.parametrize(
+    "ticker",
+    [
+        ("AAPL"),
+        ("GOOGL"),
+        ("MSFT"),
+    ],
+)
+def test_trading_information(ticker):
+    ticker = Ticker(ticker)
+    trading_information_df = ticker.trading_information
+
+    # Check if the response is as expected
+    assert isinstance(trading_information_df, pd.DataFrame)
+    assert trading_information_df.shape[0] > 0
+    assert trading_information_df.shape[1] == 1
+    assert isinstance(trading_information_df.iloc[0, 0], (int, float, str))
+
+
+def test_trading_information_wrong_security_type():
+    with pytest.raises(WrongSecurityType):
+        ticker = Ticker(isin="AAPL", security_type="etf")
+        ticker.trading_information
