@@ -47,7 +47,7 @@ financials = ticker.financials(period1=datetime(2022, 1, 1), period2=datetime.to
 ```
 
 
-## Fundamental data with criteria from `Yahoo Finance` website (web scraping):
+## Fundamental data from `Yahoo Finance` website (web scraping):
 ```python
 # Summary including general financial information
 summary = ticker.summary
