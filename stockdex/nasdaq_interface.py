@@ -8,6 +8,7 @@ from stockdex.config import NASDAQ_BASE_URL, VALID_SECURITY_TYPES
 from stockdex.lib import get_user_agent
 from stockdex.selenium_interface import selenium_interface
 from stockdex.ticker_base import TickerBase
+from stockdex.lib import check_security_type
 
 
 class NASDAQInterface(TickerBase):
@@ -40,6 +41,7 @@ class NASDAQInterface(TickerBase):
         - 'Consensus EPS* Forecast'
         - '% Surprise'
         """
+        check_security_type(security_type=self.security_type, valid_types=["stock"])
 
         url = f"{NASDAQ_BASE_URL}/{self.ticker.lower()}/earnings"
 
@@ -84,6 +86,7 @@ class NASDAQInterface(TickerBase):
         - Over The Last 4 Weeks Number Of Revisions - Up
         - Over The Last 4 Weeks Number Of Revisions - Down
         """
+        check_security_type(security_type=self.security_type, valid_types=["stock"])
 
         url = f"{NASDAQ_BASE_URL}/{self.ticker.lower()}/earnings"
 
@@ -128,6 +131,7 @@ class NASDAQInterface(TickerBase):
         - Over The Last 4 Weeks Number Of Revisions - Up
         - Over The Last 4 Weeks Number Of Revisions - Down
         """
+        check_security_type(security_type=self.security_type, valid_types=["stock"])
 
         url = f"{NASDAQ_BASE_URL}/{self.ticker.lower()}/earnings"
 
@@ -156,3 +160,68 @@ class NASDAQInterface(TickerBase):
             data.append(row_data)
 
         return pd.DataFrame(data, columns=columns)
+
+    @property
+    def price_to_earnings_ratio(self) -> pd.DataFrame:
+        """
+        Get the price to earnings ratio for the stock
+
+        Returns:
+        ----------------
+        pd.DataFrame: Price to earnings ratio data
+        """
+        check_security_type(security_type=self.security_type, valid_types=["stock"])
+
+        url = f"{NASDAQ_BASE_URL}/{self.ticker.lower()}/price-earnings-peg-ratios"
+
+        # build selenium interface object if not already built
+        if not hasattr(self, "selenium_interface"):
+            self.selenium_interface = selenium_interface(use_custom_user_agent=True)
+
+        soup = self.selenium_interface.get_html_content(url)
+        with open("nasdaq.html", "w") as f:
+            f.write(str(soup.prettify()))
+
+        table = soup.find(
+            "tbody", {"class": "price-earnings-peg-ratios__table-body"}
+        )
+        index, value = [], []
+
+        for row in table.find_all("tr"):
+            index.append(row.find("th").text)
+            value.append(row.find("td").text)
+
+        return pd.DataFrame(value, index=index, columns=["Price to Earnings Ratio"])
+
+    @property
+    def forecast_peg_rate(self) -> pd.DataFrame:
+        """
+        Get the forecast price to earning growth rate for the stock
+
+        Returns:
+        ----------------
+        pd.DataFrame: Forecast price to earning growth rate data
+        """
+
+        check_security_type(security_type=self.security_type, valid_types=["stock"])
+
+        url = f"{NASDAQ_BASE_URL}/{self.ticker.lower()}/price-earnings-peg-ratios"
+
+        # build selenium interface object if not already built
+        if not hasattr(self, "selenium_interface"):
+            self.selenium_interface = selenium_interface(use_custom_user_agent=True)
+
+        soup = self.selenium_interface.get_html_content(url)
+        with open("nasdaq.html", "w") as f:
+            f.write(str(soup.prettify()))
+
+        table = soup.find_all(
+            "tbody", {"class": "price-earnings-peg-ratios__table-body"}
+        )[1]
+        index, value = [], []
+
+        for row in table.find_all("tr"):
+            index.append(row.find("th").text)
+            value.append(row.find("td").text)
+
+        return pd.DataFrame(value, index=index, columns=["Forecast Price to Earning Growth Rate"])

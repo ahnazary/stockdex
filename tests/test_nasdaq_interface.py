@@ -6,6 +6,7 @@ import pandas as pd
 import pytest
 
 from stockdex.ticker import Ticker
+from stockdex.exceptions import WrongSecurityType
 
 
 @pytest.mark.parametrize(
@@ -34,6 +35,12 @@ def test_quarterly_earnings_surprise(ticker):
         "% Surprise",
     ]
     assert response.columns.tolist() == expected_columns
+
+
+def test_quarterly_earnings_surprise_wrong_securiy_type():
+    with pytest.raises(WrongSecurityType):
+        ticker = Ticker(ticker="AAPL", security_type="wrong_security_type")
+        ticker.quarterly_earnings_surprise
 
 
 @pytest.mark.parametrize(
@@ -65,6 +72,12 @@ def test_yearly_earnings_forecast(ticker):
         assert column in response.columns.tolist()
 
 
+def test_yearly_earnings_forecast_wrong_securiy_type():
+    with pytest.raises(WrongSecurityType):
+        ticker = Ticker(ticker="AAPL", security_type="wrong_security_type")
+        ticker.yearly_earnings_forecast
+
+
 @pytest.mark.parametrize(
     "ticker",
     [
@@ -92,3 +105,59 @@ def test_quarterly_earnings_forecast(ticker):
 
     for column in expected_columns:
         assert column in response.columns.tolist()
+
+
+def test_quarterly_earnings_forecast_wrong_securiy_type():
+    with pytest.raises(WrongSecurityType):
+        ticker = Ticker(ticker="AAPL", security_type="wrong_security_type")
+        ticker.quarterly_earnings_forecast
+
+
+@pytest.mark.parametrize(
+    "ticker",
+    [
+        ("NVDA"),
+        ("AAPL"),
+        ("GOOGL"),
+        ("MSFT"),
+    ],
+)
+def test_price_to_earnings_ratio(ticker):
+    ticker = Ticker(ticker)
+    price_to_earnings_ratio = ticker.price_to_earnings_ratio
+
+    assert price_to_earnings_ratio is not None
+    assert isinstance(price_to_earnings_ratio, pd.DataFrame)
+    assert price_to_earnings_ratio.shape[0] > 1
+    assert price_to_earnings_ratio.shape[1] == 1
+
+
+def test_price_to_earnings_ratio_wrong_securiy_type():
+    with pytest.raises(WrongSecurityType):
+        ticker = Ticker(ticker="AAPL", security_type="wrong_security_type")
+        ticker.price_to_earnings_ratio
+
+
+@pytest.mark.parametrize(
+    "ticker",
+    [
+        ("NVDA"),
+        ("AAPL"),
+        ("GOOGL"),
+        ("MSFT"),
+    ],
+)
+def test_forecast_peg_rate(ticker):
+    ticker = Ticker(ticker)
+    forecast_peg_rate = ticker.forecast_peg_rate
+
+    assert forecast_peg_rate is not None
+    assert isinstance(forecast_peg_rate, pd.DataFrame)
+    assert forecast_peg_rate.shape[0] > 1
+    assert forecast_peg_rate.shape[1] == 1
+
+
+def test_forecast_peg_rate_wrong_securiy_type():
+    with pytest.raises(WrongSecurityType):
+        ticker = Ticker(ticker="AAPL", security_type="wrong_security_type")
+        ticker.forecast_peg_rate
