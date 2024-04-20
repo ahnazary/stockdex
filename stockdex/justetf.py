@@ -72,6 +72,8 @@ class JustETF(TickerBase):
         """
         Get the description of the ETF
         """
+        check_security_type(self.security_type, valid_types=["etf"])
+
         url = f"{JUSTETF_BASE_URL}/etf-profile.html?isin={self.isin}"
         response = self.get_response(url)
 
@@ -137,6 +139,8 @@ class JustETF(TickerBase):
         ----------------
         pd.DataFrame: DataFrame containing the basic information of the ETF
         """
+        check_security_type(self.security_type, valid_types=["etf"])
+
         url = f"{JUSTETF_BASE_URL}/etf-profile.html?isin={self.isin}#basics"
 
         # build selenium interface object if not already built
@@ -172,6 +176,8 @@ class JustETF(TickerBase):
         ----------------
         pd.DataFrame: DataFrame containing the holdings of the ETF
         """
+        check_security_type(self.security_type, valid_types=["etf"])
+
         url = f"{JUSTETF_BASE_URL}/etf-profile.html?isin={self.isin}#holdings"
 
         # build selenium interface object if not already built
@@ -218,6 +224,8 @@ class JustETF(TickerBase):
         ----------------
         pd.DataFrame: DataFrame containing the holdings of the ETF
         """
+        check_security_type(self.security_type, valid_types=["etf"])
+
         url = f"{JUSTETF_BASE_URL}/etf-profile.html?isin={self.isin}#holdings"
 
         # build selenium interface object if not already built
@@ -264,6 +272,8 @@ class JustETF(TickerBase):
         ----------------
         pd.DataFrame: DataFrame containing the holdings of the ETF
         """
+        check_security_type(self.security_type, valid_types=["etf"])
+
         url = f"{JUSTETF_BASE_URL}/etf-profile.html?isin={self.isin}#holdings"
 
         # build selenium interface object if not already built

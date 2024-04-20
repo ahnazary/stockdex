@@ -5,6 +5,7 @@ Module to test the justetf module.
 import pandas as pd
 import pytest
 
+from stockdex.exceptions import WrongSecurityType
 from stockdex.ticker import Ticker
 
 
@@ -30,6 +31,15 @@ def test_etf_general_info(isin: str) -> None:
         assert etf_general_info.iloc[0][i] != ""
 
 
+def test_etf_general_info_wrong_security_type() -> None:
+    """
+    Test the WrongSecurityType exception
+    """
+    with pytest.raises(WrongSecurityType):
+        ticker = Ticker(isin="IE00B4L5Y983", security_type="wrong_security_type")
+        ticker.etf_general_info
+
+
 @pytest.mark.parametrize(
     "isin, expected",
     [
@@ -46,6 +56,15 @@ def test_etf_wkn(isin: str, expected: str) -> None:
     etf_wkn = etf.etf_wkn
     assert isinstance(etf_wkn, str)
     assert etf_wkn == expected
+
+
+def test_etf_wkn_wrong_security_type() -> None:
+    """
+    Test the WrongSecurityType exception
+    """
+    with pytest.raises(WrongSecurityType):
+        ticker = Ticker(isin="IE00B4L5Y983", security_type="wrong_security_type")
+        ticker.etf_wkn
 
 
 def test_no_isin() -> None:
@@ -72,6 +91,15 @@ def test_etf_description(isin: str) -> None:
     etf_description = etf.etf_description
     assert isinstance(etf_description, str)
     assert len(etf_description) > 0
+
+
+def test_etf_description_wrong_security_type() -> None:
+    """
+    Test the WrongSecurityType exception
+    """
+    with pytest.raises(WrongSecurityType):
+        ticker = Ticker(isin="IE00B4L5Y983", security_type="wrong_security_type")
+        ticker.etf_description
 
 
 # @pytest.mark.parametrize(
@@ -121,6 +149,15 @@ def test_etf_basics(isin: str) -> None:
         assert etf_basics[column].iloc[0] != ""
 
 
+def test_etf_basics_wrong_security_type() -> None:
+    """
+    Test the WrongSecurityType exception
+    """
+    with pytest.raises(WrongSecurityType):
+        ticker = Ticker(isin="IE00B4L5Y983", security_type="wrong_security_type")
+        ticker.etf_basics
+
+
 @pytest.mark.parametrize(
     "isin",
     [
@@ -138,6 +175,15 @@ def test_etf_holdings_companies(isin: str) -> None:
     assert isinstance(etf_holdings, pd.DataFrame)
     assert etf_holdings.shape[0] == 10
     assert etf_holdings.shape[1] == 1
+
+
+def test_etf_holdings_companies_wrong_security_type() -> None:
+    """
+    Test the WrongSecurityType exception
+    """
+    with pytest.raises(WrongSecurityType):
+        ticker = Ticker(isin="IE00B4L5Y983", security_type="wrong_security_type")
+        ticker.etf_holdings_companies
 
 
 @pytest.mark.parametrize(
@@ -160,6 +206,15 @@ def test_etf_holdings_countries(isin: str) -> None:
     assert etf_holdings.shape[1] == 1
 
 
+def test_etf_holdings_countries_wrong_security_type() -> None:
+    """
+    Test the WrongSecurityType exception
+    """
+    with pytest.raises(WrongSecurityType):
+        ticker = Ticker(isin="IE00B4L5Y983", security_type="wrong_security_type")
+        ticker.etf_holdings_countries
+
+
 @pytest.mark.parametrize(
     "isin",
     [
@@ -178,3 +233,12 @@ def test_etf_holdings_sectors(isin: str) -> None:
     assert isinstance(etf_holdings, pd.DataFrame)
     assert etf_holdings.shape[0] >= 2
     assert etf_holdings.shape[1] == 1
+
+
+def test_etf_holdings_sectors_wrong_security_type() -> None:
+    """
+    Test the WrongSecurityType exception
+    """
+    with pytest.raises(WrongSecurityType):
+        ticker = Ticker(isin="IE00B4L5Y983", security_type="wrong_security_type")
+        ticker.etf_holdings_sectors
