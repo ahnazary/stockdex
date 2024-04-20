@@ -74,8 +74,10 @@ major_holders = ticker.major_holders
 top_institutional_holders = ticker.top_institutional_holders
 top_mutual_fund_holders = ticker.top_mutual_fund_holders
 
-# Main statistics
-statistics = ticker.statistics 
+# Statistics
+valuation_measures = ticker.valuation_measures
+financial_highlights = ticker.financial_highlights
+trading_information = ticker.trading_information
 ```
 
 ## NASDAQ data from `NASDAQ` website (web scraping):
