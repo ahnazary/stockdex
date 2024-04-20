@@ -5,13 +5,16 @@ Module to extract data from Digrin website
 import pandas as pd
 from bs4 import BeautifulSoup
 
-from stockdex.config import DIGRIN_BASE_URL, SECURITY_TYPE
+from stockdex.config import DIGRIN_BASE_URL, VALID_SECURITY_TYPES
 from stockdex.ticker_base import TickerBase
 
 
 class Digrin_Interface(TickerBase):
     def __init__(
-        self, ticker: str = "", isin: str = "", security_type: str = SECURITY_TYPE
+        self,
+        ticker: str = "",
+        isin: str = "",
+        security_type: VALID_SECURITY_TYPES = "stock",
     ) -> None:
         self.isin = isin
         self.ticker = ticker

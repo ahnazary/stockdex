@@ -5,7 +5,7 @@ Module for extracting ETF data from JustETF website
 import pandas as pd
 from bs4 import BeautifulSoup
 
-from stockdex.config import JUSTETF_BASE_URL, SECURITY_TYPE
+from stockdex.config import JUSTETF_BASE_URL, VALID_SECURITY_TYPES
 from stockdex.exceptions import NoISINError
 from stockdex.lib import check_security_type
 from stockdex.selenium_interface import selenium_interface
@@ -17,7 +17,7 @@ class JustETF(TickerBase):
         self,
         ticker: str = "",
         isin: str = "",
-        security_type: str = SECURITY_TYPE,
+        security_type: VALID_SECURITY_TYPES = "etf",
     ) -> None:
         self.isin = isin
         self.ticker = ticker
