@@ -1,4 +1,3 @@
-import pandas as pd
 import pytest
 
 from stockdex.ticker import Ticker
@@ -21,23 +20,3 @@ def test_get_response(ticker, expected_response):
 
     # Check if the response is as expected
     assert response.status_code == expected_response
-
-
-@pytest.mark.skip(
-    reason="This test is skipped because github actions is not able to access the yahoo finance page"  # noqa E501
-)
-@pytest.mark.parametrize(
-    "ticker",
-    [
-        ("AAPL"),
-        ("GOOGL"),
-        ("MSFT"),
-    ],
-)
-def test_statistics(ticker):
-    ticker = Ticker(ticker)
-    statistics_df = ticker.statistics()
-
-    # Check if the response is as expected
-    assert isinstance(statistics_df, pd.DataFrame)
-    assert statistics_df.shape[0] > 0
