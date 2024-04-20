@@ -50,9 +50,9 @@
 <li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#fundamental-data-from-yahoo-finance-api-fast-queries-through-yahoo-finance-api">Fundamental data from <code class="docutils literal notranslate"><span class="pre">Yahoo</span> <span class="pre">Finance</span></code> API (fast queries through Yahoo Finance API):</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fundamental-data-with-criteria-from-yahoo-finance-website-web-scraping">Fundamental data with criteria from <code class="docutils literal notranslate"><span class="pre">Yahoo</span> <span class="pre">Finance</span></code> website (web scraping):</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#nasdaq-data-from-nasdaq-web-scraping">NASDAQ data from <code class="docutils literal notranslate"><span class="pre">NASDAQ</span></code> (web scraping):</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#eu-etf-data-from-justetf-web-scraping">EU ETF data from justETF (web scraping):</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#historical-dividends-data">Historical dividends data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#nasdaq-data-from-nasdaq-website-web-scraping">NASDAQ data from <code class="docutils literal notranslate"><span class="pre">NASDAQ</span></code> website (web scraping):</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#stocks-data-from-digrin-web-scraping">Stocks data from <code class="docutils literal notranslate"><span class="pre">Digrin</span></code> (web scraping):</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#eu-etf-data-from-justetf-web-scraping">EU ETF data from <code class="docutils literal notranslate"><span class="pre">justETF</span></code> (web scraping):</a></li>
 </ul>
 </li>
 </ul>
@@ -135,7 +135,7 @@
 <span class="n">summary</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">summary</span>
 
 <span class="c1"># Financial data as it is seen in the yahoo finance website</span>
-<span class="n">income_stmt</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">income_stmt</span>
+<span class="n">income_stmt_web</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">income_stmt_web</span>
 <span class="n">balance_sheet</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">balance_sheet_web</span>
 <span class="n">cash_flow</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">cashflow_web</span>
 
@@ -161,18 +161,32 @@
 </pre></div>
 </div>
 </section>
-<section id="nasdaq-data-from-nasdaq-web-scraping">
-<h3>NASDAQ data from <code class="docutils literal notranslate"><span class="pre">NASDAQ</span></code> (web scraping):<a class="headerlink" href="#nasdaq-data-from-nasdaq-web-scraping" title="Permalink to this heading"></a></h3>
+<section id="nasdaq-data-from-nasdaq-website-web-scraping">
+<h3>NASDAQ data from <code class="docutils literal notranslate"><span class="pre">NASDAQ</span></code> website (web scraping):<a class="headerlink" href="#nasdaq-data-from-nasdaq-website-web-scraping" title="Permalink to this heading"></a></h3>
+<p>Data on NASDAQ website gets updated more frequently than Yahoo Finance data. Below are some of the data that can be retrieved from the NASDAQ website.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Data about quarterly and yearly earnings, updated on the same day as the earnings release (yahoo finance data is updated after a few days)</span>
 
 <span class="n">quarterly_earnings_surprise</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">quarterly_earnings_surprise</span>
 <span class="n">yearly_earnings_forecast</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yearly_earnings_forecast</span>
 <span class="n">quarterly_earnings_forecast</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">quarterly_earnings_forecast</span>
+
+<span class="n">price_to_earnings_ratio</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">price_to_earnings_ratio</span>
+<span class="n">forecast_price_to_earnings__growth_rates</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">forecast_peg_rate</span>
+</pre></div>
+</div>
+</section>
+<section id="stocks-data-from-digrin-web-scraping">
+<h3>Stocks data from <code class="docutils literal notranslate"><span class="pre">Digrin</span></code> (web scraping):<a class="headerlink" href="#stocks-data-from-digrin-web-scraping" title="Permalink to this heading"></a></h3>
+<p>Data on Digrin website includes all historical data of the stock in certain categories, unlike Yahoo Finance which only provides the last 5 years of data at most.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Complete historical data of the stock in certain categories</span>
+<span class="n">dividend</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">dividend</span>
+<span class="n">payout_ratio</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">payout_ratio</span>
+<span class="n">stock_splits</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">stock_splits</span>
 </pre></div>
 </div>
 </section>
 <section id="eu-etf-data-from-justetf-web-scraping">
-<h3>EU ETF data from justETF (web scraping):<a class="headerlink" href="#eu-etf-data-from-justetf-web-scraping" title="Permalink to this heading"></a></h3>
+<h3>EU ETF data from <code class="docutils literal notranslate"><span class="pre">justETF</span></code> (web scraping):<a class="headerlink" href="#eu-etf-data-from-justetf-web-scraping" title="Permalink to this heading"></a></h3>
 <p>For EU ETFS, the <code class="docutils literal notranslate"><span class="pre">isin</span></code> and <code class="docutils literal notranslate"><span class="pre">security_type</span></code> should be passed to the <code class="docutils literal notranslate"><span class="pre">Ticker</span></code> object. The <code class="docutils literal notranslate"><span class="pre">isin</span></code> is the International Securities Identification Number of the ETF and the <code class="docutils literal notranslate"><span class="pre">security_type</span></code> should be set to <code class="docutils literal notranslate"><span class="pre">etf</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">etf</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">isin</span><span class="o">=</span><span class="s1">&#39;IE00B4L5Y983&#39;</span><span class="p">,</span> <span class="n">security_type</span><span class="o">=</span><span class="s1">&#39;etf&#39;</span><span class="p">)</span>
 
@@ -187,13 +201,6 @@
 <span class="n">etf_holdings_companies</span> <span class="o">=</span> <span class="n">etf</span><span class="o">.</span><span class="n">etf_holdings_companies</span>
 <span class="n">etf_holdings_countries</span> <span class="o">=</span> <span class="n">etf</span><span class="o">.</span><span class="n">etf_holdings_countries</span>
 <span class="n">etf_holdings_sectors</span> <span class="o">=</span> <span class="n">etf</span><span class="o">.</span><span class="n">etf_holdings_sectors</span>
-</pre></div>
-</div>
-</section>
-<section id="historical-dividends-data">
-<h3>Historical dividends data<a class="headerlink" href="#historical-dividends-data" title="Permalink to this heading"></a></h3>
-<p>All dividends paid by the company returned as a pandas DataFrame.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dividend</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">dividend</span>
 </pre></div>
 </div>
 <br />

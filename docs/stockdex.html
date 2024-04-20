@@ -48,6 +48,7 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">stockdex package</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-stockdex.lib">stockdex.lib module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#stockdex.lib.check_security_type"><code class="docutils literal notranslate"><span class="pre">check_security_type()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#stockdex.lib.get_user_agent"><code class="docutils literal notranslate"><span class="pre">get_user_agent()</span></code></a></li>
 </ul>
 </li>
@@ -107,6 +108,12 @@
 <section id="module-stockdex.lib">
 <span id="stockdex-lib-module"></span><h2>stockdex.lib module<a class="headerlink" href="#module-stockdex.lib" title="Permalink to this heading"></a></h2>
 <dl class="py function">
+<dt class="sig sig-object py" id="stockdex.lib.check_security_type">
+<span class="sig-prename descclassname"><span class="pre">stockdex.lib.</span></span><span class="sig-name descname"><span class="pre">check_security_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">security_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_types</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/stockdex/lib.html#check_security_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.lib.check_security_type" title="Permalink to this definition"></a></dt>
+<dd><p>Check if the security type is valid</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="stockdex.lib.get_user_agent">
 <span class="sig-prename descclassname"><span class="pre">stockdex.lib.</span></span><span class="sig-name descname"><span class="pre">get_user_agent</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/stockdex/lib.html#get_user_agent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.lib.get_user_agent" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
@@ -117,14 +124,34 @@
 <p>Interface for NASDAQ stock data</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="stockdex.nasdaq_interface.NASDAQInterface">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stockdex.nasdaq_interface.</span></span><span class="sig-name descname"><span class="pre">NASDAQInterface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ticker</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">security_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">typing.Literal['stock',</span> <span class="pre">'etf']</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stockdex/nasdaq_interface.html#NASDAQInterface"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.nasdaq_interface.NASDAQInterface" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stockdex.nasdaq_interface.</span></span><span class="sig-name descname"><span class="pre">NASDAQInterface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ticker</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">security_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'stock'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'etf'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'cryptocurrency'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'index'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'commodity'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'stock'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stockdex/nasdaq_interface.html#NASDAQInterface"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.nasdaq_interface.NASDAQInterface" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#stockdex.ticker_base.TickerBase" title="stockdex.ticker_base.TickerBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">TickerBase</span></code></a></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="stockdex.nasdaq_interface.NASDAQInterface.quarterly_earnings_forecast">
-<span class="sig-name descname"><span class="pre">quarterly_earnings_forecast</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/stockdex/nasdaq_interface.html#NASDAQInterface.quarterly_earnings_forecast"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.nasdaq_interface.NASDAQInterface.quarterly_earnings_forecast" title="Permalink to this definition"></a></dt>
-<dd><p>Get quarterly earnings forecast for the stock</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="stockdex.nasdaq_interface.NASDAQInterface.forecast_peg_rate">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">forecast_peg_rate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">DataFrame</span></em><a class="headerlink" href="#stockdex.nasdaq_interface.NASDAQInterface.forecast_peg_rate" title="Permalink to this definition"></a></dt>
+<dd><p>Get the forecast price to earning growth rate for the stock</p>
 <section id="returns">
 <h3>Returns:<a class="headerlink" href="#returns" title="Permalink to this heading"></a></h3>
+<p>pd.DataFrame: Forecast price to earning growth rate data</p>
+</section>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="stockdex.nasdaq_interface.NASDAQInterface.price_to_earnings_ratio">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">price_to_earnings_ratio</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">DataFrame</span></em><a class="headerlink" href="#stockdex.nasdaq_interface.NASDAQInterface.price_to_earnings_ratio" title="Permalink to this definition"></a></dt>
+<dd><p>Get the price to earnings ratio for the stock</p>
+<section id="id1">
+<h3>Returns:<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
+<p>pd.DataFrame: Price to earnings ratio data</p>
+</section>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="stockdex.nasdaq_interface.NASDAQInterface.quarterly_earnings_forecast">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">quarterly_earnings_forecast</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">DataFrame</span></em><a class="headerlink" href="#stockdex.nasdaq_interface.NASDAQInterface.quarterly_earnings_forecast" title="Permalink to this definition"></a></dt>
+<dd><p>Get quarterly earnings forecast for the stock</p>
+<section id="id2">
+<h3>Returns:<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h3>
 <p>pd.DataFrame: Quarterly earnings forecast data
 The columns might include:
 - Fiscal Quarter End
@@ -137,12 +164,12 @@ The columns might include:
 </section>
 </dd></dl>
 
-<dl class="py method">
+<dl class="py property">
 <dt class="sig sig-object py" id="stockdex.nasdaq_interface.NASDAQInterface.quarterly_earnings_surprise">
-<span class="sig-name descname"><span class="pre">quarterly_earnings_surprise</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/stockdex/nasdaq_interface.html#NASDAQInterface.quarterly_earnings_surprise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.nasdaq_interface.NASDAQInterface.quarterly_earnings_surprise" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">quarterly_earnings_surprise</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">DataFrame</span></em><a class="headerlink" href="#stockdex.nasdaq_interface.NASDAQInterface.quarterly_earnings_surprise" title="Permalink to this definition"></a></dt>
 <dd><p>Get quarterly earnings for the stock</p>
-<section id="id1">
-<h3>Returns:<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
+<section id="id3">
+<h3>Returns:<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h3>
 <p>pd.DataFrame: Quarterly earnings surprise data
 The columns might include:
 - ‘Fiscal Quarter End’
@@ -153,12 +180,12 @@ The columns might include:
 </section>
 </dd></dl>
 
-<dl class="py method">
+<dl class="py property">
 <dt class="sig sig-object py" id="stockdex.nasdaq_interface.NASDAQInterface.yearly_earnings_forecast">
-<span class="sig-name descname"><span class="pre">yearly_earnings_forecast</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/stockdex/nasdaq_interface.html#NASDAQInterface.yearly_earnings_forecast"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.nasdaq_interface.NASDAQInterface.yearly_earnings_forecast" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">yearly_earnings_forecast</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">DataFrame</span></em><a class="headerlink" href="#stockdex.nasdaq_interface.NASDAQInterface.yearly_earnings_forecast" title="Permalink to this definition"></a></dt>
 <dd><p>Get yearly earnings for the stock</p>
-<section id="id2">
-<h3>Returns:<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h3>
+<section id="id4">
+<h3>Returns:<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h3>
 <p>pd.DataFrame: Yearly earnings data
 The columns might include:
 - Fiscal Year End
@@ -179,143 +206,15 @@ The columns might include:
 <p>Moduel for the Ticker class</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="stockdex.ticker.Ticker">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stockdex.ticker.</span></span><span class="sig-name descname"><span class="pre">Ticker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ticker</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">security_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">typing.Literal['stock',</span> <span class="pre">'etf']</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stockdex/ticker.html#Ticker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.ticker.Ticker" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#stockdex.ticker_api.TickerAPI" title="stockdex.ticker_api.TickerAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">TickerAPI</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">JustETF</span></code>, <a class="reference internal" href="#stockdex.nasdaq_interface.NASDAQInterface" title="stockdex.nasdaq_interface.NASDAQInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">NASDAQInterface</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stockdex.ticker.</span></span><span class="sig-name descname"><span class="pre">Ticker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ticker</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">security_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'stock'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'etf'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'cryptocurrency'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'index'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'commodity'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'stock'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stockdex/ticker.html#Ticker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.ticker.Ticker" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#stockdex.ticker_api.TickerAPI" title="stockdex.ticker_api.TickerAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">TickerAPI</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">JustETF</span></code>, <a class="reference internal" href="#stockdex.nasdaq_interface.NASDAQInterface" title="stockdex.nasdaq_interface.NASDAQInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">NASDAQInterface</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Digrin_Interface</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">YahooWeb</span></code></p>
 <p>Class for the Ticker</p>
-<dl class="py property">
-<dt class="sig sig-object py" id="stockdex.ticker.Ticker.analysis">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">analysis</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">DataFrame</span></em><a class="headerlink" href="#stockdex.ticker.Ticker.analysis" title="Permalink to this definition"></a></dt>
-<dd><p>Get analysis for the ticker</p>
-<p>Returns:
-pd.DataFrame: A pandas DataFrame including the analysis
-visible in the Yahoo Finance statistics page for the ticker</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="stockdex.ticker.Ticker.balance_sheet_web">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">balance_sheet_web</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">DataFrame</span></em><a class="headerlink" href="#stockdex.ticker.Ticker.balance_sheet_web" title="Permalink to this definition"></a></dt>
-<dd><p>Get balance sheet for the ticker</p>
-<p>Returns:
-pd.DataFrame: A pandas DataFrame including the balance sheet
-visible in the Yahoo Finance statistics page for the ticker</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="stockdex.ticker.Ticker.calls">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calls</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">DataFrame</span></em><a class="headerlink" href="#stockdex.ticker.Ticker.calls" title="Permalink to this definition"></a></dt>
-<dd><p>Get calls for the ticker</p>
-<p>Returns:
-pd.DataFrame: A pandas DataFrame including the calls
-visible in the Yahoo Finance statistics page for the ticker</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="stockdex.ticker.Ticker.cashflow_web">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cashflow_web</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">DataFrame</span></em><a class="headerlink" href="#stockdex.ticker.Ticker.cashflow_web" title="Permalink to this definition"></a></dt>
-<dd><p>Get cash flow for the ticker</p>
-<p>Returns:
-pd.DataFrame: A pandas DataFrame including the cash flow
-visible in the Yahoo Finance statistics page for the ticker</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="stockdex.ticker.Ticker.corporate_governance">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">corporate_governance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#stockdex.ticker.Ticker.corporate_governance" title="Permalink to this definition"></a></dt>
-<dd><p>Get the description of the ticker</p>
-<p>Returns:
-str: A string including the description of the ticker
-visible in the Yahoo Finance profile page for the ticker</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="stockdex.ticker.Ticker.description">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#stockdex.ticker.Ticker.description" title="Permalink to this definition"></a></dt>
-<dd><p>Get the description of the ticker</p>
-<p>Returns:
-str: A string including the description of the ticker
-visible in the Yahoo Finance profile page for the ticker</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="stockdex.ticker.Ticker.dividend">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dividend</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">DataFrame</span></em><a class="headerlink" href="#stockdex.ticker.Ticker.dividend" title="Permalink to this definition"></a></dt>
-<dd><p>Get dividends for the ticker</p>
-<p>Args:
-period (str): The period for the dividends</p>
-<p>Returns:
-pd.DataFrame: A pandas DataFrame including the dividends
-visible in the digrin website for the ticker</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="stockdex.ticker.Ticker.income_stmt">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">income_stmt</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">DataFrame</span></em><a class="headerlink" href="#stockdex.ticker.Ticker.income_stmt" title="Permalink to this definition"></a></dt>
-<dd><p>Get income statement for the ticker</p>
-<p>Returns:
-pd.DataFrame: A pandas DataFrame including the income statement
-visible in the Yahoo Finance statistics page for the ticker</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="stockdex.ticker.Ticker.key_executives">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">key_executives</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">DataFrame</span></em><a class="headerlink" href="#stockdex.ticker.Ticker.key_executives" title="Permalink to this definition"></a></dt>
-<dd><p>Get profile key executives for the ticker</p>
-<p>Returns:
-pd.DataFrame: A pandas DataFrame including the profile key executives
-visible in the Yahoo Finance statistics page for the ticker</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="stockdex.ticker.Ticker.major_holders">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">major_holders</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">DataFrame</span></em><a class="headerlink" href="#stockdex.ticker.Ticker.major_holders" title="Permalink to this definition"></a></dt>
-<dd><p>Get major holders for the ticker</p>
-<p>Returns:
-pd.DataFrame: A pandas DataFrame including the major holders
-visible in the Yahoo Finance statistics page for the ticker</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="stockdex.ticker.Ticker.puts">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">puts</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">DataFrame</span></em><a class="headerlink" href="#stockdex.ticker.Ticker.puts" title="Permalink to this definition"></a></dt>
-<dd><p>Get puts for the ticker</p>
-<p>Returns:
-pd.DataFrame: A pandas DataFrame including the puts
-visible in the Yahoo Finance statistics page for the ticker</p>
-</dd></dl>
-
 <dl class="py property">
 <dt class="sig sig-object py" id="stockdex.ticker.Ticker.statistics">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">statistics</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">DataFrame</span></em><a class="headerlink" href="#stockdex.ticker.Ticker.statistics" title="Permalink to this definition"></a></dt>
 <dd><p>Get statistics for the ticker</p>
 <p>Returns:
 pd.DataFrame: A pandas DataFrame including the statistics
-visible in the Yahoo Finance statistics page for the ticker</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="stockdex.ticker.Ticker.summary">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">summary</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">DataFrame</span></em><a class="headerlink" href="#stockdex.ticker.Ticker.summary" title="Permalink to this definition"></a></dt>
-<dd><p>Get data for the ticker</p>
-<p>Returns:
-pd.DataFrame: A pandas DataFrame including the data
-visible in the Yahoo Finance first page for the ticker</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="stockdex.ticker.Ticker.top_institutional_holders">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">top_institutional_holders</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">DataFrame</span></em><a class="headerlink" href="#stockdex.ticker.Ticker.top_institutional_holders" title="Permalink to this definition"></a></dt>
-<dd><p>Get top institutional holders for the ticker</p>
-<p>Returns:
-pd.DataFrame: A pandas DataFrame including the top institutional holders
-visible in the Yahoo Finance statistics page for the ticker</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="stockdex.ticker.Ticker.top_mutual_fund_holders">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">top_mutual_fund_holders</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">DataFrame</span></em><a class="headerlink" href="#stockdex.ticker.Ticker.top_mutual_fund_holders" title="Permalink to this definition"></a></dt>
-<dd><p>Get top mutual fund holders for the ticker</p>
-<p>Returns:
-pd.DataFrame: A pandas DataFrame including the top mutual fund holders
 visible in the Yahoo Finance statistics page for the ticker</p>
 </dd></dl>
 
@@ -328,11 +227,11 @@ visible in the Yahoo Finance statistics page for the ticker</p>
 The main Ticker class inherits from this class</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="stockdex.ticker_api.TickerAPI">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stockdex.ticker_api.</span></span><span class="sig-name descname"><span class="pre">TickerAPI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ticker</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">security_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">typing.Literal['stock',</span> <span class="pre">'etf']</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stockdex/ticker_api.html#TickerAPI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.ticker_api.TickerAPI" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stockdex.ticker_api.</span></span><span class="sig-name descname"><span class="pre">TickerAPI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ticker</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">security_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'stock'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'etf'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'cryptocurrency'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'index'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'commodity'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'stock'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stockdex/ticker_api.html#TickerAPI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.ticker_api.TickerAPI" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#stockdex.ticker_base.TickerBase" title="stockdex.ticker_base.TickerBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">TickerBase</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="stockdex.ticker_api.TickerAPI.balance_sheet">
-<span class="sig-name descname"><span class="pre">balance_sheet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'annual'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'quarterly'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'annual'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'fmt'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'raw'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'fmt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">datetime.datetime(2019,</span> <span class="pre">4,</span> <span class="pre">8,</span> <span class="pre">22,</span> <span class="pre">43,</span> <span class="pre">5,</span> <span class="pre">776542)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">datetime.datetime(2024,</span> <span class="pre">4,</span> <span class="pre">8,</span> <span class="pre">22,</span> <span class="pre">43,</span> <span class="pre">5,</span> <span class="pre">776542)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/stockdex/ticker_api.html#TickerAPI.balance_sheet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.ticker_api.TickerAPI.balance_sheet" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">balance_sheet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'annual'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'quarterly'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'annual'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'fmt'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'raw'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'fmt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">datetime.datetime(2019,</span> <span class="pre">4,</span> <span class="pre">20,</span> <span class="pre">16,</span> <span class="pre">58,</span> <span class="pre">30,</span> <span class="pre">135920)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">datetime.datetime(2024,</span> <span class="pre">4,</span> <span class="pre">20,</span> <span class="pre">16,</span> <span class="pre">58,</span> <span class="pre">30,</span> <span class="pre">135920)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/stockdex/ticker_api.html#TickerAPI.balance_sheet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.ticker_api.TickerAPI.balance_sheet" title="Permalink to this definition"></a></dt>
 <dd><p>Get the balance sheet for the stock</p>
 <section id="args">
 <h3>Args:<a class="headerlink" href="#args" title="Permalink to this heading"></a></h3>
@@ -347,8 +246,8 @@ default is five years ago as that is the maximum period the API supports data re
 <p>period2 (datetime): The end date of the data to retrieve
 default is the current date</p>
 </section>
-<section id="id3">
-<h3>Returns:<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h3>
+<section id="id5">
+<h3>Returns:<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h3>
 <p>pd.DataFrame: The balance sheet data</p>
 </section>
 </dd></dl>
@@ -357,26 +256,26 @@ default is the current date</p>
 <dt class="sig sig-object py" id="stockdex.ticker_api.TickerAPI.build_url">
 <span class="sig-name descname"><span class="pre">build_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desired_entity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/stockdex/ticker_api.html#TickerAPI.build_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.ticker_api.TickerAPI.build_url" title="Permalink to this definition"></a></dt>
 <dd><p>Build the URL for the income statement, balance sheet, and cash flow statement</p>
-<section id="id4">
-<h3>Args:<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h3>
+<section id="id6">
+<h3>Args:<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h3>
 <p>frequency (str): The frequency of the data to retrieve
 valid values are “annual”, “quarterly”</p>
 <p>period1 (datetime): The start date of the data to retrieve</p>
 <p>period2 (datetime): The end date of the data to retrieve</p>
 <p>desired_entity (str): The entity to retrieve the data for</p>
 </section>
-<section id="id5">
-<h3>Returns:<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h3>
+<section id="id7">
+<h3>Returns:<a class="headerlink" href="#id7" title="Permalink to this heading"></a></h3>
 <p>str: The URL to retrieve the data from</p>
 </section>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="stockdex.ticker_api.TickerAPI.cash_flow">
-<span class="sig-name descname"><span class="pre">cash_flow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'annual'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'quarterly'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'annual'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'fmt'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'raw'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'fmt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">datetime.datetime(2019,</span> <span class="pre">4,</span> <span class="pre">8,</span> <span class="pre">22,</span> <span class="pre">43,</span> <span class="pre">5,</span> <span class="pre">776542)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">datetime.datetime(2024,</span> <span class="pre">4,</span> <span class="pre">8,</span> <span class="pre">22,</span> <span class="pre">43,</span> <span class="pre">5,</span> <span class="pre">776542)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/stockdex/ticker_api.html#TickerAPI.cash_flow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.ticker_api.TickerAPI.cash_flow" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">cash_flow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'annual'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'quarterly'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'annual'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'fmt'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'raw'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'fmt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">datetime.datetime(2019,</span> <span class="pre">4,</span> <span class="pre">20,</span> <span class="pre">16,</span> <span class="pre">58,</span> <span class="pre">30,</span> <span class="pre">135920)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">datetime.datetime(2024,</span> <span class="pre">4,</span> <span class="pre">20,</span> <span class="pre">16,</span> <span class="pre">58,</span> <span class="pre">30,</span> <span class="pre">135920)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/stockdex/ticker_api.html#TickerAPI.cash_flow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.ticker_api.TickerAPI.cash_flow" title="Permalink to this definition"></a></dt>
 <dd><p>Get the cash flow statement for the stock</p>
-<section id="id6">
-<h3>Args:<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h3>
+<section id="id8">
+<h3>Args:<a class="headerlink" href="#id8" title="Permalink to this heading"></a></h3>
 <p>frequency (str): The frequency of the data to retrieve
 valid values are “annual”, “quarterly”</p>
 <p>format (str): The format of the data to retrieve
@@ -388,8 +287,8 @@ default is five years ago as that is the maximum period the API supports data re
 <p>period2 (datetime): The end date of the data to retrieve
 default is the current date</p>
 </section>
-<section id="id7">
-<h3>Returns:<a class="headerlink" href="#id7" title="Permalink to this heading"></a></h3>
+<section id="id9">
+<h3>Returns:<a class="headerlink" href="#id9" title="Permalink to this heading"></a></h3>
 <p>pd.DataFrame: The cash flow statement data</p>
 </section>
 </dd></dl>
@@ -404,49 +303,21 @@ default is the current date</p>
 <dt class="sig sig-object py" id="stockdex.ticker_api.TickerAPI.extract_dataframe">
 <span class="sig-name descname"><span class="pre">extract_dataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">response</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fmt'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/stockdex/ticker_api.html#TickerAPI.extract_dataframe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.ticker_api.TickerAPI.extract_dataframe" title="Permalink to this definition"></a></dt>
 <dd><p>Extract the dataframes from the response</p>
-<section id="id8">
-<h3>Args:<a class="headerlink" href="#id8" title="Permalink to this heading"></a></h3>
+<section id="id10">
+<h3>Args:<a class="headerlink" href="#id10" title="Permalink to this heading"></a></h3>
 <p>response (dict): The response from the API</p>
 <p>format (str): The format of the data to retrieve</p>
 </section>
-<section id="id9">
-<h3>Returns:<a class="headerlink" href="#id9" title="Permalink to this heading"></a></h3>
+<section id="id11">
+<h3>Returns:<a class="headerlink" href="#id11" title="Permalink to this heading"></a></h3>
 <p>pd.DataFrame: The data in a dataframe</p>
 </section>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="stockdex.ticker_api.TickerAPI.financials">
-<span class="sig-name descname"><span class="pre">financials</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'annual'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'quarterly'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'annual'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'fmt'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'raw'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'fmt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">datetime.datetime(2019,</span> <span class="pre">4,</span> <span class="pre">8,</span> <span class="pre">22,</span> <span class="pre">43,</span> <span class="pre">5,</span> <span class="pre">776542)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">datetime.datetime(2024,</span> <span class="pre">4,</span> <span class="pre">8,</span> <span class="pre">22,</span> <span class="pre">43,</span> <span class="pre">5,</span> <span class="pre">776542)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/stockdex/ticker_api.html#TickerAPI.financials"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.ticker_api.TickerAPI.financials" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">financials</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'annual'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'quarterly'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'annual'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'fmt'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'raw'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'fmt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">datetime.datetime(2019,</span> <span class="pre">4,</span> <span class="pre">20,</span> <span class="pre">16,</span> <span class="pre">58,</span> <span class="pre">30,</span> <span class="pre">135920)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">datetime.datetime(2024,</span> <span class="pre">4,</span> <span class="pre">20,</span> <span class="pre">16,</span> <span class="pre">58,</span> <span class="pre">30,</span> <span class="pre">135920)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/stockdex/ticker_api.html#TickerAPI.financials"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.ticker_api.TickerAPI.financials" title="Permalink to this definition"></a></dt>
 <dd><p>Get the financials for the stock</p>
-<section id="id10">
-<h3>Args:<a class="headerlink" href="#id10" title="Permalink to this heading"></a></h3>
-<p>frequency (str): The frequency of the data to retrieve
-valid values are “annual”, “quarterly”</p>
-<p>format (str): The format of the data to retrieve
-valid values are “fmt”, “raw”
-if “fmt” is used, the data will be in a human readable format, e.g. 1B
-if “raw” is used, the data will be in a raw format, e.g. 1000000000</p>
-<p>period1 (datetime): The start date of the data to retrieve
-default is five years ago as that is the maximum period the API supports data retrieval for</p>
-<p>period2 (datetime): The end date of the data to retrieve
-default is the current date</p>
-</section>
-<section id="id11">
-<h3>Returns:<a class="headerlink" href="#id11" title="Permalink to this heading"></a></h3>
-<p>pd.DataFrame: The financials data</p>
-</section>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="stockdex.ticker_api.TickerAPI.five_years_ago">
-<span class="sig-name descname"><span class="pre">five_years_ago</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">datetime.datetime(2019,</span> <span class="pre">4,</span> <span class="pre">8,</span> <span class="pre">22,</span> <span class="pre">43,</span> <span class="pre">5,</span> <span class="pre">776542)</span></em><a class="headerlink" href="#stockdex.ticker_api.TickerAPI.five_years_ago" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="stockdex.ticker_api.TickerAPI.income_statement">
-<span class="sig-name descname"><span class="pre">income_statement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'annual'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'quarterly'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'annual'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'fmt'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'raw'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'fmt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">datetime.datetime(2019,</span> <span class="pre">4,</span> <span class="pre">8,</span> <span class="pre">22,</span> <span class="pre">43,</span> <span class="pre">5,</span> <span class="pre">776542)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">datetime.datetime(2024,</span> <span class="pre">4,</span> <span class="pre">8,</span> <span class="pre">22,</span> <span class="pre">43,</span> <span class="pre">5,</span> <span class="pre">776542)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/stockdex/ticker_api.html#TickerAPI.income_statement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.ticker_api.TickerAPI.income_statement" title="Permalink to this definition"></a></dt>
-<dd><p>Get the income statement for the stock</p>
 <section id="id12">
 <h3>Args:<a class="headerlink" href="#id12" title="Permalink to this heading"></a></h3>
 <p>frequency (str): The frequency of the data to retrieve
@@ -462,6 +333,34 @@ default is the current date</p>
 </section>
 <section id="id13">
 <h3>Returns:<a class="headerlink" href="#id13" title="Permalink to this heading"></a></h3>
+<p>pd.DataFrame: The financials data</p>
+</section>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stockdex.ticker_api.TickerAPI.five_years_ago">
+<span class="sig-name descname"><span class="pre">five_years_ago</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">datetime.datetime(2019,</span> <span class="pre">4,</span> <span class="pre">20,</span> <span class="pre">16,</span> <span class="pre">58,</span> <span class="pre">30,</span> <span class="pre">135920)</span></em><a class="headerlink" href="#stockdex.ticker_api.TickerAPI.five_years_ago" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="stockdex.ticker_api.TickerAPI.income_statement">
+<span class="sig-name descname"><span class="pre">income_statement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'annual'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'quarterly'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'annual'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'fmt'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'raw'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'fmt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">datetime.datetime(2019,</span> <span class="pre">4,</span> <span class="pre">20,</span> <span class="pre">16,</span> <span class="pre">58,</span> <span class="pre">30,</span> <span class="pre">135920)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">datetime.datetime(2024,</span> <span class="pre">4,</span> <span class="pre">20,</span> <span class="pre">16,</span> <span class="pre">58,</span> <span class="pre">30,</span> <span class="pre">135920)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/stockdex/ticker_api.html#TickerAPI.income_statement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.ticker_api.TickerAPI.income_statement" title="Permalink to this definition"></a></dt>
+<dd><p>Get the income statement for the stock</p>
+<section id="id14">
+<h3>Args:<a class="headerlink" href="#id14" title="Permalink to this heading"></a></h3>
+<p>frequency (str): The frequency of the data to retrieve
+valid values are “annual”, “quarterly”</p>
+<p>format (str): The format of the data to retrieve
+valid values are “fmt”, “raw”
+if “fmt” is used, the data will be in a human readable format, e.g. 1B
+if “raw” is used, the data will be in a raw format, e.g. 1000000000</p>
+<p>period1 (datetime): The start date of the data to retrieve
+default is five years ago as that is the maximum period the API supports data retrieval for</p>
+<p>period2 (datetime): The end date of the data to retrieve
+default is the current date</p>
+</section>
+<section id="id15">
+<h3>Returns:<a class="headerlink" href="#id15" title="Permalink to this heading"></a></h3>
 <p>pd.DataFrame: The income statement data</p>
 </section>
 </dd></dl>
@@ -470,22 +369,22 @@ default is the current date</p>
 <dt class="sig sig-object py" id="stockdex.ticker_api.TickerAPI.price">
 <span class="sig-name descname"><span class="pre">price</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'1d'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'5d'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'1mo'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'3mo'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'6mo'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'1y'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'2y'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'5y'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'10y'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'ytd'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'max'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'1d'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataGranularity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'1m'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'2m'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'5m'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'15m'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'30m'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'60m'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'90m'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'1h'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'1d'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'5d'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'1wk'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'1mo'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'3mo'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'1m'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/stockdex/ticker_api.html#TickerAPI.price"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.ticker_api.TickerAPI.price" title="Permalink to this definition"></a></dt>
 <dd><p>Get the price data for the stock</p>
-<section id="id14">
-<h3>Args:<a class="headerlink" href="#id14" title="Permalink to this heading"></a></h3>
+<section id="id16">
+<h3>Args:<a class="headerlink" href="#id16" title="Permalink to this heading"></a></h3>
 <p>range (str): The range of the price data to retrieve
 valid values are “1d”, “5d”, “1mo”, “3mo”, “6mo”, “1y”, “2y”, “5y”, “10y”, “ytd”, “max”</p>
 <p>dataGranularity (str): The granularity of the data to retrieve (interval)
 valid values are “1m”, “2m”, “5m”, “15m”, “30m”, “60m”, “90m”, “1h”, “1d”, “5d”, “1wk”, “1mo”, “3mo””  # noqa: E501</p>
 </section>
-<section id="id15">
-<h3>Returns:<a class="headerlink" href="#id15" title="Permalink to this heading"></a></h3>
+<section id="id17">
+<h3>Returns:<a class="headerlink" href="#id17" title="Permalink to this heading"></a></h3>
 <p>pd.DataFrame: The price data</p>
 </section>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="stockdex.ticker_api.TickerAPI.today">
-<span class="sig-name descname"><span class="pre">today</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">datetime.datetime(2024,</span> <span class="pre">4,</span> <span class="pre">8,</span> <span class="pre">22,</span> <span class="pre">43,</span> <span class="pre">5,</span> <span class="pre">776542)</span></em><a class="headerlink" href="#stockdex.ticker_api.TickerAPI.today" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">today</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">datetime.datetime(2024,</span> <span class="pre">4,</span> <span class="pre">20,</span> <span class="pre">16,</span> <span class="pre">58,</span> <span class="pre">30,</span> <span class="pre">135920)</span></em><a class="headerlink" href="#stockdex.ticker_api.TickerAPI.today" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
