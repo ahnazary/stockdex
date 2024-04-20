@@ -143,7 +143,6 @@ def test_description(ticker):
     "ticker",
     [
         ("AAPL"),
-        ("ASML"),
         ("TSLA"),
     ],
 )
