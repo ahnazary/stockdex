@@ -5,14 +5,15 @@ Moduel for the Ticker class
 import pandas as pd
 from bs4 import BeautifulSoup
 
-from stockdex.config import SECURITY_TYPE
+from stockdex.config import VALID_SECURITY_TYPES
 from stockdex.digrin_interface import Digrin_Interface
 from stockdex.justetf import JustETF
 from stockdex.nasdaq_interface import NASDAQInterface
 from stockdex.ticker_api import TickerAPI
+from stockdex.yahoo_web import YahooWeb
 
 
-class Ticker(TickerAPI, JustETF, NASDAQInterface, Digrin_Interface):
+class Ticker(TickerAPI, JustETF, NASDAQInterface, Digrin_Interface, YahooWeb):
     """
     Class for the Ticker
     """
@@ -21,7 +22,7 @@ class Ticker(TickerAPI, JustETF, NASDAQInterface, Digrin_Interface):
         self,
         ticker: str = "",
         isin: str = "",
-        security_type: str = SECURITY_TYPE,
+        security_type: VALID_SECURITY_TYPES = "stock",
     ) -> None:
         """
         Initialize the Ticker class
@@ -98,113 +99,6 @@ class Ticker(TickerAPI, JustETF, NASDAQInterface, Digrin_Interface):
             cols = item.find_all("td")
             cols = [ele.text.strip() for ele in cols]
             data_df[cols[0]] = [cols[1]]
-
-        return data_df.T
-
-    @property
-    def income_stmt(self) -> pd.DataFrame:
-        """
-        Get income statement for the ticker
-
-        Returns:
-        pd.DataFrame: A pandas DataFrame including the income statement
-        visible in the Yahoo Finance statistics page for the ticker
-        """
-
-        # URL of the website to scrape
-        url = f"https://finance.yahoo.com/quote/{self.ticker}/financials"
-        response = self.get_response(url)
-
-        # Parse the HTML content of the website
-        soup = BeautifulSoup(response.content, "html.parser")
-
-        # <div class="" data-test="fin-row">
-        raw_data = soup.find_all("div", {"data-test": "fin-row"})
-
-        data_df = pd.DataFrame()
-        for item in raw_data:
-            # get criteria. e.g. "Total Revenue"
-            major_div = item.find_all("div", {"class": True})[0]
-            criteria = major_div.find_all("div", {"class": True})[0].find("span").text
-
-            # get data. e.g. "274515000000"
-            minor_div = major_div.find_all("div", {"class": "Ta(c)"})
-            data_list = []
-            for div in minor_div:
-                data_list.append(div.text)
-
-            data_df[criteria] = data_list
-
-        return data_df.T
-
-    @property
-    def balance_sheet_web(self) -> pd.DataFrame:
-        """
-        Get balance sheet for the ticker
-
-        Returns:
-        pd.DataFrame: A pandas DataFrame including the balance sheet
-        visible in the Yahoo Finance statistics page for the ticker
-        """
-
-        # URL of the website to scrape
-        url = f"https://finance.yahoo.com/quote/{self.ticker}/balance-sheet"
-        response = self.get_response(url)
-
-        # Parse the HTML content of the website
-        soup = BeautifulSoup(response.content, "html.parser")
-
-        # <div class="" data-test="fin-row">
-        raw_data = soup.find_all("div", {"data-test": "fin-row"})
-
-        data_df = pd.DataFrame()
-        for item in raw_data:
-            # get criteria. e.g. "Total Revenue"
-            major_div = item.find_all("div", {"class": True})[0]
-            criteria = major_div.find_all("div", {"class": True})[0].find("span").text
-
-            # get data. e.g. "274515000000"
-            minor_div = major_div.find_all("div", {"class": "Ta(c)"})
-            data_list = []
-            for div in minor_div:
-                data_list.append(div.text)
-
-            data_df[criteria] = data_list
-
-        return data_df.T
-
-    @property
-    def cashflow_web(self) -> pd.DataFrame:
-        """
-        Get cash flow for the ticker
-
-        Returns:
-        pd.DataFrame: A pandas DataFrame including the cash flow
-        visible in the Yahoo Finance statistics page for the ticker
-        """
-
-        # URL of the website to scrape
-        url = f"https://finance.yahoo.com/quote/{self.ticker}/cash-flow"
-        response = self.get_response(url)
-        # Parse the HTML content of the website
-        soup = BeautifulSoup(response.content, "html.parser")
-
-        # <div class="" data-test="fin-row">
-        raw_data = soup.find_all("div", {"data-test": "fin-row"})
-
-        data_df = pd.DataFrame()
-        for item in raw_data:
-            # get criteria. e.g. "Total Revenue"
-            major_div = item.find_all("div", {"class": True})[0]
-            criteria = major_div.find_all("div", {"class": True})[0].find("span").text
-
-            # get data. e.g. "274515000000"
-            minor_div = major_div.find_all("div", {"class": "Ta(c)"})
-            data_list = []
-            for div in minor_div:
-                data_list.append(div.text)
-
-            data_df[criteria] = data_list
 
         return data_df.T
 
