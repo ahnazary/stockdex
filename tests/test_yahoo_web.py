@@ -143,8 +143,8 @@ def test_description(ticker):
     "ticker",
     [
         ("AAPL"),
-        ("GOOGL"),
         ("ASML"),
+        ("TSLA"),
     ],
 )
 def test_key_executives(ticker):
