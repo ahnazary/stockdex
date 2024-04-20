@@ -5,8 +5,8 @@ Module to test the NasdaqInterface class
 import pandas as pd
 import pytest
 
-from stockdex.ticker import Ticker
 from stockdex.exceptions import WrongSecurityType
+from stockdex.ticker import Ticker
 
 
 @pytest.mark.parametrize(

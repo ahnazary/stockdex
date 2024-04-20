@@ -5,10 +5,9 @@ Interface for NASDAQ stock data
 import pandas as pd
 
 from stockdex.config import NASDAQ_BASE_URL, VALID_SECURITY_TYPES
-from stockdex.lib import get_user_agent
+from stockdex.lib import check_security_type, get_user_agent
 from stockdex.selenium_interface import selenium_interface
 from stockdex.ticker_base import TickerBase
-from stockdex.lib import check_security_type
 
 
 class NASDAQInterface(TickerBase):
@@ -182,9 +181,7 @@ class NASDAQInterface(TickerBase):
         with open("nasdaq.html", "w") as f:
             f.write(str(soup.prettify()))
 
-        table = soup.find(
-            "tbody", {"class": "price-earnings-peg-ratios__table-body"}
-        )
+        table = soup.find("tbody", {"class": "price-earnings-peg-ratios__table-body"})
         index, value = [], []
 
         for row in table.find_all("tr"):
@@ -224,4 +221,6 @@ class NASDAQInterface(TickerBase):
             index.append(row.find("th").text)
             value.append(row.find("td").text)
 
-        return pd.DataFrame(value, index=index, columns=["Forecast Price to Earning Growth Rate"])
+        return pd.DataFrame(
+            value, index=index, columns=["Forecast Price to Earning Growth Rate"]
+        )
