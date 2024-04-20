@@ -71,3 +71,237 @@ def test_income_stmt_web_wrong_security_type():
     with pytest.raises(WrongSecurityType):
         ticker = Ticker(isin="AAPL", security_type="etf")
         ticker.income_stmt_web
+
+
+@pytest.mark.parametrize(
+    "ticker, security_type",
+    [
+        ("AAPL", "stock"),
+        ("GOOGL", "stock"),
+        ("MSFT", "stock"),
+        ("QQQ", "etf"),
+    ],
+)
+def test_calls(ticker, security_type):
+    ticker = Ticker(ticker, security_type=security_type)
+    calls = ticker.calls
+
+    # Check if the response is as expected
+    assert isinstance(calls, pd.DataFrame)
+    assert calls.shape[0] > 0
+
+
+def test_calls_wrong_security_type():
+    with pytest.raises(WrongSecurityType):
+        ticker = Ticker(isin="AAPL", security_type="wrong_type")
+        ticker.calls
+
+
+@pytest.mark.parametrize(
+    "ticker, security_type",
+    [
+        ("AAPL", "stock"),
+        ("GOOGL", "stock"),
+        ("MSFT", "stock"),
+        ("QQQ", "etf"),
+    ],
+)
+def test_puts(ticker, security_type):
+    ticker = Ticker(ticker, security_type=security_type)
+    puts = ticker.puts
+
+    # Check if the response is as expected
+    assert isinstance(puts, pd.DataFrame)
+    assert puts.shape[0] > 0
+
+
+def test_puts_wrong_security_type():
+    with pytest.raises(WrongSecurityType):
+        ticker = Ticker(isin="AAPL", security_type="wrong_type")
+        ticker.puts
+
+
+@pytest.mark.parametrize(
+    "ticker",
+    [
+        ("AAPL"),
+        ("GOOGL"),
+        ("ASML"),
+        ("TSLA"),
+    ],
+)
+def test_description(ticker):
+    ticker = Ticker(ticker)
+    description = ticker.description
+
+    # Check if the response is as expected
+    assert isinstance(description, str)
+    assert len(description) > 0
+
+
+@pytest.mark.parametrize(
+    "ticker",
+    [
+        ("AAPL"),
+        ("GOOGL"),
+        ("ASML"),
+    ],
+)
+def test_key_executives(ticker):
+    ticker = Ticker(ticker)
+    key_executives = ticker.key_executives
+
+    # Check if the response is as expected
+    assert isinstance(key_executives, pd.DataFrame)
+    assert key_executives.shape[0] > 0
+
+
+def test_key_executives_wrong_security_type():
+    with pytest.raises(WrongSecurityType):
+        ticker = Ticker(isin="AAPL", security_type="etf")
+        ticker.key_executives
+
+
+@pytest.mark.parametrize(
+    "ticker",
+    [
+        ("AAPL"),
+        ("GOOGL"),
+        ("ASML"),
+        ("TSLA"),
+    ],
+)
+def test_corporate_governance(ticker):
+    ticker = Ticker(ticker)
+    corporate_governance = ticker.corporate_governance
+
+    # Check if the response is as expected
+    assert isinstance(corporate_governance, str)
+    assert len(corporate_governance) > 0
+
+
+def test_corporate_governance_wrong_security_type():
+    with pytest.raises(WrongSecurityType):
+        ticker = Ticker(isin="AAPL", security_type="etf")
+        ticker.corporate_governance
+
+
+@pytest.mark.parametrize(
+    "ticker",
+    [
+        ("AAPL"),
+        ("GOOGL"),
+        ("ASML"),
+        ("TSLA"),
+    ],
+)
+def test_major_holders(ticker):
+    ticker = Ticker(ticker)
+    major_holders = ticker.major_holders
+
+    # Check if the response is as expected
+    assert isinstance(major_holders, pd.DataFrame)
+    assert major_holders.shape[0] > 0
+    assert major_holders.shape[1] == 2
+
+
+def test_major_holders_wrong_security_type():
+    with pytest.raises(WrongSecurityType):
+        ticker = Ticker(isin="AAPL", security_type="etf")
+        ticker.major_holders
+
+
+@pytest.mark.parametrize(
+    "ticker",
+    [
+        ("AAPL"),
+        ("GOOGL"),
+        ("ASML"),
+        ("TSLA"),
+    ],
+)
+def test_top_institutional_holders(ticker):
+    ticker = Ticker(ticker)
+    top_institutional_holders = ticker.top_institutional_holders
+
+    # Check if the response is as expected
+    assert isinstance(top_institutional_holders, pd.DataFrame)
+    assert top_institutional_holders.shape[0] > 0
+    assert top_institutional_holders.shape[1] == 5
+
+
+def test_top_institutional_holders_wrong_security_type():
+    with pytest.raises(WrongSecurityType):
+        ticker = Ticker(isin="AAPL", security_type="etf")
+        ticker.top_institutional_holders
+
+
+@pytest.mark.parametrize(
+    "ticker",
+    [
+        ("AAPL"),
+        ("GOOGL"),
+        ("ASML"),
+        ("TSLA"),
+    ],
+)
+def test_top_mutual_fund_holders(ticker):
+    ticker = Ticker(ticker)
+    top_mutual_fund_holders = ticker.top_mutual_fund_holders
+
+    # Check if the response is as expected
+    assert isinstance(top_mutual_fund_holders, pd.DataFrame)
+    assert top_mutual_fund_holders.shape[0] > 0
+    assert top_mutual_fund_holders.shape[1] == 5
+
+
+def test_top_mutual_fund_holders_wrong_security_type():
+    with pytest.raises(WrongSecurityType):
+        ticker = Ticker(isin="AAPL", security_type="etf")
+        ticker.top_mutual_fund_holders
+
+
+@pytest.mark.parametrize(
+    "ticker",
+    [
+        ("AAPL"),
+        ("GOOGL"),
+        ("MSFT"),
+    ],
+)
+def test_summary(ticker):
+    ticker = Ticker(ticker)
+    summary_df = ticker.summary
+
+    # Check if the response is as expected
+    assert isinstance(summary_df, pd.DataFrame)
+    assert summary_df.shape[0] > 0
+
+
+def test_summary_wrong_security_type():
+    with pytest.raises(WrongSecurityType):
+        ticker = Ticker(isin="AAPL", security_type="etf")
+        ticker.summary
+
+
+@pytest.mark.parametrize(
+    "ticker",
+    [
+        ("AAPL"),
+        ("GOOGL"),
+        ("MSFT"),
+    ],
+)
+def test_analysis(ticker):
+    ticker = Ticker(ticker)
+    analysis_df = ticker.analysis
+
+    # Check if the response is as expected
+    assert isinstance(analysis_df, pd.DataFrame)
+    assert analysis_df.shape[0] > 0
+
+
+def test_analysis_wrong_security_type():
+    with pytest.raises(WrongSecurityType):
+        ticker = Ticker(isin="AAPL", security_type="etf")
+        ticker.analysis

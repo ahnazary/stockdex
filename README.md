@@ -53,7 +53,7 @@ financials = ticker.financials(period1=datetime(2022, 1, 1), period2=datetime.to
 summary = ticker.summary
 
 # Financial data as it is seen in the yahoo finance website
-income_stmt = ticker.income_stmt 
+income_stmt_web = ticker.income_stmt_web
 balance_sheet = ticker.balance_sheet_web
 cash_flow = ticker.cashflow_web
 
