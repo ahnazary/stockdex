@@ -83,43 +83,6 @@ class JustETF(TickerBase):
 
         return description
 
-    # @property
-    # def etf_quote(self) -> pd.DataFrame:
-    #     """
-    #     Get the quote of the ETF
-
-    #     columns may include:
-    #     - Currency
-    #     - Price
-
-    #     Args:
-    #     ----------------
-    #     isin (str): ISIN of the ETF
-
-    #     Returns:
-    #     ----------------
-    #     pd.DataFrame: DataFrame containing the quote of the ETF
-    #     """
-    #     url = f"{JUSTETF_BASE_URL}/etf-profile.html?isin={self.isin}"
-
-    #     # build selenium interface object if not already built
-    #     if not hasattr(self, "selenium_interface"):
-    #         self.selenium_interface = selenium_interface()
-
-    #     soup = self.selenium_interface.get_html_content(url)
-
-    #     data_df = pd.DataFrame()
-
-    #     quote = soup.find("div", {"id": "realtime-quotes"})
-    #     currency, price = tuple(
-    #         quote.find("div", {"class": "col-xs-7"})
-    #         .find("div", {"class": "val"})
-    #         .text.split(" ")
-    #     )
-
-    #     data_df["currency"] = [currency]
-    #     data_df["price"] = [price]
-
     @property
     def etf_basics(self) -> pd.DataFrame:
         """
