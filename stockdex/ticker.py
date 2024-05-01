@@ -7,11 +7,16 @@ from stockdex.digrin_interface import Digrin_Interface
 from stockdex.exceptions import WrongDataSource
 from stockdex.justetf import JustETF
 from stockdex.nasdaq_interface import NASDAQInterface
-from stockdex.ticker_api import TickerAPI
+from stockdex.yahoo_api import YahooAPI
 from stockdex.yahoo_web import YahooWeb
 
+# def ticker_factory(data_source_class):
+# #YahooAPI, JustETF, NASDAQInterface, Digrin_Interface, YahooWeb
+#     class TickerFactory(data_source):
+#         pass
 
-class Ticker(TickerAPI, JustETF, NASDAQInterface, Digrin_Interface, YahooWeb):
+
+class Ticker(YahooAPI, JustETF, NASDAQInterface, Digrin_Interface, YahooWeb):
     """
     Class for the Ticker
     """
@@ -52,3 +57,17 @@ class Ticker(TickerAPI, JustETF, NASDAQInterface, Digrin_Interface, YahooWeb):
         if value not in VALID_DATA_SOURCES.__args__:
             raise WrongDataSource(given_source=value)
         self._data_source = value
+
+    def data_source_class(self):
+        if self.data_source == "yahoo_web":
+            return YahooWeb
+        elif self.data_source == "yahoo_api":
+            return YahooAPI
+        elif self.data_source == "nasdaq":
+            return NASDAQInterface
+        elif self.data_source == "justetf":
+            return JustETF
+        elif self.data_source == "digrin":
+            return Digrin_Interface
+        else:
+            raise WrongDataSource(given_source=self.data_source)

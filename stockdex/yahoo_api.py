@@ -13,7 +13,7 @@ from stockdex.config import VALID_SECURITY_TYPES
 from stockdex.ticker_base import TickerBase
 
 
-class TickerAPI(TickerBase):
+class YahooAPI(TickerBase):
     def __init__(
         self,
         ticker: str = "",

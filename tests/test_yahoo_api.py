@@ -21,7 +21,7 @@ from stockdex.ticker import Ticker
 )
 def test_price(ticker, range, dataGranularity):
     """
-    Test the price property of the TickerAPI class
+    Test the price property of the YahooAPI class
     """
 
     ticker = Ticker(ticker)
@@ -52,7 +52,7 @@ def test_price(ticker, range, dataGranularity):
 )
 def test_current_trading_period(ticker):
     """
-    Test the price property of the TickerAPI class
+    Test the price property of the YahooAPI class
     """
 
     ticker = Ticker(ticker)
