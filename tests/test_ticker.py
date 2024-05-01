@@ -1,5 +1,6 @@
 import pytest
 
+from stockdex.exceptions import WrongDataSource
 from stockdex.ticker import Ticker
 
 
@@ -20,3 +21,12 @@ def test_get_response(ticker, expected_response):
 
     # Check if the response is as expected
     assert response.status_code == expected_response
+
+
+def test_data_source_invalid():
+    # Create a Ticker object
+    ticker = Ticker(ticker="AAPL")
+
+    # Check if the exception is raised
+    with pytest.raises(WrongDataSource):
+        ticker.data_source = "invalid_data_source"
