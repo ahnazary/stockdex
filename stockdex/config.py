@@ -3,6 +3,7 @@
 from typing import Literal
 
 VALID_SECURITY_TYPES = Literal["stock", "etf", "cryptocurrency", "index", "commodity"]
+VALID_DATA_SOURCES = Literal["yahoo_web", "yahoo_api", "justetf", "nasdaq", "digrin"]
 
 BASE_URL = "https://query2.finance.yahoo.com/v8/finance"
 FUNDAMENTALS_BASE_URL = (
