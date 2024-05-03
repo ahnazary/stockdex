@@ -9,7 +9,7 @@ from typing import Literal
 import pandas as pd
 
 from stockdex import config
-from stockdex.config import VALID_SECURITY_TYPES
+from stockdex.config import VALID_DATA_SOURCES, VALID_SECURITY_TYPES
 from stockdex.ticker_base import TickerBase
 
 
@@ -19,10 +19,12 @@ class YahooAPI(TickerBase):
         ticker: str = "",
         isin: str = "",
         security_type: VALID_SECURITY_TYPES = "stock",
+        data_source: VALID_DATA_SOURCES = "yahoo_api",
     ) -> None:
         self.ticker = ticker
         self.isin = isin
         self.security_type = security_type
+        self.data_source = data_source
 
     today = datetime.today()
     five_years_ago = today.replace(year=today.year - 5)

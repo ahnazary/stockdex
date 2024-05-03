@@ -1,7 +1,7 @@
 import pytest
 
 from stockdex.exceptions import WrongDataSource
-from stockdex.ticker import Ticker
+from stockdex.ticker import TickerFactory
 
 
 @pytest.mark.parametrize(
@@ -14,7 +14,7 @@ from stockdex.ticker import Ticker
 )
 def test_get_response(ticker, expected_response):
     # Create a Ticker object
-    ticker = Ticker(ticker)
+    ticker = TickerFactory(ticker=ticker).ticker
 
     # Send an HTTP GET request to the website
     response = ticker.get_response(f"https://finance.yahoo.com/quote/{ticker.ticker}")
@@ -25,8 +25,15 @@ def test_get_response(ticker, expected_response):
 
 def test_data_source_invalid():
     # Create a Ticker object
-    ticker = Ticker(ticker="AAPL")
+    ticker = TickerFactory(ticker="AAPL").ticker
 
     # Check if the exception is raised
     with pytest.raises(WrongDataSource):
         ticker.data_source = "invalid_data_source"
+
+
+def test_function():
+    # ticker = build_ticker()(ticker="AAPL")
+
+    ticker = TickerFactory(ticker="AAPL", data_source="yahoo_api").ticker
+    result = ticker.current_trading_period
