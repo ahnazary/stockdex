@@ -19,7 +19,7 @@ from stockdex.ticker import TickerFactory
     ],
 )
 def test_quarterly_earnings_surprise(ticker):
-    ticker = TickerFactory(ticker).ticker
+    ticker = TickerFactory(ticker, data_source="nasdaq").ticker
     response = ticker.quarterly_earnings_surprise
 
     assert response is not None
@@ -40,7 +40,7 @@ def test_quarterly_earnings_surprise(ticker):
 def test_quarterly_earnings_surprise_wrong_securiy_type():
     with pytest.raises(WrongSecurityType):
         ticker = TickerFactory(
-            ticker="AAPL", security_type="wrong_security_type"
+            ticker="AAPL", security_type="wrong_security_type", data_source="nasdaq"
         ).ticker
         ticker.quarterly_earnings_surprise
 
@@ -55,7 +55,7 @@ def test_quarterly_earnings_surprise_wrong_securiy_type():
     ],
 )
 def test_yearly_earnings_forecast(ticker):
-    ticker = TickerFactory(ticker).ticker
+    ticker = TickerFactory(ticker, data_source="nasdaq").ticker
     response = ticker.yearly_earnings_forecast
 
     assert response is not None
@@ -77,7 +77,7 @@ def test_yearly_earnings_forecast(ticker):
 def test_yearly_earnings_forecast_wrong_securiy_type():
     with pytest.raises(WrongSecurityType):
         ticker = TickerFactory(
-            ticker="AAPL", security_type="wrong_security_type"
+            ticker="AAPL", security_type="wrong_security_type", data_source="nasdaq"
         ).ticker
         ticker.yearly_earnings_forecast
 
@@ -92,7 +92,7 @@ def test_yearly_earnings_forecast_wrong_securiy_type():
     ],
 )
 def test_quarterly_earnings_forecast(ticker):
-    ticker = TickerFactory(ticker).ticker
+    ticker = TickerFactory(ticker, data_source="nasdaq").ticker
     response = ticker.quarterly_earnings_forecast
 
     assert response is not None
@@ -114,7 +114,7 @@ def test_quarterly_earnings_forecast(ticker):
 def test_quarterly_earnings_forecast_wrong_securiy_type():
     with pytest.raises(WrongSecurityType):
         ticker = TickerFactory(
-            ticker="AAPL", security_type="wrong_security_type"
+            ticker="AAPL", security_type="wrong_security_type", data_source="nasdaq"
         ).ticker
         ticker.quarterly_earnings_forecast
 
@@ -141,7 +141,7 @@ def test_price_to_earnings_ratio(ticker):
 def test_price_to_earnings_ratio_wrong_securiy_type():
     with pytest.raises(WrongSecurityType):
         ticker = TickerFactory(
-            ticker="AAPL", security_type="wrong_security_type"
+            ticker="AAPL", security_type="wrong_security_type", data_source="nasdaq"
         ).ticker
         ticker.price_to_earnings_ratio
 
@@ -168,6 +168,6 @@ def test_forecast_peg_rate(ticker):
 def test_forecast_peg_rate_wrong_securiy_type():
     with pytest.raises(WrongSecurityType):
         ticker = TickerFactory(
-            ticker="AAPL", security_type="wrong_security_type"
+            ticker="AAPL", security_type="wrong_security_type", data_source="nasdaq"
         ).ticker
         ticker.forecast_peg_rate

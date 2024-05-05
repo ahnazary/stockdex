@@ -30,10 +30,3 @@ def test_data_source_invalid():
     # Check if the exception is raised
     with pytest.raises(WrongDataSource):
         ticker.data_source = "invalid_data_source"
-
-
-def test_function():
-    # ticker = build_ticker()(ticker="AAPL")
-
-    ticker = TickerFactory(ticker="AAPL", data_source="yahoo_api").ticker
-    result = ticker.current_trading_period
