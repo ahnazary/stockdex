@@ -25,7 +25,7 @@ def test_get_response(ticker, expected_response):
 
 def test_data_source_invalid():
     # Create a Ticker object
-    ticker = TickerFactory(ticker="AAPL").ticker
+    ticker = TickerFactory(ticker="AAPL")
 
     # Check if the exception is raised
     with pytest.raises(WrongDataSource):

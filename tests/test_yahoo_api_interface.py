@@ -3,7 +3,7 @@ from datetime import datetime
 import pandas as pd
 import pytest
 
-from stockdex.ticker import Ticker
+from stockdex.ticker import TickerFactory
 
 
 @pytest.mark.parametrize(
@@ -24,7 +24,7 @@ def test_price(ticker, range, dataGranularity):
     Test the price property of the YahooAPI class
     """
 
-    ticker = Ticker(ticker)
+    ticker = TickerFactory(ticker).ticker
     price = ticker.price(range=range, dataGranularity=dataGranularity)
 
     assert price.columns.tolist() == [
@@ -55,7 +55,7 @@ def test_current_trading_period(ticker):
     Test the price property of the YahooAPI class
     """
 
-    ticker = Ticker(ticker)
+    ticker = TickerFactory(ticker).ticker
     current_trading_period = ticker.current_trading_period
 
     assert current_trading_period.columns.tolist() == [
@@ -87,7 +87,7 @@ def test_current_trading_period(ticker):
     ],
 )
 def test_income_statement(ticker, frequency, format, period1, period2):
-    ticker = Ticker(ticker)
+    ticker = TickerFactory(ticker).ticker
     income_statement = ticker.income_statement(
         frequency=frequency, format=format, period1=period1, period2=period2
     )
@@ -108,7 +108,7 @@ def test_income_statement(ticker, frequency, format, period1, period2):
     ],
 )
 def test_cash_flow(ticker, frequency, format, period1, period2):
-    ticker = Ticker(ticker)
+    ticker = TickerFactory(ticker).ticker
     cash_flow = ticker.cash_flow(
         frequency=frequency, format=format, period1=period1, period2=period2
     )
@@ -129,7 +129,7 @@ def test_cash_flow(ticker, frequency, format, period1, period2):
     ],
 )
 def test_balance_sheet(ticker, frequency, format, period1, period2):
-    ticker = Ticker(ticker)
+    ticker = TickerFactory(ticker).ticker
     balance_sheet = ticker.balance_sheet(
         frequency=frequency, format=format, period1=period1, period2=period2
     )
@@ -150,7 +150,7 @@ def test_balance_sheet(ticker, frequency, format, period1, period2):
     ],
 )
 def test_financials(ticker, frequency, format, period1, period2):
-    ticker = Ticker(ticker)
+    ticker = TickerFactory(ticker).ticker
     financials = ticker.financials(
         frequency=frequency, format=format, period1=period1, period2=period2
     )
