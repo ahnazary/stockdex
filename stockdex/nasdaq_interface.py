@@ -178,8 +178,6 @@ class NASDAQInterface(TickerBase):
             self.selenium_interface = selenium_interface(use_custom_user_agent=True)
 
         soup = self.selenium_interface.get_html_content(url)
-        with open("nasdaq.html", "w") as f:
-            f.write(str(soup.prettify()))
 
         table = soup.find("tbody", {"class": "price-earnings-peg-ratios__table-body"})
         index, value = [], []
@@ -209,8 +207,6 @@ class NASDAQInterface(TickerBase):
             self.selenium_interface = selenium_interface(use_custom_user_agent=True)
 
         soup = self.selenium_interface.get_html_content(url)
-        with open("nasdaq.html", "w") as f:
-            f.write(str(soup.prettify()))
 
         table = soup.find_all(
             "tbody", {"class": "price-earnings-peg-ratios__table-body"}
