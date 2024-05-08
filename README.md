@@ -80,7 +80,7 @@ financial_highlights = ticker.financial_highlights
 trading_information = ticker.trading_information
 ```
 
-## NASDAQ data from `NASDAQ` website (web scraping):
+<!-- ## NASDAQ data from `NASDAQ` website (web scraping):
 
 Data on NASDAQ website gets updated more frequently than Yahoo Finance data. Below are some of the data that can be retrieved from the NASDAQ website.
 
@@ -93,7 +93,7 @@ quarterly_earnings_forecast = ticker.quarterly_earnings_forecast
 
 price_to_earnings_ratio = ticker.price_to_earnings_ratio
 forecast_price_to_earnings__growth_rates = ticker.forecast_peg_rate
-```
+``` -->
 
 ## Stocks data from `Digrin` (web scraping):
 
