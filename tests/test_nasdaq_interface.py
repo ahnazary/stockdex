@@ -8,6 +8,12 @@ import pytest
 from stockdex.exceptions import WrongSecurityType
 from stockdex.ticker import TickerFactory
 
+pytestmark = pytest.mark.skip(
+    reason="""Skip the entire module as nasdaq is
+              not supported anymore due to nasdaq
+              website changes"""
+)
+
 
 @pytest.mark.parametrize(
     "ticker",
@@ -129,7 +135,7 @@ def test_quarterly_earnings_forecast_wrong_securiy_type():
     ],
 )
 def test_price_to_earnings_ratio(ticker):
-    ticker = TickerFactory(ticker).ticker
+    ticker = TickerFactory(ticker, data_source="nasdaq").ticker
     price_to_earnings_ratio = ticker.price_to_earnings_ratio
 
     assert price_to_earnings_ratio is not None
@@ -156,7 +162,7 @@ def test_price_to_earnings_ratio_wrong_securiy_type():
     ],
 )
 def test_forecast_peg_rate(ticker):
-    ticker = TickerFactory(ticker).ticker
+    ticker = TickerFactory(ticker, data_source="nasdaq").ticker
     forecast_peg_rate = ticker.forecast_peg_rate
 
     assert forecast_peg_rate is not None

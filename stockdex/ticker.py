@@ -6,7 +6,6 @@ from stockdex.config import VALID_DATA_SOURCES
 from stockdex.digrin_interface import Digrin_Interface
 from stockdex.exceptions import WrongDataSource
 from stockdex.justetf_interface import JustETF
-from stockdex.nasdaq_interface import NASDAQInterface
 from stockdex.yahoo_api_interface import YahooAPI
 from stockdex.yahoo_web_interface import YahooWeb
 
@@ -27,8 +26,9 @@ class TickerFactory:
             return YahooWeb
         elif data_source == "yahoo_api":
             return YahooAPI
-        elif data_source == "nasdaq":
-            return NASDAQInterface
+        # TODO: Implement NASDAQInterface when website is stable
+        # elif data_source == "nasdaq":
+        #     return NASDAQInterface
         elif data_source == "justetf":
             return JustETF
         elif data_source == "digrin":
