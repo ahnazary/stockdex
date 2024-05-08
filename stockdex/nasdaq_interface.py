@@ -94,6 +94,10 @@ class NASDAQInterface(TickerBase):
             self.selenium_interface = selenium_interface(use_custom_user_agent=True)
 
         soup = self.selenium_interface.get_html_content(url)
+
+        with open("earnings.html", "w") as f:
+            f.write(str(soup.prettify()))
+        # earnings_table = soup.find("div", {"class": "jupiter22-earnings-forecast"})
         earnings_table = soup.find("table", {"class": "earnings-forecast__table"})
 
         columns = earnings_table.find(
