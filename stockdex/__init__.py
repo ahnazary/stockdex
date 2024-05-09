@@ -1,1 +1,1 @@
-from .ticker import Ticker  # noqa F401
+from .ticker import TickerFactory  # noqa F401

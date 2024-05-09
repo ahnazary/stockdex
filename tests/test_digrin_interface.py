@@ -5,7 +5,7 @@ Module to test the Digrin_Interface class
 import pandas as pd
 import pytest
 
-from stockdex.ticker import Ticker
+from stockdex.ticker import TickerFactory
 
 
 @pytest.mark.parametrize(
@@ -18,7 +18,7 @@ from stockdex.ticker import Ticker
     ],
 )
 def test_dividend(ticker):
-    ticker = Ticker(ticker)
+    ticker = TickerFactory(ticker=ticker, data_source="digrin").ticker
     dividend = ticker.dividend
 
     # Check if the response is as expected
@@ -38,7 +38,7 @@ def test_dividend(ticker):
     ],
 )
 def test_payout_ratio(ticker):
-    ticker = Ticker(ticker)
+    ticker = TickerFactory(ticker=ticker, data_source="digrin").ticker
     payout_ratio = ticker.payout_ratio
 
     # Check if the response is as expected
@@ -58,7 +58,7 @@ def test_payout_ratio(ticker):
     ],
 )
 def test_stock_splits(ticker):
-    ticker = Ticker(ticker)
+    ticker = TickerFactory(ticker=ticker, data_source="digrin").ticker
     stock_splits = ticker.stock_splits
 
     # Check if the response is as expected

@@ -2,7 +2,10 @@
 Base class for ticker objects to inherit from
 """
 
+from typing import Union
+
 import requests
+from bs4 import BeautifulSoup
 
 from stockdex.lib import get_user_agent
 
@@ -32,3 +35,14 @@ class TickerBase:
             raise Exception("Failed to load page, check if the ticker symbol exists")
 
         return response
+
+    def find_parent_by_text(
+        self, soup: BeautifulSoup, tag: str, text: str
+    ) -> Union[None, str]:
+        """
+        Method that finds the parent of a tag by its text from a BeautifulSoup object
+        """
+        for element in soup.find_all(tag):
+            if text in element.get_text():
+                return element
+        return None

@@ -94,6 +94,17 @@ class NASDAQInterface(TickerBase):
             self.selenium_interface = selenium_interface(use_custom_user_agent=True)
 
         soup = self.selenium_interface.get_html_content(url)
+
+        # with open("earnings.html", "w") as f:
+        #     f.write(str(soup.prettify()))
+
+        # parent_div = self.find_parent_by_text(
+        #     soup=soup, tag="h2", text="Yearly Earnings Forecast"
+        # ).parent.parent
+
+        # table = parent_div.find("div", {"part": "table-row"})
+
+        # earnings_table = soup.find("div", {"class": "jupiter22-earnings-forecast"})
         earnings_table = soup.find("table", {"class": "earnings-forecast__table"})
 
         columns = earnings_table.find(
@@ -178,8 +189,6 @@ class NASDAQInterface(TickerBase):
             self.selenium_interface = selenium_interface(use_custom_user_agent=True)
 
         soup = self.selenium_interface.get_html_content(url)
-        with open("nasdaq.html", "w") as f:
-            f.write(str(soup.prettify()))
 
         table = soup.find("tbody", {"class": "price-earnings-peg-ratios__table-body"})
         index, value = [], []
@@ -209,8 +218,6 @@ class NASDAQInterface(TickerBase):
             self.selenium_interface = selenium_interface(use_custom_user_agent=True)
 
         soup = self.selenium_interface.get_html_content(url)
-        with open("nasdaq.html", "w") as f:
-            f.write(str(soup.prettify()))
 
         table = soup.find_all(
             "tbody", {"class": "price-earnings-peg-ratios__table-body"}

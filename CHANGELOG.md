@@ -1,3 +1,18 @@
+# Changelog
+
+## 0.4.1
+
+### Added
+
+
+### Fixed
+
+- Bug with `isin` field in all classes.
+
+### Changed
+
+- Removed `nasdaq` module as the website keeps changing its structure.
+
 ## 0.4.0
 
 ### Added

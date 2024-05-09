@@ -6,7 +6,7 @@ import pandas as pd
 import pytest
 
 from stockdex.exceptions import WrongSecurityType
-from stockdex.ticker import Ticker
+from stockdex.ticker import TickerFactory
 
 
 @pytest.mark.parametrize(
@@ -18,7 +18,7 @@ from stockdex.ticker import Ticker
     ],
 )
 def test_cashflow_web(ticker):
-    ticker = Ticker(ticker)
+    ticker = TickerFactory(ticker, data_source="yahoo_web").ticker
     cashflow_web_df = ticker.cashflow_web
 
     # Check if the response is as expected
@@ -29,7 +29,9 @@ def test_cashflow_web(ticker):
 
 def test_cashflow_web_wrong_security_type():
     with pytest.raises(WrongSecurityType):
-        ticker = Ticker(isin="AAPL", security_type="etf")
+        ticker = TickerFactory(
+            ticker="AAPL", security_type="etf", data_source="yahoo_web"
+        ).ticker
         ticker.cashflow_web
 
 
@@ -38,7 +40,7 @@ def test_cashflow_web_wrong_security_type():
     [("AAPL"), ("GOOGL"), ("TSLA")],
 )
 def test_balance_sheet_web(ticker):
-    ticker = Ticker(ticker)
+    ticker = TickerFactory(ticker, data_source="yahoo_web").ticker
     balance_sheet_web_df = ticker.balance_sheet_web
 
     # Check if the response is as expected
@@ -49,7 +51,9 @@ def test_balance_sheet_web(ticker):
 
 def test_balance_sheet_web_wrong_security_type():
     with pytest.raises(WrongSecurityType):
-        ticker = Ticker(isin="AAPL", security_type="etf")
+        ticker = TickerFactory(
+            ticker="AAPL", security_type="etf", data_source="yahoo_web"
+        ).ticker
         ticker.balance_sheet_web
 
 
@@ -58,7 +62,7 @@ def test_balance_sheet_web_wrong_security_type():
     [("AAPL"), ("GOOGL"), ("TSLA")],
 )
 def test_income_stmt_web(ticker):
-    ticker = Ticker(ticker)
+    ticker = TickerFactory(ticker, data_source="yahoo_web").ticker
     income_stmt_web_df = ticker.income_stmt_web
 
     # Check if the response is as expected
@@ -69,7 +73,9 @@ def test_income_stmt_web(ticker):
 
 def test_income_stmt_web_wrong_security_type():
     with pytest.raises(WrongSecurityType):
-        ticker = Ticker(isin="AAPL", security_type="etf")
+        ticker = TickerFactory(
+            ticker="AAPL", security_type="etf", data_source="yahoo_web"
+        ).ticker
         ticker.income_stmt_web
 
 
@@ -83,7 +89,9 @@ def test_income_stmt_web_wrong_security_type():
     ],
 )
 def test_calls(ticker, security_type):
-    ticker = Ticker(ticker, security_type=security_type)
+    ticker = TickerFactory(
+        ticker, security_type=security_type, data_source="yahoo_web"
+    ).ticker
     calls = ticker.calls
 
     # Check if the response is as expected
@@ -93,7 +101,9 @@ def test_calls(ticker, security_type):
 
 def test_calls_wrong_security_type():
     with pytest.raises(WrongSecurityType):
-        ticker = Ticker(isin="AAPL", security_type="wrong_type")
+        ticker = TickerFactory(
+            ticker="AAPL", security_type="wrong_type", data_source="yahoo_web"
+        ).ticker
         ticker.calls
 
 
@@ -107,7 +117,9 @@ def test_calls_wrong_security_type():
     ],
 )
 def test_puts(ticker, security_type):
-    ticker = Ticker(ticker, security_type=security_type)
+    ticker = TickerFactory(
+        ticker, security_type=security_type, data_source="yahoo_web"
+    ).ticker
     puts = ticker.puts
 
     # Check if the response is as expected
@@ -117,7 +129,9 @@ def test_puts(ticker, security_type):
 
 def test_puts_wrong_security_type():
     with pytest.raises(WrongSecurityType):
-        ticker = Ticker(isin="AAPL", security_type="wrong_type")
+        ticker = TickerFactory(
+            ticker="AAPL", security_type="wrong_type", data_source="yahoo_web"
+        ).ticker
         ticker.puts
 
 
@@ -131,7 +145,7 @@ def test_puts_wrong_security_type():
     ],
 )
 def test_description(ticker):
-    ticker = Ticker(ticker)
+    ticker = TickerFactory(ticker, data_source="yahoo_web").ticker
     description = ticker.description
 
     # Check if the response is as expected
@@ -147,7 +161,7 @@ def test_description(ticker):
     ],
 )
 def test_key_executives(ticker):
-    ticker = Ticker(ticker)
+    ticker = TickerFactory(ticker, data_source="yahoo_web").ticker
     key_executives = ticker.key_executives
 
     # Check if the response is as expected
@@ -157,7 +171,9 @@ def test_key_executives(ticker):
 
 def test_key_executives_wrong_security_type():
     with pytest.raises(WrongSecurityType):
-        ticker = Ticker(isin="AAPL", security_type="etf")
+        ticker = TickerFactory(
+            ticker="AAPL", security_type="etf", data_source="yahoo_web"
+        ).ticker
         ticker.key_executives
 
 
@@ -171,7 +187,7 @@ def test_key_executives_wrong_security_type():
     ],
 )
 def test_corporate_governance(ticker):
-    ticker = Ticker(ticker)
+    ticker = TickerFactory(ticker, data_source="yahoo_web").ticker
     corporate_governance = ticker.corporate_governance
 
     # Check if the response is as expected
@@ -181,7 +197,9 @@ def test_corporate_governance(ticker):
 
 def test_corporate_governance_wrong_security_type():
     with pytest.raises(WrongSecurityType):
-        ticker = Ticker(isin="AAPL", security_type="etf")
+        ticker = TickerFactory(
+            ticker="AAPL", security_type="etf", data_source="yahoo_web"
+        ).ticker
         ticker.corporate_governance
 
 
@@ -195,7 +213,7 @@ def test_corporate_governance_wrong_security_type():
     ],
 )
 def test_major_holders(ticker):
-    ticker = Ticker(ticker)
+    ticker = TickerFactory(ticker, data_source="yahoo_web").ticker
     major_holders = ticker.major_holders
 
     # Check if the response is as expected
@@ -206,7 +224,9 @@ def test_major_holders(ticker):
 
 def test_major_holders_wrong_security_type():
     with pytest.raises(WrongSecurityType):
-        ticker = Ticker(isin="AAPL", security_type="etf")
+        ticker = TickerFactory(
+            ticker="AAPL", security_type="etf", data_source="yahoo_web"
+        ).ticker
         ticker.major_holders
 
 
@@ -220,7 +240,7 @@ def test_major_holders_wrong_security_type():
     ],
 )
 def test_top_institutional_holders(ticker):
-    ticker = Ticker(ticker)
+    ticker = TickerFactory(ticker, data_source="yahoo_web").ticker
     top_institutional_holders = ticker.top_institutional_holders
 
     # Check if the response is as expected
@@ -231,7 +251,9 @@ def test_top_institutional_holders(ticker):
 
 def test_top_institutional_holders_wrong_security_type():
     with pytest.raises(WrongSecurityType):
-        ticker = Ticker(isin="AAPL", security_type="etf")
+        ticker = TickerFactory(
+            ticker="AAPL", security_type="etf", data_source="yahoo_web"
+        ).ticker
         ticker.top_institutional_holders
 
 
@@ -245,7 +267,7 @@ def test_top_institutional_holders_wrong_security_type():
     ],
 )
 def test_top_mutual_fund_holders(ticker):
-    ticker = Ticker(ticker)
+    ticker = TickerFactory(ticker, data_source="yahoo_web").ticker
     top_mutual_fund_holders = ticker.top_mutual_fund_holders
 
     # Check if the response is as expected
@@ -256,7 +278,9 @@ def test_top_mutual_fund_holders(ticker):
 
 def test_top_mutual_fund_holders_wrong_security_type():
     with pytest.raises(WrongSecurityType):
-        ticker = Ticker(isin="AAPL", security_type="etf")
+        ticker = TickerFactory(
+            ticker="AAPL", security_type="etf", data_source="yahoo_web"
+        ).ticker
         ticker.top_mutual_fund_holders
 
 
@@ -269,7 +293,7 @@ def test_top_mutual_fund_holders_wrong_security_type():
     ],
 )
 def test_summary(ticker):
-    ticker = Ticker(ticker)
+    ticker = TickerFactory(ticker, data_source="yahoo_web").ticker
     summary_df = ticker.summary
 
     # Check if the response is as expected
@@ -279,7 +303,9 @@ def test_summary(ticker):
 
 def test_summary_wrong_security_type():
     with pytest.raises(WrongSecurityType):
-        ticker = Ticker(isin="AAPL", security_type="etf")
+        ticker = TickerFactory(
+            ticker="AAPL", security_type="etf", data_source="yahoo_web"
+        ).ticker
         ticker.summary
 
 
@@ -292,7 +318,7 @@ def test_summary_wrong_security_type():
     ],
 )
 def test_analysis(ticker):
-    ticker = Ticker(ticker)
+    ticker = TickerFactory(ticker, data_source="yahoo_web").ticker
     analysis_df = ticker.analysis
 
     # Check if the response is as expected
@@ -302,7 +328,9 @@ def test_analysis(ticker):
 
 def test_analysis_wrong_security_type():
     with pytest.raises(WrongSecurityType):
-        ticker = Ticker(isin="AAPL", security_type="etf")
+        ticker = TickerFactory(
+            ticker="AAPL", security_type="etf", data_source="yahoo_web"
+        ).ticker
         ticker.analysis
 
 
@@ -318,7 +346,7 @@ def test_analysis_wrong_security_type():
     ],
 )
 def test_valuation_measures(ticker):
-    ticker = Ticker(ticker)
+    ticker = TickerFactory(ticker, data_source="yahoo_web").ticker
     valuation_measures_df = ticker.valuation_measures
 
     # Check if the response is as expected
@@ -330,7 +358,9 @@ def test_valuation_measures(ticker):
 
 def test_valuation_measures_wrong_security_type():
     with pytest.raises(WrongSecurityType):
-        ticker = Ticker(isin="AAPL", security_type="etf")
+        ticker = TickerFactory(
+            ticker="AAPL", security_type="etf", data_source="yahoo_web"
+        ).ticker
         ticker.valuation_measures
 
 
@@ -343,7 +373,7 @@ def test_valuation_measures_wrong_security_type():
     ],
 )
 def test_financial_highlights(ticker):
-    ticker = Ticker(ticker)
+    ticker = TickerFactory(ticker, data_source="yahoo_web").ticker
     financial_highlights_df = ticker.financial_highlights
 
     # Check if the response is as expected
@@ -355,7 +385,9 @@ def test_financial_highlights(ticker):
 
 def test_financial_highlights_wrong_security_type():
     with pytest.raises(WrongSecurityType):
-        ticker = Ticker(isin="AAPL", security_type="etf")
+        ticker = TickerFactory(
+            ticker="AAPL", security_type="etf", data_source="yahoo_web"
+        ).ticker
         ticker.financial_highlights
 
 
@@ -368,7 +400,7 @@ def test_financial_highlights_wrong_security_type():
     ],
 )
 def test_trading_information(ticker):
-    ticker = Ticker(ticker)
+    ticker = TickerFactory(ticker, data_source="yahoo_web").ticker
     trading_information_df = ticker.trading_information
 
     # Check if the response is as expected
@@ -380,5 +412,7 @@ def test_trading_information(ticker):
 
 def test_trading_information_wrong_security_type():
     with pytest.raises(WrongSecurityType):
-        ticker = Ticker(isin="AAPL", security_type="etf")
+        ticker = TickerFactory(
+            ticker="AAPL", security_type="etf", data_source="yahoo_web"
+        ).ticker
         ticker.trading_information

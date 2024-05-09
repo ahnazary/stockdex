@@ -432,7 +432,13 @@ class YahooWeb(TickerBase):
         # Parse the HTML content of the website
         soup = BeautifulSoup(response.content, "html.parser")
 
-        table = soup.find("table", {"class": "table svelte-179gefj"})
+        # find element with test Valuation Measures
+        parent_section = self.find_parent_by_text(
+            soup, "h3", "Valuation Measures"
+        ).parent.parent
+
+        # looking for "table svelte-104jbnt"
+        table = parent_section.find("table")
 
         data_df = pd.DataFrame()
 
