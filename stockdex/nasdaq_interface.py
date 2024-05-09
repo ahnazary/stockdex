@@ -95,8 +95,15 @@ class NASDAQInterface(TickerBase):
 
         soup = self.selenium_interface.get_html_content(url)
 
-        with open("earnings.html", "w") as f:
-            f.write(str(soup.prettify()))
+        # with open("earnings.html", "w") as f:
+        #     f.write(str(soup.prettify()))
+
+        # parent_div = self.find_parent_by_text(
+        #     soup=soup, tag="h2", text="Yearly Earnings Forecast"
+        # ).parent.parent
+
+        # table = parent_div.find("div", {"part": "table-row"})
+
         # earnings_table = soup.find("div", {"class": "jupiter22-earnings-forecast"})
         earnings_table = soup.find("table", {"class": "earnings-forecast__table"})
 
