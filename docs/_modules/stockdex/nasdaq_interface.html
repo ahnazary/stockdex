@@ -166,6 +166,17 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">selenium_interface</span> <span class="o">=</span> <span class="n">selenium_interface</span><span class="p">(</span><span class="n">use_custom_user_agent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="n">soup</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selenium_interface</span><span class="o">.</span><span class="n">get_html_content</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+        <span class="c1"># with open(&quot;earnings.html&quot;, &quot;w&quot;) as f:</span>
+        <span class="c1">#     f.write(str(soup.prettify()))</span>
+
+        <span class="c1"># parent_div = self.find_parent_by_text(</span>
+        <span class="c1">#     soup=soup, tag=&quot;h2&quot;, text=&quot;Yearly Earnings Forecast&quot;</span>
+        <span class="c1"># ).parent.parent</span>
+
+        <span class="c1"># table = parent_div.find(&quot;div&quot;, {&quot;part&quot;: &quot;table-row&quot;})</span>
+
+        <span class="c1"># earnings_table = soup.find(&quot;div&quot;, {&quot;class&quot;: &quot;jupiter22-earnings-forecast&quot;})</span>
         <span class="n">earnings_table</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;table&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;earnings-forecast__table&quot;</span><span class="p">})</span>
 
         <span class="n">columns</span> <span class="o">=</span> <span class="n">earnings_table</span><span class="o">.</span><span class="n">find</span><span class="p">(</span>
@@ -250,8 +261,6 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">selenium_interface</span> <span class="o">=</span> <span class="n">selenium_interface</span><span class="p">(</span><span class="n">use_custom_user_agent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="n">soup</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selenium_interface</span><span class="o">.</span><span class="n">get_html_content</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;nasdaq.html&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">soup</span><span class="o">.</span><span class="n">prettify</span><span class="p">()))</span>
 
         <span class="n">table</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;tbody&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;price-earnings-peg-ratios__table-body&quot;</span><span class="p">})</span>
         <span class="n">index</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
@@ -281,8 +290,6 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">selenium_interface</span> <span class="o">=</span> <span class="n">selenium_interface</span><span class="p">(</span><span class="n">use_custom_user_agent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="n">soup</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selenium_interface</span><span class="o">.</span><span class="n">get_html_content</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;nasdaq.html&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">soup</span><span class="o">.</span><span class="n">prettify</span><span class="p">()))</span>
 
         <span class="n">table</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span>
             <span class="s2">&quot;tbody&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;price-earnings-peg-ratios__table-body&quot;</span><span class="p">}</span>

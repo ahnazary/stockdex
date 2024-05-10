@@ -74,43 +74,70 @@
 <span class="sd">Moduel for the Ticker class</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">stockdex.config</span> <span class="kn">import</span> <span class="n">VALID_SECURITY_TYPES</span>
+<span class="kn">from</span> <span class="nn">stockdex.config</span> <span class="kn">import</span> <span class="n">VALID_DATA_SOURCES</span>
 <span class="kn">from</span> <span class="nn">stockdex.digrin_interface</span> <span class="kn">import</span> <span class="n">Digrin_Interface</span>
-<span class="kn">from</span> <span class="nn">stockdex.justetf</span> <span class="kn">import</span> <span class="n">JustETF</span>
-<span class="kn">from</span> <span class="nn">stockdex.nasdaq_interface</span> <span class="kn">import</span> <span class="n">NASDAQInterface</span>
-<span class="kn">from</span> <span class="nn">stockdex.ticker_api</span> <span class="kn">import</span> <span class="n">TickerAPI</span>
-<span class="kn">from</span> <span class="nn">stockdex.yahoo_web</span> <span class="kn">import</span> <span class="n">YahooWeb</span>
+<span class="kn">from</span> <span class="nn">stockdex.exceptions</span> <span class="kn">import</span> <span class="n">WrongDataSource</span>
+<span class="kn">from</span> <span class="nn">stockdex.justetf_interface</span> <span class="kn">import</span> <span class="n">JustETF</span>
+<span class="kn">from</span> <span class="nn">stockdex.yahoo_api_interface</span> <span class="kn">import</span> <span class="n">YahooAPI</span>
+<span class="kn">from</span> <span class="nn">stockdex.yahoo_web_interface</span> <span class="kn">import</span> <span class="n">YahooWeb</span>
 
 
-<div class="viewcode-block" id="Ticker"><a class="viewcode-back" href="../../stockdex.html#stockdex.ticker.Ticker">[docs]</a><span class="k">class</span> <span class="nc">Ticker</span><span class="p">(</span><span class="n">TickerAPI</span><span class="p">,</span> <span class="n">JustETF</span><span class="p">,</span> <span class="n">NASDAQInterface</span><span class="p">,</span> <span class="n">Digrin_Interface</span><span class="p">,</span> <span class="n">YahooWeb</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Class for the Ticker</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
+<div class="viewcode-block" id="TickerFactory"><a class="viewcode-back" href="../../stockdex.html#stockdex.ticker.TickerFactory">[docs]</a><span class="k">class</span> <span class="nc">TickerFactory</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">ticker</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="n">isin</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="n">security_type</span><span class="p">:</span> <span class="n">VALID_SECURITY_TYPES</span> <span class="o">=</span> <span class="s2">&quot;stock&quot;</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Initialize the Ticker class</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">        ticker (str): The ticker of the stock</span>
-<span class="sd">        isin (str): The ISIN of the etf</span>
-<span class="sd">        security_type (str): The security type of the ticker</span>
-<span class="sd">            default is &quot;stock&quot;</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">ticker</span> <span class="o">=</span> <span class="n">ticker</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">isin</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">security_type</span><span class="o">=</span><span class="s2">&quot;stock&quot;</span><span class="p">,</span> <span class="n">data_source</span><span class="o">=</span><span class="s2">&quot;yahoo_api&quot;</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ticker_name</span> <span class="o">=</span> <span class="n">ticker</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">isin</span> <span class="o">=</span> <span class="n">isin</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">security_type</span> <span class="o">=</span> <span class="n">security_type</span> <span class="k">if</span> <span class="n">security_type</span> <span class="k">else</span> <span class="s2">&quot;stock&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">security_type</span> <span class="o">=</span> <span class="n">security_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_source</span> <span class="o">=</span> <span class="n">data_source</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_class</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_select_base_class</span><span class="p">(</span><span class="n">data_source</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ticker_instance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_ticker</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">ticker</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">isin</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Please provide either a ticker or an ISIN&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_select_base_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_source</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">data_source</span> <span class="o">==</span> <span class="s2">&quot;yahoo_web&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">YahooWeb</span>
+        <span class="k">elif</span> <span class="n">data_source</span> <span class="o">==</span> <span class="s2">&quot;yahoo_api&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">YahooAPI</span>
+        <span class="c1"># TODO: Implement NASDAQInterface when website is stable</span>
+        <span class="c1"># elif data_source == &quot;nasdaq&quot;:</span>
+        <span class="c1">#     return NASDAQInterface</span>
+        <span class="k">elif</span> <span class="n">data_source</span> <span class="o">==</span> <span class="s2">&quot;justetf&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">JustETF</span>
+        <span class="k">elif</span> <span class="n">data_source</span> <span class="o">==</span> <span class="s2">&quot;digrin&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Digrin_Interface</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported data source: </span><span class="si">{</span><span class="n">data_source</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="n">ticker</span><span class="p">,</span> <span class="n">isin</span><span class="o">=</span><span class="n">isin</span><span class="p">,</span> <span class="n">security_type</span><span class="o">=</span><span class="n">security_type</span><span class="p">)</span></div>
+    <span class="k">def</span> <span class="nf">_create_ticker</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">class</span> <span class="nc">Ticker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_class</span><span class="p">):</span>
+            <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ticker</span><span class="p">,</span> <span class="n">isin</span><span class="p">,</span> <span class="n">security_type</span><span class="p">,</span> <span class="n">data_source</span><span class="p">):</span>
+                <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">ticker</span><span class="p">,</span> <span class="n">isin</span><span class="p">,</span> <span class="n">security_type</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ticker</span> <span class="o">=</span> <span class="n">ticker</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">isin</span> <span class="o">=</span> <span class="n">isin</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">security_type</span> <span class="o">=</span> <span class="n">security_type</span>
+
+        <span class="k">return</span> <span class="n">Ticker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">isin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">security_type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_source</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TickerFactory.get_ticker"><a class="viewcode-back" href="../../stockdex.html#stockdex.ticker.TickerFactory.get_ticker">[docs]</a>    <span class="k">def</span> <span class="nf">get_ticker</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ticker_instance</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">ticker</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ticker_instance</span>
+
+    <span class="nd">@ticker</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">ticker</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ticker_instance</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">data_source</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_source</span>
+
+    <span class="nd">@data_source</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">data_source</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">VALID_DATA_SOURCES</span><span class="o">.</span><span class="n">__args__</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">WrongDataSource</span><span class="p">(</span><span class="n">given_source</span><span class="o">=</span><span class="n">value</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data_source</span> <span class="o">=</span> <span class="n">value</span></div>
 </pre></div>
 
            </div>
