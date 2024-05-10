@@ -16,22 +16,25 @@ Stockdex is a Python package that provides a simple interface to access financia
 Install the package using pip:
 
 ```bash
-pip install stockdex
+pip install stockdex -U
 ``` 
 
 # Usage
 
-Create `Ticker` object by passing the ticker symbol. Ticker objects are the main interface to retrieve stock data.
-
+To access main functions, use `ticker`property from `TickerFactory` class. The `Ticker` class is used to access data from Various data sources. The `TickerFactory` class requires a data source to be passed to it. Here is an example of how to begin using the package:
 ```python
-from stockdex import Ticker
+from stockdex import TickerFactory
 
-# Pick arbitrary ticker
-ticker = Ticker('AAPL')
+ticker = TickerFactory(ticker="AAPL", data_source="yahoo_api").ticker
 ```
+
+After creating the `Ticker` object, you can access functions defined for each data source. Below are some examples of how to access data from supported data sources.
 
 ## Data from `Yahoo Finance` API (fast queries through Yahoo Finance API):
 ```python
+from stockdex import TickerFactory
+
+ticker = TickerFactory(ticker="AAPL", data_source="yahoo_api").ticker
 
 # Price data (use range and dataGranularity to make range and granularity more specific)
 price = ticker.price(range='1y', dataGranularity='1d')
@@ -49,6 +52,10 @@ financials = ticker.financials(period1=datetime(2022, 1, 1), period2=datetime.to
 
 ## Data from `Yahoo Finance` website (web scraping):
 ```python
+from stockdex import TickerFactory
+
+ticker = TickerFactory(ticker="AAPL", data_source="yahoo_web").ticker
+
 # Summary including general financial information
 summary = ticker.summary
 
@@ -100,6 +107,10 @@ forecast_price_to_earnings__growth_rates = ticker.forecast_peg_rate
 Data on Digrin website includes all historical data of the stock in certain categories, unlike Yahoo Finance which only provides the last 5 years of data at most.
 
 ```python
+from stockdex import TickerFactory
+
+ticker = TickerFactory(ticker="AAPL", data_source="digrin").ticker
+
 # Complete historical data of the stock in certain categories
 dividend = ticker.dividend
 payout_ratio = ticker.payout_ratio
@@ -111,7 +122,9 @@ stock_splits = ticker.stock_splits
 For EU ETFS, the `isin` and `security_type` should be passed to the `Ticker` object. The `isin` is the International Securities Identification Number of the ETF and the `security_type` should be set to `etf`.
 
 ```python
-etf = Ticker(isin='IE00B4L5Y983', security_type='etf')
+from stockdex import TickerFactory
+
+etf = TickerFactory(isin="IE00B4L5Y983", security_type="etf", data_source="justetf").ticker
 
 etf_general_info = etf.etf_general_info
 etf_wkn = etf.etf_wkn
