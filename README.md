@@ -33,6 +33,7 @@ After creating the `Ticker` object, you can access functions defined for each da
 ## Data from `Yahoo Finance` API (fast queries through Yahoo Finance API):
 ```python
 from stockdex import TickerFactory
+from datetime import datetime
 
 ticker = TickerFactory(ticker="AAPL", data_source="yahoo_api").ticker
 
