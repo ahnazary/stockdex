@@ -6,7 +6,7 @@ import pandas as pd
 import pytest
 
 from stockdex.exceptions import WrongSecurityType
-from stockdex.ticker import TickerFactory
+from stockdex.ticker import Ticker
 
 
 @pytest.mark.parametrize(
@@ -16,32 +16,28 @@ from stockdex.ticker import TickerFactory
         ("IE00B53SZB19"),
     ],
 )
-def test_etf_general_info(isin: str) -> None:
+def test_justetf_general_info(isin: str) -> None:
     """
     Test the ter property of the JustETF class
     """
-    etf = TickerFactory(isin=isin, security_type="etf", data_source="justetf").ticker
+    etf = Ticker(isin=isin, security_type="etf")
 
-    etf_general_info = etf.etf_general_info
-    assert isinstance(etf_general_info, pd.DataFrame)
-    assert etf_general_info.shape[0] == 1
-    assert etf_general_info.shape[1] >= 5
-    assert etf_general_info.iloc[0]["TER"] != ""
-    for i in range(1, etf_general_info.shape[1]):
-        assert etf_general_info.iloc[0][i] != ""
+    justetf_general_info = etf.justetf_general_info
+    assert isinstance(justetf_general_info, pd.DataFrame)
+    assert justetf_general_info.shape[0] == 1
+    assert justetf_general_info.shape[1] >= 5
+    assert justetf_general_info.iloc[0]["TER"] != ""
+    for i in range(1, justetf_general_info.shape[1]):
+        assert justetf_general_info.iloc[0][i] != ""
 
 
-def test_etf_general_info_wrong_security_type() -> None:
+def test_justetf_general_info_wrong_security_type() -> None:
     """
     Test the WrongSecurityType exception
     """
     with pytest.raises(WrongSecurityType):
-        ticker = TickerFactory(
-            isin="IE00B4L5Y983",
-            security_type="wrong_security_type",
-            data_source="justetf",
-        ).ticker
-        ticker.etf_general_info
+        ticker = Ticker(isin="IE00B4L5Y983", security_type="wrong_security_type")
+        ticker.justetf_general_info
 
 
 @pytest.mark.parametrize(
@@ -51,28 +47,27 @@ def test_etf_general_info_wrong_security_type() -> None:
         ("IE00B53SZB19", "A0YEDL"),
     ],
 )
-def test_etf_wkn(isin: str, expected: str) -> None:
+def test_justetf_wkn(isin: str, expected: str) -> None:
     """
     Test the wkn property of the JustETF class
     """
-    etf = TickerFactory(isin=isin, security_type="etf", data_source="justetf").ticker
+    etf = etf = Ticker(isin=isin, security_type="etf")
 
-    etf_wkn = etf.etf_wkn
-    assert isinstance(etf_wkn, str)
-    assert etf_wkn == expected
+    justetf_wkn = etf.justetf_wkn
+    assert isinstance(justetf_wkn, str)
+    assert justetf_wkn == expected
 
 
-def test_etf_wkn_wrong_security_type() -> None:
+def test_justetf_wkn_wrong_security_type() -> None:
     """
     Test the WrongSecurityType exception
     """
     with pytest.raises(WrongSecurityType):
-        ticker = TickerFactory(
+        ticker = Ticker(
             isin="IE00B4L5Y983",
             security_type="wrong_security_type",
-            data_source="justetf",
-        ).ticker
-        ticker.etf_wkn
+        )
+        ticker.justetf_wkn
 
 
 def test_no_isin() -> None:
@@ -80,7 +75,7 @@ def test_no_isin() -> None:
     Test the NoISINError exception
     """
     with pytest.raises(Exception):
-        TickerFactory(isin="", security_type="etf", data_source="justetf").ticker
+        Ticker(isin="")
 
 
 @pytest.mark.parametrize(
@@ -90,28 +85,27 @@ def test_no_isin() -> None:
         ("IE00B53SZB19"),
     ],
 )
-def test_etf_description(isin: str) -> None:
+def test_justetf_description(isin: str) -> None:
     """
     Test the description property of the JustETF class
     """
-    etf = TickerFactory(isin=isin, security_type="etf", data_source="justetf").ticker
+    etf = etf = Ticker(isin=isin, security_type="etf")
 
-    etf_description = etf.etf_description
-    assert isinstance(etf_description, str)
-    assert len(etf_description) > 0
+    justetf_description = etf.justetf_description
+    assert isinstance(justetf_description, str)
+    assert len(justetf_description) > 0
 
 
-def test_etf_description_wrong_security_type() -> None:
+def test_justetf_description_wrong_security_type() -> None:
     """
     Test the WrongSecurityType exception
     """
     with pytest.raises(WrongSecurityType):
-        ticker = TickerFactory(
+        ticker = Ticker(
             isin="IE00B4L5Y983",
             security_type="wrong_security_type",
-            data_source="justetf",
-        ).ticker
-        ticker.etf_description
+        )
+        ticker.justetf_description
 
 
 # @pytest.mark.parametrize(
@@ -125,7 +119,7 @@ def test_etf_description_wrong_security_type() -> None:
 #     """
 #     Test the quote property of the JustETF class
 #     """
-#     etf = Ticker(isin=isin, security_type="etf")
+#     etf = etf = Ticker(isin=isin, security_type="etf")
 
 #     quote = etf.etf_quote
 #     assert isinstance(quote, pd.DataFrame)
@@ -138,16 +132,16 @@ def test_etf_description_wrong_security_type() -> None:
         ("IE00B53SZB19"),
     ],
 )
-def test_etf_basics(isin: str) -> None:
+def test_justetf_basics(isin: str) -> None:
     """
-    Test the etf_basics property of the JustETF class
+    Test the justetf_basics property of the JustETF class
     """
-    etf = TickerFactory(isin=isin, security_type="etf", data_source="justetf").ticker
+    etf = etf = Ticker(isin=isin, security_type="etf")
 
-    etf_basics = etf.etf_basics
-    assert isinstance(etf_basics, pd.DataFrame)
-    assert etf_basics.shape[0] == 1
-    assert etf_basics.shape[1] >= 5
+    justetf_basics = etf.justetf_basics
+    assert isinstance(justetf_basics, pd.DataFrame)
+    assert justetf_basics.shape[0] == 1
+    assert justetf_basics.shape[1] >= 5
 
     expceted_columns = [
         "Fund size",
@@ -157,21 +151,20 @@ def test_etf_basics(isin: str) -> None:
     ]
 
     for column in expceted_columns:
-        assert column in etf_basics.columns
-        assert etf_basics[column].iloc[0] != ""
+        assert column in justetf_basics.columns
+        assert justetf_basics[column].iloc[0] != ""
 
 
-def test_etf_basics_wrong_security_type() -> None:
+def test_justetf_basics_wrong_security_type() -> None:
     """
     Test the WrongSecurityType exception
     """
     with pytest.raises(WrongSecurityType):
-        ticker = TickerFactory(
+        ticker = Ticker(
             isin="IE00B4L5Y983",
             security_type="wrong_security_type",
-            data_source="justetf",
-        ).ticker
-        ticker.etf_basics
+        )
+        ticker.justetf_basics
 
 
 @pytest.mark.parametrize(
@@ -181,29 +174,28 @@ def test_etf_basics_wrong_security_type() -> None:
         ("IE00B53SZB19"),
     ],
 )
-def test_etf_holdings_companies(isin: str) -> None:
+def test_justetf_holdings_companies(isin: str) -> None:
     """
     Test the etf_holdings property of the JustETF class
     """
-    etf = TickerFactory(isin=isin, security_type="etf", data_source="justetf").ticker
+    etf = etf = Ticker(isin=isin, security_type="etf")
 
-    etf_holdings = etf.etf_holdings_companies
+    etf_holdings = etf.justetf_holdings_companies
     assert isinstance(etf_holdings, pd.DataFrame)
     assert etf_holdings.shape[0] == 10
     assert etf_holdings.shape[1] == 1
 
 
-def test_etf_holdings_companies_wrong_security_type() -> None:
+def test_justetf_holdings_companies_wrong_security_type() -> None:
     """
     Test the WrongSecurityType exception
     """
     with pytest.raises(WrongSecurityType):
-        ticker = TickerFactory(
+        ticker = Ticker(
             isin="IE00B4L5Y983",
             security_type="wrong_security_type",
-            data_source="justetf",
-        ).ticker
-        ticker.etf_holdings_companies
+        )
+        ticker.justetf_holdings_companies
 
 
 @pytest.mark.parametrize(
@@ -213,30 +205,29 @@ def test_etf_holdings_companies_wrong_security_type() -> None:
         ("IE00B53SZB19"),
     ],
 )
-def test_etf_holdings_countries(isin: str) -> None:
+def test_justetf_holdings_countries(isin: str) -> None:
     """
     Test the etf_holdings property of the JustETF class
     """
 
-    etf = TickerFactory(isin=isin, security_type="etf", data_source="justetf").ticker
+    etf = etf = Ticker(isin=isin, security_type="etf")
 
-    etf_holdings = etf.etf_holdings_countries
+    etf_holdings = etf.justetf_holdings_countries
     assert isinstance(etf_holdings, pd.DataFrame)
     assert etf_holdings.shape[0] >= 2
     assert etf_holdings.shape[1] == 1
 
 
-def test_etf_holdings_countries_wrong_security_type() -> None:
+def test_justetf_holdings_countries_wrong_security_type() -> None:
     """
     Test the WrongSecurityType exception
     """
     with pytest.raises(WrongSecurityType):
-        ticker = TickerFactory(
+        ticker = Ticker(
             isin="IE00B4L5Y983",
             security_type="wrong_security_type",
-            data_source="justetf",
-        ).ticker
-        ticker.etf_holdings_countries
+        )
+        ticker.justetf_holdings_countries
 
 
 @pytest.mark.parametrize(
@@ -246,27 +237,26 @@ def test_etf_holdings_countries_wrong_security_type() -> None:
         ("IE00B53SZB19"),
     ],
 )
-def test_etf_holdings_sectors(isin: str) -> None:
+def test_justetf_holdings_sectors(isin: str) -> None:
     """
     Test the etf_holdings property of the JustETF class
     """
 
-    etf = TickerFactory(isin=isin, security_type="etf", data_source="justetf").ticker
+    etf = etf = Ticker(isin=isin, security_type="etf")
 
-    etf_holdings = etf.etf_holdings_sectors
+    etf_holdings = etf.justetf_holdings_sectors
     assert isinstance(etf_holdings, pd.DataFrame)
     assert etf_holdings.shape[0] >= 2
     assert etf_holdings.shape[1] == 1
 
 
-def test_etf_holdings_sectors_wrong_security_type() -> None:
+def test_justetf_holdings_sectors_wrong_security_type() -> None:
     """
     Test the WrongSecurityType exception
     """
     with pytest.raises(WrongSecurityType):
-        ticker = TickerFactory(
+        ticker = Ticker(
             isin="IE00B4L5Y983",
             security_type="wrong_security_type",
-            data_source="justetf",
-        ).ticker
-        ticker.etf_holdings_sectors
+        )
+        ticker.justetf_holdings_sectors

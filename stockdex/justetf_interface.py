@@ -26,7 +26,7 @@ class JustETF(TickerBase):
             raise NoISINError("No ISIN provided, please provide an ISIN")
 
     @property
-    def etf_general_info(self) -> pd.DataFrame:
+    def justetf_general_info(self) -> pd.DataFrame:
         """
         Get the general information of the ETF
         genral information includes TER, distribution policy, replication method, etc.
@@ -52,7 +52,7 @@ class JustETF(TickerBase):
         return data_df
 
     @property
-    def etf_wkn(self) -> str:
+    def justetf_wkn(self) -> str:
         """
         Get the WKN of the ETF
         """
@@ -68,7 +68,7 @@ class JustETF(TickerBase):
         return wkn
 
     @property
-    def etf_description(self) -> str:
+    def justetf_description(self) -> str:
         """
         Get the description of the ETF
         """
@@ -84,7 +84,7 @@ class JustETF(TickerBase):
         return description
 
     @property
-    def etf_basics(self) -> pd.DataFrame:
+    def justetf_basics(self) -> pd.DataFrame:
         """
         Get the baisc information of the ETF
 
@@ -123,7 +123,7 @@ class JustETF(TickerBase):
         return data_df
 
     @property
-    def etf_holdings_companies(self) -> pd.DataFrame:
+    def justetf_holdings_companies(self) -> pd.DataFrame:
         """
         Get the top 10 holdings of the ETF by companies
 
@@ -171,7 +171,7 @@ class JustETF(TickerBase):
         return data_df
 
     @property
-    def etf_holdings_countries(self) -> pd.DataFrame:
+    def justetf_holdings_countries(self) -> pd.DataFrame:
         """
         Get the top 10 holdings of the ETF by countries
 
@@ -219,7 +219,7 @@ class JustETF(TickerBase):
         return data_df
 
     @property
-    def etf_holdings_sectors(self) -> pd.DataFrame:
+    def justetf_holdings_sectors(self) -> pd.DataFrame:
         """
         Get the top 10 holdings of the ETF by sectors
 
