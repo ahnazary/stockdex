@@ -21,7 +21,7 @@ class Digrin_Interface(TickerBase):
         self.security_type = security_type
 
     @property
-    def dividend(self) -> pd.DataFrame:
+    def digrin_dividend(self) -> pd.DataFrame:
         """
         Get dividends for the ticker
 
@@ -56,7 +56,7 @@ class Digrin_Interface(TickerBase):
         return data_df
 
     @property
-    def payout_ratio(self) -> pd.DataFrame:
+    def digrin_payout_ratio(self) -> pd.DataFrame:
         """
         Get payout ratio for the ticker
 
@@ -90,7 +90,7 @@ class Digrin_Interface(TickerBase):
         return data_df
 
     @property
-    def stock_splits(self) -> pd.DataFrame:
+    def digrin_stock_splits(self) -> pd.DataFrame:
         """
         Get stock splits for the ticker
 
