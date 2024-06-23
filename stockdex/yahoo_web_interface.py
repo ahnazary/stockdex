@@ -21,7 +21,7 @@ class YahooWeb(TickerBase):
         self.ticker = ticker
         self.security_type = security_type
 
-    def get_financials_table(self, url: str) -> pd.DataFrame:
+    def yahoo_web_financials_table(self, url: str) -> pd.DataFrame:
         """
         Get financials table from the Yahoo Finance website
 
@@ -54,7 +54,7 @@ class YahooWeb(TickerBase):
         return data_df.set_index("Breakdown").T
 
     @property
-    def cashflow_web(self) -> pd.DataFrame:
+    def yahoo_web_cashflow(self) -> pd.DataFrame:
         """
         Get cash flow for the ticker
 
@@ -66,10 +66,10 @@ class YahooWeb(TickerBase):
 
         # URL of the website to scrape
         url = f"https://finance.yahoo.com/quote/{self.ticker}/cash-flow"
-        return self.get_financials_table(url)
+        return self.yahoo_web_financials_table(url)
 
     @property
-    def balance_sheet_web(self) -> pd.DataFrame:
+    def yahoo_web_balance_sheet(self) -> pd.DataFrame:
         """
         Get balance sheet for the ticker
 
@@ -82,10 +82,10 @@ class YahooWeb(TickerBase):
 
         # URL of the website to scrape
         url = f"https://finance.yahoo.com/quote/{self.ticker}/balance-sheet"
-        return self.get_financials_table(url)
+        return self.yahoo_web_financials_table(url)
 
     @property
-    def income_stmt_web(self) -> pd.DataFrame:
+    def yahoo_web_income_stmt(self) -> pd.DataFrame:
         """
         Get income statement for the ticker
 
@@ -98,10 +98,10 @@ class YahooWeb(TickerBase):
 
         # URL of the website to scrape
         url = f"https://finance.yahoo.com/quote/{self.ticker}/financials"
-        return self.get_financials_table(url)
+        return self.yahoo_web_financials_table(url)
 
     @property
-    def calls(self) -> pd.DataFrame:
+    def yahoo_web_calls(self) -> pd.DataFrame:
         """
         Get calls for the ticker
 
@@ -135,7 +135,7 @@ class YahooWeb(TickerBase):
         return data_df
 
     @property
-    def puts(self) -> pd.DataFrame:
+    def yahoo_web_puts(self) -> pd.DataFrame:
         """
         Get puts for the ticker
 
@@ -170,7 +170,7 @@ class YahooWeb(TickerBase):
         return data_df
 
     @property
-    def description(self) -> str:
+    def yahoo_web_description(self) -> str:
         """
         Get the description of the ticker
 
@@ -189,7 +189,7 @@ class YahooWeb(TickerBase):
         return soup.find("section", {"data-testid": "description"}).find("p").text
 
     @property
-    def key_executives(self) -> pd.DataFrame:
+    def yahoo_web_key_executives(self) -> pd.DataFrame:
         """
         Get profile key executives for the ticker
 
@@ -220,7 +220,7 @@ class YahooWeb(TickerBase):
         return data_df
 
     @property
-    def corporate_governance(self) -> str:
+    def yahoo_web_corporate_governance(self) -> str:
         """
         Get the description of the ticker
 
@@ -244,7 +244,7 @@ class YahooWeb(TickerBase):
         )
 
     @property
-    def major_holders(self) -> pd.DataFrame:
+    def yahoo_web_major_holders(self) -> pd.DataFrame:
         """
         Get major holders for the ticker
 
@@ -280,7 +280,7 @@ class YahooWeb(TickerBase):
         return data_df
 
     @property
-    def top_institutional_holders(self) -> pd.DataFrame:
+    def yahoo_web_top_institutional_holders(self) -> pd.DataFrame:
         """
         Get top institutional holders for the ticker
 
@@ -318,7 +318,7 @@ class YahooWeb(TickerBase):
         return data_df
 
     @property
-    def top_mutual_fund_holders(self) -> pd.DataFrame:
+    def yahoo_web_top_mutual_fund_holders(self) -> pd.DataFrame:
         """
         Get top mutual fund holders for the ticker
 
@@ -349,7 +349,7 @@ class YahooWeb(TickerBase):
         return data_df
 
     @property
-    def summary(self) -> pd.DataFrame:
+    def yahoo_web_summary(self) -> pd.DataFrame:
         """
         Get data for the ticker
 
@@ -380,7 +380,7 @@ class YahooWeb(TickerBase):
         return data_df.T
 
     @property
-    def analysis(self) -> pd.DataFrame:
+    def yahoo_web_analysis(self) -> pd.DataFrame:
         """
         Get analysis for the ticker
 
@@ -415,7 +415,7 @@ class YahooWeb(TickerBase):
         return data_df.T
 
     @property
-    def valuation_measures(self) -> pd.DataFrame:
+    def yahoo_web_valuation_measures(self) -> pd.DataFrame:
         """
         Get valuation measures for the ticker
 
@@ -452,7 +452,7 @@ class YahooWeb(TickerBase):
         return data_df.set_index("")
 
     @property
-    def financial_highlights(self) -> pd.DataFrame:
+    def yahoo_web_financial_highlights(self) -> pd.DataFrame:
         """
         Get financial highlights for the ticker
 
@@ -483,7 +483,7 @@ class YahooWeb(TickerBase):
         return data_df.set_index("Criteria")
 
     @property
-    def trading_information(self) -> pd.DataFrame:
+    def yahoo_web_trading_information(self) -> pd.DataFrame:
         """
         Get trading information for the ticker
 
