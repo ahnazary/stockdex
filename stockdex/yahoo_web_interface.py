@@ -500,9 +500,6 @@ class YahooWeb(TickerBase):
         # Parse the HTML content of the website
         soup = BeautifulSoup(response.content, "html.parser")
 
-        with open("yahoo.html", "w") as file:
-            file.write(str(soup.prettify()))
-
         raw_data = soup.find("div", {"data-testid": "stats-highlight"}).find_all(
             "section", recursive=False
         )[1]
