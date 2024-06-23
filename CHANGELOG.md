@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.6.0
+
+### Added
+
+### Fixed
+
+### Changed
+
+- `Ticker` class now is the main calss and `TickerFactory` class is removed.
+
 ## 0.5.0
 
 ### Added
