@@ -19,15 +19,17 @@ from stockdex.ticker import Ticker
         ("SAP", "1y", "1mo"),
     ],
 )
-def test_price(ticker, range, dataGranularity):
+def test_yahoo_api_price(ticker, range, dataGranularity):
     """
     Test the price property of the YahooAPI class
     """
 
     ticker = Ticker(ticker)
-    price = ticker.price(range=range, dataGranularity=dataGranularity)
+    yahoo_api_price = ticker.yahoo_api_price(
+        range=range, dataGranularity=dataGranularity
+    )
 
-    assert price.columns.tolist() == [
+    assert yahoo_api_price.columns.tolist() == [
         "timestamp",
         "volume",
         "close",
@@ -40,7 +42,7 @@ def test_price(ticker, range, dataGranularity):
         "exchangeName",
         "instrumentType",
     ]
-    assert len(price) > 0
+    assert len(yahoo_api_price) > 0
 
 
 @pytest.mark.parametrize(
@@ -50,20 +52,20 @@ def test_price(ticker, range, dataGranularity):
         ("ASML"),
     ],
 )
-def test_current_trading_period(ticker):
+def test_yahoo_api_current_trading_period(ticker):
     """
     Test the price property of the YahooAPI class
     """
 
     ticker = Ticker(ticker)
-    current_trading_period = ticker.current_trading_period
+    yahoo_api_current_trading_period = ticker.yahoo_api_current_trading_period
 
-    assert current_trading_period.columns.tolist() == [
+    assert yahoo_api_current_trading_period.columns.tolist() == [
         "pre",
         "regular",
         "post",
     ]
-    assert len(current_trading_period) == 4
+    assert len(yahoo_api_current_trading_period) == 4
 
     expected_columns = [
         "timezone",
@@ -73,7 +75,7 @@ def test_current_trading_period(ticker):
     ]
 
     for column in expected_columns:
-        assert column in current_trading_period.index.tolist()
+        assert column in yahoo_api_current_trading_period.index.tolist()
 
 
 @pytest.mark.parametrize(
@@ -86,15 +88,15 @@ def test_current_trading_period(ticker):
         ("FMC", "quarterly", "raw", datetime(2021, 1, 1), datetime.today()),
     ],
 )
-def test_income_statement(ticker, frequency, format, period1, period2):
+def test_yahoo_api_income_statement(ticker, frequency, format, period1, period2):
     ticker = Ticker(ticker)
-    income_statement = ticker.income_statement(
+    yahoo_api_income_statement = ticker.yahoo_api_income_statement(
         frequency=frequency, format=format, period1=period1, period2=period2
     )
 
-    assert isinstance(income_statement, pd.DataFrame)
-    assert income_statement.shape[0] > 0
-    assert income_statement.shape[1] > 0
+    assert isinstance(yahoo_api_income_statement, pd.DataFrame)
+    assert yahoo_api_income_statement.shape[0] > 0
+    assert yahoo_api_income_statement.shape[1] > 0
 
 
 @pytest.mark.parametrize(
@@ -107,15 +109,15 @@ def test_income_statement(ticker, frequency, format, period1, period2):
         ("FMC", "quarterly", "raw", datetime(2021, 1, 1), datetime.today()),
     ],
 )
-def test_cash_flow(ticker, frequency, format, period1, period2):
+def test_yahoo_api_cash_flow(ticker, frequency, format, period1, period2):
     ticker = Ticker(ticker)
-    cash_flow = ticker.cash_flow(
+    yahoo_api_cash_flow = ticker.yahoo_api_cash_flow(
         frequency=frequency, format=format, period1=period1, period2=period2
     )
 
-    assert isinstance(cash_flow, pd.DataFrame)
-    assert cash_flow.shape[0] > 0
-    assert cash_flow.shape[1] > 0
+    assert isinstance(yahoo_api_cash_flow, pd.DataFrame)
+    assert yahoo_api_cash_flow.shape[0] > 0
+    assert yahoo_api_cash_flow.shape[1] > 0
 
 
 @pytest.mark.parametrize(
@@ -128,15 +130,15 @@ def test_cash_flow(ticker, frequency, format, period1, period2):
         ("FMC", "quarterly", "raw", datetime(2021, 1, 1), datetime.today()),
     ],
 )
-def test_balance_sheet(ticker, frequency, format, period1, period2):
+def test_yahoo_api_balance_sheet(ticker, frequency, format, period1, period2):
     ticker = Ticker(ticker)
-    balance_sheet = ticker.balance_sheet(
+    yahoo_api_balance_sheet = ticker.yahoo_api_balance_sheet(
         frequency=frequency, format=format, period1=period1, period2=period2
     )
 
-    assert isinstance(balance_sheet, pd.DataFrame)
-    assert balance_sheet.shape[0] > 0
-    assert balance_sheet.shape[1] > 0
+    assert isinstance(yahoo_api_balance_sheet, pd.DataFrame)
+    assert yahoo_api_balance_sheet.shape[0] > 0
+    assert yahoo_api_balance_sheet.shape[1] > 0
 
 
 @pytest.mark.parametrize(
@@ -149,12 +151,12 @@ def test_balance_sheet(ticker, frequency, format, period1, period2):
         ("FMC", "quarterly", "raw", datetime(2021, 1, 1), datetime.today()),
     ],
 )
-def test_financials(ticker, frequency, format, period1, period2):
+def test_yahoo_api_financials(ticker, frequency, format, period1, period2):
     ticker = Ticker(ticker)
-    financials = ticker.financials(
+    yahoo_api_financials = ticker.yahoo_api_financials(
         frequency=frequency, format=format, period1=period1, period2=period2
     )
 
-    assert isinstance(financials, pd.DataFrame)
-    assert financials.shape[0] > 0
-    assert financials.shape[1] > 0
+    assert isinstance(yahoo_api_financials, pd.DataFrame)
+    assert yahoo_api_financials.shape[0] > 0
+    assert yahoo_api_financials.shape[1] > 0

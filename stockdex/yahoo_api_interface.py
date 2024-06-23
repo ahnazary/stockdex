@@ -29,7 +29,7 @@ class YahooAPI(TickerBase):
     today = datetime.today()
     five_years_ago = today.replace(year=today.year - 5)
 
-    def price(
+    def yahoo_api_price(
         self,
         range: Literal[
             "1d", "5d", "1mo", "3mo", "6mo", "1y", "2y", "5y", "10y", "ytd", "max"
@@ -103,7 +103,7 @@ class YahooAPI(TickerBase):
         )
 
     @property
-    def current_trading_period(self) -> pd.DataFrame:
+    def yahoo_api_current_trading_period(self) -> pd.DataFrame:
         """
         Get the current trading period for the stock
         """
@@ -135,7 +135,7 @@ class YahooAPI(TickerBase):
             }
         )
 
-    def income_statement(
+    def yahoo_api_income_statement(
         self,
         frequency: Literal["annual", "quarterly"] = "annual",
         format: Literal["fmt", "raw"] = "fmt",
@@ -171,7 +171,7 @@ class YahooAPI(TickerBase):
 
         return self.extract_dataframe(response, format)
 
-    def cash_flow(
+    def yahoo_api_cash_flow(
         self,
         frequency: Literal["annual", "quarterly"] = "annual",
         format: Literal["fmt", "raw"] = "fmt",
@@ -207,7 +207,7 @@ class YahooAPI(TickerBase):
 
         return self.extract_dataframe(response, format)
 
-    def balance_sheet(
+    def yahoo_api_balance_sheet(
         self,
         frequency: Literal["annual", "quarterly"] = "annual",
         format: Literal["fmt", "raw"] = "fmt",
@@ -243,7 +243,7 @@ class YahooAPI(TickerBase):
 
         return self.extract_dataframe(response, format)
 
-    def financials(
+    def yahoo_api_financials(
         self,
         frequency: Literal["annual", "quarterly"] = "annual",
         format: Literal["fmt", "raw"] = "fmt",
