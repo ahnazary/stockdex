@@ -9,7 +9,7 @@ from stockdex.config import DIGRIN_BASE_URL, VALID_SECURITY_TYPES
 from stockdex.ticker_base import TickerBase
 
 
-class Digrin_Interface(TickerBase):
+class DigrinInterface(TickerBase):
     def __init__(
         self,
         ticker: str = "",

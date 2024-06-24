@@ -37,12 +37,23 @@ class TickerBase:
         return response
 
     def find_parent_by_text(
-        self, soup: BeautifulSoup, tag: str, text: str
+        self, soup: BeautifulSoup, tag: str, text: str, condition: dict = {}
     ) -> Union[None, str]:
         """
         Method that finds the parent of a tag by its text from a BeautifulSoup object
+
+        Args:
+        ----------
+        soup (BeautifulSoup): The BeautifulSoup object
+        tag (str): The tag to search for
+        text (str): The text to search for
+        condition (dict): The condition to search for
+
+        Returns:
+        ----------
+        Union[None, str]: The parent of the tag if it exists, None otherwise
         """
-        for element in soup.find_all(tag):
+        for element in soup.find_all(tag, condition):
             if text in element.get_text():
                 return element
         return None
