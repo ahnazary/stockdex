@@ -21,11 +21,15 @@ class TickerBase:
         Send an HTTP GET request to the website
 
         Args:
-        url (str): The URL of the website
-        headers (dict): The headers to be sent with the HTTP GET request
+        ----------
+        url: str
+            The URL to send the HTTP GET request to
+
 
         Returns:
-        requests.Response: The response of the HTTP GET request
+        ----------
+        requests.Response
+            The response from the website
         """
 
         # Send an HTTP GET request to the website
@@ -47,10 +51,14 @@ class TickerBase:
 
         Args:
         ----------
-        soup (BeautifulSoup): The BeautifulSoup object
-        tag (str): The tag to search for
-        text (str): The text to search for
-        condition (dict): The condition to search for
+        soup: BeautifulSoup
+            The BeautifulSoup object to search
+        tag: str
+            The tag to search for
+        text: str
+            The text to search for
+        condition: dict
+            The condition to search for
 
         Returns:
         ----------
