@@ -386,3 +386,21 @@ def test_yahoo_web_trading_information_wrong_security_type():
     with pytest.raises(WrongSecurityType):
         ticker = Ticker(ticker="AAPL", security_type="etf")
         ticker.yahoo_web_trading_information
+
+
+@pytest.mark.parametrize(
+    "ticker",
+    [
+        ("PANW"),
+        ("AAPL"),
+        ("GOOGL"),
+        ("MSFT"),
+    ],
+)
+def test_yahoo_web_full_name(ticker):
+    ticker = Ticker(ticker)
+    yahoo_web_full_name = ticker.yahoo_web_full_name
+
+    # Check if the response is as expected
+    assert isinstance(yahoo_web_full_name, str)
+    assert len(yahoo_web_full_name) > 0

@@ -2,6 +2,8 @@
 Module for fetching data from Yahoo Finance website
 """
 
+import re
+
 import pandas as pd
 from bs4 import BeautifulSoup
 
@@ -512,3 +514,26 @@ class YahooWeb(TickerBase):
                 data_df.loc[len(data_df)] = data
 
         return data_df.set_index("Criteria")
+
+    @property
+    def yahoo_web_full_name(self) -> str:
+        """
+        Get the full name of the ticker
+
+        Returns:
+        str: A string including the full name of the ticker
+        visible in the Yahoo Finance profile page for the ticker
+        """
+        check_security_type(security_type=self.security_type, valid_types=["stock"])
+
+        # URL of the website to scrape
+        url = f"https://finance.yahoo.com/quote/{self.ticker}/"
+        response = self.get_response(url)
+
+        # Parse the HTML content of the website
+        soup = BeautifulSoup(response.content, "html.parser")
+
+        header = self.find_parent_by_text(soup, "h1", f"({self.ticker})")
+
+        # get the word till the first special character including space
+        return re.findall(r"[\w\s]+", header.text)[0]
