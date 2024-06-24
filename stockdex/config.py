@@ -2,6 +2,8 @@
 
 from typing import Literal
 
+RESPONSE_TIMEOUT = 25
+
 VALID_SECURITY_TYPES = Literal["stock", "etf", "cryptocurrency", "index", "commodity"]
 VALID_DATA_SOURCES = Literal["yahoo_web", "yahoo_api", "justetf", "digrin"]
 
@@ -12,6 +14,7 @@ FUNDAMENTALS_BASE_URL = (
 JUSTETF_BASE_URL = "https://www.justetf.com/en"
 NASDAQ_BASE_URL = "https://www.nasdaq.com/market-activity/stocks"
 DIGRIN_BASE_URL = "https://www.digrin.com/stocks/detail"
+MACROTRENDS_BASE_URL = "https://www.macrotrends.net/stocks/charts"
 
 INCOME_STATEMENT_COLUMNS = [
     "TaxEffectOfUnusualItems",
