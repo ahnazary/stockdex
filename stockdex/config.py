@@ -2,7 +2,7 @@
 
 from typing import Literal
 
-RESPONSE_TIMEOUT = 25
+RESPONSE_TIMEOUT = 2
 
 VALID_SECURITY_TYPES = Literal["stock", "etf", "cryptocurrency", "index", "commodity"]
 VALID_DATA_SOURCES = Literal["yahoo_web", "yahoo_api", "justetf", "digrin"]

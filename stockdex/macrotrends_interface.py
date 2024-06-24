@@ -9,6 +9,7 @@ from bs4 import BeautifulSoup
 
 from stockdex.config import MACROTRENDS_BASE_URL, VALID_SECURITY_TYPES
 from stockdex.lib import check_security_type
+from stockdex.selenium_interface import selenium_interface
 from stockdex.ticker_base import TickerBase
 
 
@@ -37,7 +38,9 @@ class MacrotrendsInterface(TickerBase):
 
         return full_name
 
-    def _find_table_in_url(self, url: str, text_to_look_for: str) -> pd.DataFrame:
+    def _find_table_in_url(
+        self, url: str, text_to_look_for: str, soup: BeautifulSoup
+    ) -> pd.DataFrame:
         """
         Retrieve the table with the given id from the given URL.
 
@@ -53,11 +56,6 @@ class MacrotrendsInterface(TickerBase):
         pd.DataFrame
             The table as a pandas DataFrame.
         """
-        response = self.get_response(url)
-
-        # Parse the HTML content of the website
-        soup = BeautifulSoup(response.content, "html.parser")
-
         table = self.find_parent_by_text(soup=soup, tag="div", text=text_to_look_for)
 
         data = []
@@ -81,6 +79,7 @@ class MacrotrendsInterface(TickerBase):
 
         return data
 
+    @property
     def macrotrends_income_statement(self) -> pd.DataFrame:
         """
         Retrieve the income statement for the given ticker.
@@ -88,7 +87,60 @@ class MacrotrendsInterface(TickerBase):
         check_security_type(self.security_type, valid_types=["stock"])
         url = f"{MACROTRENDS_BASE_URL}/{self.ticker}/TBD/income-statement"
 
-        data = self._find_table_in_url(url, "Revenue")
+        response = self.get_response(url)
+
+        # Parse the HTML content of the website
+        soup = BeautifulSoup(response.content, "html.parser")
+
+        data = self._find_table_in_url(url, "Revenue", soup)
+
+        data["field_name"] = data["field_name"].apply(
+            lambda x: re.search(">(.*)<", x).group(1)
+        )
+        data = data.set_index("field_name")
+        data.drop(columns=["popup_icon"], inplace=True)
+
+        return data
+
+    @property
+    def macrotrends_balance_sheet(self) -> pd.DataFrame:
+        """
+        Retrieve the balance sheet for the given ticker.
+        """
+        check_security_type(self.security_type, valid_types=["stock"])
+        url = f"{MACROTRENDS_BASE_URL}/{self.ticker}/TBD/balance-sheet"
+
+        # build selenium interface object if not already built
+        if not hasattr(self, "selenium_interface"):
+            self.selenium_interface = selenium_interface()
+
+        soup = self.selenium_interface.get_html_content(url)
+
+        data = self._find_table_in_url(url, "Cash On Hand", soup)
+
+        data["field_name"] = data["field_name"].apply(
+            lambda x: re.search(">(.*)<", x).group(1)
+        )
+        data = data.set_index("field_name")
+        data.drop(columns=["popup_icon"], inplace=True)
+
+        return data
+
+    @property
+    def macrotrends_cash_flow(self) -> pd.DataFrame:
+        """
+        Retrieve the cash flow statement for the given ticker.
+        """
+        check_security_type(self.security_type, valid_types=["stock"])
+        url = f"{MACROTRENDS_BASE_URL}/{self.ticker}/TBD/cash-flow-statement"
+
+        # build selenium interface object if not already built
+        if not hasattr(self, "selenium_interface"):
+            self.selenium_interface = selenium_interface()
+
+        soup = self.selenium_interface.get_html_content(url)
+
+        data = self._find_table_in_url(url, "Net Income/Loss", soup)
 
         data["field_name"] = data["field_name"].apply(
             lambda x: re.search(">(.*)<", x).group(1)
