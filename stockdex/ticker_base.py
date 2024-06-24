@@ -7,6 +7,7 @@ from typing import Union
 import requests
 from bs4 import BeautifulSoup
 
+from stockdex.config import RESPONSE_TIMEOUT
 from stockdex.lib import get_user_agent
 
 
@@ -29,7 +30,9 @@ class TickerBase:
 
         # Send an HTTP GET request to the website
         session = requests.Session()
-        response = session.get(url, headers=self.request_headers, timeout=2)
+        response = session.get(
+            url, headers=self.request_headers, timeout=RESPONSE_TIMEOUT
+        )
         # If the HTTP GET request can't be served
         if response.status_code != 200:
             raise Exception("Failed to load page, check if the ticker symbol exists")
