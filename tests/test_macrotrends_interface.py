@@ -56,3 +56,21 @@ def test_macrotrends_cash_flow(ticker):
     assert macrotrends_cash_flow.shape[0] > 0
     assert macrotrends_cash_flow.shape[1] > 0
     assert macrotrends_cash_flow.iloc[0][1] is not None
+
+
+@pytest.mark.parametrize(
+    "ticker",
+    [
+        ("PANW"),
+        ("BAC"),
+    ],
+)
+def test_macrotrends_key_financial_ratios(ticker):
+    ticker = Ticker(ticker=ticker)
+    macrotrends_key_financial_ratios = ticker.macrotrends_key_financial_ratios
+
+    # Check if the response is as expected
+    assert isinstance(macrotrends_key_financial_ratios, pd.DataFrame)
+    assert macrotrends_key_financial_ratios.shape[0] > 0
+    assert macrotrends_key_financial_ratios.shape[1] > 0
+    assert "Current Ratio" in macrotrends_key_financial_ratios.index

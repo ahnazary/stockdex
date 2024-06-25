@@ -149,3 +149,27 @@ class MacrotrendsInterface(TickerBase):
         data.drop(columns=["popup_icon"], inplace=True)
 
         return data
+
+    @property
+    def macrotrends_key_financial_ratios(self) -> pd.DataFrame:
+        """
+        Retrieve the key financial ratios for the given ticker.
+        """
+        check_security_type(self.security_type, valid_types=["stock"])
+        url = f"{MACROTRENDS_BASE_URL}/{self.ticker}/TBD/financial-ratios"
+
+        # build selenium interface object if not already built
+        if not hasattr(self, "selenium_interface"):
+            self.selenium_interface = selenium_interface()
+
+        soup = self.selenium_interface.get_html_content(url)
+
+        data = self._find_table_in_url(url, "Current Ratio", soup)
+
+        data["field_name"] = data["field_name"].apply(
+            lambda x: re.search(">(.*)<", x).group(1)
+        )
+        data = data.set_index("field_name")
+        data.drop(columns=["popup_icon"], inplace=True)
+
+        return data
