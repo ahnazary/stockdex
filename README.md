@@ -163,9 +163,9 @@ net_margin = ticker.macrotrends_net_margin
 For EU ETFS, the `isin` and `security_type` should be passed to the `Ticker` object. The `isin` is the International Securities Identification Number of the ETF and the `security_type` should be set to `etf`.
 
 ```python
-from stockdex import TickerFactory
+from stockdex import Ticker
 
-etf = TickerFactory(isin="IE00B4L5Y983", security_type="etf", data_source="justetf").ticker
+etf = Ticker(isin="IE00B4L5Y983", security_type="etf")
 
 etf_general_info = etf.justetf_general_info
 etf_wkn = etf.justetf_wkn
