@@ -4,9 +4,15 @@
 
 ### Added
 
+- Module for `´macrotrends` website to fetch data.
+- methods for extracting basic and margin related data from `macrotrends` website.
+
 ### Fixed
 
 ### Changed
+
+- Some log messages are changed.
+- `TickerFactory` class is removed and `Ticker` class is used to create `Ticker` objects.
 
 - `Ticker` class now is the main calss and `TickerFactory` class is removed.
 
