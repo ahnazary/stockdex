@@ -2,12 +2,14 @@
 Base class for ticker objects to inherit from
 """
 
+import time
+from logging import getLogger
 from typing import Union
 
 import requests
 from bs4 import BeautifulSoup
 
-from stockdex.config import RESPONSE_TIMEOUT
+from stockdex.config import RESPONSE_TIMEOUT, RETRY_AFTER_TIMEOUT
 from stockdex.lib import get_user_agent
 
 
@@ -15,6 +17,7 @@ class TickerBase:
     request_headers = {
         "User-Agent": get_user_agent(),
     }
+    logger = getLogger(__name__)
 
     def get_response(self, url: str) -> requests.Response:
         """
@@ -38,13 +41,17 @@ class TickerBase:
             url, headers=self.request_headers, timeout=RESPONSE_TIMEOUT
         )
         # If the HTTP GET request can't be served
-        if response.status_code != 200:
+        if response.status_code != 200 and response.status_code != 429:
             raise Exception(
                 f"""
                 Failed to load page (status code: {response.status_code}).
                 Check if the ticker symbol exists
                 """
             )
+        elif response.status_code == 429:
+            self.logger.warning("Rate limit reached. Waiting for the retry-after time.")
+            time.sleep(int(RETRY_AFTER_TIMEOUT))
+            response = self.get_response(url)
 
         return response
 
