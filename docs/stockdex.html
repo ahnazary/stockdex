@@ -57,7 +57,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#module-stockdex.ticker">stockdex.ticker module</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#stockdex.ticker.TickerFactory"><code class="docutils literal notranslate"><span class="pre">TickerFactory</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#stockdex.ticker.Ticker"><code class="docutils literal notranslate"><span class="pre">Ticker</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#stockdex-ticker-api-module">stockdex.ticker_api module</a></li>
@@ -200,26 +200,11 @@ The columns might include:
 </section>
 <section id="module-stockdex.ticker">
 <span id="stockdex-ticker-module"></span><h2>stockdex.ticker module<a class="headerlink" href="#module-stockdex.ticker" title="Permalink to this heading"></a></h2>
-<p>Moduel for the Ticker class</p>
 <dl class="py class">
-<dt class="sig sig-object py" id="stockdex.ticker.TickerFactory">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stockdex.ticker.</span></span><span class="sig-name descname"><span class="pre">TickerFactory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ticker</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">security_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'stock'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'yahoo_api'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stockdex/ticker.html#TickerFactory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.ticker.TickerFactory" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py property">
-<dt class="sig sig-object py" id="stockdex.ticker.TickerFactory.data_source">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data_source</span></span><a class="headerlink" href="#stockdex.ticker.TickerFactory.data_source" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="stockdex.ticker.TickerFactory.get_ticker">
-<span class="sig-name descname"><span class="pre">get_ticker</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/stockdex/ticker.html#TickerFactory.get_ticker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.ticker.TickerFactory.get_ticker" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="stockdex.ticker.TickerFactory.ticker">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ticker</span></span><a class="headerlink" href="#stockdex.ticker.TickerFactory.ticker" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
+<dt class="sig sig-object py" id="stockdex.ticker.Ticker">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stockdex.ticker.</span></span><span class="sig-name descname"><span class="pre">Ticker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ticker</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">security_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'stock'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'etf'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'cryptocurrency'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'index'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'commodity'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'stock'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stockdex/ticker.html#Ticker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.ticker.Ticker" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">YahooAPI</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">JustETF</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">DigrinInterface</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">YahooWeb</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">MacrotrendsInterface</span></code></p>
+<p>Class for the Ticker</p>
 </dd></dl>
 
 </section>
@@ -235,20 +220,51 @@ The columns might include:
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="stockdex.ticker_base.TickerBase.find_parent_by_text">
-<span class="sig-name descname"><span class="pre">find_parent_by_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soup</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">BeautifulSoup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></span><a class="reference internal" href="_modules/stockdex/ticker_base.html#TickerBase.find_parent_by_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.ticker_base.TickerBase.find_parent_by_text" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">find_parent_by_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soup</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">BeautifulSoup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">condition</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></span><a class="reference internal" href="_modules/stockdex/ticker_base.html#TickerBase.find_parent_by_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.ticker_base.TickerBase.find_parent_by_text" title="Permalink to this definition"></a></dt>
 <dd><p>Method that finds the parent of a tag by its text from a BeautifulSoup object</p>
+<section id="args">
+<h3>Args:<a class="headerlink" href="#args" title="Permalink to this heading"></a></h3>
+<dl class="simple">
+<dt>soup: BeautifulSoup</dt><dd><p>The BeautifulSoup object to search</p>
+</dd>
+<dt>tag: str</dt><dd><p>The tag to search for</p>
+</dd>
+<dt>text: str</dt><dd><p>The text to search for</p>
+</dd>
+<dt>condition: dict</dt><dd><p>The condition to search for</p>
+</dd>
+</dl>
+</section>
+<section id="id5">
+<h3>Returns:<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h3>
+<p>Union[None, str]: The parent of the tag if it exists, None otherwise</p>
+</section>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="stockdex.ticker_base.TickerBase.get_response">
 <span class="sig-name descname"><span class="pre">get_response</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Response</span></span></span><a class="reference internal" href="_modules/stockdex/ticker_base.html#TickerBase.get_response"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.ticker_base.TickerBase.get_response" title="Permalink to this definition"></a></dt>
 <dd><p>Send an HTTP GET request to the website</p>
-<p>Args:
-url (str): The URL of the website
-headers (dict): The headers to be sent with the HTTP GET request</p>
-<p>Returns:
-requests.Response: The response of the HTTP GET request</p>
+<section id="id6">
+<h3>Args:<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h3>
+<dl class="simple">
+<dt>url: str</dt><dd><p>The URL to send the HTTP GET request to</p>
+</dd>
+</dl>
+</section>
+<section id="id7">
+<h3>Returns:<a class="headerlink" href="#id7" title="Permalink to this heading"></a></h3>
+<dl class="simple">
+<dt>requests.Response</dt><dd><p>The response from the website</p>
+</dd>
+</dl>
+</section>
 </dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stockdex.ticker_base.TickerBase.logger">
+<span class="sig-name descname"><span class="pre">logger</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Logger</span> <span class="pre">stockdex.ticker_base</span> <span class="pre">(WARNING)&gt;</span></em><a class="headerlink" href="#stockdex.ticker_base.TickerBase.logger" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="stockdex.ticker_base.TickerBase.request_headers">
