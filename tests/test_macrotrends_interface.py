@@ -8,7 +8,6 @@ from stockdex.ticker import Ticker
     "ticker",
     [
         ("PANW"),
-        ("BAC"),
     ],
 )
 def test_macrotrends_income_statement(ticker):
@@ -25,7 +24,6 @@ def test_macrotrends_income_statement(ticker):
 @pytest.mark.parametrize(
     "ticker",
     [
-        ("PANW"),
         ("BAC"),
     ],
 )
@@ -44,7 +42,6 @@ def test_macrotrends_balance_sheet(ticker):
     "ticker",
     [
         ("PANW"),
-        ("BAC"),
     ],
 )
 def test_macrotrends_cash_flow(ticker):
@@ -61,7 +58,6 @@ def test_macrotrends_cash_flow(ticker):
 @pytest.mark.parametrize(
     "ticker",
     [
-        ("PANW"),
         ("BAC"),
     ],
 )
@@ -74,3 +70,83 @@ def test_macrotrends_key_financial_ratios(ticker):
     assert macrotrends_key_financial_ratios.shape[0] > 0
     assert macrotrends_key_financial_ratios.shape[1] > 0
     assert "Current Ratio" in macrotrends_key_financial_ratios.index
+
+
+@pytest.mark.parametrize(
+    "ticker",
+    [
+        ("PANW"),
+    ],
+)
+def test_macrotrends_gross_margin(ticker):
+    ticker = Ticker(ticker=ticker)
+    macrotrends_gross_margin = ticker.macrotrends_gross_margin
+
+    # Check if the response is as expected
+    assert isinstance(macrotrends_gross_margin, pd.DataFrame)
+    assert macrotrends_gross_margin.shape[0] > 0
+    assert macrotrends_gross_margin.shape[1] > 0
+
+
+@pytest.mark.parametrize(
+    "ticker",
+    [
+        ("BAC"),
+    ],
+)
+def test_macrotrends_operating_margin(ticker):
+    ticker = Ticker(ticker=ticker)
+    macrotrends_operating_margin = ticker.macrotrends_operating_margin
+
+    # Check if the response is as expected
+    assert isinstance(macrotrends_operating_margin, pd.DataFrame)
+    assert macrotrends_operating_margin.shape[0] > 0
+    assert macrotrends_operating_margin.shape[1] > 0
+
+
+@pytest.mark.parametrize(
+    "ticker",
+    [
+        ("BAC"),
+    ],
+)
+def test_macrotrends_ebitda_margin(ticker):
+    ticker = Ticker(ticker=ticker)
+    macrotrends_ebitda_margin = ticker.macrotrends_ebitda_margin
+
+    # Check if the response is as expected
+    assert isinstance(macrotrends_ebitda_margin, pd.DataFrame)
+    assert macrotrends_ebitda_margin.shape[0] > 0
+    assert macrotrends_ebitda_margin.shape[1] > 0
+
+
+@pytest.mark.parametrize(
+    "ticker",
+    [
+        ("BAC"),
+    ],
+)
+def test_macrotrends_pre_tax_margin(ticker):
+    ticker = Ticker(ticker=ticker)
+    macrotrends_pre_tax_margin = ticker.macrotrends_pre_tax_margin
+
+    # Check if the response is as expected
+    assert isinstance(macrotrends_pre_tax_margin, pd.DataFrame)
+    assert macrotrends_pre_tax_margin.shape[0] > 0
+    assert macrotrends_pre_tax_margin.shape[1] > 0
+
+
+@pytest.mark.parametrize(
+    "ticker",
+    [
+        ("BAC"),
+    ],
+)
+def test_macrotrends_net_margin(ticker):
+    ticker = Ticker(ticker=ticker)
+    macrotrends_net_margin = ticker.macrotrends_net_margin
+
+    # Check if the response is as expected
+    assert isinstance(macrotrends_net_margin, pd.DataFrame)
+    assert macrotrends_net_margin.shape[0] > 0
+    assert macrotrends_net_margin.shape[1] > 0

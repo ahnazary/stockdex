@@ -39,7 +39,7 @@ class MacrotrendsInterface(TickerBase):
         return full_name
 
     def _find_table_in_url(
-        self, url: str, text_to_look_for: str, soup: BeautifulSoup
+        self, text_to_look_for: str, soup: BeautifulSoup
     ) -> pd.DataFrame:
         """
         Retrieve the table with the given id from the given URL.
@@ -92,7 +92,7 @@ class MacrotrendsInterface(TickerBase):
         # Parse the HTML content of the website
         soup = BeautifulSoup(response.content, "html.parser")
 
-        data = self._find_table_in_url(url, "Revenue", soup)
+        data = self._find_table_in_url("Revenue", soup)
 
         data["field_name"] = data["field_name"].apply(
             lambda x: re.search(">(.*)<", x).group(1)
@@ -116,7 +116,7 @@ class MacrotrendsInterface(TickerBase):
 
         soup = self.selenium_interface.get_html_content(url)
 
-        data = self._find_table_in_url(url, "Cash On Hand", soup)
+        data = self._find_table_in_url("Cash On Hand", soup)
 
         data["field_name"] = data["field_name"].apply(
             lambda x: re.search(">(.*)<", x).group(1)
@@ -140,7 +140,7 @@ class MacrotrendsInterface(TickerBase):
 
         soup = self.selenium_interface.get_html_content(url)
 
-        data = self._find_table_in_url(url, "Net Income/Loss", soup)
+        data = self._find_table_in_url("Net Income/Loss", soup)
 
         data["field_name"] = data["field_name"].apply(
             lambda x: re.search(">(.*)<", x).group(1)
@@ -164,7 +164,7 @@ class MacrotrendsInterface(TickerBase):
 
         soup = self.selenium_interface.get_html_content(url)
 
-        data = self._find_table_in_url(url, "Current Ratio", soup)
+        data = self._find_table_in_url("Current Ratio", soup)
 
         data["field_name"] = data["field_name"].apply(
             lambda x: re.search(">(.*)<", x).group(1)
@@ -173,3 +173,76 @@ class MacrotrendsInterface(TickerBase):
         data.drop(columns=["popup_icon"], inplace=True)
 
         return data
+
+    def _find_margins_table(self, url: str, text_to_look_for: str):
+        response = self.get_response(url)
+
+        # Parse the HTML content of the website
+        soup = BeautifulSoup(response.content, "html.parser")
+
+        data = []
+        headers = []
+
+        table = self.find_parent_by_text(soup=soup, tag="table", text=text_to_look_for)
+
+        headers = [
+            row.text
+            for row in table.find_all("thead")[1].find_all("tr")[0].find_all("th")
+        ]
+        data = [
+            [cell.text for cell in row.find_all("td")]
+            for row in table.find_all("tr")[1:]
+        ]
+        data = pd.DataFrame(data, columns=headers)
+
+        return data
+
+    @property
+    def macrotrends_operating_margin(self) -> pd.DataFrame:
+        """
+        Retrieve the operating margin for the given ticker.
+        """
+        check_security_type(self.security_type, valid_types=["stock"])
+        url = f"{MACROTRENDS_BASE_URL}/{self.ticker}/TBD/operating-margin"
+
+        return self._find_margins_table(url, "TTM Operating Income")
+
+    @property
+    def macrotrends_gross_margin(self) -> pd.DataFrame:
+        """
+        Retrieve the gross margin for the given ticker.
+        """
+        check_security_type(self.security_type, valid_types=["stock"])
+        url = f"{MACROTRENDS_BASE_URL}/{self.ticker}/TBD/gross-margin"
+
+        return self._find_margins_table(url, "TTM Gross Margin")
+
+    @property
+    def macrotrends_ebitda_margin(self) -> pd.DataFrame:
+        """
+        Retrieve the EBITDA margin for the given ticker.
+        """
+        check_security_type(self.security_type, valid_types=["stock"])
+        url = f"{MACROTRENDS_BASE_URL}/{self.ticker}/TBD/ebitda-margin"
+
+        return self._find_margins_table(url, "TTM EBITDA")
+
+    @property
+    def macrotrends_pre_tax_margin(self) -> pd.DataFrame:
+        """
+        Retrieve the pre-tax margin for the given ticker.
+        """
+        check_security_type(self.security_type, valid_types=["stock"])
+        url = f"{MACROTRENDS_BASE_URL}/{self.ticker}/TBD/pre-tax-profit-margin"
+
+        return self._find_margins_table(url, "TTM Pre-Tax Income")
+
+    @property
+    def macrotrends_net_margin(self) -> pd.DataFrame:
+        """
+        Retrieve the net profit margin for the given ticker.
+        """
+        check_security_type(self.security_type, valid_types=["stock"])
+        url = f"{MACROTRENDS_BASE_URL}/{self.ticker}/TBD/net-profit-margin"
+
+        return self._find_margins_table(url, "TTM Net Income")
