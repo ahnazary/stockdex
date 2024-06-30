@@ -39,7 +39,12 @@ class TickerBase:
         )
         # If the HTTP GET request can't be served
         if response.status_code != 200:
-            raise Exception("Failed to load page, check if the ticker symbol exists")
+            raise Exception(
+                f"""
+                Failed to load page (status code: {response.status_code}).
+                Check if the ticker symbol exists
+                """
+            )
 
         return response
 
