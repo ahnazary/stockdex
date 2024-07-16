@@ -19,6 +19,16 @@ Install the package using pip:
 pip install stockdex -U
 ``` 
 
+# Supported Data Sources
+
+As of now, the package supports the following data sources:
+
+- Yahoo Finance API
+- Yahoo Finance Website
+- Digrin Website
+- Macrotrends Website
+- JustETF Website (for EU ETFs)
+
 # Usage
 
 To access main functions, use the `Ticker` class. The `Ticker` class is the main class that is used to create `Ticker` objects. Below is an example of how to create a `Ticker` object.
