@@ -31,14 +31,14 @@ As of now, the package supports the following data sources:
 
 # Usage
 
-To access main functions, use the `Ticker` class. The `Ticker` class is the main class that is used to create `Ticker` objects. Below is an example of how to create a `Ticker` object.
+To access main functions, use the `Ticker` class. Below is an example of how to create a `Ticker` object.
 ```python
 from stockdex import Ticker
 
 ticker = Ticker(ticker="AAPL")
 ```
 
-After creating the `Ticker` object, you can access financial related to the stock in the form of a pandas DataFrame through ticker object's functions. each function is prefixed with the source of the data. For example, `yahoo_api_<function_name>` is used to access data from Yahoo Finance API and `yahoo_web_<function_name>` is used to access data from Yahoo Finance website. Below are some examples of how to access data from all various sources.
+Using the `Ticker` object, you can access financial data related to the stock in the form of a pandas DataFrame through ticker object's functions. each function is prefixed with the source of the data. For example functions with `yahoo_api_<function_name>` pattern are used to access data from Yahoo Finance API and functions with `yahoo_web_<function_name>` pattern are used to access data from Yahoo Finance website. Below are some examples of how to access data from different sources.
 
 ## Data from `Yahoo Finance` API (fast queries through Yahoo Finance API):
 ```python
