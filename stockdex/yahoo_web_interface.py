@@ -23,31 +23,37 @@ class YahooWeb(TickerBase):
         self.ticker = ticker
         self.security_type = security_type
 
-    def yahoo_web_financials_table(self, url: str) -> pd.DataFrame:
+    def yahoo_web_financials_table(self, url: str, column_name_to_look_for: str = ""):
         """
         Get financials table from the Yahoo Finance website
 
         Args:
-        url (str): URL of the Yahoo Finance website
+        ----------------
+        url (str)
+            The URL of the website to scrape
+        column_name_to_look_for (str)
+            The column name to look for in the table
+
 
         Returns:
+        ----------------
         pd.DataFrame: A pandas DataFrame including the financials table
         """
         response = self.get_response(url)
         soup = BeautifulSoup(response.content, "html.parser")
 
-        raw_data = soup.find("div", {"class": "table svelte-1pgoo1f"})
+        raw_data = soup.find("div", {"class": "table yf-1pgoo1f"})
 
         data_df = pd.DataFrame()
 
         headers = [
             item.text
-            for item in raw_data.find("div", {"class": "row svelte-1ezv2n5"}).find_all(
+            for item in raw_data.find("div", {"class": "row yf-1ezv2n5"}).find_all(
                 "div"
             )
         ]
         data_df = pd.DataFrame(columns=headers)
-        rows = raw_data.find_all("div", {"class": "row lv-0 svelte-1xjz32c"})
+        rows = raw_data.find_all("div", {"class": "row lv-0 yf-1xjz32c"})
 
         for row in rows:
             data = [item.text for item in row.find_all("div")][-len(headers) :]  # noqa
