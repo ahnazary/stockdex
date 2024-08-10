@@ -132,7 +132,12 @@
         <span class="k">return</span> <span class="n">response</span></div>
 
 <div class="viewcode-block" id="TickerBase.find_parent_by_text"><a class="viewcode-back" href="../../stockdex.html#stockdex.ticker_base.TickerBase.find_parent_by_text">[docs]</a>    <span class="k">def</span> <span class="nf">find_parent_by_text</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">soup</span><span class="p">:</span> <span class="n">BeautifulSoup</span><span class="p">,</span> <span class="n">tag</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">condition</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">soup</span><span class="p">:</span> <span class="n">BeautifulSoup</span><span class="p">,</span>
+        <span class="n">tag</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">condition</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{},</span>
+        <span class="n">skip</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method that finds the parent of a tag by its text from a BeautifulSoup object</span>
@@ -147,6 +152,8 @@
 <span class="sd">            The text to search for</span>
 <span class="sd">        condition: dict</span>
 <span class="sd">            The condition to search for</span>
+<span class="sd">        skip: int</span>
+<span class="sd">            The number of elements to skip before returning the parent</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">        ----------</span>
@@ -154,6 +161,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">condition</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">element</span><span class="o">.</span><span class="n">get_text</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">skip</span><span class="p">):</span>
+                    <span class="n">element</span> <span class="o">=</span> <span class="n">element</span><span class="o">.</span><span class="n">find_next</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
                 <span class="k">return</span> <span class="n">element</span>
         <span class="k">return</span> <span class="kc">None</span></div></div>
 </pre></div>

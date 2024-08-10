@@ -47,6 +47,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Project description</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#stockdex">Stockdex</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#supported-data-sources">Supported Data Sources</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#data-from-yahoo-finance-api-fast-queries-through-yahoo-finance-api">Data from <code class="docutils literal notranslate"><span class="pre">Yahoo</span> <span class="pre">Finance</span></code> API (fast queries through Yahoo Finance API):</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#data-from-yahoo-finance-website-web-scraping">Data from <code class="docutils literal notranslate"><span class="pre">Yahoo</span> <span class="pre">Finance</span></code> website (web scraping):</a></li>
@@ -103,15 +104,26 @@
 </pre></div>
 </div>
 </section>
+<section id="supported-data-sources">
+<h2>Supported Data Sources<a class="headerlink" href="#supported-data-sources" title="Permalink to this heading"></a></h2>
+<p>As of now, the package supports the following data sources:</p>
+<ul class="simple">
+<li><p>Yahoo Finance API</p></li>
+<li><p>Yahoo Finance Website</p></li>
+<li><p>Digrin Website</p></li>
+<li><p>Macrotrends Website</p></li>
+<li><p>JustETF Website (for EU ETFs)</p></li>
+</ul>
+</section>
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h2>
-<p>To access main functions, use the <code class="docutils literal notranslate"><span class="pre">Ticker</span></code> class. The <code class="docutils literal notranslate"><span class="pre">Ticker</span></code> class is the main class that is used to create <code class="docutils literal notranslate"><span class="pre">Ticker</span></code> objects. Below is an example of how to create a <code class="docutils literal notranslate"><span class="pre">Ticker</span></code> object.</p>
+<p>To access main functions, use the <code class="docutils literal notranslate"><span class="pre">Ticker</span></code> class. Below is an example of how to create a <code class="docutils literal notranslate"><span class="pre">Ticker</span></code> object.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">stockdex</span> <span class="kn">import</span> <span class="n">Ticker</span>
 
 <span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>After creating the <code class="docutils literal notranslate"><span class="pre">Ticker</span></code> object, you can access financial related to the stock in the form of a pandas DataFrame through ticker object’s functions. each function is prefixed with the source of the data. For example, <code class="docutils literal notranslate"><span class="pre">yahoo_api_&lt;function_name&gt;</span></code> is used to access data from Yahoo Finance API and <code class="docutils literal notranslate"><span class="pre">yahoo_web_&lt;function_name&gt;</span></code> is used to access data from Yahoo Finance website. Below are some examples of how to access data from all various sources.</p>
+<p>Using the <code class="docutils literal notranslate"><span class="pre">Ticker</span></code> object, you can access financial data related to the stock in the form of a pandas DataFrame through ticker object’s functions. each function is prefixed with the source of the data. For example functions with <code class="docutils literal notranslate"><span class="pre">yahoo_api_&lt;function_name&gt;</span></code> pattern are used to access data from Yahoo Finance API and functions with <code class="docutils literal notranslate"><span class="pre">yahoo_web_&lt;function_name&gt;</span></code> pattern are used to access data from Yahoo Finance website. Below are some examples of how to access data from different sources.</p>
 <section id="data-from-yahoo-finance-api-fast-queries-through-yahoo-finance-api">
 <h3>Data from <code class="docutils literal notranslate"><span class="pre">Yahoo</span> <span class="pre">Finance</span></code> API (fast queries through Yahoo Finance API):<a class="headerlink" href="#data-from-yahoo-finance-api-fast-queries-through-yahoo-finance-api" title="Permalink to this heading"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">stockdex</span> <span class="kn">import</span> <span class="n">Ticker</span>
@@ -241,9 +253,9 @@ forecast_price_to_earnings__growth_rates = ticker.forecast_peg_rate
 <section id="eu-etf-data-from-justetf-web-scraping">
 <h3>EU ETF data from <code class="docutils literal notranslate"><span class="pre">justETF</span></code> (web scraping):<a class="headerlink" href="#eu-etf-data-from-justetf-web-scraping" title="Permalink to this heading"></a></h3>
 <p>For EU ETFS, the <code class="docutils literal notranslate"><span class="pre">isin</span></code> and <code class="docutils literal notranslate"><span class="pre">security_type</span></code> should be passed to the <code class="docutils literal notranslate"><span class="pre">Ticker</span></code> object. The <code class="docutils literal notranslate"><span class="pre">isin</span></code> is the International Securities Identification Number of the ETF and the <code class="docutils literal notranslate"><span class="pre">security_type</span></code> should be set to <code class="docutils literal notranslate"><span class="pre">etf</span></code>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">stockdex</span> <span class="kn">import</span> <span class="n">TickerFactory</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">stockdex</span> <span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">etf</span> <span class="o">=</span> <span class="n">TickerFactory</span><span class="p">(</span><span class="n">isin</span><span class="o">=</span><span class="s2">&quot;IE00B4L5Y983&quot;</span><span class="p">,</span> <span class="n">security_type</span><span class="o">=</span><span class="s2">&quot;etf&quot;</span><span class="p">,</span> <span class="n">data_source</span><span class="o">=</span><span class="s2">&quot;justetf&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">ticker</span>
+<span class="n">etf</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">isin</span><span class="o">=</span><span class="s2">&quot;IE00B4L5Y983&quot;</span><span class="p">,</span> <span class="n">security_type</span><span class="o">=</span><span class="s2">&quot;etf&quot;</span><span class="p">)</span>
 
 <span class="n">etf_general_info</span> <span class="o">=</span> <span class="n">etf</span><span class="o">.</span><span class="n">justetf_general_info</span>
 <span class="n">etf_wkn</span> <span class="o">=</span> <span class="n">etf</span><span class="o">.</span><span class="n">justetf_wkn</span>
