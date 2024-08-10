@@ -123,8 +123,7 @@ class YahooWeb(TickerBase):
         soup = BeautifulSoup(response.content, "html.parser")
 
         # gets calls and puts
-        table = soup.find_all("table", {"class": "svelte-12t6atp"})[0]
-        headers, data = [], []
+        table = self.find_parent_by_text(soup, "table", "Contract Name")
 
         headers = [item.text for item in table.find_all("th")]
         data = [
@@ -158,8 +157,7 @@ class YahooWeb(TickerBase):
         soup = BeautifulSoup(response.content, "html.parser")
 
         # gets calls and puts
-        table = soup.find_all("table", {"class": "svelte-12t6atp"})[1]
-        headers, data = [], []
+        table = self.find_parent_by_text(soup, "table", "Contract Name", skip=1)
 
         headers = [item.text for item in table.find_all("th")]
         data = [
