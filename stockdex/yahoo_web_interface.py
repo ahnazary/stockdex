@@ -506,3 +506,72 @@ class YahooWeb(TickerBase):
 
         # get the word till the first special character including space
         return re.findall(r"[\w\s]+", header.text)[0]
+
+    @property
+    def yahoo_web_earnings_estimate(self) -> pd.DataFrame:
+        """
+        Get earnings estimate for the ticker
+
+        Returns:
+        ----------------
+        pd.DataFrame: A pandas DataFrame including the earnings estimate
+        visible in the Yahoo Finance statistics page for the ticker
+        """
+        check_security_type(security_type=self.security_type, valid_types=["stock"])
+
+        # URL of the website to scrape
+        url = f"https://finance.yahoo.com/quote/{self.ticker}/analysis"
+        response = self.get_response(url)
+
+        # Parse the HTML content of the website
+        soup = BeautifulSoup(response.content, "html.parser")
+
+        section = soup.find("section", {"data-testid": "earningsEstimate"})
+
+        # find thead and tbody
+        table = section.find("table")
+
+        headers = [item.text for item in table.find("thead").find_all("th")]
+        data = [
+            [item.text for item in row.find_all("td")]
+            for row in table.find("tbody").find_all("tr")
+        ]
+
+        data_df = pd.DataFrame(data, columns=headers)
+
+        return data_df
+
+    @property
+    def yahoo_web_revenue_estimate(self) -> pd.DataFrame:
+        """
+        Get revenue estimate for the ticker
+
+        Returns:
+        ----------------
+        pd.DataFrame: A pandas DataFrame including the revenue estimate
+        visible in the Yahoo Finance statistics page for the ticker
+        """
+
+        check_security_type(security_type=self.security_type, valid_types=["stock"])
+
+        # URL of the website to scrape
+        url = f"https://finance.yahoo.com/quote/{self.ticker}/analysis"
+        response = self.get_response(url)
+
+        # Parse the HTML content of the website
+        soup = BeautifulSoup(response.content, "html.parser")
+
+        section = soup.find("section", {"data-testid": "revenueEstimate"})
+
+        # find thead and tbody
+        table = section.find("table")
+
+        headers = [item.text for item in table.find("thead").find_all("th")]
+        data = [
+            [item.text for item in row.find_all("td")]
+            for row in table.find("tbody").find_all("tr")
+        ]
+
+        data_df = pd.DataFrame(data, columns=headers)
+
+        return data_df
