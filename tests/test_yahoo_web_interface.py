@@ -429,3 +429,99 @@ def test_yahoo_web_revenue_estimate_wrong_security_type():
     with pytest.raises(WrongSecurityType):
         ticker = Ticker(ticker="AAPL", security_type="etf")
         ticker.yahoo_web_revenue_estimate
+
+
+@pytest.mark.parametrize(
+    "ticker",
+    [
+        ("AAPL"),
+        ("GOOGL"),
+        ("MSFT"),
+    ],
+)
+def test_yahoo_web_earnings_history(ticker):
+    ticker = Ticker(ticker)
+    yahoo_web_earnings_history = ticker.yahoo_web_earnings_history
+
+    # Check if the response is as expected
+    assert isinstance(yahoo_web_earnings_history, pd.DataFrame)
+    assert yahoo_web_earnings_history.shape[0] >= 2
+    assert yahoo_web_earnings_history.shape[1] >= 5
+
+
+def test_yahoo_web_earnings_history_wrong_security_type():
+    with pytest.raises(WrongSecurityType):
+        ticker = Ticker(ticker="AAPL", security_type="etf")
+        ticker.yahoo_web_earnings_history
+
+
+@pytest.mark.parametrize(
+    "ticker",
+    [
+        ("AAPL"),
+        ("GOOGL"),
+        ("MSFT"),
+    ],
+)
+def test_yahoo_web_eps_trend(ticker):
+    ticker = Ticker(ticker)
+    yahoo_web_eps_trend = ticker.yahoo_web_eps_trend
+
+    # Check if the response is as expected
+    assert isinstance(yahoo_web_eps_trend, pd.DataFrame)
+    assert yahoo_web_eps_trend.shape[0] >= 2
+    assert yahoo_web_eps_trend.shape[1] >= 5
+
+
+def test_yahoo_web_eps_trend_wrong_security_type():
+    with pytest.raises(WrongSecurityType):
+        ticker = Ticker(ticker="AAPL", security_type="etf")
+        ticker.yahoo_web_eps_trend
+
+
+@pytest.mark.parametrize(
+    "ticker",
+    [
+        ("AAPL"),
+        ("GOOGL"),
+        ("MSFT"),
+    ],
+)
+def test_yahoo_web_eps_revisions(ticker):
+    ticker = Ticker(ticker)
+    yahoo_web_eps_revisions = ticker.yahoo_web_eps_revisions
+
+    # Check if the response is as expected
+    assert isinstance(yahoo_web_eps_revisions, pd.DataFrame)
+    assert yahoo_web_eps_revisions.shape[0] >= 2
+    assert yahoo_web_eps_revisions.shape[1] >= 5
+
+
+def test_yahoo_web_eps_revisions_wrong_security_type():
+    with pytest.raises(WrongSecurityType):
+        ticker = Ticker(ticker="AAPL", security_type="etf")
+        ticker.yahoo_web_eps_revisions
+
+
+@pytest.mark.parametrize(
+    "ticker",
+    [
+        ("AAPL"),
+        ("GOOGL"),
+        ("MSFT"),
+    ],
+)
+def test_yahoo_web_growth_estimates(ticker):
+    ticker = Ticker(ticker)
+    yahoo_web_growth_estimates = ticker.yahoo_web_growth_estimates
+
+    # Check if the response is as expected
+    assert isinstance(yahoo_web_growth_estimates, pd.DataFrame)
+    assert yahoo_web_growth_estimates.shape[0] >= 2
+    assert yahoo_web_growth_estimates.shape[1] >= 5
+
+
+def test_yahoo_web_growth_estimates_wrong_security_type():
+    with pytest.raises(WrongSecurityType):
+        ticker = Ticker(ticker="AAPL", security_type="etf")
+        ticker.yahoo_web_growth_estimates

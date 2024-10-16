@@ -575,3 +575,143 @@ class YahooWeb(TickerBase):
         data_df = pd.DataFrame(data, columns=headers)
 
         return data_df
+
+    @property
+    def yahoo_web_earnings_history(self) -> pd.DataFrame:
+        """
+        Get earnings history for the ticker
+
+        Returns:
+        ----------------
+        pd.DataFrame: A pandas DataFrame including the earnings history
+        visible in the Yahoo Finance statistics page for the ticker
+        """
+
+        check_security_type(security_type=self.security_type, valid_types=["stock"])
+
+        # URL of the website to scrape
+        url = f"https://finance.yahoo.com/quote/{self.ticker}/analysis"
+        response = self.get_response(url)
+
+        # Parse the HTML content of the website
+        soup = BeautifulSoup(response.content, "html.parser")
+
+        section = soup.find("section", {"data-testid": "earningsHistory"})
+
+        # find thead and tbody
+        table = section.find("table")
+
+        headers = [item.text for item in table.find("thead").find_all("th")]
+        data = [
+            [item.text for item in row.find_all("td")]
+            for row in table.find("tbody").find_all("tr")
+        ]
+
+        data_df = pd.DataFrame(data, columns=headers)
+
+        return data_df
+
+    @property
+    def yahoo_web_eps_trend(self) -> pd.DataFrame:
+        """
+        Get EPS trend for the ticker
+
+        Returns:
+        ----------------
+        pd.DataFrame: A pandas DataFrame including the EPS trend
+        visible in the Yahoo Finance statistics page for the ticker
+        """
+
+        check_security_type(security_type=self.security_type, valid_types=["stock"])
+
+        # URL of the website to scrape
+        url = f"https://finance.yahoo.com/quote/{self.ticker}/analysis"
+        response = self.get_response(url)
+
+        # Parse the HTML content of the website
+        soup = BeautifulSoup(response.content, "html.parser")
+
+        section = soup.find("section", {"data-testid": "epsTrend"})
+
+        # find thead and tbody
+        table = section.find("table")
+
+        headers = [item.text for item in table.find("thead").find_all("th")]
+        data = [
+            [item.text for item in row.find_all("td")]
+            for row in table.find("tbody").find_all("tr")
+        ]
+
+        data_df = pd.DataFrame(data, columns=headers)
+
+        return data_df
+
+    @property
+    def yahoo_web_eps_revisions(self) -> pd.DataFrame:
+        """
+        Get EPS revisions for the ticker
+
+        Returns:
+        ----------------
+        pd.DataFrame: A pandas DataFrame including the EPS revisions
+        visible in the Yahoo Finance statistics page for the ticker
+        """
+
+        check_security_type(security_type=self.security_type, valid_types=["stock"])
+
+        # URL of the website to scrape
+        url = f"https://finance.yahoo.com/quote/{self.ticker}/analysis"
+        response = self.get_response(url)
+
+        # Parse the HTML content of the website
+        soup = BeautifulSoup(response.content, "html.parser")
+
+        section = soup.find("section", {"data-testid": "epsRevisions"})
+
+        # find thead and tbody
+        table = section.find("table")
+
+        headers = [item.text for item in table.find("thead").find_all("th")]
+        data = [
+            [item.text for item in row.find_all("td")]
+            for row in table.find("tbody").find_all("tr")
+        ]
+
+        data_df = pd.DataFrame(data, columns=headers)
+
+        return data_df
+
+    @property
+    def yahoo_web_growth_estimates(self) -> pd.DataFrame:
+        """
+        Get growth estimates for the ticker
+
+        Returns:
+        ----------------
+        pd.DataFrame: A pandas DataFrame including the growth estimates
+        visible in the Yahoo Finance statistics page for the ticker
+        """
+
+        check_security_type(security_type=self.security_type, valid_types=["stock"])
+
+        # URL of the website to scrape
+        url = f"https://finance.yahoo.com/quote/{self.ticker}/analysis"
+        response = self.get_response(url)
+
+        # Parse the HTML content of the website
+        soup = BeautifulSoup(response.content, "html.parser")
+
+        section = soup.find("section", {"data-testid": "growthEstimate"})
+
+        # find thead and tbody
+        table = section.find("table")
+
+        headers = [item.text for item in table.find("thead").find_all("th")]
+        data = [
+            [item.text for item in row.find_all("td")]
+            for row in table.find("tbody").find_all("tr")
+        ]
+
+        data_df = pd.DataFrame(data, columns=headers)
+
+        return data_df
