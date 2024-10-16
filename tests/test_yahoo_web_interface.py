@@ -287,29 +287,6 @@ def test_yahoo_web_summary_wrong_security_type():
         ticker.yahoo_web_summary
 
 
-@pytest.mark.parametrize(
-    "ticker",
-    [
-        ("AAPL"),
-        ("GOOGL"),
-        ("MSFT"),
-    ],
-)
-def test_yahoo_web_analysis(ticker):
-    ticker = Ticker(ticker)
-    yahoo_web_analysis_df = ticker.yahoo_web_analysis
-
-    # Check if the response is as expected
-    assert isinstance(yahoo_web_analysis_df, pd.DataFrame)
-    assert yahoo_web_analysis_df.shape[0] > 0
-
-
-def test_yahoo_web_analysis_wrong_security_type():
-    with pytest.raises(WrongSecurityType):
-        ticker = Ticker(ticker="AAPL", security_type="etf")
-        ticker.yahoo_web_analysis
-
-
 # @pytest.mark.skip(
 #     reason="This test is skipped because github actions is not able to access the yahoo finance page"  # noqa E501
 # )

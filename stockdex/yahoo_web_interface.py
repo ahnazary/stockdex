@@ -386,41 +386,6 @@ class YahooWeb(TickerBase):
         return data_df.T
 
     @property
-    def yahoo_web_analysis(self) -> pd.DataFrame:
-        """
-        Get analysis for the ticker
-
-        Returns:
-        pd.DataFrame: A pandas DataFrame including the analysis
-        visible in the Yahoo Finance statistics page for the ticker
-        """
-        check_security_type(security_type=self.security_type, valid_types=["stock"])
-
-        # URL of the website to scrape
-        url = f"https://finance.yahoo.com/quote/{self.ticker}/analysis"
-        response = self.get_response(url)
-
-        # Parse the HTML content of the website
-        soup = BeautifulSoup(response.content, "html.parser")
-
-        raw_data = soup.find_all("tbody")
-
-        data_df = pd.DataFrame()
-        for item in raw_data:
-            for row in item.find_all("tr"):
-                row = row.find_all("td")
-                criteria = row[0].text
-
-                # the rest of the row is the data
-                data_list = []
-                for data in row[1:]:
-                    data_list.append(data.text)
-
-                data_df[criteria] = data_list
-
-        return data_df.T
-
-    @property
     def yahoo_web_valuation_measures(self) -> pd.DataFrame:
         """
         Get valuation measures for the ticker
