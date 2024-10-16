@@ -1,5 +1,23 @@
 # Changelog
 
+
+## 0.7.0
+
+### Added
+
+- Added following properties to yahoo web module:
+    - `yahoo_web_earnings_estimate` 
+    - `yahoo_web_revenue_estimate`
+    - `yahoo_web_earnings_history`
+    - `yahoo_web_eps_trend`
+    - `yahoo_web_eps_revisions`
+    - `yahoo_web_growth_estimates`
+
+### Fixed
+
+### Changed
+
+
 ## 0.6.0
 
 ### Added
