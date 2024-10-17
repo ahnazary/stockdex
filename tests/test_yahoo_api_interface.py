@@ -160,3 +160,16 @@ def test_yahoo_api_financials(ticker, frequency, format, period1, period2):
     assert isinstance(yahoo_api_financials, pd.DataFrame)
     assert yahoo_api_financials.shape[0] > 0
     assert yahoo_api_financials.shape[1] > 0
+
+
+@pytest.mark.parametrize(
+    "ticker, frequency, group_by, period1, period2",
+    [
+        ("AAPL", "quarterly", "field", datetime(2020, 1, 1), datetime.today()),
+    ],
+)
+def test_plot_yahoo_api_income_statement(ticker, frequency, group_by, period1, period2):
+    ticker = Ticker(ticker)
+    ticker.plot_yahoo_api_income_statement(
+        frequency=frequency, period1=period1, period2=period2, group_by=group_by
+    )
