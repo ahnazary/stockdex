@@ -1,6 +1,9 @@
 import platform
 from typing import Union
 
+import pandas as pd
+import plotly.express as px
+
 from stockdex.exceptions import WrongSecurityType
 
 
@@ -26,3 +29,41 @@ def check_security_type(security_type: str, valid_types: Union[str, list]) -> No
 
     if security_type not in valid_types:
         raise WrongSecurityType(valid_types=valid_types, given_type=security_type)
+
+
+def plot_dataframe(
+    dataframe: pd.DataFrame,
+    title: str,
+    barmode: str = "group",
+    logaritmic: bool = False,
+    template: str = "plotly",
+) -> None:
+    """
+    Plot a DataFrame using Plotly Express
+
+    Parameters
+    ----------
+    dataframe : pd.DataFrame
+        The DataFrame to plot
+
+    title : str
+        The title of the plot
+
+    barmode : str
+        The barmode of the plot
+        default: "group"
+
+    logaritmic : bool
+        If the y-axis should be logaritmic
+        default: False
+
+    template : str
+        The template of the plot.
+        One of plotly, plotly_white, plotly_dark, ggplot2, seaborn, simple_white, none
+        default: "plotly"
+    """
+    fig = px.bar(
+        dataframe, title=title, barmode=barmode, log_y=logaritmic, template=template
+    )
+
+    fig.show()
