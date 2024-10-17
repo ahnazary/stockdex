@@ -37,6 +37,8 @@ def plot_dataframe(
     barmode: str = "group",
     logaritmic: bool = False,
     template: str = "plotly",
+    y_axis_title: str = "Amount",
+    x_axis_title: str = "Date",
 ) -> None:
     """
     Plot a DataFrame using Plotly Express
@@ -65,5 +67,14 @@ def plot_dataframe(
     fig = px.bar(
         dataframe, title=title, barmode=barmode, log_y=logaritmic, template=template
     )
+
+    fig.update_layout(
+        yaxis_title=y_axis_title,
+        xaxis_title=x_axis_title,
+    )
+
+    # make marker line width wider
+    fig.update_traces(marker_line_width=1.5)
+    fig.update_traces(hovertemplate="<b>%{y}</b>")
 
     fig.show()
