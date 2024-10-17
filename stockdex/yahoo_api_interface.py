@@ -10,6 +10,7 @@ import pandas as pd
 
 from stockdex import config
 from stockdex.config import VALID_DATA_SOURCES, VALID_SECURITY_TYPES
+from stockdex.lib import plot_dataframe
 from stockdex.ticker_base import TickerBase
 
 
@@ -291,14 +292,18 @@ class YahooAPI(TickerBase):
 
         Args:
         ----------------
-        frequency (str): The frequency of the data to retrieve
-        valid values are "annual", "quarterly"
+        frequency: str
+            The frequency of the data to retrieve
+            valid values are "annual", "quarterly"
 
-        period1 (datetime): The start date of the data to retrieve
+        period1: datetime
+            The start date of the data to retrieve
 
-        period2 (datetime): The end date of the data to retrieve
+        period2: datetime
+            The end date of the data to retrieve
 
-        desired_entity (str): The entity to retrieve the data for
+        desired_entity: str
+            The entity to retrieve the data for
 
         Returns:
         ----------------
@@ -323,9 +328,11 @@ class YahooAPI(TickerBase):
 
         Args:
         ----------------
-        response (dict): The response from the API
+        response: dict
+            The response from the API
 
-        format (str): The format of the data to retrieve
+        format: str
+            The format of the data to retrieve
 
         Returns:
         ----------------
@@ -346,3 +353,62 @@ class YahooAPI(TickerBase):
             row[column] = pd.Series(values, index=dated_index)
 
         return pd.DataFrame(row, index=dated_index)
+
+    def plot_yahoo_api_income_statement(
+        self,
+        frequency: Literal["annual", "quarterly"] = "annual",
+        period1: datetime = five_years_ago,
+        period2: datetime = today,
+        group_by: Literal["timeframe, field"] = "timeframe",
+        fields_to_include: list = [
+            "TotalRevenue",
+            "EBITDA",
+            "TotalExpenses",
+            "NetIncomeCommonStockholders",
+            "NetIncome",
+        ],
+    ) -> None:
+        """
+        Plots the income statement for the stock using matplotlib grouped bar chart
+
+        Parameters
+        ----------------
+        frequency: str
+            The frequency of the data to retrieve
+            valid values are "annual", "quarterly"
+
+        period1: datetime
+            The start date of the data to retrieve
+
+        period2: datetime
+            The end date of the data to retrieve
+
+        group_by: str
+            The group by parameter
+
+        fields_to_include: list
+            The fields to include in the chart in the x-axis
+        """
+
+        income_statement = self.yahoo_api_income_statement(
+            frequency=frequency, period1=period1, period2=period2, format="raw"
+        )
+
+        fields_to_include = [f"{frequency}{i}" for i in fields_to_include]
+
+        # check if the fields to include are in the dataframe
+        for field in fields_to_include:
+            if field not in income_statement.columns:
+                raise ValueError(f"{field} is not in the income statement")
+
+        # remove the columns that are not needed
+        income_statement = income_statement[fields_to_include]
+
+        # remove the rows that are not needed
+        income_statement = income_statement.dropna()
+
+        if group_by == "timeframe":
+            income_statement = income_statement.T
+
+        # plot the income statement
+        plot_dataframe(income_statement, title="Income Statement")
