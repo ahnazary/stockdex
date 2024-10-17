@@ -215,7 +215,7 @@ class MacrotrendsInterface(TickerBase):
         check_security_type(self.security_type, valid_types=["stock"])
         url = f"{MACROTRENDS_BASE_URL}/{self.ticker}/TBD/gross-margin"
 
-        return self._find_margins_table(url, "TTM Gross Margin")
+        return self._find_margins_table(url, "Gross Margin")
 
     @property
     def macrotrends_ebitda_margin(self) -> pd.DataFrame:
