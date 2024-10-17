@@ -189,3 +189,31 @@ def test_plot_yahoo_api_income_statement_wrong_field():
             period2=datetime.today(),
             fields_to_include=["wrong_field"],
         )
+
+
+@pytest.mark.parametrize(
+    "ticker, frequency, group_by, period1, period2",
+    [
+        ("AAPL", "quarterly", "field", datetime(2020, 1, 1), datetime.today()),
+        ("GOOGL", "quarterly", "timeframe", datetime(2021, 1, 1), datetime.today()),
+        ("MSFT", "annual", "field", datetime(2021, 1, 1), datetime(2024, 1, 1)),
+        ("NVDA", "quarterly", "field", datetime(2020, 1, 1), datetime.today()),
+        ("FMC", "quarterly", "field", datetime(2021, 1, 1), datetime.today()),
+    ],
+)
+def test_plot_yahoo_api_cash_flow(ticker, frequency, group_by, period1, period2):
+    ticker = Ticker(ticker)
+    ticker.plot_yahoo_api_cash_flow(
+        frequency=frequency, period1=period1, period2=period2, group_by=group_by
+    )
+
+
+def test_plot_yahoo_api_cash_flow_wrong_field():
+    ticker = Ticker("AAPL")
+    with pytest.raises(FieldNotExists):
+        ticker.plot_yahoo_api_cash_flow(
+            frequency="quarterly",
+            period1=datetime(2020, 1, 1),
+            period2=datetime.today(),
+            fields_to_include=["wrong_field"],
+        )

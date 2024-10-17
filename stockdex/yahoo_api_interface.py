@@ -395,27 +395,115 @@ class YahooAPI(TickerBase):
             frequency=frequency, period1=period1, period2=period2, format="raw"
         )
 
+        income_statement = self._transform_df_for_plotting(
+            df=income_statement,
+            group_by=group_by,
+            fields_to_include=fields_to_include,
+            frequency=frequency,
+        )
+
+        x_axis_title = "Date" if group_by == "field" else "Field"
+
+        # plot the income statement
+        plot_dataframe(
+            income_statement, title="Income Statement", x_axis_title=x_axis_title
+        )
+
+    def plot_yahoo_api_cash_flow(
+        self,
+        frequency: Literal["annual", "quarterly"] = "annual",
+        period1: datetime = five_years_ago,
+        period2: datetime = today,
+        group_by: Literal["timeframe, field"] = "timeframe",
+        fields_to_include: list = [
+            "OperatingCashFlow",
+            "FreeCashFlow",
+        ],
+    ) -> None:
+        """
+        Plots the cash flow statement for the stock using matplotlib grouped bar chart
+
+        Parameters
+        ----------------
+        frequency: str
+            The frequency of the data to retrieve
+            valid values are "annual", "quarterly"
+
+        period1: datetime
+            The start date of the data to retrieve
+
+        period2: datetime
+            The end date of the data to retrieve
+
+        group_by: str
+            The group by parameter
+
+        fields_to_include: list
+            The fields to include in the chart in the x-axis
+        """
+
+        cash_flow = self.yahoo_api_cash_flow(
+            frequency=frequency, period1=period1, period2=period2, format="raw"
+        )
+
+        cash_flow = self._transform_df_for_plotting(
+            df=cash_flow,
+            group_by=group_by,
+            fields_to_include=fields_to_include,
+            frequency=frequency,
+        )
+
+        x_axis_title = "Date" if group_by == "field" else "Field"
+
+        # plot the cash flow
+        plot_dataframe(
+            cash_flow, title="Cash Flow Statement", x_axis_title=x_axis_title
+        )
+
+    def _transform_df_for_plotting(
+        self, df: pd.DataFrame, group_by: str, fields_to_include: list, frequency: str
+    ) -> pd.DataFrame:
+        """
+        Transform the dataframe for plotting
+
+        Args:
+        ----------------
+        df: pd.DataFrame
+            The dataframe to transform
+
+        group_by: str
+            The group by parameter
+
+        fields_to_include: list
+            The fields to include in the chart in the x-axis
+
+        frequency: str
+            The frequency of the data to retrieve
+            valid values are "annual", "quarterly"
+
+
+        Returns:
+        ----------------
+        pd.DataFrame: The transformed dataframe
+        """
         fields_to_include = [f"{frequency}{i}" for i in fields_to_include]
 
         for field in fields_to_include:
-            if field not in income_statement.columns:
-                raise FieldNotExists(
-                    available_fields=income_statement.columns, given_field=field
-                )
+            if field not in df.columns:
+                raise FieldNotExists(available_fields=df.columns, given_field=field)
 
         # check if the fields to include are in the dataframe
         for field in fields_to_include:
-            if field not in income_statement.columns:
-                raise ValueError(f"{field} is not in the income statement")
+            if field not in df.columns:
+                raise ValueError(f"{field} is not in the cash flow")
 
         # remove the columns that are not needed
-        income_statement = income_statement[fields_to_include]
+        df = df[fields_to_include]
 
         # remove the rows that are not needed
-        income_statement = income_statement.dropna()
+        df = df.dropna()
 
         if group_by == "timeframe":
-            income_statement = income_statement.T
+            df = df.T
 
-        # plot the income statement
-        plot_dataframe(income_statement, title="Income Statement")
+        return df
