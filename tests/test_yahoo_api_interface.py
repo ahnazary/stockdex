@@ -3,6 +3,7 @@ from datetime import datetime
 import pandas as pd
 import pytest
 
+from stockdex.exceptions import FieldNotExists
 from stockdex.ticker import Ticker
 
 
@@ -166,6 +167,10 @@ def test_yahoo_api_financials(ticker, frequency, format, period1, period2):
     "ticker, frequency, group_by, period1, period2",
     [
         ("AAPL", "quarterly", "field", datetime(2020, 1, 1), datetime.today()),
+        ("GOOGL", "quarterly", "timeframe", datetime(2021, 1, 1), datetime.today()),
+        ("MSFT", "annual", "field", datetime(2021, 1, 1), datetime(2024, 1, 1)),
+        ("NVDA", "quarterly", "field", datetime(2020, 1, 1), datetime.today()),
+        ("FMC", "quarterly", "field", datetime(2021, 1, 1), datetime.today()),
     ],
 )
 def test_plot_yahoo_api_income_statement(ticker, frequency, group_by, period1, period2):
@@ -173,3 +178,14 @@ def test_plot_yahoo_api_income_statement(ticker, frequency, group_by, period1, p
     ticker.plot_yahoo_api_income_statement(
         frequency=frequency, period1=period1, period2=period2, group_by=group_by
     )
+
+
+def test_plot_yahoo_api_income_statement_wrong_field():
+    ticker = Ticker("AAPL")
+    with pytest.raises(FieldNotExists):
+        ticker.plot_yahoo_api_income_statement(
+            frequency="quarterly",
+            period1=datetime(2020, 1, 1),
+            period2=datetime.today(),
+            fields_to_include=["wrong_field"],
+        )

@@ -62,3 +62,26 @@ class WrongDataSource(Exception):
             Wrong data source has been used,
             make sure to use one of the following: {VALID_DATA_SOURCES}
             """
+
+
+class FieldNotExists(Exception):
+    """
+    The exception to be shown when a field is called that does not exist in the dataframe
+    """
+
+    def __init__(
+        self,
+        available_fields: list,
+        message: str = "Field does not exist",
+        given_field: str = None,
+    ) -> None:
+        self.message = message
+        self.given_field = given_field
+        self.available_fields = available_fields
+        super().__init__(self.message)
+
+    def __str__(self) -> str:
+        return f"""
+            {self.message}. The field {self.given_field} does not exist in the dataframe.
+            Make sure to choose a field from the following: {self.available_fields}
+            """

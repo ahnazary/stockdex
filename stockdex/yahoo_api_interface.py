@@ -10,6 +10,7 @@ import pandas as pd
 
 from stockdex import config
 from stockdex.config import VALID_DATA_SOURCES, VALID_SECURITY_TYPES
+from stockdex.exceptions import FieldNotExists
 from stockdex.lib import plot_dataframe
 from stockdex.ticker_base import TickerBase
 
@@ -395,6 +396,12 @@ class YahooAPI(TickerBase):
         )
 
         fields_to_include = [f"{frequency}{i}" for i in fields_to_include]
+
+        for field in fields_to_include:
+            if field not in income_statement.columns:
+                raise FieldNotExists(
+                    available_fields=income_statement.columns, given_field=field
+                )
 
         # check if the fields to include are in the dataframe
         for field in fields_to_include:
