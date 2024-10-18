@@ -460,6 +460,107 @@ class YahooAPI(TickerBase):
             cash_flow, title="Cash Flow Statement", x_axis_title=x_axis_title
         )
 
+    def plot_yahoo_api_balance_sheet(
+        self,
+        frequency: Literal["annual", "quarterly"] = "annual",
+        period1: datetime = five_years_ago,
+        period2: datetime = today,
+        group_by: Literal["timeframe, field"] = "timeframe",
+        fields_to_include: list = [
+            "TotalAssets",
+            "TotalDebt",
+        ],
+    ) -> None:
+        """
+        Plots the balance sheet for the stock using matplotlib grouped bar chart
+
+        Parameters
+        ----------------
+        frequency: str
+            The frequency of the data to retrieve
+            valid values are "annual", "quarterly"
+
+        period1: datetime
+            The start date of the data to retrieve
+
+        period2: datetime
+            The end date of the data to retrieve
+
+        group_by: str
+            The group by parameter
+
+        fields_to_include: list
+            The fields to include in the chart in the x-axis
+        """
+
+        balance_sheet = self.yahoo_api_balance_sheet(
+            frequency=frequency, period1=period1, period2=period2, format="raw"
+        )
+
+        balance_sheet = self._transform_df_for_plotting(
+            df=balance_sheet,
+            group_by=group_by,
+            fields_to_include=fields_to_include,
+            frequency=frequency,
+        )
+
+        x_axis_title = "Date" if group_by == "field" else "Field"
+
+        # plot the balance sheet
+        plot_dataframe(balance_sheet, title="Balance Sheet", x_axis_title=x_axis_title)
+
+    def plot_yahoo_api_financials(
+        self,
+        frequency: Literal["annual", "quarterly"] = "annual",
+        period1: datetime = five_years_ago,
+        period2: datetime = today,
+        group_by: Literal["timeframe, field"] = "timeframe",
+        fields_to_include: list = [
+            "TotalRevenue",
+            "EBITDA",
+            "TotalExpenses",
+            "NetIncomeCommonStockholders",
+            "NetIncome",
+        ],
+    ) -> None:
+        """
+        Plots the financials for the stock using matplotlib grouped bar chart
+
+        Parameters
+        ----------------
+        frequency: str
+            The frequency of the data to retrieve
+            valid values are "annual", "quarterly"
+
+        period1: datetime
+            The start date of the data to retrieve
+
+        period2: datetime
+            The end date of the data to retrieve
+
+        group_by: str
+            The group by parameter
+
+        fields_to_include: list
+            The fields to include in the chart in the x-axis
+        """
+
+        financials = self.yahoo_api_financials(
+            frequency=frequency, period1=period1, period2=period2, format="raw"
+        )
+
+        financials = self._transform_df_for_plotting(
+            df=financials,
+            group_by=group_by,
+            fields_to_include=fields_to_include,
+            frequency=frequency,
+        )
+
+        x_axis_title = "Date" if group_by == "field" else "Field"
+
+        # plot the financials
+        plot_dataframe(financials, title="Financials", x_axis_title=x_axis_title)
+
     def _transform_df_for_plotting(
         self, df: pd.DataFrame, group_by: str, fields_to_include: list, frequency: str
     ) -> pd.DataFrame:
