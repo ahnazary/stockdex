@@ -90,5 +90,7 @@ jobs:
         pip install -r requirements_tests.txt
 
     - name: run pytest
+      env:
+        SKIP_DIGRIN_TESTS: ${{ secrets.SKIP_DIGRIN_TESTS }}  
       run: |
         pytest

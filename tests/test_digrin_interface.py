@@ -2,12 +2,17 @@
 Module to test the Digrin_Interface class
 """
 
+import os
+
 import pandas as pd
 import pytest
 
 from stockdex.ticker import Ticker
 
+skip_digit_tests = bool(os.getenv("SKIP_DIGRIN_TESTS", False))
 
+
+@pytest.mark.skipif(skip_digit_tests, reason="Skipping Digrin tests")
 @pytest.mark.parametrize(
     "ticker",
     [
@@ -27,6 +32,7 @@ def test_digrin_dividend(ticker):
     assert digrin_dividend.shape[1] == 5
 
 
+@pytest.mark.skipif(skip_digit_tests, reason="Skipping Digrin tests")
 @pytest.mark.parametrize(
     "ticker",
     [
@@ -47,6 +53,7 @@ def test_digrin_payout_ratio(ticker):
     assert digrin_payout_ratio.shape[1] == 2
 
 
+@pytest.mark.skipif(skip_digit_tests, reason="Skipping Digrin tests")
 @pytest.mark.parametrize(
     "ticker",
     [
@@ -67,6 +74,7 @@ def test_digrin_stock_splits(ticker):
     assert digrin_stock_splits.shape[1] == 2
 
 
+@pytest.mark.skipif(skip_digit_tests, reason="Skipping Digrin tests")
 @pytest.mark.parametrize(
     "ticker",
     [
@@ -87,6 +95,7 @@ def test_digrin_price(ticker):
     assert digrin_price.shape[1] == 3
 
 
+@pytest.mark.skipif(skip_digit_tests, reason="Skipping Digrin tests")
 @pytest.mark.parametrize(
     "ticker",
     [
@@ -111,6 +120,7 @@ def test_digrin_assets_vs_liabilities(ticker):
     assert digrin_assets_vs_liabilities.iloc[0]["Assets"] != ""
 
 
+@pytest.mark.skipif(skip_digit_tests, reason="Skipping Digrin tests")
 @pytest.mark.parametrize(
     "ticker",
     [
@@ -134,6 +144,7 @@ def test_digrin_free_cash_flow(ticker):
     assert digrin_free_cash_flow.iloc[0]["Free Cash Flow"] != ""
 
 
+@pytest.mark.skipif(skip_digit_tests, reason="Skipping Digrin tests")
 @pytest.mark.parametrize(
     "ticker",
     [
@@ -157,6 +168,7 @@ def test_digrin_net_income(ticker):
     assert digrin_net_income.iloc[0]["Net Income"] != ""
 
 
+@pytest.mark.skipif(skip_digit_tests, reason="Skipping Digrin tests")
 @pytest.mark.parametrize(
     "ticker",
     [
@@ -180,6 +192,7 @@ def test_digrin_cash_and_debt(ticker):
     assert "Date" in digrin_cash_and_debt.columns
 
 
+@pytest.mark.skipif(skip_digit_tests, reason="Skipping Digrin tests")
 @pytest.mark.parametrize(
     "ticker",
     [
@@ -203,6 +216,7 @@ def test_digrin_shares_outstanding(ticker):
     assert digrin_shares_outstanding.iloc[0]["Shares Outstanding"] != ""
 
 
+@pytest.mark.skipif(skip_digit_tests, reason="Skipping Digrin tests")
 @pytest.mark.parametrize(
     "ticker",
     [
@@ -224,6 +238,7 @@ def test_digrin_expenses(ticker):
     assert "Date" in digrin_expenses.columns
 
 
+@pytest.mark.skipif(skip_digit_tests, reason="Skipping Digrin tests")
 @pytest.mark.parametrize(
     "ticker",
     [
@@ -247,6 +262,7 @@ def test_digrin_cost_of_revenue(ticker):
     assert digrin_cost_of_revenue.iloc[0]["Cost of Revenue"] != ""
 
 
+@pytest.mark.skipif(skip_digit_tests, reason="Skipping Digrin tests")
 @pytest.mark.parametrize(
     "ticker",
     [
@@ -268,6 +284,7 @@ def test_digrin_dgr3(ticker):
     assert "Year" in digrin_dgr3.columns
 
 
+@pytest.mark.skipif(skip_digit_tests, reason="Skipping Digrin tests")
 @pytest.mark.parametrize(
     "ticker",
     [
@@ -288,6 +305,7 @@ def test_digrin_dgr5(ticker):
     assert "Year" in digrin_dgr5.columns
 
 
+@pytest.mark.skipif(skip_digit_tests, reason="Skipping Digrin tests")
 @pytest.mark.parametrize(
     "ticker",
     [
@@ -309,6 +327,7 @@ def test_digrin_dgr10(ticker):
     assert "Year" in digrin_dgr10.columns
 
 
+@pytest.mark.skipif(skip_digit_tests, reason="Skipping Digrin tests")
 @pytest.mark.parametrize(
     "ticker",
     [
