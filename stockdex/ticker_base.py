@@ -16,6 +16,8 @@ class TickerBase:
     request_headers = {
         "User-Agent": get_user_agent(),
     }
+    # TODO: Remove this print statement
+    print(request_headers)
     logger = getLogger(__name__)
 
     def get_response(self, url: str) -> requests.Response:
