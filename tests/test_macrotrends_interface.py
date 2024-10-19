@@ -1,7 +1,11 @@
+import os
+
 import pandas as pd
 import pytest
 
 from stockdex.ticker import Ticker
+
+skip_test = bool(os.getenv("SKIP_TEST", False))
 
 
 @pytest.mark.parametrize(
@@ -150,3 +154,42 @@ def test_macrotrends_net_margin(ticker):
     assert isinstance(macrotrends_net_margin, pd.DataFrame)
     assert macrotrends_net_margin.shape[0] > 0
     assert macrotrends_net_margin.shape[1] > 0
+
+
+@pytest.mark.skipif(skip_test, reason="Skipping in GH action as it is visual")
+@pytest.mark.parametrize(
+    "ticker, group_by",
+    [
+        ("AAPL", "field"),
+        ("GOOGL", "timeframe"),
+    ],
+)
+def test_plot_macrotrends_income_statement(ticker, group_by):
+    ticker = Ticker(ticker=ticker)
+    ticker.plot_macrotrends_income_statement(group_by=group_by)
+
+
+@pytest.mark.skipif(skip_test, reason="Skipping in GH action as it is visual")
+@pytest.mark.parametrize(
+    "ticker, group_by",
+    [
+        ("AAPL", "field"),
+        ("GOOGL", "timeframe"),
+    ],
+)
+def test_plot_macrotrends_balance_sheet(ticker, group_by):
+    ticker = Ticker(ticker=ticker)
+    ticker.plot_macrotrends_balance_sheet(group_by=group_by)
+
+
+@pytest.mark.skipif(skip_test, reason="Skipping in GH action as it is visual")
+@pytest.mark.parametrize(
+    "ticker, group_by",
+    [
+        ("AAPL", "field"),
+        ("GOOGL", "timeframe"),
+    ],
+)
+def test_plot_macrotrends_cash_flow(ticker, group_by):
+    ticker = Ticker(ticker=ticker)
+    ticker.plot_macrotrends_cash_flow(group_by=group_by)
