@@ -71,6 +71,7 @@ def plot_dataframe(
     fig.update_layout(
         yaxis_title=y_axis_title,
         xaxis_title=x_axis_title,
+        legend_title_text="",
     )
 
     # make marker line width wider
