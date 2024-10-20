@@ -13,6 +13,10 @@ skip_test = bool(os.getenv("SKIP_TEST", False))
     [
         ("AAPL", "annual", 0),
         ("AAPL", "quarterly", 4),
+        ("NVDA", "annual", 0),
+        ("BAC", "quarterly", 0),
+        ("TSLA", "annual", 0),
+        ("PLTR", "quarterly", 0),
     ],
 )
 def test_plot_sankey_chart(ticker, frequency, period_ago):
