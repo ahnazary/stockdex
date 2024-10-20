@@ -2,11 +2,14 @@ from stockdex.config import VALID_SECURITY_TYPES
 from stockdex.digrin_interface import DigrinInterface
 from stockdex.justetf_interface import JustETF
 from stockdex.macrotrends_interface import MacrotrendsInterface
+from stockdex.sankey_charts import SankeyCharts
 from stockdex.yahoo_api_interface import YahooAPI
 from stockdex.yahoo_web_interface import YahooWeb
 
 
-class Ticker(YahooAPI, JustETF, DigrinInterface, YahooWeb, MacrotrendsInterface):
+class Ticker(
+    YahooAPI, JustETF, DigrinInterface, YahooWeb, MacrotrendsInterface, SankeyCharts
+):
     """
     Class for the Ticker
     """
