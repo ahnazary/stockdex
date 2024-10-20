@@ -143,10 +143,21 @@ class SankeyCharts(TickerBase):
         value_human = pd.Series(value).apply(self._human_format)
 
         node_values = [
-            self._human_format(get_value(df, f"{frequency}TotalRevenue"))
-        ] + [self._human_format(v) for v in value]
-        # convert to pd.Series
-        node_values = pd.Series(node_values)
+            self._human_format(get_value(df, f"{frequency}TotalRevenue")),
+            self._human_format(get_value(df, f"{frequency}CostOfRevenue")),
+            self._human_format(gross_profit),
+            self._human_format(get_value(df, f"{frequency}OperatingExpense")),
+            self._human_format(get_value(df, f"{frequency}OperatingIncome")),
+            self._human_format(
+                get_value(df, f"{frequency}NetIncomeCommonStockholders")
+            ),
+            self._human_format(get_value(df, f"{frequency}TaxProvision")),
+            self._human_format(get_value(df, f"{frequency}OtherIncomeExpense")),
+            self._human_format(get_value(df, f"{frequency}ResearchAndDevelopment")),
+            self._human_format(
+                get_value(df, f"{frequency}SellingGeneralAndAdministration")
+            ),
+        ]
 
         fig = go.Figure(
             go.Sankey(
