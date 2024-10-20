@@ -1,0 +1,172 @@
+"""
+Module to draw sankey charts
+"""
+
+from typing import Literal
+
+import pandas as pd
+import plotly.graph_objects as go
+
+from stockdex.ticker_base import TickerBase
+
+
+class SankeyCharts(TickerBase):
+    def __init__(self, ticker: str) -> None:
+        self.ticker = ticker
+
+    def _build_main_df(self, ticker: str, frequency: str = "annual") -> pd.DataFrame:
+        self.ticker = ticker
+        self.yahoo_cash_flow = self.yahoo_api_cash_flow(
+            format="raw", frequency=frequency
+        )
+        self.yahoo_balance_sheet = self.yahoo_api_balance_sheet(
+            format="raw", frequency=frequency
+        )
+        self.yahoo_income_statement = self.yahoo_api_income_statement(
+            format="raw", frequency=frequency
+        )
+        self.yahoo_financials = self.yahoo_api_financials(
+            format="raw", frequency=frequency
+        )
+        # concatenate all the dataframes
+        self.data = pd.concat(
+            [
+                self.yahoo_cash_flow,
+                self.yahoo_balance_sheet,
+                self.yahoo_income_statement,
+                self.yahoo_financials,
+            ],
+            axis=1,
+        )
+        return self.data
+
+    def plot_sankey_chart(
+        self, frequency: Literal["annual", "quarterly"] = "annual", period_ago: int = 0
+    ) -> None:
+        """
+        Main function to plot the sankey chart
+
+        Args:
+        ----------
+        frequency: str
+            The frequency of the data to be used. It can be either "annual" or "quarterly".
+            Default is "annual"
+
+        period_ago: int
+            The period to go back. Default is 0. if a non zero value, e.g. 3 is provided,
+            the data for 3 periods ago will be used (annual or quarterly based on the frequency)
+
+        Returns:
+        ----------
+        None
+        """
+
+        # Helper function to safely retrieve sum from columns or return 0 if the column is missing
+        def get_value(df, column_name):
+            value = (
+                df[column_name].iloc[df.shape[0] - period_ago - 1]
+                if column_name in df.columns
+                else 0
+            )
+
+            if isinstance(value, pd.Series):
+                value = value.iloc[0]
+
+            return value
+
+        df = self._build_main_df(self.ticker, frequency)
+
+        nodes = [
+            "Total Revenue",  # 0
+            "Cost of Revenue",  # 1 (CostOfRevenue)
+            "Gross Profit",  # 2
+            "Operating Expenses",  # 3 (OperatingExpense)
+            "Operating Income",  # 4 (OperatingIncome)
+            "Net Income",  # 5 (NetIncomeCommonStockholders)
+            "Tax",  # 6 (TaxProvision)
+            "Other",  # 7 (OtherIncomeExpense)
+            "R&D",  # 8 (ResearchAndDevelopment)
+            "SG&A",  # 9 (SellingGeneralAndAdministration)
+        ]
+
+        source, value, target = [], [], []
+
+        # Total Revenue -> Cost of Revenue
+        source.append(0)
+        target.append(1)
+        value.append(get_value(df, f"{frequency}CostOfRevenue"))
+
+        # Total Revenue -> Gross Profit (derived after Cost of Revenue)
+        gross_profit = get_value(df, f"{frequency}TotalRevenue") - get_value(
+            df, f"{frequency}CostOfRevenue"
+        )
+        source.append(0)
+        target.append(2)
+        value.append(gross_profit)
+
+        # Gross Profit -> Operating Expenses
+        source.append(2)
+        target.append(3)
+        value.append(get_value(df, f"{frequency}OperatingExpense"))
+
+        # Operating Expenses -> R&D
+        source.append(3)
+        target.append(8)
+        value.append(get_value(df, f"{frequency}ResearchAndDevelopment"))
+
+        # Operating Expenses -> SG&A
+        source.append(3)
+        target.append(9)
+        value.append(get_value(df, f"{frequency}SellingGeneralAndAdministration"))
+
+        # Gross Profit -> Operating Income
+        source.append(2)
+        target.append(4)
+        value.append(get_value(df, f"{frequency}OperatingIncome"))
+
+        # Operating Income -> Net Income
+        source.append(4)
+        target.append(5)
+        value.append(get_value(df, f"{frequency}NetIncomeCommonStockholders"))
+
+        # Operating Income -> Other Income/Expense
+        source.append(4)
+        target.append(7)
+        value.append(get_value(df, f"{frequency}OtherIncomeExpense"))
+
+        # Operating Income -> Tax Provision
+        source.append(4)
+        target.append(6)
+        value.append(get_value(df, f"{frequency}TaxProvision"))
+
+        # if element is value is of type series, get iloc 0
+        value = [v if not isinstance(v, pd.Series) else v.iloc[0] for v in value]
+
+        # convert to float
+        value = [float(v) for v in value]
+
+        # Create the Sankey diagram
+        fig = go.Figure(
+            go.Sankey(
+                arrangement="snap",
+                node=dict(
+                    pad=15,
+                    thickness=20,
+                    line=dict(color="black", width=0.5),
+                    label=nodes,
+                    hovertemplate="%{label}:%{value}",
+                ),
+                link=dict(
+                    arrowlen=40,
+                    source=source,  # Indices of the source nodes
+                    target=target,  # Indices of the target nodes
+                    value=value,  # The flow values
+                ),
+            )
+        )
+
+        fig.update_layout(
+            title_text=f"Sankey Diagram for {self.ticker} ({frequency} data) for period {df.index[df.shape[0] - period_ago - 1]}", # noqa E501
+            font_size=10,
+        )
+        fig.show()
