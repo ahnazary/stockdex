@@ -381,3 +381,14 @@ def test_plot_assets_vs_liabilities(ticker):
     ticker = Ticker(ticker=ticker)
     ticker.plot_assets_vs_liabilities()
     assert True
+
+
+@pytest.mark.skipif(skip_test, reason="Skipping in GH action as it is visual")
+@pytest.mark.parametrize(
+    "ticker",
+    [("AAPL"), ("BAC"), ("CAT"), ("ASML"), ("MSFT"), ("PLTR")],
+)
+def test_plot_free_cash_flow(ticker):
+    ticker = Ticker(ticker=ticker)
+    ticker.plot_free_cash_flow()
+    assert True

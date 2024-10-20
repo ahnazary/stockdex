@@ -457,3 +457,31 @@ class DigrinInterface(TickerBase):
         month = conversion_dict[month]
         day = day.replace(",", "")
         return f"{year}-{month}-{day}"
+
+    def plot_free_cash_flow(self) -> None:
+        """
+        Plot the free cash flow for the ticker
+        """
+
+        data = self.digrin_free_cash_flow
+
+        data["Date"] = data["Date"].apply(self._human_date_format_to_raw)
+        data["Date"] = pd.to_datetime(data["Date"])
+        data["Free Cash Flow"] = (
+            data["Free Cash Flow"]
+            .replace("?", "0")
+            .apply(self._human_number_format_to_raw)
+        )
+        data["Stock based compensation"] = (
+            data["Stock based compensation"]
+            .replace("?", "0")
+            .apply(self._human_number_format_to_raw)
+        )
+        data.set_index("Date", inplace=True)
+
+        plot_dataframe(
+            data,
+            x_axis_title="Date",
+            y_axis_title="Amount",
+            title=f"{self.ticker} Free Cash Flow from Digrin",
+        )
