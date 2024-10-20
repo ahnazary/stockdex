@@ -370,3 +370,14 @@ def test_plot_digrin_dividend(ticker):
     ticker = Ticker(ticker=ticker)
     ticker.plot_digrin_dividend()
     assert True
+
+
+@pytest.mark.skipif(skip_test, reason="Skipping in GH action as it is visual")
+@pytest.mark.parametrize(
+    "ticker",
+    [("AAPL"), ("BAC"), ("CAT"), ("ASML"), ("MSFT")],
+)
+def test_plot_assets_vs_liabilities(ticker):
+    ticker = Ticker(ticker=ticker)
+    ticker.plot_assets_vs_liabilities()
+    assert True

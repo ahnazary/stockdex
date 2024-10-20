@@ -393,3 +393,67 @@ class DigrinInterface(TickerBase):
             title=f"{self.ticker} Dividend from Digrin",
             draw_line_chart=True,
         )
+
+    def plot_assets_vs_liabilities(self) -> None:
+        """
+        Plot the assets vs liabilities for the ticker
+        """
+
+        data = self.digrin_assets_vs_liabilities
+
+        data["Date"] = data["Date"].apply(self._human_date_format_to_raw)
+        data["Date"] = pd.to_datetime(data["Date"])
+        data["Assets"] = data["Assets"].apply(self._human_number_format_to_raw)
+        data["Liabilities"] = data["Liabilities"].apply(
+            self._human_number_format_to_raw
+        )
+        data.set_index("Date", inplace=True)
+
+        plot_dataframe(
+            data,
+            x_axis_title="Date",
+            y_axis_title="Amount",
+            title=f"{self.ticker} Assets vs Liabilities from Digrin",
+        )
+
+    def _human_number_format_to_raw(self, entry: str) -> float:
+        """
+        Convert human readable format to raw format
+        If there is a suffix like trillion, billion, million, etc. in the data,
+        """
+
+        if "T" or "t" in entry:
+            return float(entry.split(" ")[0]) * 1000000000000
+        elif "B" or "b" in entry:
+            return float(entry.split(" ")[0]) * 1000000000
+        elif "M" or "m" in entry:
+            return float(entry.split(" ")[0]) * 1000000
+        elif "K" or "k" in entry:
+            return float(entry.split(" ")[0]) * 1000
+        else:
+            return float(entry)
+
+    def _human_date_format_to_raw(self, entry: str) -> str:
+        """
+        Convert human readable date format (e.g. "Dec. 31, 2023") to raw format (e.g. 2023-12-31)
+        """
+        conversion_dict = {
+            "Jan": "01",
+            "Feb": "02",
+            "March": "03",
+            "Apr": "04",
+            "May": "05",
+            "June": "06",
+            "Jul": "07",
+            "Aug": "08",
+            "Sept": "09",
+            "Oct": "10",
+            "Nov": "11",
+            "Dec": "12",
+        }
+
+        month, day, year = entry.split(" ")
+        month = month.replace(".", "")
+        month = conversion_dict[month]
+        day = day.replace(",", "")
+        return f"{year}-{month}-{day}"
