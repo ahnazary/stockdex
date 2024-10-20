@@ -155,6 +155,9 @@ class SankeyCharts(TickerBase):
                     line=dict(color="black", width=0.5),
                     label=nodes,
                     hovertemplate="%{label}:%{value}",
+                    # move cost of revenue to the left
+                    x=[None, 0.35, None, None, None, 0.7, 0.7, None, None, None],
+                    y=[None, 0.35, None, None, None, None, None, None, None, None],
                 ),
                 link=dict(
                     arrowlen=40,
@@ -166,7 +169,7 @@ class SankeyCharts(TickerBase):
         )
 
         fig.update_layout(
-            title_text=f"Sankey Diagram for {self.ticker} ({frequency} data) for period {df.index[df.shape[0] - period_ago - 1]}", # noqa E501
+            title_text=f"{self.ticker} Income Statement ({frequency} data) reported at: {df.index[df.shape[0] - period_ago - 1]}",  # noqa E501
             font_size=10,
         )
         fig.show()
