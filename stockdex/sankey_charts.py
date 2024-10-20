@@ -16,25 +16,21 @@ class SankeyCharts(TickerBase):
 
     def _build_main_df(self, ticker: str, frequency: str = "annual") -> pd.DataFrame:
         self.ticker = ticker
-        self.yahoo_cash_flow = self.yahoo_api_cash_flow(
+        yahoo_cash_flow = self.yahoo_api_cash_flow(format="raw", frequency=frequency)
+        yahoo_balance_sheet = self.yahoo_api_balance_sheet(
             format="raw", frequency=frequency
         )
-        self.yahoo_balance_sheet = self.yahoo_api_balance_sheet(
+        yahoo_income_statement = self.yahoo_api_income_statement(
             format="raw", frequency=frequency
         )
-        self.yahoo_income_statement = self.yahoo_api_income_statement(
-            format="raw", frequency=frequency
-        )
-        self.yahoo_financials = self.yahoo_api_financials(
-            format="raw", frequency=frequency
-        )
+        yahoo_financials = self.yahoo_api_financials(format="raw", frequency=frequency)
         # concatenate all the dataframes
         self.data = pd.concat(
             [
-                self.yahoo_cash_flow,
-                self.yahoo_balance_sheet,
-                self.yahoo_income_statement,
-                self.yahoo_financials,
+                yahoo_cash_flow,
+                yahoo_balance_sheet,
+                yahoo_income_statement,
+                yahoo_financials,
             ],
             axis=1,
         )
@@ -146,6 +142,12 @@ class SankeyCharts(TickerBase):
         value = [float(v) for v in value]
         value_human = pd.Series(value).apply(self._human_format)
 
+        node_values = [
+            self._human_format(get_value(df, f"{frequency}TotalRevenue"))
+        ] + [self._human_format(v) for v in value]
+        # convert to pd.Series
+        node_values = pd.Series(node_values)
+
         fig = go.Figure(
             go.Sankey(
                 arrangement="snap",
@@ -154,9 +156,9 @@ class SankeyCharts(TickerBase):
                     thickness=20,
                     line=dict(color="black", width=0.5),
                     label=nodes,
-                    customdata=value_human,
+                    # add total revenue as  the first element to value_human
+                    customdata=node_values,
                     hovertemplate="%{customdata}",
-                    hoverinfo="none",
                     x=[None, 0.35, None, None, None, 0.7, 0.7, None, None, None],
                     y=[None, 0.35, None, None, None, None, None, None, None, None],
                 ),
@@ -177,7 +179,19 @@ class SankeyCharts(TickerBase):
         )
         fig.show()
 
-    def _human_format(self, num):
+    def _human_format(self, num) -> str:
+        """
+        Helper function to convert a number to human readable format
+
+        Args:
+        ----------
+        num: float
+            The number to be converted
+
+        Returns:
+        ----------
+        str: The human readable format of the number
+        """
         num = float("{:.3g}".format(num))
         magnitude = 0
         while abs(num) >= 1000:
