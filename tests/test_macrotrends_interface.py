@@ -59,6 +59,9 @@ def test_macrotrends_cash_flow(ticker):
     assert macrotrends_cash_flow.iloc[0][1] is not None
 
 
+@pytest.mark.skipif(
+    skip_test, reason="Skipping in GH action as it reaches the limit of requests"
+)
 @pytest.mark.parametrize(
     "ticker",
     [
@@ -76,6 +79,9 @@ def test_macrotrends_key_financial_ratios(ticker):
     assert "Current Ratio" in macrotrends_key_financial_ratios.index
 
 
+@pytest.mark.skipif(
+    skip_test, reason="Skipping in GH action as it reaches the limit of requests"
+)
 @pytest.mark.parametrize(
     "ticker",
     [
@@ -92,6 +98,9 @@ def test_macrotrends_gross_margin(ticker):
     assert macrotrends_gross_margin.shape[1] > 0
 
 
+@pytest.mark.skipif(
+    skip_test, reason="Skipping in GH action as it reaches the limit of requests"
+)
 @pytest.mark.parametrize(
     "ticker",
     [
@@ -108,6 +117,9 @@ def test_macrotrends_operating_margin(ticker):
     assert macrotrends_operating_margin.shape[1] > 0
 
 
+@pytest.mark.skipif(
+    skip_test, reason="Skipping in GH action as it reaches the limit of requests"
+)
 @pytest.mark.parametrize(
     "ticker",
     [
@@ -124,6 +136,9 @@ def test_macrotrends_ebitda_margin(ticker):
     assert macrotrends_ebitda_margin.shape[1] > 0
 
 
+@pytest.mark.skipif(
+    skip_test, reason="Skipping in GH action as it reaches the limit of requests"
+)
 @pytest.mark.parametrize(
     "ticker",
     [
@@ -140,6 +155,9 @@ def test_macrotrends_pre_tax_margin(ticker):
     assert macrotrends_pre_tax_margin.shape[1] > 0
 
 
+@pytest.mark.skipif(
+    skip_test, reason="Skipping in GH action as it reaches the limit of requests"
+)
 @pytest.mark.parametrize(
     "ticker",
     [
