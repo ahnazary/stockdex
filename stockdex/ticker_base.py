@@ -2,6 +2,7 @@
 Base class for ticker objects to inherit from
 """
 
+import time
 from logging import getLogger
 from typing import Union
 
@@ -40,22 +41,28 @@ class TickerBase:
             url, headers=self.request_headers, timeout=RESPONSE_TIMEOUT
         )
         # If the HTTP GET request can't be served
-        if response.status_code != 200 and response.status_code != 429:
+        if response.status_code != 200:
             raise Exception(
                 f"""
                 Failed to load page (status code: {response.status_code}).
                 Check if the ticker symbol exists
                 """
             )
+
+        # sleep if rate limit is reached and retry after time is given
         elif response.status_code == 429:
-            self.logger.warning("Rate limit reached. Waiting for the retry-after time.")
-            raise Exception(
-                """
-                Rate limit reached. Waiting for the retry-after time.
-                """
-            )
-            # time.sleep(int(RETRY_AFTER_TIMEOUT))
-            # response = self.get_response(url)
+            # retry 5 times with 10 seconds intervals and after that raise an exception
+            for _ in range(5):
+                retry_after = 10
+                self.logger.warning(
+                    f"Rate limit reached. Retrying after {retry_after} seconds"
+                )
+                time.sleep(retry_after)
+                response = session.get(
+                    url, headers=self.request_headers, timeout=RESPONSE_TIMEOUT
+                )
+                if response.status_code == 200:
+                    break
 
         return response
 
