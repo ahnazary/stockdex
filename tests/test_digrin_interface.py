@@ -346,3 +346,27 @@ def test_digrin_upcoming_estimated_earnings(ticker):
     assert digrin_upcoming_estimated_earnings.shape[0] >= 1
     assert digrin_upcoming_estimated_earnings.shape[1] == 5
     assert "Date" in digrin_upcoming_estimated_earnings.columns
+
+
+@pytest.mark.skipif(skip_test, reason="Skipping in GH action as it is visual")
+@pytest.mark.parametrize(
+    "ticker",
+    [
+        ("AAPL"),
+    ],
+)
+def test_plot_digrin_price(ticker):
+    ticker = Ticker(ticker=ticker)
+    ticker.plot_digrin_price()
+    assert True
+
+
+@pytest.mark.skipif(skip_test, reason="Skipping in GH action as it is visual")
+@pytest.mark.parametrize(
+    "ticker",
+    [("AAPL"), ("BAC")],
+)
+def test_plot_digrin_dividend(ticker):
+    ticker = Ticker(ticker=ticker)
+    ticker.plot_digrin_dividend()
+    assert True

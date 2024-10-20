@@ -6,6 +6,7 @@ import pandas as pd
 from bs4 import BeautifulSoup
 
 from stockdex.config import DIGRIN_BASE_URL, VALID_SECURITY_TYPES
+from stockdex.lib import plot_dataframe
 from stockdex.ticker_base import TickerBase
 
 
@@ -341,4 +342,54 @@ class DigrinInterface(TickerBase):
 
         return self._get_table_from_url(
             "Actual / Estimated EPS", f"{DIGRIN_BASE_URL}/{self.ticker}/earnings"
+        )
+
+    def plot_digrin_price(self) -> None:
+        """
+        Plot the price for the ticker
+        """
+
+        data = self.digrin_price
+        data["Date"] = pd.to_datetime(data["Date"])
+        data["Real Price"] = (
+            data["Real price"].str.replace("$", "").replace(",", "").astype(float)
+        )
+        data["Adjusted Price"] = (
+            data["Adjusted price"].str.replace("$", "").replace(",", "").astype(float)
+        )
+
+        # drop the original columns
+        data.drop(columns=["Real price", "Adjusted price"], inplace=True)
+        data.set_index("Date", inplace=True)
+
+        plot_dataframe(
+            data,
+            x_axis_title="Date",
+            y_axis_title="Price",
+            title=f"{self.ticker} Stock Price (Real vs Adjusted) from Digrin",
+            draw_line_chart=True,
+        )
+
+    def plot_digrin_dividend(self) -> None:
+        """
+        Plot the dividend for the ticker
+        """
+
+        data = self.digrin_dividend
+        data["Ex-dividend date"] = pd.to_datetime(data["Ex-dividend date"])
+        data["Dividend"] = (
+            data["Dividend amount (change)"]
+            .str.split(" ", expand=True)[0]
+            .astype(float)
+        )
+
+        data.set_index("Ex-dividend date", inplace=True)
+        data = data[["Dividend"]]
+
+        plot_dataframe(
+            data,
+            x_axis_title="Ex-dividend date",
+            y_axis_title="Dividend",
+            title=f"{self.ticker} Dividend from Digrin",
+            draw_line_chart=True,
         )
