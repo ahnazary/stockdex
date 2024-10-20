@@ -77,9 +77,9 @@ class SankeyCharts(TickerBase):
         df = self._build_main_df(self.ticker, frequency)
 
         nodes = [
-            "Total Revenue",  # 0
+            "Total Revenue",  # 0 (TotalRevenue)
             "Cost of Revenue",  # 1 (CostOfRevenue)
-            "Gross Profit",  # 2
+            "Gross Profit",  # 2 (GrossProfit)
             "Operating Expenses",  # 3 (OperatingExpense)
             "Operating Income",  # 4 (OperatingIncome)
             "Net Income",  # 5 (NetIncomeCommonStockholders)
@@ -144,8 +144,8 @@ class SankeyCharts(TickerBase):
 
         # convert to float
         value = [float(v) for v in value]
+        value_human = pd.Series(value).apply(self._human_format)
 
-        # Create the Sankey diagram
         fig = go.Figure(
             go.Sankey(
                 arrangement="snap",
@@ -154,16 +154,19 @@ class SankeyCharts(TickerBase):
                     thickness=20,
                     line=dict(color="black", width=0.5),
                     label=nodes,
-                    hovertemplate="%{label}:%{value}",
-                    # move cost of revenue to the left
+                    customdata=value_human,
+                    hovertemplate="%{customdata}",
+                    hoverinfo="none",
                     x=[None, 0.35, None, None, None, 0.7, 0.7, None, None, None],
                     y=[None, 0.35, None, None, None, None, None, None, None, None],
                 ),
                 link=dict(
                     arrowlen=40,
-                    source=source,  # Indices of the source nodes
-                    target=target,  # Indices of the target nodes
-                    value=value,  # The flow values
+                    source=source,
+                    target=target,
+                    value=value,
+                    customdata=value_human,
+                    hovertemplate="%{customdata}",
                 ),
             )
         )
@@ -173,3 +176,14 @@ class SankeyCharts(TickerBase):
             font_size=10,
         )
         fig.show()
+
+    def _human_format(self, num):
+        num = float("{:.3g}".format(num))
+        magnitude = 0
+        while abs(num) >= 1000:
+            magnitude += 1
+            num /= 1000.0
+        return "{}{}".format(
+            "{:f}".format(num).rstrip("0").rstrip("."),
+            ["", " Thousand", " Million", " Billion", " Trillion"][magnitude],
+        )
