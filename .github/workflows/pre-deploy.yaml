@@ -91,6 +91,6 @@ jobs:
 
     - name: run pytest
       env:
-        SKIP_DIGRIN_TESTS: ${{ secrets.SKIP_TEST }}  
+        SKIP_TEST: ${{ secrets.SKIP_TEST }}  
       run: |
         pytest
