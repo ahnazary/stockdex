@@ -422,13 +422,13 @@ class DigrinInterface(TickerBase):
         If there is a suffix like trillion, billion, million, etc. in the data,
         """
 
-        if "T" or "t" in entry:
+        if "t" in entry.lower():
             return float(entry.split(" ")[0]) * 1000000000000
-        elif "B" or "b" in entry:
+        elif "b" in entry.lower():
             return float(entry.split(" ")[0]) * 1000000000
-        elif "M" or "m" in entry:
+        elif "m" in entry.lower():
             return float(entry.split(" ")[0]) * 1000000
-        elif "K" or "k" in entry:
+        elif "k" in entry.lower():
             return float(entry.split(" ")[0]) * 1000
         else:
             return float(entry)
@@ -484,4 +484,26 @@ class DigrinInterface(TickerBase):
             x_axis_title="Date",
             y_axis_title="Amount",
             title=f"{self.ticker} Free Cash Flow from Digrin",
+        )
+
+    def plot_net_income(self) -> None:
+        """
+        Plot the net income for the ticker
+        """
+
+        data = self.digrin_net_income
+
+        data["Date"] = data["Date"].apply(self._human_date_format_to_raw)
+        data["Date"] = pd.to_datetime(data["Date"])
+        data["Net Income"] = (
+            data["Net Income"].replace("?", "0").apply(self._human_number_format_to_raw)
+        )
+
+        data.set_index("Date", inplace=True)
+
+        plot_dataframe(
+            data,
+            x_axis_title="Date",
+            y_axis_title="Amount",
+            title=f"{self.ticker} Net Income from Digrin",
         )

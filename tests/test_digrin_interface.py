@@ -392,3 +392,14 @@ def test_plot_free_cash_flow(ticker):
     ticker = Ticker(ticker=ticker)
     ticker.plot_free_cash_flow()
     assert True
+
+
+@pytest.mark.skipif(skip_test, reason="Skipping in GH action as it is visual")
+@pytest.mark.parametrize(
+    "ticker",
+    [("AAPL"), ("BAC"), ("CAT"), ("ASML"), ("MSFT"), ("PLTR"), ("DHL.DE")],
+)
+def test_plot_net_income(ticker):
+    ticker = Ticker(ticker=ticker)
+    ticker.plot_net_income()
+    assert True
