@@ -421,8 +421,20 @@ class DigrinInterface(TickerBase):
         Convert human readable format to raw format
         If there is a suffix like trillion, billion, million, etc. in the data,
         """
-
-        if "t" in entry.lower():
+        entries_to_consider_zero = [
+            "?",
+            "N/A",
+            "n/a",
+            "nan",
+            "NAN",
+            "Nan",
+            "_",
+            "-",
+            "",
+        ]
+        if entry in entries_to_consider_zero:
+            return 0
+        elif "t" in entry.lower():
             return float(entry.split(" ")[0]) * 1000000000000
         elif "b" in entry.lower():
             return float(entry.split(" ")[0]) * 1000000000
@@ -506,4 +518,25 @@ class DigrinInterface(TickerBase):
             x_axis_title="Date",
             y_axis_title="Amount",
             title=f"{self.ticker} Net Income from Digrin",
+        )
+
+    def plot_cash_and_debt(self) -> None:
+        """
+        Plot the cash and debt for the ticker
+        """
+
+        data = self.digrin_cash_and_debt
+
+        data["Date"] = data["Date"].apply(self._human_date_format_to_raw)
+        data["Date"] = pd.to_datetime(data["Date"])
+        data["Cash"] = data["Cash"].apply(self._human_number_format_to_raw)
+        data["Debt"] = data["Debt"].apply(self._human_number_format_to_raw)
+        data.set_index("Date", inplace=True)
+        data = data[["Cash", "Debt"]]
+
+        plot_dataframe(
+            data,
+            x_axis_title="Date",
+            y_axis_title="Amount",
+            title=f"{self.ticker} Cash and Debt from Digrin",
         )
