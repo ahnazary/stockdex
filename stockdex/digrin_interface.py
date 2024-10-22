@@ -416,6 +416,7 @@ class DigrinInterface(TickerBase):
             self._human_number_format_to_raw
         )
         data.set_index("Date", inplace=True)
+        data = data[["Assets", "Liabilities"]]
 
         plot_dataframe(
             data,
@@ -498,6 +499,7 @@ class DigrinInterface(TickerBase):
             .apply(self._human_number_format_to_raw)
         )
         data.set_index("Date", inplace=True)
+        data = data[["Free Cash Flow", "Stock based compensation"]]
 
         plot_dataframe(
             data,
@@ -520,6 +522,7 @@ class DigrinInterface(TickerBase):
         )
 
         data.set_index("Date", inplace=True)
+        data = data[["Net Income"]]
 
         plot_dataframe(
             data,
@@ -564,10 +567,61 @@ class DigrinInterface(TickerBase):
             .apply(self._human_number_format_to_raw)
         )
         data.set_index("Date", inplace=True)
+        data = data[["Shares Outstanding"]]
 
         plot_dataframe(
             data,
             x_axis_title="Date",
             y_axis_title="Amount",
             title=f"{self.ticker} Shares Outstanding from Digrin",
+        )
+
+    def plot_digrin_expenses(self) -> None:
+        """
+        Plot the expenses for the ticker
+        """
+
+        data = self.digrin_expenses
+
+        data["Date"] = data["Date"].apply(self._human_date_format_to_raw)
+        data["Date"] = pd.to_datetime(data["Date"])
+        data["Capex"] = data["Capex"].apply(self._human_number_format_to_raw)
+        data["R&D"] = data["R&D"].apply(self._human_number_format_to_raw)
+        data["G&A"] = data["G&A"].apply(self._human_number_format_to_raw)
+        data["S&M"] = data["S&M"].apply(self._human_number_format_to_raw)
+        data.set_index("Date", inplace=True)
+        data = data[["Capex", "R&D", "G&A", "S&M"]]
+
+        plot_dataframe(
+            data,
+            x_axis_title="Date",
+            y_axis_title="Amount",
+            title=f"{self.ticker} Expenses from Digrin",
+        )
+
+    def plot_digrin_cost_of_revenue(self) -> None:
+        """
+        Plot the cost of revenue for the ticker
+        """
+
+        data = self.digrin_cost_of_revenue
+
+        data["Date"] = data["Date"].apply(self._human_date_format_to_raw)
+        data["Date"] = pd.to_datetime(data["Date"])
+        data["Cost of Revenue"] = (
+            data["Cost of Revenue"]
+            .replace("?", "0")
+            .apply(self._human_number_format_to_raw)
+        )
+        data["Revenue"] = (
+            data["Revenue"].replace("?", "0").apply(self._human_number_format_to_raw)
+        )
+        data.set_index("Date", inplace=True)
+        data = data[["Cost of Revenue", "Revenue"]]
+
+        plot_dataframe(
+            data,
+            x_axis_title="Date",
+            y_axis_title="Amount",
+            title=f"{self.ticker} Cost of Revenue from Digrin",
         )
