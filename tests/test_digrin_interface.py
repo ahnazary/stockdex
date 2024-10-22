@@ -378,9 +378,9 @@ def test_plot_digrin_dividend(ticker):
     "ticker",
     [("AAPL"), ("BAC"), ("CAT"), ("ASML"), ("MSFT")],
 )
-def test_plot_assets_vs_liabilities(ticker):
+def test_plot_digrin_assets_vs_liabilities(ticker):
     ticker = Ticker(ticker=ticker)
-    ticker.plot_assets_vs_liabilities()
+    ticker.plot_digrin_assets_vs_liabilities()
     assert True
 
 
@@ -389,9 +389,9 @@ def test_plot_assets_vs_liabilities(ticker):
     "ticker",
     [("AAPL"), ("BAC"), ("CAT"), ("ASML"), ("MSFT"), ("PLTR")],
 )
-def test_plot_free_cash_flow(ticker):
+def test_plot_digrin_free_cash_flow(ticker):
     ticker = Ticker(ticker=ticker)
-    ticker.plot_free_cash_flow()
+    ticker.plot_digrin_free_cash_flow()
     assert True
 
 
@@ -400,16 +400,16 @@ def test_plot_free_cash_flow(ticker):
     "ticker",
     [("AAPL"), ("BAC"), ("CAT"), ("ASML"), ("MSFT"), ("DHL.DE")],
 )
-def test_plot_net_income(ticker):
+def test_plot_digrin_net_income(ticker):
     ticker = Ticker(ticker=ticker)
-    ticker.plot_net_income()
+    ticker.plot_digrin_net_income()
     assert True
 
 
-def test_plot_net_income_no_data():
+def test_plot_digrin_net_income_no_data():
     with pytest.raises(NoDataError):
         ticker = Ticker(ticker="PLTR")
-        ticker.plot_net_income()
+        ticker.plot_digrin_net_income()
 
 
 @pytest.mark.skipif(skip_test, reason="Skipping in GH action as it is visual")
@@ -417,9 +417,9 @@ def test_plot_net_income_no_data():
     "ticker",
     [("AAPL"), ("BAC"), ("CAT"), ("ASML"), ("MSFT"), ("PLTR"), ("DHL.DE")],
 )
-def test_plot_cash_and_debt(ticker):
+def test_plot_digrin_cash_and_debt(ticker):
     ticker = Ticker(ticker=ticker)
-    ticker.plot_cash_and_debt()
+    ticker.plot_digrin_cash_and_debt()
     assert True
 
 
@@ -428,7 +428,7 @@ def test_plot_cash_and_debt(ticker):
     "ticker",
     [("AAPL"), ("BAC"), ("CAT"), ("ASML"), ("MSFT"), ("PLTR"), ("DHL.DE")],
 )
-def test_plot_shares_outstanding(ticker):
+def test_plot_digrin_shares_outstanding(ticker):
     ticker = Ticker(ticker=ticker)
-    ticker.plot_shares_outstanding()
+    ticker.plot_digrin_shares_outstanding()
     assert True

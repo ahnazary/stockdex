@@ -402,7 +402,7 @@ class DigrinInterface(TickerBase):
             draw_line_chart=True,
         )
 
-    def plot_assets_vs_liabilities(self) -> None:
+    def plot_digrin_assets_vs_liabilities(self) -> None:
         """
         Plot the assets vs liabilities for the ticker
         """
@@ -478,7 +478,7 @@ class DigrinInterface(TickerBase):
         day = day.replace(",", "")
         return f"{year}-{month}-{day}"
 
-    def plot_free_cash_flow(self) -> None:
+    def plot_digrin_free_cash_flow(self) -> None:
         """
         Plot the free cash flow for the ticker
         """
@@ -506,7 +506,7 @@ class DigrinInterface(TickerBase):
             title=f"{self.ticker} Free Cash Flow from Digrin",
         )
 
-    def plot_net_income(self) -> None:
+    def plot_digrin_net_income(self) -> None:
         """
         Plot the net income for the ticker
         """
@@ -528,7 +528,7 @@ class DigrinInterface(TickerBase):
             title=f"{self.ticker} Net Income from Digrin",
         )
 
-    def plot_cash_and_debt(self) -> None:
+    def plot_digrin_cash_and_debt(self) -> None:
         """
         Plot the cash and debt for the ticker
         """
@@ -549,7 +549,7 @@ class DigrinInterface(TickerBase):
             title=f"{self.ticker} Cash and Debt from Digrin",
         )
 
-    def plot_shares_outstanding(self) -> None:
+    def plot_digrin_shares_outstanding(self) -> None:
         """
         Plot the shares outstanding for the ticker
         """
