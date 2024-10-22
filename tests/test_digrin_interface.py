@@ -7,6 +7,7 @@ import os
 import pandas as pd
 import pytest
 
+from stockdex.exceptions import NoDataError
 from stockdex.ticker import Ticker
 
 skip_test = bool(os.getenv("SKIP_TEST", False))
@@ -397,12 +398,18 @@ def test_plot_free_cash_flow(ticker):
 @pytest.mark.skipif(skip_test, reason="Skipping in GH action as it is visual")
 @pytest.mark.parametrize(
     "ticker",
-    [("AAPL"), ("BAC"), ("CAT"), ("ASML"), ("MSFT"), ("PLTR"), ("DHL.DE")],
+    [("AAPL"), ("BAC"), ("CAT"), ("ASML"), ("MSFT"), ("DHL.DE")],
 )
 def test_plot_net_income(ticker):
     ticker = Ticker(ticker=ticker)
     ticker.plot_net_income()
     assert True
+
+
+def test_plot_net_income_no_data():
+    with pytest.raises(NoDataError):
+        ticker = Ticker(ticker="PLTR")
+        ticker.plot_net_income()
 
 
 @pytest.mark.skipif(skip_test, reason="Skipping in GH action as it is visual")
@@ -413,4 +420,15 @@ def test_plot_net_income(ticker):
 def test_plot_cash_and_debt(ticker):
     ticker = Ticker(ticker=ticker)
     ticker.plot_cash_and_debt()
+    assert True
+
+
+@pytest.mark.skipif(skip_test, reason="Skipping in GH action as it is visual")
+@pytest.mark.parametrize(
+    "ticker",
+    [("AAPL"), ("BAC"), ("CAT"), ("ASML"), ("MSFT"), ("PLTR"), ("DHL.DE")],
+)
+def test_plot_shares_outstanding(ticker):
+    ticker = Ticker(ticker=ticker)
+    ticker.plot_shares_outstanding()
     assert True

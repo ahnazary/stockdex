@@ -6,6 +6,7 @@ import pandas as pd
 from bs4 import BeautifulSoup
 
 from stockdex.config import DIGRIN_BASE_URL, VALID_SECURITY_TYPES
+from stockdex.exceptions import NoDataError
 from stockdex.lib import plot_dataframe
 from stockdex.ticker_base import TickerBase
 
@@ -178,7 +179,14 @@ class DigrinInterface(TickerBase):
         try:
             table = self.find_parent_by_text(soup, "table", keyword)
         except IndexError:
-            raise Exception(f"There is no {keyword} data for the ticker {self.ticker}")
+            raise NoDataError(
+                f"There is no {keyword} data for the ticker {self.ticker}"
+            )
+
+        if table is None:
+            raise NoDataError(
+                f"There is no {keyword} data for the ticker {self.ticker}"
+            )
 
         data_df = pd.DataFrame()
         data = []
@@ -539,4 +547,27 @@ class DigrinInterface(TickerBase):
             x_axis_title="Date",
             y_axis_title="Amount",
             title=f"{self.ticker} Cash and Debt from Digrin",
+        )
+
+    def plot_shares_outstanding(self) -> None:
+        """
+        Plot the shares outstanding for the ticker
+        """
+
+        data = self.digrin_shares_outstanding
+
+        data["Date"] = data["Date"].apply(self._human_date_format_to_raw)
+        data["Date"] = pd.to_datetime(data["Date"])
+        data["Shares Outstanding"] = (
+            data["Shares Outstanding"]
+            .replace("?", "0")
+            .apply(self._human_number_format_to_raw)
+        )
+        data.set_index("Date", inplace=True)
+
+        plot_dataframe(
+            data,
+            x_axis_title="Date",
+            y_axis_title="Amount",
+            title=f"{self.ticker} Shares Outstanding from Digrin",
         )
