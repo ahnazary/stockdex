@@ -436,21 +436,37 @@ def test_plot_digrin_shares_outstanding(ticker):
 
 @pytest.mark.skipif(skip_test, reason="Skipping in GH action as it is visual")
 @pytest.mark.parametrize(
-    "ticker",
-    [("AAPL"), ("BAC"), ("CAT"), ("ASML"), ("MSFT"), ("PLTR"), ("DHL.DE")],
+    "ticker, show_plot",
+    [
+        ("AAPL", False),
+        ("BAC", True),
+        ("CAT", True),
+        ("ASML", True),
+        ("MSFT", True),
+        ("PLTR", True),
+        ("DHL.DE", True),
+    ],
 )
-def test_plot_digrin_expenses(ticker):
+def test_plot_digrin_expenses(ticker, show_plot):
     ticker = Ticker(ticker=ticker)
-    ticker.plot_digrin_expenses()
+    ticker.plot_digrin_expenses(show_plot=show_plot)
     assert True
 
 
 @pytest.mark.skipif(skip_test, reason="Skipping in GH action as it is visual")
 @pytest.mark.parametrize(
-    "ticker",
-    [("AAPL"), ("BAC"), ("CAT"), ("ASML"), ("MSFT"), ("PLTR"), ("DHL.DE")],
+    "ticker, show_plot",
+    [
+        ("AAPL", False),
+        ("BAC", True),
+        ("CAT", True),
+        ("ASML", True),
+        ("MSFT", True),
+        ("PLTR", True),
+        ("DHL.DE", True),
+    ],
 )
-def test_plot_digrin_cost_of_revenue(ticker):
+def test_plot_digrin_cost_of_revenue(ticker, show_plot):
     ticker = Ticker(ticker=ticker)
-    ticker.plot_digrin_cost_of_revenue()
+    ticker.plot_digrin_cost_of_revenue(show_plot=show_plot)
     assert True

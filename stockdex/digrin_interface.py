@@ -355,9 +355,60 @@ class DigrinInterface(TickerBase):
             "Actual / Estimated EPS", f"{DIGRIN_BASE_URL}/{self.ticker}/earnings"
         )
 
-    def plot_digrin_price(self) -> None:
+    def plot_digrin_shares_outstanding(
+        self, show_plot: bool = True
+    ) -> Union[px.line, px.bar]:
+        """
+        Plot the shares outstanding for the ticker
+
+        Args:
+        ----------------
+        show_plot : bool
+            If the plot should be shown or not.
+            If dash is used, this should be set to False
+            Default is True (show the plot)
+
+        Returns:
+        ----------------
+        Union[px.line, px.bar]: The plotly figure
+        """
+
+        data = self.digrin_shares_outstanding
+
+        data["Date"] = data["Date"].apply(self._human_date_format_to_raw)
+        data["Date"] = pd.to_datetime(data["Date"])
+        data["Shares Outstanding"] = (
+            data["Shares Outstanding"]
+            .replace("?", "0")
+            .apply(self._human_number_format_to_raw)
+        )
+        data.set_index("Date", inplace=True)
+        data = data[["Shares Outstanding"]]
+
+        fig = plot_dataframe(
+            data,
+            x_axis_title="Date",
+            y_axis_title="Amount",
+            title=f"{self.ticker} Shares Outstanding from Digrin",
+            show_plot=show_plot,
+        )
+
+        return fig
+
+    def plot_digrin_price(self, show_plot: bool = True) -> Union[px.line, px.bar]:
         """
         Plot the price for the ticker
+
+        Args:
+        ----------------
+        show_plot : bool
+            If the plot should be shown or not.
+            If dash is used, this should be set to False
+            Default is True (show the plot)
+
+        Returns:
+        ----------------
+        Union[px.line, px.bar]: The plotly figure
         """
 
         data = self.digrin_price
@@ -373,17 +424,31 @@ class DigrinInterface(TickerBase):
         data.drop(columns=["Real price", "Adjusted price"], inplace=True)
         data.set_index("Date", inplace=True)
 
-        plot_dataframe(
+        fig = plot_dataframe(
             data,
             x_axis_title="Date",
             y_axis_title="Price",
             title=f"{self.ticker} Stock Price (Real vs Adjusted) from Digrin",
             draw_line_chart=True,
+            show_plot=show_plot,
         )
 
-    def plot_digrin_dividend(self) -> None:
+        return fig
+
+    def plot_digrin_dividend(self, show_plot: bool = True) -> Union[px.line, px.bar]:
         """
         Plot the dividend for the ticker
+
+        Args:
+        ----------------
+        show_plot : bool
+            If the plot should be shown or not.
+            If dash is used, this should be set to False
+            Default is True (show the plot)
+
+        Returns:
+        ----------------
+        Union[px.line, px.bar]: The plotly figure
         """
 
         data = self.digrin_dividend
@@ -397,17 +462,33 @@ class DigrinInterface(TickerBase):
         data.set_index("Ex-dividend date", inplace=True)
         data = data[["Dividend"]]
 
-        plot_dataframe(
+        fig = plot_dataframe(
             data,
             x_axis_title="Ex-dividend date",
             y_axis_title="Dividend",
             title=f"{self.ticker} Dividend from Digrin",
             draw_line_chart=True,
+            show_plot=show_plot,
         )
 
-    def plot_digrin_assets_vs_liabilities(self) -> None:
+        return fig
+
+    def plot_digrin_assets_vs_liabilities(
+        self, show_plot: bool = True
+    ) -> Union[px.line, px.bar]:
         """
         Plot the assets vs liabilities for the ticker
+
+        Args:
+        ----------------
+        show_plot : bool
+            If the plot should be shown or not.
+            If dash is used, this should be set to False
+            Default is True (show the plot)
+
+        Returns:
+        ----------------
+        Union[px.line, px.bar]: The plotly figure
         """
 
         data = self.digrin_assets_vs_liabilities
@@ -421,12 +502,15 @@ class DigrinInterface(TickerBase):
         data.set_index("Date", inplace=True)
         data = data[["Assets", "Liabilities"]]
 
-        plot_dataframe(
+        fig = plot_dataframe(
             data,
             x_axis_title="Date",
             y_axis_title="Amount",
             title=f"{self.ticker} Assets vs Liabilities from Digrin",
+            show_plot=show_plot,
         )
+
+        return fig
 
     def _human_number_format_to_raw(self, entry: str) -> float:
         """
@@ -482,9 +566,22 @@ class DigrinInterface(TickerBase):
         day = day.replace(",", "")
         return f"{year}-{month}-{day}"
 
-    def plot_digrin_free_cash_flow(self) -> None:
+    def plot_digrin_free_cash_flow(
+        self, show_plot: bool = True
+    ) -> Union[px.line, px.bar]:
         """
         Plot the free cash flow for the ticker
+
+        Args:
+        ----------------
+        show_plot : bool
+            If the plot should be shown or not.
+            If dash is used, this should be set to False
+            Default is True (show the plot)
+
+        Returns:
+        ----------------
+        Union[px.line, px.bar]: The plotly figure
         """
 
         data = self.digrin_free_cash_flow
@@ -504,16 +601,30 @@ class DigrinInterface(TickerBase):
         data.set_index("Date", inplace=True)
         data = data[["Free Cash Flow", "Stock based compensation"]]
 
-        plot_dataframe(
+        fig = plot_dataframe(
             data,
             x_axis_title="Date",
             y_axis_title="Amount",
             title=f"{self.ticker} Free Cash Flow from Digrin",
+            show_plot=show_plot,
         )
 
-    def plot_digrin_net_income(self) -> None:
+        return fig
+
+    def plot_digrin_net_income(self, show_plot: bool = True) -> Union[px.line, px.bar]:
         """
         Plot the net income for the ticker
+
+        Args:
+        ----------------
+        show_plot : bool
+            If the plot should be shown or not.
+            If dash is used, this should be set to False
+            Default is True (show the plot)
+
+        Returns:
+        ----------------
+        Union[px.line, px.bar]: The plotly figure
         """
 
         data = self.digrin_net_income
@@ -527,16 +638,32 @@ class DigrinInterface(TickerBase):
         data.set_index("Date", inplace=True)
         data = data[["Net Income"]]
 
-        plot_dataframe(
+        fig = plot_dataframe(
             data,
             x_axis_title="Date",
             y_axis_title="Amount",
             title=f"{self.ticker} Net Income from Digrin",
+            show_plot=show_plot,
         )
 
-    def plot_digrin_cash_and_debt(self) -> None:
+        return fig
+
+    def plot_digrin_cash_and_debt(
+        self, show_plot: bool = True
+    ) -> Union[px.line, px.bar]:
         """
         Plot the cash and debt for the ticker
+
+        Args:
+        ----------------
+        show_plot : bool
+            If the plot should be shown or not.
+            If dash is used, this should be set to False
+            Default is True (show the plot)
+
+        Returns:
+        ----------------
+        Union[px.line, px.bar]: The plotly figure
         """
 
         data = self.digrin_cash_and_debt
@@ -548,42 +675,30 @@ class DigrinInterface(TickerBase):
         data.set_index("Date", inplace=True)
         data = data[["Cash", "Debt"]]
 
-        plot_dataframe(
+        fig = plot_dataframe(
             data,
             x_axis_title="Date",
             y_axis_title="Amount",
             title=f"{self.ticker} Cash and Debt from Digrin",
+            show_plot=show_plot,
         )
 
-    def plot_digrin_shares_outstanding(self) -> None:
-        """
-        Plot the shares outstanding for the ticker
-        """
+        return fig
 
-        data = self.digrin_shares_outstanding
-
-        data["Date"] = data["Date"].apply(self._human_date_format_to_raw)
-        data["Date"] = pd.to_datetime(data["Date"])
-        data["Shares Outstanding"] = (
-            data["Shares Outstanding"]
-            .replace("?", "0")
-            .apply(self._human_number_format_to_raw)
-        )
-        data.set_index("Date", inplace=True)
-        data = data[["Shares Outstanding"]]
-
-        plot_dataframe(
-            data,
-            x_axis_title="Date",
-            y_axis_title="Amount",
-            title=f"{self.ticker} Shares Outstanding from Digrin",
-        )
-
-    def plot_digrin_expenses(
-        self, show_plot: bool = True
-    ) -> Union[px.line, px.bar, None]:
+    def plot_digrin_expenses(self, show_plot: bool = True) -> Union[px.line, px.bar]:
         """
         Plot the expenses for the ticker
+
+        Args:
+        ----------------
+        show_plot : bool
+            If the plot should be shown or not.
+            If dash is used, this should be set to False
+            Default is True (show the plot)
+
+        Returns:
+        ----------------
+        Union[px.line, px.bar]: The plotly figure
         """
 
         data = self.digrin_expenses
@@ -609,9 +724,20 @@ class DigrinInterface(TickerBase):
 
     def plot_digrin_cost_of_revenue(
         self, show_plot: bool = True
-    ) -> Union[px.line, px.bar, None]:
+    ) -> Union[px.line, px.bar]:
         """
         Plot the cost of revenue for the ticker
+
+        Args:
+        ----------------
+        show_plot : bool
+            If the plot should be shown or not.
+            If dash is used, this should be set to False
+            Default is True (show the plot)
+
+        Returns:
+        ----------------
+        Union[px.line, px.bar]: The plotly figure
         """
 
         data = self.digrin_cost_of_revenue

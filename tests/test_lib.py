@@ -24,12 +24,21 @@ def test_complex_digrin_plot(ticker):
     """
 
     ticker = Ticker(ticker=ticker)
-    fig_1 = ticker.plot_digrin_expenses(show_plot=False)
-    fig_2 = ticker.plot_digrin_cost_of_revenue(show_plot=False)
+    figures = [
+        ticker.plot_digrin_shares_outstanding(show_plot=False),
+        ticker.plot_digrin_price(show_plot=False),
+        ticker.plot_digrin_dividend(show_plot=False),
+        ticker.plot_digrin_assets_vs_liabilities(show_plot=False),
+        ticker.plot_digrin_free_cash_flow(show_plot=False),
+        ticker.plot_digrin_net_income(show_plot=False),
+        ticker.plot_digrin_cash_and_debt(show_plot=False),
+        ticker.plot_digrin_expenses(show_plot=False),
+        ticker.plot_digrin_cost_of_revenue(show_plot=False),
+    ]
 
     # Function to run the Dash app
     def run_dash_app():
-        plot_multiple_categories(ticker=ticker.ticker, figures=[fig_1, fig_2])
+        plot_multiple_categories(ticker=ticker.ticker, figures=figures)
 
     # Start the Dash app in a separate thread
     dash_thread = threading.Thread(target=run_dash_app)
