@@ -2,8 +2,11 @@
 Module to extract data from Digrin website
 """
 
+from typing import Union
+
 import pandas as pd
 from bs4 import BeautifulSoup
+from plotly import express as px
 
 from stockdex.config import DIGRIN_BASE_URL, VALID_SECURITY_TYPES
 from stockdex.exceptions import NoDataError
@@ -576,7 +579,9 @@ class DigrinInterface(TickerBase):
             title=f"{self.ticker} Shares Outstanding from Digrin",
         )
 
-    def plot_digrin_expenses(self) -> None:
+    def plot_digrin_expenses(
+        self, show_plot: bool = True
+    ) -> Union[px.line, px.bar, None]:
         """
         Plot the expenses for the ticker
         """
@@ -592,14 +597,19 @@ class DigrinInterface(TickerBase):
         data.set_index("Date", inplace=True)
         data = data[["Capex", "R&D", "G&A", "S&M"]]
 
-        plot_dataframe(
+        fig = plot_dataframe(
             data,
             x_axis_title="Date",
             y_axis_title="Amount",
             title=f"{self.ticker} Expenses from Digrin",
+            show_plot=show_plot,
         )
 
-    def plot_digrin_cost_of_revenue(self) -> None:
+        return fig
+
+    def plot_digrin_cost_of_revenue(
+        self, show_plot: bool = True
+    ) -> Union[px.line, px.bar, None]:
         """
         Plot the cost of revenue for the ticker
         """
@@ -619,9 +629,12 @@ class DigrinInterface(TickerBase):
         data.set_index("Date", inplace=True)
         data = data[["Cost of Revenue", "Revenue"]]
 
-        plot_dataframe(
+        fig = plot_dataframe(
             data,
             x_axis_title="Date",
             y_axis_title="Amount",
             title=f"{self.ticker} Cost of Revenue from Digrin",
+            show_plot=show_plot,
         )
+
+        return fig
