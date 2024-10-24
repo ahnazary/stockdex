@@ -5,3 +5,5 @@ plotly>=5.24.1
 pytest==7.4.4
 Requests==2.32.3
 selenium==4.25.0
+plotly>=5.24.1
+dash>=2.18.0
