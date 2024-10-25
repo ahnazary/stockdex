@@ -3,9 +3,10 @@ Module for interfacing with the Macrotrends website.
 """
 
 import re
-from typing import Literal
+from typing import Literal, Union
 
 import pandas as pd
+import plotly.express as px
 from bs4 import BeautifulSoup
 
 from stockdex.config import MACROTRENDS_BASE_URL, VALID_SECURITY_TYPES
@@ -253,29 +254,67 @@ class MacrotrendsInterface(TickerBase):
         self,
         fields_to_include: list = ["Revenue", "Income After Taxes"],
         group_by: Literal["field", "timeframe"] = "timeframe",
-    ) -> None:
+        show_plot: bool = True,
+    ) -> Union[px.line, px.bar]:
         """
         Plot the income statement for the given ticker.
+
+        Args:
+        ----------
+        show_plot : bool
+            If the plot should be shown or not.
+            If dash is used, this should be set to False
+            Default is True (show the plot)
+
+        Returns:
+        ----------------
+        Union[px.line, px.bar]: The plotly figure
         """
         df = self._transform_df_for_plotting_macrotrends(
             self.macrotrends_income_statement, fields_to_include, group_by
         )
 
-        plot_dataframe(df, title=f"{self.ticker} Income Statement (from Macrotrends)")
+        fig = plot_dataframe(
+            df,
+            title=f"{self.ticker} Income Statement (from Macrotrends)",
+            show_plot=show_plot,
+        )
+
+        return fig
 
     def plot_macrotrends_balance_sheet(
         self,
         fields_to_include: list = ["Cash On Hand", "Total Assets", "Total Liabilities"],
         group_by: Literal["field", "timeframe"] = "timeframe",
-    ) -> None:
+        show_plot: bool = True,
+    ) -> Union[px.line, px.bar]:
         """
         Plot the balance sheet for the given ticker.
+
+        Args:
+        ----------
+        show_plot : bool
+            If the plot should be shown or not.
+            If dash is used, this should be set to False
+            Default is True (show the plot)
+
+        Returns:
+        ----------------
+        Union[px.line, px.bar]: The plotly figure
         """
         df = self._transform_df_for_plotting_macrotrends(
-            self.macrotrends_balance_sheet, fields_to_include, group_by
+            self.macrotrends_balance_sheet,
+            fields_to_include,
+            group_by,
         )
 
-        plot_dataframe(df, title=f"{self.ticker} Balance Sheet (from Macrotrends)")
+        fig = plot_dataframe(
+            df,
+            title=f"{self.ticker} Balance Sheet (from Macrotrends)",
+            show_plot=show_plot,
+        )
+
+        return fig
 
     def plot_macrotrends_cash_flow(
         self,
@@ -285,17 +324,33 @@ class MacrotrendsInterface(TickerBase):
             "Net Long-Term Debt",
         ],
         group_by: Literal["field", "timeframe"] = "timeframe",
+        show_plot: bool = True,
     ) -> None:
         """
         Plot the cash flow statement for the given ticker.
+
+        Args:
+        ----------
+        show_plot : bool
+            If the plot should be shown or not.
+            If dash is used, this should be set to False
+            Default is True (show the plot)
+
+        Returns:
+        ----------------
+        Union[px.line, px.bar]: The plotly figure
         """
         df = self._transform_df_for_plotting_macrotrends(
             self.macrotrends_cash_flow, fields_to_include, group_by
         )
 
-        plot_dataframe(
-            df, title=f"{self.ticker} Cash Flow Statement (from Macrotrends)"
+        fig = plot_dataframe(
+            df,
+            title=f"{self.ticker} Cash Flow Statement (from Macrotrends)",
+            show_plot=show_plot,
         )
+
+        return fig
 
     def _transform_df_for_plotting_macrotrends(
         self, df: pd.DataFrame, fields_to_include: list, group_by: str
