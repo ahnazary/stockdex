@@ -4,9 +4,10 @@ The main Ticker class inherits from this class
 """
 
 from datetime import datetime
-from typing import Literal
+from typing import Literal, Union
 
 import pandas as pd
+import plotly.express as px
 
 from stockdex import config
 from stockdex.config import VALID_DATA_SOURCES, VALID_SECURITY_TYPES
@@ -368,7 +369,8 @@ class YahooAPI(TickerBase):
             "NetIncomeCommonStockholders",
             "NetIncome",
         ],
-    ) -> None:
+        show_plot: bool = True,
+    ) -> Union[px.line, px.bar]:
         """
         Plots the income statement for the stock using matplotlib grouped bar chart
 
@@ -389,6 +391,15 @@ class YahooAPI(TickerBase):
 
         fields_to_include: list
             The fields to include in the chart in the x-axis
+
+        show_plot : bool
+            If the plot should be shown or not.
+            If dash is used, this should be set to False
+            Default is True (show the plot)
+
+        Returns:
+        ----------------
+        Union[px.line, px.bar]: The plotly figure
         """
 
         income_statement = self.yahoo_api_income_statement(
@@ -405,9 +416,14 @@ class YahooAPI(TickerBase):
         x_axis_title = "Date" if group_by == "field" else "Field"
 
         # plot the income statement
-        plot_dataframe(
-            income_statement, title="Income Statement", x_axis_title=x_axis_title
+        fig = plot_dataframe(
+            income_statement,
+            title="Income Statement",
+            x_axis_title=x_axis_title,
+            show_plot=show_plot,
         )
+
+        return fig
 
     def plot_yahoo_api_cash_flow(
         self,
@@ -419,7 +435,8 @@ class YahooAPI(TickerBase):
             "OperatingCashFlow",
             "FreeCashFlow",
         ],
-    ) -> None:
+        show_plot: bool = True,
+    ) -> Union[px.line, px.bar]:
         """
         Plots the cash flow statement for the stock using matplotlib grouped bar chart
 
@@ -440,6 +457,15 @@ class YahooAPI(TickerBase):
 
         fields_to_include: list
             The fields to include in the chart in the x-axis
+
+        show_plot : bool
+            If the plot should be shown or not.
+            If dash is used, this should be set to False
+            Default is True (show the plot)
+
+        Returns:
+        ----------------
+        Union[px.line, px.bar]: The plotly figure
         """
 
         cash_flow = self.yahoo_api_cash_flow(
@@ -456,9 +482,14 @@ class YahooAPI(TickerBase):
         x_axis_title = "Date" if group_by == "field" else "Field"
 
         # plot the cash flow
-        plot_dataframe(
-            cash_flow, title="Cash Flow Statement", x_axis_title=x_axis_title
+        fig = plot_dataframe(
+            cash_flow,
+            title="Cash Flow Statement",
+            x_axis_title=x_axis_title,
+            show_plot=show_plot,
         )
+
+        return fig
 
     def plot_yahoo_api_balance_sheet(
         self,
@@ -470,7 +501,8 @@ class YahooAPI(TickerBase):
             "TotalAssets",
             "TotalDebt",
         ],
-    ) -> None:
+        show_plot: bool = True,
+    ) -> Union[px.line, px.bar]:
         """
         Plots the balance sheet for the stock using matplotlib grouped bar chart
 
@@ -491,6 +523,15 @@ class YahooAPI(TickerBase):
 
         fields_to_include: list
             The fields to include in the chart in the x-axis
+
+        show_plot : bool
+            If the plot should be shown or not.
+            If dash is used, this should be set to False
+            Default is True (show the plot)
+
+        Returns:
+        ----------------
+        Union[px.line, px.bar]: The plotly figure
         """
 
         balance_sheet = self.yahoo_api_balance_sheet(
@@ -507,7 +548,14 @@ class YahooAPI(TickerBase):
         x_axis_title = "Date" if group_by == "field" else "Field"
 
         # plot the balance sheet
-        plot_dataframe(balance_sheet, title="Balance Sheet", x_axis_title=x_axis_title)
+        fig = plot_dataframe(
+            balance_sheet,
+            title="Balance Sheet",
+            x_axis_title=x_axis_title,
+            show_plot=show_plot,
+        )
+
+        return fig
 
     def plot_yahoo_api_financials(
         self,
@@ -522,7 +570,8 @@ class YahooAPI(TickerBase):
             "NetIncomeCommonStockholders",
             "NetIncome",
         ],
-    ) -> None:
+        show_plot: bool = True,
+    ) -> Union[px.line, px.bar]:
         """
         Plots the financials for the stock using matplotlib grouped bar chart
 
@@ -543,6 +592,15 @@ class YahooAPI(TickerBase):
 
         fields_to_include: list
             The fields to include in the chart in the x-axis
+
+        show_plot : bool
+            If the plot should be shown or not.
+            If dash is used, this should be set to False
+            Default is True (show the plot)
+
+        Returns:
+        ----------------
+        Union[px.line, px.bar]: The plotly figure
         """
 
         financials = self.yahoo_api_financials(
@@ -559,7 +617,14 @@ class YahooAPI(TickerBase):
         x_axis_title = "Date" if group_by == "field" else "Field"
 
         # plot the financials
-        plot_dataframe(financials, title="Financials", x_axis_title=x_axis_title)
+        fig = plot_dataframe(
+            financials,
+            title="Financials",
+            x_axis_title=x_axis_title,
+            show_plot=show_plot,
+        )
+
+        return fig
 
     def _transform_df_for_plotting(
         self, df: pd.DataFrame, group_by: str, fields_to_include: list, frequency: str

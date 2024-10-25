@@ -48,3 +48,35 @@ def test_complex_digrin_plot(ticker):
     # Allow the Dash app to run for a short duration (e.g., 5 seconds)
     print("Waiting for Dash app to run for 30 seconds")
     time.sleep(30)
+
+
+@pytest.mark.skipif(skip_test, reason="Skipping in GH action as it is visual")
+@pytest.mark.parametrize(
+    "ticker",
+    [("AAPL"), ("BAC"), ("CAT"), ("ASML"), ("MSFT"), ("PLTR"), ("DHL.DE")],
+)
+def test_complex_yahoo_api_plot(ticker):
+    """
+    Test that builds multiple figures and plots them together in dash
+    """
+
+    ticker = Ticker(ticker=ticker)
+    figures = [
+        ticker.plot_yahoo_api_income_statement(show_plot=False),
+        ticker.plot_yahoo_api_cash_flow(show_plot=False),
+        ticker.plot_yahoo_api_balance_sheet(show_plot=False),
+        ticker.plot_yahoo_api_financials(show_plot=False),
+    ]
+
+    # Function to run the Dash app
+    def run_dash_app():
+        plot_multiple_categories(ticker=ticker.ticker, figures=figures)
+
+    # Start the Dash app in a separate thread
+    dash_thread = threading.Thread(target=run_dash_app)
+    dash_thread.daemon = True
+    dash_thread.start()
+
+    # Allow the Dash app to run for a short duration (e.g., 5 seconds)
+    print("Waiting for Dash app to run for 30 seconds")
+    time.sleep(30)
