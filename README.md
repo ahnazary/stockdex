@@ -7,9 +7,37 @@
 
 [![Documentation Status](https://readthedocs.org/projects/stockdex/badge/?version=latest)](https://ahnazary.github.io/stockdex/)
 
+<p align="center">
+  <img src="docs/images/stockdex_logo.png" alt="Stockdex Logo" style="width: 300px; height: 300px; border-radius: 50%; object-fit: cover;">
+</p>
+
+
 # Stockdex
 
-Stockdex is a Python package that provides a simple interface to access financial data from Yahoo Finance. Data is returned as a pandas DataFrame.
+Stockdex is a Python package that provides a simple interface to access financial data from various soruces and plotting capabilities using Plotly.
+
+<br />
+
+
+# Advantages of `Stockdex` over similar packages
+
+- **Various data sources**: `Stockdex` provides data from Yahoo Finance API and website, Digrin, Macrotrends, and JustETF (for EU ETFs).
+
+- **Numerous data categories**: `Stockdex` provides various data including financial statements, earnings, dividends, stock splits, list of key executives, major shareholders, and many more.
+
+- **Historical data**: `Stockdex` provides a wide time range of data, e.g. Digrin and Macrotrends sources, which provide data ranging from 4 years to historical data.
+
+- <span style="font-size: 17px; font-weight: bold; animation: rainbow 1.8s infinite; background: linear-gradient(90deg, orange, green, blue, indigo, violet); background-size: 1300%; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">plotting capabilities (new feature)</span>: `Stockdex` provides plotting financial data using bar, line, and sanky plots. Multiple plots can be combined in dash app.
+
+<style>
+@keyframes rainbow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+</style>
+
+<br />
 
 # Installation 
 
@@ -18,16 +46,7 @@ Install the package using pip:
 ```bash
 pip install stockdex -U
 ``` 
-
-# Supported Data Sources
-
-As of now, the package supports the following data sources:
-
-- Yahoo Finance API
-- Yahoo Finance Website
-- Digrin Website
-- Macrotrends Website
-- JustETF Website (for EU ETFs)
+<br />
 
 # Usage
 
@@ -40,7 +59,9 @@ ticker = Ticker(ticker="AAPL")
 
 Using the `Ticker` object, you can access financial data related to the stock in the form of a pandas DataFrame through ticker object's functions. each function is prefixed with the source of the data. For example functions with `yahoo_api_<function_name>` pattern are used to access data from Yahoo Finance API and functions with `yahoo_web_<function_name>` pattern are used to access data from Yahoo Finance website. Below are some examples of how to access data from different sources.
 
-## Data from `Yahoo Finance` API (fast queries through Yahoo Finance API):
+## Data from `Yahoo Finance` API:
+
+### Raw data:
 ```python
 from stockdex import Ticker
 from datetime import datetime
@@ -59,6 +80,19 @@ cash_flow = ticker.yahoo_api_cash_flow(format='raw')
 balance_sheet = ticker.yahoo_api_balance_sheet(period1=datetime(2020, 1, 1))
 financials = ticker.yahoo_api_financials(period1=datetime(2022, 1, 1), period2=datetime.today())
 ```
+
+### Plotting data:
+```python
+
+from stockdex import Ticker
+
+ticker = Ticker(ticker="MSFT")
+ticker.plot_yahoo_api_financials(group_by="field")
+``` 
+
+<p align="center">
+  <img src="docs/images/plot_yahoo_api_financials_msft.png" alt="Stockdex Logo" style="width: auto; height: auto; border-radius: 15px;">
+</p>
 
 
 ## Data from `Yahoo Finance` website (web scraping):
