@@ -14,3 +14,4 @@ requests==2.31.0
 selenium==4.18.1
 numpy==1.25.1
 plotly==5.24.1
+dash>=2.18.0
