@@ -406,6 +406,7 @@ def test_plot_digrin_net_income(ticker):
     assert True
 
 
+@pytest.mark.skipif(skip_test, reason="Skipping in GH action as it throws error 403")
 def test_plot_digrin_net_income_no_data():
     with pytest.raises(NoDataError):
         ticker = Ticker(ticker="PLTR")
