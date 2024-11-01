@@ -8,7 +8,7 @@
 [![Documentation Status](https://readthedocs.org/projects/stockdex/badge/?version=latest)](https://ahnazary.github.io/stockdex/)
 
 <p align="center">
-  <img src="docs/images/stockdex_logo.png" alt="Stockdex Logo" style="width: 300px; height: 300px; border-radius: 50%; object-fit: cover;">
+  <img src="docs/images/stockdex_logo.png" alt="Stockdex Logo" width="300" height="300" style="width: 300px; height: 300px; border-radius: 50%; object-fit: cover;">
 </p>
 
 
@@ -29,13 +29,13 @@ Stockdex is a Python package that provides a simple interface to access financia
 
 - <span style="font-size: 17px; font-weight: bold; animation: rainbow 1.8s infinite; background: linear-gradient(90deg, orange, green, blue, indigo, violet); background-size: 1300%; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">plotting capabilities (new feature)</span>: `Stockdex` provides plotting financial data using bar, line, and sanky plots. Multiple plots can be combined in dash app.
 
-<style>
+<!-- <style>
 @keyframes rainbow {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
-</style>
+</style> -->
 
 <br />
 
@@ -91,7 +91,7 @@ ticker.plot_yahoo_api_financials(group_by="field")
 ``` 
 
 <p align="center">
-  <img src="docs/images/plot_yahoo_api_financials_msft.png" alt="Stockdex Logo" style="width: auto; height: auto; border-radius: 15px;">
+  <img src="docs/images/plot_yahoo_api_financials_msft.png" alt="Stockdex Logo" width="auto" height="auto" style="width: auto; height: auto; border-radius: 15px;">
 </p>
 
 
