@@ -50,6 +50,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#module-stockdex.lib">stockdex.lib module</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#stockdex.lib.check_security_type"><code class="docutils literal notranslate"><span class="pre">check_security_type()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#stockdex.lib.get_user_agent"><code class="docutils literal notranslate"><span class="pre">get_user_agent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#stockdex.lib.plot_dataframe"><code class="docutils literal notranslate"><span class="pre">plot_dataframe()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#stockdex.lib.plot_multiple_categories"><code class="docutils literal notranslate"><span class="pre">plot_multiple_categories()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#module-stockdex.nasdaq_interface">stockdex.nasdaq_interface module</a><ul>
@@ -114,6 +116,52 @@
 <dt class="sig sig-object py" id="stockdex.lib.get_user_agent">
 <span class="sig-prename descclassname"><span class="pre">stockdex.lib.</span></span><span class="sig-name descname"><span class="pre">get_user_agent</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/stockdex/lib.html#get_user_agent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.lib.get_user_agent" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="stockdex.lib.plot_dataframe">
+<span class="sig-prename descclassname"><span class="pre">stockdex.lib.</span></span><span class="sig-name descname"><span class="pre">plot_dataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">barmode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'group'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logaritmic</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">template</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'plotly'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_axis_title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Amount'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_axis_title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Date'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">draw_line_chart</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_plot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/stockdex/lib.html#plot_dataframe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.lib.plot_dataframe" title="Permalink to this definition"></a></dt>
+<dd><p>Plot a DataFrame using Plotly Express</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataframe</strong> (<em>pd.DataFrame</em>) – The DataFrame to plot</p></li>
+<li><p><strong>title</strong> (<em>str</em>) – The title of the plot</p></li>
+<li><p><strong>barmode</strong> (<em>str</em>) – The barmode of the plot
+default: “group”</p></li>
+<li><p><strong>logaritmic</strong> (<em>bool</em>) – If the y-axis should be logaritmic
+default: False</p></li>
+<li><p><strong>template</strong> (<em>str</em>) – The template of the plot.
+One of plotly, plotly_white, plotly_dark, ggplot2, seaborn, simple_white, none
+default: “plotly”#</p></li>
+<li><p><strong>y_axis_title</strong> (<em>str</em>) – The title of the y-axis
+default: “Amount”</p></li>
+<li><p><strong>x_axis_title</strong> (<em>str</em>) – The title of the x-axis
+default: “Date”</p></li>
+<li><p><strong>draw_line_chart</strong> (<em>bool</em>) – If the plot should be a line chart and not bar. For charts that have too many data points,
+it is recommended to use line charts instead of bar charts as it is easier to read.
+default: False (bar chart)</p></li>
+<li><p><strong>show_plot</strong> (<em>bool</em>) – If the plot should be shown. Setting this to False will only return the plot object.
+Can be used to save the plot to a file or construct complex dashboards with multiple plots.
+default: True</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="stockdex.lib.plot_multiple_categories">
+<span class="sig-prename descclassname"><span class="pre">stockdex.lib.</span></span><span class="sig-name descname"><span class="pre">plot_multiple_categories</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ticker</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figures</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">bar</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">line</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app_port</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8050</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/stockdex/lib.html#plot_multiple_categories"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.lib.plot_multiple_categories" title="Permalink to this definition"></a></dt>
+<dd><p>Plot multiple categories in a single Dash app.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>figures</strong> (<em>List</em><em>[</em><em>Union</em><em>[</em><em>px.bar</em><em>, </em><em>px.line</em><em>]</em><em>]</em>) – A list of Plotly Express bar or line objects</p></li>
+<li><p><strong>app_port</strong> (<em>int</em>) – The port to run the Dash app on
+default: 8050</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 <section id="module-stockdex.nasdaq_interface">
@@ -203,7 +251,7 @@ The columns might include:
 <dl class="py class">
 <dt class="sig sig-object py" id="stockdex.ticker.Ticker">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stockdex.ticker.</span></span><span class="sig-name descname"><span class="pre">Ticker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ticker</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">security_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'stock'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'etf'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'cryptocurrency'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'index'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'commodity'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'stock'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stockdex/ticker.html#Ticker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.ticker.Ticker" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">YahooAPI</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">JustETF</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">DigrinInterface</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">YahooWeb</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">MacrotrendsInterface</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">YahooAPI</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">JustETF</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">DigrinInterface</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">YahooWeb</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">MacrotrendsInterface</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">SankeyCharts</span></code></p>
 <p>Class for the Ticker</p>
 </dd></dl>
 

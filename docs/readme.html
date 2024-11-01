@@ -46,10 +46,14 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Project description</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#stockdex">Stockdex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#advantages-of-stockdex-over-similar-packages">Advantages of <code class="docutils literal notranslate"><span class="pre">Stockdex</span></code> over similar packages</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#supported-data-sources">Supported Data Sources</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#data-from-yahoo-finance-api-fast-queries-through-yahoo-finance-api">Data from <code class="docutils literal notranslate"><span class="pre">Yahoo</span> <span class="pre">Finance</span></code> API (fast queries through Yahoo Finance API):</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#data-from-yahoo-finance-api">Data from <code class="docutils literal notranslate"><span class="pre">Yahoo</span> <span class="pre">Finance</span></code> API:</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#raw-data">Raw data:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#plotting-data">Plotting data:</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#data-from-yahoo-finance-website-web-scraping">Data from <code class="docutils literal notranslate"><span class="pre">Yahoo</span> <span class="pre">Finance</span></code> website (web scraping):</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#stocks-data-from-digrin-web-scraping">Stocks data from <code class="docutils literal notranslate"><span class="pre">Digrin</span></code> (web scraping):</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#stocks-data-from-macrotrends-web-scraping">Stocks data from <code class="docutils literal notranslate"><span class="pre">macrotrends</span></code> (web scraping):</a></li>
@@ -93,9 +97,30 @@
 <img alt="Code style: isort" src="https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&amp;labelColor=ef8336" />
 <img alt="flake8" src="https://img.shields.io/badge/flake8-checked-blue" /></p>
 <p><a class="reference external" href="https://ahnazary.github.io/stockdex/"><img alt="Documentation Status" src="https://readthedocs.org/projects/stockdex/badge/?version=latest" /></a></p>
+<p align="center">
+  <img src="docs/images/stockdex_logo.png" alt="Stockdex Logo" style="width: 300px; height: 300px; border-radius: 50%; object-fit: cover;">
+</p>
 <section id="stockdex">
 <h2>Stockdex<a class="headerlink" href="#stockdex" title="Permalink to this heading"></a></h2>
-<p>Stockdex is a Python package that provides a simple interface to access financial data from Yahoo Finance. Data is returned as a pandas DataFrame.</p>
+<p>Stockdex is a Python package that provides a simple interface to access financial data from various soruces and plotting capabilities using Plotly.</p>
+<br />
+</section>
+<section id="advantages-of-stockdex-over-similar-packages">
+<h2>Advantages of <code class="docutils literal notranslate"><span class="pre">Stockdex</span></code> over similar packages<a class="headerlink" href="#advantages-of-stockdex-over-similar-packages" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Various data sources</strong>: <code class="docutils literal notranslate"><span class="pre">Stockdex</span></code> provides data from Yahoo Finance API and website, Digrin, Macrotrends, and JustETF (for EU ETFs).</p></li>
+<li><p><strong>Numerous data categories</strong>: <code class="docutils literal notranslate"><span class="pre">Stockdex</span></code> provides various data including financial statements, earnings, dividends, stock splits, list of key executives, major shareholders, and many more.</p></li>
+<li><p><strong>Historical data</strong>: <code class="docutils literal notranslate"><span class="pre">Stockdex</span></code> provides a wide time range of data, e.g. Digrin and Macrotrends sources, which provide data ranging from 4 years to historical data.</p></li>
+<li><p><span style="font-size: 17px; font-weight: bold; animation: rainbow 1.8s infinite; background: linear-gradient(90deg, orange, green, blue, indigo, violet); background-size: 1300%; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">plotting capabilities (new feature)</span>: <code class="docutils literal notranslate"><span class="pre">Stockdex</span></code> provides plotting financial data using bar, line, and sanky plots. Multiple plots can be combined in dash app.</p></li>
+</ul>
+<style>
+@keyframes rainbow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+</style>
+<br />
 </section>
 <section id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h2>
@@ -103,17 +128,7 @@
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>stockdex<span class="w"> </span>-U
 </pre></div>
 </div>
-</section>
-<section id="supported-data-sources">
-<h2>Supported Data Sources<a class="headerlink" href="#supported-data-sources" title="Permalink to this heading"></a></h2>
-<p>As of now, the package supports the following data sources:</p>
-<ul class="simple">
-<li><p>Yahoo Finance API</p></li>
-<li><p>Yahoo Finance Website</p></li>
-<li><p>Digrin Website</p></li>
-<li><p>Macrotrends Website</p></li>
-<li><p>JustETF Website (for EU ETFs)</p></li>
-</ul>
+<br />
 </section>
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h2>
@@ -124,8 +139,10 @@
 </pre></div>
 </div>
 <p>Using the <code class="docutils literal notranslate"><span class="pre">Ticker</span></code> object, you can access financial data related to the stock in the form of a pandas DataFrame through ticker object’s functions. each function is prefixed with the source of the data. For example functions with <code class="docutils literal notranslate"><span class="pre">yahoo_api_&lt;function_name&gt;</span></code> pattern are used to access data from Yahoo Finance API and functions with <code class="docutils literal notranslate"><span class="pre">yahoo_web_&lt;function_name&gt;</span></code> pattern are used to access data from Yahoo Finance website. Below are some examples of how to access data from different sources.</p>
-<section id="data-from-yahoo-finance-api-fast-queries-through-yahoo-finance-api">
-<h3>Data from <code class="docutils literal notranslate"><span class="pre">Yahoo</span> <span class="pre">Finance</span></code> API (fast queries through Yahoo Finance API):<a class="headerlink" href="#data-from-yahoo-finance-api-fast-queries-through-yahoo-finance-api" title="Permalink to this heading"></a></h3>
+<section id="data-from-yahoo-finance-api">
+<h3>Data from <code class="docutils literal notranslate"><span class="pre">Yahoo</span> <span class="pre">Finance</span></code> API:<a class="headerlink" href="#data-from-yahoo-finance-api" title="Permalink to this heading"></a></h3>
+<section id="raw-data">
+<h4>Raw data:<a class="headerlink" href="#raw-data" title="Permalink to this heading"></a></h4>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">stockdex</span> <span class="kn">import</span> <span class="n">Ticker</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 
@@ -144,6 +161,20 @@
 <span class="n">financials</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_api_financials</span><span class="p">(</span><span class="n">period1</span><span class="o">=</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2022</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">period2</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">today</span><span class="p">())</span>
 </pre></div>
 </div>
+</section>
+<section id="plotting-data">
+<h4>Plotting data:<a class="headerlink" href="#plotting-data" title="Permalink to this heading"></a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<span class="kn">from</span> <span class="nn">stockdex</span> <span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;MSFT&quot;</span><span class="p">)</span>
+<span class="n">ticker</span><span class="o">.</span><span class="n">plot_yahoo_api_financials</span><span class="p">(</span><span class="n">group_by</span><span class="o">=</span><span class="s2">&quot;field&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p align="center">
+  <img src="docs/images/plot_yahoo_api_financials_msft.png" alt="Stockdex Logo" style="width: auto; height: auto; border-radius: 15px;">
+</p>
+</section>
 </section>
 <section id="data-from-yahoo-finance-website-web-scraping">
 <h3>Data from <code class="docutils literal notranslate"><span class="pre">Yahoo</span> <span class="pre">Finance</span></code> website (web scraping):<a class="headerlink" href="#data-from-yahoo-finance-website-web-scraping" title="Permalink to this heading"></a></h3>
