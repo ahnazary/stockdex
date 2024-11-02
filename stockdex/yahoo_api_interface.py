@@ -418,7 +418,7 @@ class YahooAPI(TickerBase):
         # plot the income statement
         fig = plot_dataframe(
             income_statement,
-            title="Income Statement",
+            title=f"Income Statement for {self.ticker} ({frequency})",
             x_axis_title=x_axis_title,
             show_plot=show_plot,
         )
@@ -484,7 +484,7 @@ class YahooAPI(TickerBase):
         # plot the cash flow
         fig = plot_dataframe(
             cash_flow,
-            title="Cash Flow Statement",
+            title=f"Cash Flow Statement for {self.ticker} ({frequency})",
             x_axis_title=x_axis_title,
             show_plot=show_plot,
         )
@@ -550,7 +550,7 @@ class YahooAPI(TickerBase):
         # plot the balance sheet
         fig = plot_dataframe(
             balance_sheet,
-            title="Balance Sheet",
+            title=f"Balance Sheet for {self.ticker} ({frequency})",
             x_axis_title=x_axis_title,
             show_plot=show_plot,
         )
@@ -619,7 +619,7 @@ class YahooAPI(TickerBase):
         # plot the financials
         fig = plot_dataframe(
             financials,
-            title="Financials",
+            title=f"Financials for {self.ticker} ({frequency})",
             x_axis_title=x_axis_title,
             show_plot=show_plot,
         )

@@ -185,6 +185,7 @@ def test_macrotrends_net_margin(ticker):
 def test_plot_macrotrends_income_statement(ticker, group_by):
     ticker = Ticker(ticker=ticker)
     ticker.plot_macrotrends_income_statement(group_by=group_by)
+    assert True
 
 
 @pytest.mark.skipif(skip_test, reason="Skipping in GH action as it is visual")

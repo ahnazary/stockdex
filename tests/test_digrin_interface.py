@@ -354,6 +354,7 @@ def test_digrin_upcoming_estimated_earnings(ticker):
     "ticker",
     [
         ("AAPL"),
+        ("CAT"),
     ],
 )
 def test_plot_digrin_price(ticker):
