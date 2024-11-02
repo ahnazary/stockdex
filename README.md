@@ -7,9 +7,7 @@
 
 [![Documentation Status](https://readthedocs.org/projects/stockdex/badge/?version=latest)](https://ahnazary.github.io/stockdex/)
 
-<p align="center">
-  <img src="docs/images/stockdex_logo.png" alt="Stockdex Logo" width="300" height="300" style="width: 300px; height: 300px; border-radius: 50%; object-fit: cover;">
-</p>
+<img src="docs/images/stockdex_logo.png" alt="Stockdex Logo" class="stockdex-logo">
 
 
 # Stockdex
@@ -27,7 +25,8 @@ Stockdex is a Python package that provides a simple interface to access financia
 
 - **Historical data**: `Stockdex` provides a wide time range of data, e.g. Digrin and Macrotrends sources, which provide data ranging from 4 years to historical data.
 
-- <span style="font-size: 17px; font-weight: bold; animation: rainbow 1.8s infinite; background: linear-gradient(90deg, orange, green, blue, indigo, violet); background-size: 1300%; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">plotting capabilities (new feature)</span>: `Stockdex` provides plotting financial data using bar, line, and sanky plots. Multiple plots can be combined in dash app.
+- <span style="font-size: 17px; font-weight: bold; animation: rainbow 1.8s infinite; background: linear-gradient(90deg, orange, green, blue, indigo, violet); background-size: 13
+ 00%; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">plotting capabilities (new feature)</span>: `Stockdex` provides plotting financial data using bar, line, and sanky plots. Multiple plots can be combined in dash app.
 
 <!-- <style>
 @keyframes rainbow {
@@ -50,7 +49,7 @@ pip install stockdex -U
 
 # Usage
 
-For detailed info about usage of the package and its functions including plotting and dash app, check out the [this part of the readme](./stockdex/USAGE.md).
+For detailed info about usage of the package and its functions including plotting and dash app, check out the [this part of the readme](USAGE.md).
 
 In general, to access main functions, The `Ticker` object should be created with the ticker of the stock as an argument. An example of creating a `Ticker` object is shown below:
 
@@ -62,7 +61,7 @@ ticker = Ticker(ticker="AAPL")
 
 ## Data from `Yahoo Finance`, `Digrin`, and `Macrotrends`:
 
-The `Ticker` object provides data from Yahoo Finance API and website, Digrin, and Macrotrends. Below are some of the data that can be retrieved from these sources (more detailed info with output can be found [here](./stockdex/USAGE.md)).
+The `Ticker` object provides data from Yahoo Finance API and website, Digrin, and Macrotrends. Below are some of the data that can be retrieved from these sources (more detailed info with output can be found [here](USAGE.md)).
 
 ### Raw data:
 ```python
