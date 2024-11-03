@@ -8,7 +8,7 @@
 [![Documentation Status](https://readthedocs.org/projects/stockdex/badge/?version=latest)](https://ahnazary.github.io/stockdex/)
 
 <p align="center">
-  <img src="images/stockdex_logo.png" alt="Stockdex Logo" width="300" height="300" style="width: 300px; height: 300px; border-radius: 50%; object-fit: cover;">
+  <img src="docs/images/stockdex_logo.png" alt="Stockdex Logo" width="300" height="300" style="width: 300px; height: 300px; border-radius: 50%; object-fit: cover;">
 </p>
 
 
