@@ -79,15 +79,15 @@ price = ticker.yahoo_api_price(range='1y', dataGranularity='1d')
 ticker = Ticker(ticker="MSFT")
 ticker.plot_yahoo_api_financials(group_by="field")
 
-# Summary including general financial information from Yahoo Finance website
-summary = ticker.yahoo_web_summary#
-
 # Complete historical data of the stock in certain categories from digrin website
 dividend = ticker.digrin_dividend
 
-
 # Financial data from macrotrends website
 income_statement = ticker.macrotrends_income_statement
+
+# Summary including general financial information from Yahoo Finance website
+summary = ticker.yahoo_web_summary
+
 ```
 
 <!-- ## NASDAQ data from `NASDAQ` website (web scraping):

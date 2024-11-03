@@ -71,44 +71,6 @@ The output of the function is a sankey chart showing the income statement of the
 </p>
 
 
-## Data from `Yahoo Finance` website (web scraping):
-```python
-from stockdex import Ticker
-
-ticker = Ticker(ticker="AAPL")
-
-# Summary including general financial information
-summary = ticker.yahoo_web_summary
-
-# Financial data as it is seen in the yahoo finance website
-income_stmt = ticker.yahoo_web_income_stmt
-balance_sheet = ticker.yahoo_web_balance_sheet
-cash_flow = ticker.yahoo_web_cashflow
-
-# Analysts and estimates
-analysis = ticker.yahoo_web_analysis
-
-# Data about options
-calls = ticker.yahoo_web_calls
-puts = ticker.yahoo_web_puts
-
-# Profile data 
-key_executives = ticker.yahoo_web_key_executives
-description = ticker.yahoo_web_description
-corporate_governance = ticker.yahoo_web_corporate_governance
-
-# Data about shareholders
-major_holders = ticker.yahoo_web_major_holders
-top_institutional_holders = ticker.yahoo_web_top_institutional_holders
-top_mutual_fund_holders = ticker.yahoo_web_top_mutual_fund_holders
-
-# Statistics
-valuation_measures = ticker.yahoo_web_valuation_measures
-financial_highlights = ticker.yahoo_web_financial_highlights
-trading_information = ticker.yahoo_web_trading_information
-```
-
-
 ## Stocks data from `Digrin` (web scraping):
 
 Data on Digrin website includes all historical data of the stock in certain categories, unlike Yahoo Finance which only provides the last 5 years of data at most.
@@ -237,6 +199,44 @@ Running each function will open a tab in default browser showing the plot. Below
 <p align="center">
   <img src="docs/images/plot_macrotrends_income_statement_googl.png" alt="Stockdex Logo" width="auto" height="auto" style="width: auto; height: auto; border-radius: 15px;">    
 </p>
+
+## Data from `Yahoo Finance` website (web scraping):
+```python
+from stockdex import Ticker
+
+ticker = Ticker(ticker="AAPL")
+
+# Summary including general financial information
+summary = ticker.yahoo_web_summary
+
+# Financial data as it is seen in the yahoo finance website
+income_stmt = ticker.yahoo_web_income_stmt
+balance_sheet = ticker.yahoo_web_balance_sheet
+cash_flow = ticker.yahoo_web_cashflow
+
+# Analysts and estimates
+analysis = ticker.yahoo_web_analysis
+
+# Data about options
+calls = ticker.yahoo_web_calls
+puts = ticker.yahoo_web_puts
+
+# Profile data 
+key_executives = ticker.yahoo_web_key_executives
+description = ticker.yahoo_web_description
+corporate_governance = ticker.yahoo_web_corporate_governance
+
+# Data about shareholders
+major_holders = ticker.yahoo_web_major_holders
+top_institutional_holders = ticker.yahoo_web_top_institutional_holders
+top_mutual_fund_holders = ticker.yahoo_web_top_mutual_fund_holders
+
+# Statistics
+valuation_measures = ticker.yahoo_web_valuation_measures
+financial_highlights = ticker.yahoo_web_financial_highlights
+trading_information = ticker.yahoo_web_trading_information
+```
+
 
 
 ## EU ETF data from `justETF` (web scraping):
