@@ -84,14 +84,14 @@
 <div class="viewcode-block" id="get_user_agent"><a class="viewcode-back" href="../../stockdex.html#stockdex.lib.get_user_agent">[docs]</a><span class="k">def</span> <span class="nf">get_user_agent</span><span class="p">():</span>
     <span class="n">os_name</span> <span class="o">=</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
     <span class="k">if</span> <span class="s2">&quot;linux&quot;</span> <span class="ow">in</span> <span class="n">os_name</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">&quot;Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36&quot;</span>  <span class="c1"># noqa E501</span>
+        <span class="k">return</span> <span class="s2">&quot;Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36&quot;</span>  <span class="c1"># noqa E501</span>
     <span class="k">elif</span> <span class="s2">&quot;darwin&quot;</span> <span class="ow">in</span> <span class="n">os_name</span><span class="p">:</span>
         <span class="k">return</span> <span class="s2">&quot;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Safari/605.1.15&quot;</span>  <span class="c1"># noqa E501</span>
     <span class="k">elif</span> <span class="s2">&quot;windows&quot;</span> <span class="ow">in</span> <span class="n">os_name</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36&quot;</span>  <span class="c1"># noqa E501</span>
+        <span class="k">return</span> <span class="s2">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36&quot;</span>  <span class="c1"># noqa E501</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># Fallback User-Agent</span>
-        <span class="k">return</span> <span class="s2">&quot;&quot;&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3&quot;&quot;&quot;</span>  <span class="c1"># noqa E501</span></div>
+        <span class="k">return</span> <span class="s2">&quot;&quot;&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36&quot;&quot;&quot;</span>  <span class="c1"># noqa E501</span></div>
 
 
 <div class="viewcode-block" id="check_security_type"><a class="viewcode-back" href="../../stockdex.html#stockdex.lib.check_security_type">[docs]</a><span class="k">def</span> <span class="nf">check_security_type</span><span class="p">(</span><span class="n">security_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">valid_types</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>

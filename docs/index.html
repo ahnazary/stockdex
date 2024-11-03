@@ -88,11 +88,52 @@
 <li class="toctree-l3"><a class="reference internal" href="readme.html#eu-etf-data-from-justetf-web-scraping">EU ETF data from <code class="docutils literal notranslate"><span class="pre">justETF</span></code> (web scraping):</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="readme.html#detailed-usage-instructions-for-the-stockdex-package">Detailed usage instructions for the stockdex package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="readme.html#data-from-yahoo-finance-api">Data from <code class="docutils literal notranslate"><span class="pre">Yahoo</span> <span class="pre">Finance</span></code> API:</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="readme.html#raw-data">Raw data:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="readme.html#plotting-data">Plotting data:</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="readme.html#sankey-charts">Sankey charts:</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="readme.html#stocks-data-from-digrin-web-scraping">Stocks data from <code class="docutils literal notranslate"><span class="pre">Digrin</span></code> (web scraping):</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="readme.html#id1">Raw data:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="readme.html#id2">Plotting data:</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="readme.html#stocks-data-from-macrotrends-web-scraping">Stocks data from <code class="docutils literal notranslate"><span class="pre">macrotrends</span></code> (web scraping):</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="readme.html#id3">Raw data:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="readme.html#id4">Plotting data:</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="readme.html#data-from-yahoo-finance-website-web-scraping">Data from <code class="docutils literal notranslate"><span class="pre">Yahoo</span> <span class="pre">Finance</span></code> website (web scraping):</a></li>
+<li class="toctree-l3"><a class="reference internal" href="readme.html#eu-etf-data-from-justetf-web-scraping">EU ETF data from <code class="docutils literal notranslate"><span class="pre">justETF</span></code> (web scraping):</a></li>
+<li class="toctree-l3"><a class="reference internal" href="readme.html#building-dashboards-with-multiple-plots">Building dashboards with multiple plots:</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">stockdex</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="stockdex.html">stockdex package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="stockdex.html">Available modules</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="stockdex.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="stockdex.html#module-stockdex.config">stockdex.config module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="stockdex.html#module-stockdex.digrin_interface">stockdex.digrin_interface module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="stockdex.html#stockdex.digrin_interface.DigrinInterface"><code class="docutils literal notranslate"><span class="pre">DigrinInterface</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="stockdex.html#module-stockdex.exceptions">stockdex.exceptions module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="stockdex.html#stockdex.exceptions.FieldNotExists"><code class="docutils literal notranslate"><span class="pre">FieldNotExists</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="stockdex.html#stockdex.exceptions.NoDataError"><code class="docutils literal notranslate"><span class="pre">NoDataError</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="stockdex.html#stockdex.exceptions.NoISINError"><code class="docutils literal notranslate"><span class="pre">NoISINError</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="stockdex.html#stockdex.exceptions.WrongDataSource"><code class="docutils literal notranslate"><span class="pre">WrongDataSource</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="stockdex.html#stockdex.exceptions.WrongSecurityType"><code class="docutils literal notranslate"><span class="pre">WrongSecurityType</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="stockdex.html#module-stockdex.justetf_interface">stockdex.justetf_interface module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="stockdex.html#stockdex.justetf_interface.JustETF"><code class="docutils literal notranslate"><span class="pre">JustETF</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="stockdex.html#module-stockdex.lib">stockdex.lib module</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="stockdex.html#stockdex.lib.check_security_type"><code class="docutils literal notranslate"><span class="pre">check_security_type()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="stockdex.html#stockdex.lib.get_user_agent"><code class="docutils literal notranslate"><span class="pre">get_user_agent()</span></code></a></li>
@@ -100,17 +141,36 @@
 <li class="toctree-l4"><a class="reference internal" href="stockdex.html#stockdex.lib.plot_multiple_categories"><code class="docutils literal notranslate"><span class="pre">plot_multiple_categories()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="stockdex.html#module-stockdex.macrotrends_interface">stockdex.macrotrends_interface module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="stockdex.html#stockdex.macrotrends_interface.MacrotrendsInterface"><code class="docutils literal notranslate"><span class="pre">MacrotrendsInterface</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="stockdex.html#module-stockdex.nasdaq_interface">stockdex.nasdaq_interface module</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="stockdex.html#stockdex.nasdaq_interface.NASDAQInterface"><code class="docutils literal notranslate"><span class="pre">NASDAQInterface</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="stockdex.html#module-stockdex.sankey_charts">stockdex.sankey_charts module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="stockdex.html#stockdex.sankey_charts.SankeyCharts"><code class="docutils literal notranslate"><span class="pre">SankeyCharts</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="stockdex.html#module-stockdex.selenium_interface">stockdex.selenium_interface module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="stockdex.html#stockdex.selenium_interface.selenium_interface"><code class="docutils literal notranslate"><span class="pre">selenium_interface</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="stockdex.html#module-stockdex.ticker">stockdex.ticker module</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="stockdex.html#stockdex.ticker.Ticker"><code class="docutils literal notranslate"><span class="pre">Ticker</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="stockdex.html#stockdex-ticker-api-module">stockdex.ticker_api module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="stockdex.html#module-stockdex.ticker_base">stockdex.ticker_base module</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="stockdex.html#stockdex.ticker_base.TickerBase"><code class="docutils literal notranslate"><span class="pre">TickerBase</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="stockdex.html#module-stockdex.yahoo_api_interface">stockdex.yahoo_api_interface module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="stockdex.html#stockdex.yahoo_api_interface.YahooAPI"><code class="docutils literal notranslate"><span class="pre">YahooAPI</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="stockdex.html#module-stockdex.yahoo_web_interface">stockdex.yahoo_web_interface module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="stockdex.html#stockdex.yahoo_web_interface.YahooWeb"><code class="docutils literal notranslate"><span class="pre">YahooWeb</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="stockdex.html#module-stockdex">Module contents</a></li>
