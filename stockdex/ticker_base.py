@@ -41,7 +41,7 @@ class TickerBase:
             url, headers=self.request_headers, timeout=RESPONSE_TIMEOUT
         )
         # If the HTTP GET request can't be served
-        if response.status_code != 200:
+        if response.status_code != 200 and response.status_code != 429:
             raise Exception(
                 f"""
                 Failed to load page (status code: {response.status_code}).
