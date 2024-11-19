@@ -28,7 +28,7 @@ Stockdex is a Python package that provides a simple interface to access financia
 - **Historical data**: `Stockdex` provides a wide time range of data, e.g. Digrin and Macrotrends sources, which provide data ranging from 4 years to historical data.
 
 - <span style="font-size: 17px; font-weight: bold; animation: rainbow 1.8s infinite; background: linear-gradient(90deg, orange, green, blue, indigo, violet); background-size: 13
- 00%; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">plotting capabilities (new feature)</span>: `Stockdex` provides plotting financial data using bar, line, and sanky plots. Multiple plots can be combined in dash app.
+ 00%; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">**plotting capabilities (new feature)**</span>: `Stockdex` provides plotting financial data using bar, line, and sanky plots. Multiple plots can be combined in dash app.
 
 <!-- <style>
 @keyframes rainbow {
@@ -45,7 +45,7 @@ Stockdex is a Python package that provides a simple interface to access financia
 Install the package using pip:
 
 ```bash
-pip install stockdex -U
+pip install stockdex -U --no-cache-dir
 ``` 
 <br />
 
