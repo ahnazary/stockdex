@@ -28,3 +28,13 @@ repos:
              --max-line-length=99,
               --extend-ignore=E402
       ] 
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    # Ruff version.
+    rev: v0.8.0
+    hooks:
+      # Run the linter.
+      - id: ruff
+        args: [ --fix ]
+      # Run the formatter.
+      - id: ruff-format
