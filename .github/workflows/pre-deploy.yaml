@@ -1,4 +1,4 @@
-name: pre-deploy (linters)
+name: pre-deploy
 
 on:
   push:
