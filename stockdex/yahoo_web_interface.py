@@ -23,7 +23,7 @@ class YahooWeb(TickerBase):
         self.ticker = ticker
         self.security_type = security_type
 
-    def yahoo_web_financials_table(self, url: str, column_name_to_look_for: str = ""):
+    def yahoo_web_financials_table(self, url: str) -> pd.DataFrame:
         """
         Get financials table from the Yahoo Finance website
 
@@ -31,8 +31,6 @@ class YahooWeb(TickerBase):
         ----------------
         url (str)
             The URL of the website to scrape
-        column_name_to_look_for (str)
-            The column name to look for in the table
 
 
         Returns:
@@ -40,26 +38,42 @@ class YahooWeb(TickerBase):
         pd.DataFrame: A pandas DataFrame including the financials table
         """
         response = self.get_response(url)
-        soup = BeautifulSoup(response.content, "html.parser")
+        soup = BeautifulSoup(response.content, "html.parser").find(
+            "div", {"class": "table yf-1pgoo1f"}
+        )
 
-        raw_data = soup.find("div", {"class": "table yf-1pgoo1f"})
-
-        data_df = pd.DataFrame()
-
-        headers = [
-            item.text
-            for item in raw_data.find("div", {"class": "row yf-1ezv2n5"}).find_all(
-                "div"
-            )
+        # Extract column headers
+        header_row = soup.find("div", class_="tableHeader")
+        columns = [
+            col.get_text(strip=True)
+            for col in header_row.find_all("div", class_="column")
         ]
-        data_df = pd.DataFrame(columns=headers)
-        rows = raw_data.find_all("div", {"class": "row lv-0 yf-1xjz32c"})
 
-        for row in rows:
-            data = [item.text for item in row.find_all("div")][-len(headers) :]  # noqa
-            data_df.loc[len(data_df)] = data
+        # Add 'Breakdown' to the columns
+        columns.insert(0, "Breakdown")
 
-        return data_df.set_index("Breakdown").T
+        # Extract data rows
+        data_rows = soup.find("div", class_="tableBody").find_all("div", class_="row")
+
+        # Parse each row into a list of values
+        data = []
+        for row in data_rows:
+            cells = row.find_all("div", class_="column")
+            row_data = [
+                row.find("div", class_="rowTitle").get_text(strip=True)
+            ]  # Extract the Breakdown value
+            row_data += [
+                cell.get_text(strip=True) for cell in cells
+            ]  # Extract the rest of the row's data
+            data.append(row_data)
+
+        # Create a Pandas DataFrame
+        df = pd.DataFrame(data, columns=columns).set_index("Breakdown")
+
+        # index is a tuple, get only first element
+        df.index = [index[0] for index in df.index]
+
+        return df
 
     @property
     def yahoo_web_cashflow(self) -> pd.DataFrame:
