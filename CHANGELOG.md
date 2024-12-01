@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.0.2
+
+### Added
+
+### Fixed
+
+- Fix path to chrome driver in selenium module.
+- Fix yahoo web financials, balance sheet, and cash flow data.
+
+### Changed
+
+## 1.0.0
+
+### Added
+
+- Added `plotly` and `dash` modules to plot financial data and create dash app.
+
+### Fixed
+
+### Changed
 
 ## 0.7.0
 
