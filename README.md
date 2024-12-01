@@ -104,6 +104,18 @@ quarterly_earnings_forecast = ticker.quarterly_earnings_forecast
 price_to_earnings_ratio = ticker.price_to_earnings_ratio
 forecast_price_to_earnings__growth_rates = ticker.forecast_peg_rate
 ``` -->
+
+## EU ETF data from `justETF` (web scraping):
+
+For EU ETFS, the `isin` and `security_type` should be passed to the `Ticker` object. The `isin` is the International Securities Identification Number of the ETF and the `security_type` should be set to `etf`.
+
+```python
+from stockdex import Ticker
+
+etf = Ticker(isin="IE00B4L5Y983", security_type="etf")
+
+etf_general_info = etf.justetf_general_info
+```
 <br />
 
 ---
