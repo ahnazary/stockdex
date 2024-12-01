@@ -18,7 +18,7 @@ class selenium_interface:
         self.chrome_options.add_argument("--no-sandbox")
         self.chrome_options.add_argument("--disable-dev-shm-usage")
         self.chrome_options.binary_location = os.path.join(
-            os.getcwd(), "chromedriver_linux64"
+            os.getcwd(), "stockdex/chromedriver_linux64"
         )
         self.chrome_options.add_argument("--disable-gpu")
         self.chrome_options.add_argument("--disable-extensions")
