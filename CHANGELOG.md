@@ -4,6 +4,8 @@
 
 ### Added
 
+- Added `ruff`as link to the project. 
+
 ### Fixed
 
 - Fix path to chrome driver in selenium module.
