@@ -74,20 +74,20 @@
 <span class="sd">Module to extract data from Digrin website</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span>
 
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
-<span class="kn">from</span> <span class="nn">plotly</span> <span class="kn">import</span> <span class="n">express</span> <span class="k">as</span> <span class="n">px</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bs4</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeautifulSoup</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">plotly</span><span class="w"> </span><span class="kn">import</span> <span class="n">express</span> <span class="k">as</span> <span class="n">px</span>
 
-<span class="kn">from</span> <span class="nn">stockdex.config</span> <span class="kn">import</span> <span class="n">DIGRIN_BASE_URL</span><span class="p">,</span> <span class="n">VALID_SECURITY_TYPES</span>
-<span class="kn">from</span> <span class="nn">stockdex.exceptions</span> <span class="kn">import</span> <span class="n">NoDataError</span>
-<span class="kn">from</span> <span class="nn">stockdex.lib</span> <span class="kn">import</span> <span class="n">plot_dataframe</span>
-<span class="kn">from</span> <span class="nn">stockdex.ticker_base</span> <span class="kn">import</span> <span class="n">TickerBase</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">DIGRIN_BASE_URL</span><span class="p">,</span> <span class="n">VALID_SECURITY_TYPES</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">NoDataError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.lib</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_dataframe</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker_base</span><span class="w"> </span><span class="kn">import</span> <span class="n">TickerBase</span>
 
 
-<div class="viewcode-block" id="DigrinInterface"><a class="viewcode-back" href="../../stockdex.html#stockdex.digrin_interface.DigrinInterface">[docs]</a><span class="k">class</span> <span class="nc">DigrinInterface</span><span class="p">(</span><span class="n">TickerBase</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<div class="viewcode-block" id="DigrinInterface"><a class="viewcode-back" href="../../stockdex.html#stockdex.digrin_interface.DigrinInterface">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">DigrinInterface</span><span class="p">(</span><span class="n">TickerBase</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">ticker</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
         <span class="n">isin</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
@@ -98,7 +98,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">security_type</span> <span class="o">=</span> <span class="n">security_type</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">digrin_dividend</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">digrin_dividend</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get dividends for the ticker</span>
 
@@ -133,7 +133,7 @@
         <span class="k">return</span> <span class="n">data_df</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">digrin_payout_ratio</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">digrin_payout_ratio</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get payout ratio for the ticker</span>
 
@@ -167,7 +167,7 @@
         <span class="k">return</span> <span class="n">data_df</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">digrin_price</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">digrin_price</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get price for the ticker</span>
 
@@ -199,7 +199,7 @@
         <span class="k">return</span> <span class="n">data_df</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">digrin_stock_splits</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">digrin_stock_splits</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get stock splits for the ticker</span>
 
@@ -232,7 +232,7 @@
         <span class="n">data_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">data_df</span>
 
-    <span class="k">def</span> <span class="nf">_get_table_from_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keyword</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_table_from_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keyword</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the table from the financials page for the ticker</span>
 
@@ -274,7 +274,7 @@
         <span class="k">return</span> <span class="n">data_df</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">digrin_assets_vs_liabilities</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">digrin_assets_vs_liabilities</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get assets vs liabilities for the ticker</span>
 
@@ -288,7 +288,7 @@
         <span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">digrin_free_cash_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">digrin_free_cash_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get free cash flow for the ticker</span>
 
@@ -302,7 +302,7 @@
         <span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">digrin_net_income</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">digrin_net_income</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get net income for the ticker</span>
 
@@ -316,7 +316,7 @@
         <span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">digrin_cash_and_debt</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">digrin_cash_and_debt</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get cash and debt for the ticker</span>
 
@@ -330,7 +330,7 @@
         <span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">digrin_shares_outstanding</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">digrin_shares_outstanding</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get shares outstanding for the ticker</span>
 
@@ -344,7 +344,7 @@
         <span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">digrin_expenses</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">digrin_expenses</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get expenses for the ticker</span>
 
@@ -358,7 +358,7 @@
         <span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">digrin_cost_of_revenue</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">digrin_cost_of_revenue</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get cost of revenue for the ticker</span>
 
@@ -372,7 +372,7 @@
         <span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">digrin_dgr3</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">digrin_dgr3</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get dgr3 for the ticker</span>
 
@@ -386,7 +386,7 @@
         <span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">digrin_dgr5</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">digrin_dgr5</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get dgr5 for the ticker</span>
 
@@ -400,7 +400,7 @@
         <span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">digrin_dgr10</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">digrin_dgr10</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get dgr10 for the ticker</span>
 
@@ -414,7 +414,7 @@
         <span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">digrin_upcoming_estimated_earnings</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">digrin_upcoming_estimated_earnings</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get upcoming estimated earnings for the ticker</span>
 
@@ -427,7 +427,7 @@
             <span class="s2">&quot;Actual / Estimated EPS&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">DIGRIN_BASE_URL</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/earnings&quot;</span>
         <span class="p">)</span>
 
-<div class="viewcode-block" id="DigrinInterface.plot_digrin_shares_outstanding"><a class="viewcode-back" href="../../stockdex.html#stockdex.digrin_interface.DigrinInterface.plot_digrin_shares_outstanding">[docs]</a>    <span class="k">def</span> <span class="nf">plot_digrin_shares_outstanding</span><span class="p">(</span>
+<div class="viewcode-block" id="DigrinInterface.plot_digrin_shares_outstanding"><a class="viewcode-back" href="../../stockdex.html#stockdex.digrin_interface.DigrinInterface.plot_digrin_shares_outstanding">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_digrin_shares_outstanding</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">show_plot</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">px</span><span class="o">.</span><span class="n">line</span><span class="p">,</span> <span class="n">px</span><span class="o">.</span><span class="n">bar</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -467,7 +467,7 @@
 
         <span class="k">return</span> <span class="n">fig</span></div>
 
-<div class="viewcode-block" id="DigrinInterface.plot_digrin_price"><a class="viewcode-back" href="../../stockdex.html#stockdex.digrin_interface.DigrinInterface.plot_digrin_price">[docs]</a>    <span class="k">def</span> <span class="nf">plot_digrin_price</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">show_plot</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">px</span><span class="o">.</span><span class="n">line</span><span class="p">,</span> <span class="n">px</span><span class="o">.</span><span class="n">bar</span><span class="p">]:</span>
+<div class="viewcode-block" id="DigrinInterface.plot_digrin_price"><a class="viewcode-back" href="../../stockdex.html#stockdex.digrin_interface.DigrinInterface.plot_digrin_price">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_digrin_price</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">show_plot</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">px</span><span class="o">.</span><span class="n">line</span><span class="p">,</span> <span class="n">px</span><span class="o">.</span><span class="n">bar</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot the price for the ticker</span>
 
@@ -507,7 +507,7 @@
 
         <span class="k">return</span> <span class="n">fig</span></div>
 
-<div class="viewcode-block" id="DigrinInterface.plot_digrin_dividend"><a class="viewcode-back" href="../../stockdex.html#stockdex.digrin_interface.DigrinInterface.plot_digrin_dividend">[docs]</a>    <span class="k">def</span> <span class="nf">plot_digrin_dividend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">show_plot</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">px</span><span class="o">.</span><span class="n">line</span><span class="p">,</span> <span class="n">px</span><span class="o">.</span><span class="n">bar</span><span class="p">]:</span>
+<div class="viewcode-block" id="DigrinInterface.plot_digrin_dividend"><a class="viewcode-back" href="../../stockdex.html#stockdex.digrin_interface.DigrinInterface.plot_digrin_dividend">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_digrin_dividend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">show_plot</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">px</span><span class="o">.</span><span class="n">line</span><span class="p">,</span> <span class="n">px</span><span class="o">.</span><span class="n">bar</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot the dividend for the ticker</span>
 
@@ -545,7 +545,7 @@
 
         <span class="k">return</span> <span class="n">fig</span></div>
 
-<div class="viewcode-block" id="DigrinInterface.plot_digrin_assets_vs_liabilities"><a class="viewcode-back" href="../../stockdex.html#stockdex.digrin_interface.DigrinInterface.plot_digrin_assets_vs_liabilities">[docs]</a>    <span class="k">def</span> <span class="nf">plot_digrin_assets_vs_liabilities</span><span class="p">(</span>
+<div class="viewcode-block" id="DigrinInterface.plot_digrin_assets_vs_liabilities"><a class="viewcode-back" href="../../stockdex.html#stockdex.digrin_interface.DigrinInterface.plot_digrin_assets_vs_liabilities">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_digrin_assets_vs_liabilities</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">show_plot</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">px</span><span class="o">.</span><span class="n">line</span><span class="p">,</span> <span class="n">px</span><span class="o">.</span><span class="n">bar</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -584,7 +584,7 @@
 
         <span class="k">return</span> <span class="n">fig</span></div>
 
-    <span class="k">def</span> <span class="nf">_human_number_format_to_raw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_human_number_format_to_raw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Convert human readable format to raw format</span>
 <span class="sd">        If there is a suffix like trillion, billion, million, etc. in the data,</span>
@@ -613,7 +613,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_human_date_format_to_raw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_human_date_format_to_raw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Convert human readable date format (e.g. &quot;Dec. 31, 2023&quot;) to raw format (e.g. 2023-12-31)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -638,7 +638,7 @@
         <span class="n">day</span> <span class="o">=</span> <span class="n">day</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">month</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">day</span><span class="si">}</span><span class="s2">&quot;</span>
 
-<div class="viewcode-block" id="DigrinInterface.plot_digrin_free_cash_flow"><a class="viewcode-back" href="../../stockdex.html#stockdex.digrin_interface.DigrinInterface.plot_digrin_free_cash_flow">[docs]</a>    <span class="k">def</span> <span class="nf">plot_digrin_free_cash_flow</span><span class="p">(</span>
+<div class="viewcode-block" id="DigrinInterface.plot_digrin_free_cash_flow"><a class="viewcode-back" href="../../stockdex.html#stockdex.digrin_interface.DigrinInterface.plot_digrin_free_cash_flow">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_digrin_free_cash_flow</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">show_plot</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">px</span><span class="o">.</span><span class="n">line</span><span class="p">,</span> <span class="n">px</span><span class="o">.</span><span class="n">bar</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -683,7 +683,7 @@
 
         <span class="k">return</span> <span class="n">fig</span></div>
 
-<div class="viewcode-block" id="DigrinInterface.plot_digrin_net_income"><a class="viewcode-back" href="../../stockdex.html#stockdex.digrin_interface.DigrinInterface.plot_digrin_net_income">[docs]</a>    <span class="k">def</span> <span class="nf">plot_digrin_net_income</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">show_plot</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">px</span><span class="o">.</span><span class="n">line</span><span class="p">,</span> <span class="n">px</span><span class="o">.</span><span class="n">bar</span><span class="p">]:</span>
+<div class="viewcode-block" id="DigrinInterface.plot_digrin_net_income"><a class="viewcode-back" href="../../stockdex.html#stockdex.digrin_interface.DigrinInterface.plot_digrin_net_income">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_digrin_net_income</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">show_plot</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">px</span><span class="o">.</span><span class="n">line</span><span class="p">,</span> <span class="n">px</span><span class="o">.</span><span class="n">bar</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot the net income for the ticker</span>
 
@@ -720,7 +720,7 @@
 
         <span class="k">return</span> <span class="n">fig</span></div>
 
-<div class="viewcode-block" id="DigrinInterface.plot_digrin_cash_and_debt"><a class="viewcode-back" href="../../stockdex.html#stockdex.digrin_interface.DigrinInterface.plot_digrin_cash_and_debt">[docs]</a>    <span class="k">def</span> <span class="nf">plot_digrin_cash_and_debt</span><span class="p">(</span>
+<div class="viewcode-block" id="DigrinInterface.plot_digrin_cash_and_debt"><a class="viewcode-back" href="../../stockdex.html#stockdex.digrin_interface.DigrinInterface.plot_digrin_cash_and_debt">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_digrin_cash_and_debt</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">show_plot</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">px</span><span class="o">.</span><span class="n">line</span><span class="p">,</span> <span class="n">px</span><span class="o">.</span><span class="n">bar</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -757,7 +757,7 @@
 
         <span class="k">return</span> <span class="n">fig</span></div>
 
-<div class="viewcode-block" id="DigrinInterface.plot_digrin_expenses"><a class="viewcode-back" href="../../stockdex.html#stockdex.digrin_interface.DigrinInterface.plot_digrin_expenses">[docs]</a>    <span class="k">def</span> <span class="nf">plot_digrin_expenses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">show_plot</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">px</span><span class="o">.</span><span class="n">line</span><span class="p">,</span> <span class="n">px</span><span class="o">.</span><span class="n">bar</span><span class="p">]:</span>
+<div class="viewcode-block" id="DigrinInterface.plot_digrin_expenses"><a class="viewcode-back" href="../../stockdex.html#stockdex.digrin_interface.DigrinInterface.plot_digrin_expenses">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_digrin_expenses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">show_plot</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">px</span><span class="o">.</span><span class="n">line</span><span class="p">,</span> <span class="n">px</span><span class="o">.</span><span class="n">bar</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot the expenses for the ticker</span>
 
@@ -794,7 +794,7 @@
 
         <span class="k">return</span> <span class="n">fig</span></div>
 
-<div class="viewcode-block" id="DigrinInterface.plot_digrin_cost_of_revenue"><a class="viewcode-back" href="../../stockdex.html#stockdex.digrin_interface.DigrinInterface.plot_digrin_cost_of_revenue">[docs]</a>    <span class="k">def</span> <span class="nf">plot_digrin_cost_of_revenue</span><span class="p">(</span>
+<div class="viewcode-block" id="DigrinInterface.plot_digrin_cost_of_revenue"><a class="viewcode-back" href="../../stockdex.html#stockdex.digrin_interface.DigrinInterface.plot_digrin_cost_of_revenue">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_digrin_cost_of_revenue</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">show_plot</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">px</span><span class="o">.</span><span class="n">line</span><span class="p">,</span> <span class="n">px</span><span class="o">.</span><span class="n">bar</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>

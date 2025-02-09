@@ -74,18 +74,18 @@
 <span class="sd">Module for fetching data from Yahoo Finance website</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bs4</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeautifulSoup</span>
 
-<span class="kn">from</span> <span class="nn">stockdex.config</span> <span class="kn">import</span> <span class="n">VALID_SECURITY_TYPES</span>
-<span class="kn">from</span> <span class="nn">stockdex.lib</span> <span class="kn">import</span> <span class="n">check_security_type</span>
-<span class="kn">from</span> <span class="nn">stockdex.ticker_base</span> <span class="kn">import</span> <span class="n">TickerBase</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">VALID_SECURITY_TYPES</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.lib</span><span class="w"> </span><span class="kn">import</span> <span class="n">check_security_type</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker_base</span><span class="w"> </span><span class="kn">import</span> <span class="n">TickerBase</span>
 
 
-<div class="viewcode-block" id="YahooWeb"><a class="viewcode-back" href="../../stockdex.html#stockdex.yahoo_web_interface.YahooWeb">[docs]</a><span class="k">class</span> <span class="nc">YahooWeb</span><span class="p">(</span><span class="n">TickerBase</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<div class="viewcode-block" id="YahooWeb"><a class="viewcode-back" href="../../stockdex.html#stockdex.yahoo_web_interface.YahooWeb">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">YahooWeb</span><span class="p">(</span><span class="n">TickerBase</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">ticker</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
         <span class="n">isin</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
@@ -95,7 +95,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">ticker</span> <span class="o">=</span> <span class="n">ticker</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">security_type</span> <span class="o">=</span> <span class="n">security_type</span>
 
-<div class="viewcode-block" id="YahooWeb.yahoo_web_financials_table"><a class="viewcode-back" href="../../stockdex.html#stockdex.yahoo_web_interface.YahooWeb.yahoo_web_financials_table">[docs]</a>    <span class="k">def</span> <span class="nf">yahoo_web_financials_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<div class="viewcode-block" id="YahooWeb.yahoo_web_financials_table"><a class="viewcode-back" href="../../stockdex.html#stockdex.yahoo_web_interface.YahooWeb.yahoo_web_financials_table">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">yahoo_web_financials_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get financials table from the Yahoo Finance website</span>
 
@@ -148,7 +148,7 @@
         <span class="k">return</span> <span class="n">df</span></div>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">yahoo_web_cashflow</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">yahoo_web_cashflow</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get cash flow for the ticker</span>
 
@@ -163,7 +163,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">yahoo_web_financials_table</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">yahoo_web_balance_sheet</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">yahoo_web_balance_sheet</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get balance sheet for the ticker</span>
 
@@ -179,7 +179,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">yahoo_web_financials_table</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">yahoo_web_income_stmt</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">yahoo_web_income_stmt</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get income statement for the ticker</span>
 
@@ -195,7 +195,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">yahoo_web_financials_table</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">yahoo_web_calls</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">yahoo_web_calls</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get calls for the ticker</span>
 
@@ -228,7 +228,7 @@
         <span class="k">return</span> <span class="n">data_df</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">yahoo_web_puts</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">yahoo_web_puts</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get puts for the ticker</span>
 
@@ -262,7 +262,7 @@
         <span class="k">return</span> <span class="n">data_df</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">yahoo_web_description</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">yahoo_web_description</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the description of the ticker</span>
 
@@ -281,7 +281,7 @@
         <span class="k">return</span> <span class="n">soup</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;section&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;data-testid&quot;</span><span class="p">:</span> <span class="s2">&quot;description&quot;</span><span class="p">})</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;p&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">yahoo_web_key_executives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">yahoo_web_key_executives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get profile key executives for the ticker</span>
 
@@ -312,7 +312,7 @@
         <span class="k">return</span> <span class="n">data_df</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">yahoo_web_corporate_governance</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">yahoo_web_corporate_governance</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the description of the ticker</span>
 
@@ -336,7 +336,7 @@
         <span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">yahoo_web_major_holders</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">yahoo_web_major_holders</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get major holders for the ticker</span>
 
@@ -372,7 +372,7 @@
         <span class="k">return</span> <span class="n">data_df</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">yahoo_web_top_institutional_holders</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">yahoo_web_top_institutional_holders</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get top institutional holders for the ticker</span>
 
@@ -410,7 +410,7 @@
         <span class="k">return</span> <span class="n">data_df</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">yahoo_web_top_mutual_fund_holders</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">yahoo_web_top_mutual_fund_holders</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get top mutual fund holders for the ticker</span>
 
@@ -441,7 +441,7 @@
         <span class="k">return</span> <span class="n">data_df</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">yahoo_web_summary</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">yahoo_web_summary</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get data for the ticker</span>
 
@@ -472,7 +472,7 @@
         <span class="k">return</span> <span class="n">data_df</span><span class="o">.</span><span class="n">T</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">yahoo_web_valuation_measures</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">yahoo_web_valuation_measures</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get valuation measures for the ticker</span>
 
@@ -509,7 +509,7 @@
         <span class="k">return</span> <span class="n">data_df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">yahoo_web_financial_highlights</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">yahoo_web_financial_highlights</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get financial highlights for the ticker</span>
 
@@ -540,7 +540,7 @@
         <span class="k">return</span> <span class="n">data_df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;Criteria&quot;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">yahoo_web_trading_information</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">yahoo_web_trading_information</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get trading information for the ticker</span>
 
@@ -571,7 +571,7 @@
         <span class="k">return</span> <span class="n">data_df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;Criteria&quot;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">yahoo_web_full_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">yahoo_web_full_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the full name of the ticker</span>
 
@@ -594,7 +594,7 @@
         <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[\w\s]+&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">.</span><span class="n">text</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">yahoo_web_earnings_estimate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">yahoo_web_earnings_estimate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get earnings estimate for the ticker</span>
 
@@ -628,7 +628,7 @@
         <span class="k">return</span> <span class="n">data_df</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">yahoo_web_revenue_estimate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">yahoo_web_revenue_estimate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get revenue estimate for the ticker</span>
 
@@ -663,7 +663,7 @@
         <span class="k">return</span> <span class="n">data_df</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">yahoo_web_earnings_history</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">yahoo_web_earnings_history</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get earnings history for the ticker</span>
 
@@ -698,7 +698,7 @@
         <span class="k">return</span> <span class="n">data_df</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">yahoo_web_eps_trend</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">yahoo_web_eps_trend</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get EPS trend for the ticker</span>
 
@@ -733,7 +733,7 @@
         <span class="k">return</span> <span class="n">data_df</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">yahoo_web_eps_revisions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">yahoo_web_eps_revisions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get EPS revisions for the ticker</span>
 
@@ -768,7 +768,7 @@
         <span class="k">return</span> <span class="n">data_df</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">yahoo_web_growth_estimates</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">yahoo_web_growth_estimates</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get growth estimates for the ticker</span>
 

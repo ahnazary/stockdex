@@ -74,18 +74,18 @@
 <span class="sd">Module for extracting ETF data from JustETF website</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bs4</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeautifulSoup</span>
 
-<span class="kn">from</span> <span class="nn">stockdex.config</span> <span class="kn">import</span> <span class="n">JUSTETF_BASE_URL</span><span class="p">,</span> <span class="n">VALID_SECURITY_TYPES</span>
-<span class="kn">from</span> <span class="nn">stockdex.exceptions</span> <span class="kn">import</span> <span class="n">NoISINError</span>
-<span class="kn">from</span> <span class="nn">stockdex.lib</span> <span class="kn">import</span> <span class="n">check_security_type</span>
-<span class="kn">from</span> <span class="nn">stockdex.selenium_interface</span> <span class="kn">import</span> <span class="n">selenium_interface</span>
-<span class="kn">from</span> <span class="nn">stockdex.ticker_base</span> <span class="kn">import</span> <span class="n">TickerBase</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">JUSTETF_BASE_URL</span><span class="p">,</span> <span class="n">VALID_SECURITY_TYPES</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">NoISINError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.lib</span><span class="w"> </span><span class="kn">import</span> <span class="n">check_security_type</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.selenium_interface</span><span class="w"> </span><span class="kn">import</span> <span class="n">selenium_interface</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker_base</span><span class="w"> </span><span class="kn">import</span> <span class="n">TickerBase</span>
 
 
-<div class="viewcode-block" id="JustETF"><a class="viewcode-back" href="../../stockdex.html#stockdex.justetf_interface.JustETF">[docs]</a><span class="k">class</span> <span class="nc">JustETF</span><span class="p">(</span><span class="n">TickerBase</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<div class="viewcode-block" id="JustETF"><a class="viewcode-back" href="../../stockdex.html#stockdex.justetf_interface.JustETF">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">JustETF</span><span class="p">(</span><span class="n">TickerBase</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">ticker</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
         <span class="n">isin</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
@@ -98,7 +98,7 @@
             <span class="k">raise</span> <span class="n">NoISINError</span><span class="p">(</span><span class="s2">&quot;No ISIN provided, please provide an ISIN&quot;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">justetf_general_info</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">justetf_general_info</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the general information of the ETF</span>
 <span class="sd">        genral information includes TER, distribution policy, replication method, etc.</span>
@@ -124,7 +124,7 @@
         <span class="k">return</span> <span class="n">data_df</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">justetf_wkn</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">justetf_wkn</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the WKN of the ETF</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -140,7 +140,7 @@
         <span class="k">return</span> <span class="n">wkn</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">justetf_description</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">justetf_description</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the description of the ETF</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -156,7 +156,7 @@
         <span class="k">return</span> <span class="n">description</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">justetf_basics</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">justetf_basics</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the baisc information of the ETF</span>
 
@@ -195,7 +195,7 @@
         <span class="k">return</span> <span class="n">data_df</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">justetf_holdings_companies</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">justetf_holdings_companies</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the top 10 holdings of the ETF by companies</span>
 
@@ -243,7 +243,7 @@
         <span class="k">return</span> <span class="n">data_df</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">justetf_holdings_countries</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">justetf_holdings_countries</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the top 10 holdings of the ETF by countries</span>
 
@@ -291,7 +291,7 @@
         <span class="k">return</span> <span class="n">data_df</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">justetf_holdings_sectors</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">justetf_holdings_sectors</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the top 10 holdings of the ETF by sectors</span>
 

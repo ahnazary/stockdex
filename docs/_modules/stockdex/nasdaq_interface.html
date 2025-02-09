@@ -74,16 +74,16 @@
 <span class="sd">Interface for NASDAQ stock data</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
-<span class="kn">from</span> <span class="nn">stockdex.config</span> <span class="kn">import</span> <span class="n">NASDAQ_BASE_URL</span><span class="p">,</span> <span class="n">VALID_SECURITY_TYPES</span>
-<span class="kn">from</span> <span class="nn">stockdex.lib</span> <span class="kn">import</span> <span class="n">check_security_type</span><span class="p">,</span> <span class="n">get_user_agent</span>
-<span class="kn">from</span> <span class="nn">stockdex.selenium_interface</span> <span class="kn">import</span> <span class="n">selenium_interface</span>
-<span class="kn">from</span> <span class="nn">stockdex.ticker_base</span> <span class="kn">import</span> <span class="n">TickerBase</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">NASDAQ_BASE_URL</span><span class="p">,</span> <span class="n">VALID_SECURITY_TYPES</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.lib</span><span class="w"> </span><span class="kn">import</span> <span class="n">check_security_type</span><span class="p">,</span> <span class="n">get_user_agent</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.selenium_interface</span><span class="w"> </span><span class="kn">import</span> <span class="n">selenium_interface</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker_base</span><span class="w"> </span><span class="kn">import</span> <span class="n">TickerBase</span>
 
 
-<div class="viewcode-block" id="NASDAQInterface"><a class="viewcode-back" href="../../stockdex.html#stockdex.nasdaq_interface.NASDAQInterface">[docs]</a><span class="k">class</span> <span class="nc">NASDAQInterface</span><span class="p">(</span><span class="n">TickerBase</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<div class="viewcode-block" id="NASDAQInterface"><a class="viewcode-back" href="../../stockdex.html#stockdex.nasdaq_interface.NASDAQInterface">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">NASDAQInterface</span><span class="p">(</span><span class="n">TickerBase</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">ticker</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
         <span class="n">isin</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
@@ -98,7 +98,7 @@
         <span class="p">}</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">quarterly_earnings_surprise</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">quarterly_earnings_surprise</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get quarterly earnings for the stock</span>
 
@@ -141,7 +141,7 @@
         <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">yearly_earnings_forecast</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">yearly_earnings_forecast</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get yearly earnings for the stock</span>
 
@@ -197,7 +197,7 @@
         <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">quarterly_earnings_forecast</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">quarterly_earnings_forecast</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get quarterly earnings forecast for the stock</span>
 
@@ -244,7 +244,7 @@
         <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">price_to_earnings_ratio</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">price_to_earnings_ratio</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the price to earnings ratio for the stock</span>
 
@@ -272,7 +272,7 @@
         <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Price to Earnings Ratio&quot;</span><span class="p">])</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">forecast_peg_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forecast_peg_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the forecast price to earning growth rate for the stock</span>
 

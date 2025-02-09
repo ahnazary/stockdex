@@ -155,7 +155,7 @@
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h2>
 <p>For detailed info about usage of the package and its functions including plotting and dash app, check out the <a class="reference internal" href="#USAGE.md"><span class="xref myst">this part of the readme</span></a>.</p>
 <p>In general, to access main functions, The <code class="docutils literal notranslate"><span class="pre">Ticker</span></code> object should be created with the ticker of the stock as an argument. An example of creating a <code class="docutils literal notranslate"><span class="pre">Ticker</span></code> object is shown below:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">stockdex</span> <span class="kn">import</span> <span class="n">Ticker</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
 <span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
 </pre></div>
@@ -165,8 +165,8 @@
 <p>The <code class="docutils literal notranslate"><span class="pre">Ticker</span></code> object provides data from Yahoo Finance API and website, Digrin, and Macrotrends. Below are some of the data that can be retrieved from these sources (more detailed info with output can be found <a class="reference internal" href="#USAGE.md"><span class="xref myst">here</span></a>).</p>
 <section id="raw-data">
 <h4>Raw data:<a class="headerlink" href="#raw-data" title="Permalink to this heading"></a></h4>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">stockdex</span> <span class="kn">import</span> <span class="n">Ticker</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
 
 <span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
 
@@ -207,7 +207,7 @@ forecast_price_to_earnings__growth_rates = ticker.forecast_peg_rate
 <section id="eu-etf-data-from-justetf-web-scraping">
 <h3>EU ETF data from <code class="docutils literal notranslate"><span class="pre">justETF</span></code> (web scraping):<a class="headerlink" href="#eu-etf-data-from-justetf-web-scraping" title="Permalink to this heading"></a></h3>
 <p>For EU ETFS, the <code class="docutils literal notranslate"><span class="pre">isin</span></code> and <code class="docutils literal notranslate"><span class="pre">security_type</span></code> should be passed to the <code class="docutils literal notranslate"><span class="pre">Ticker</span></code> object. The <code class="docutils literal notranslate"><span class="pre">isin</span></code> is the International Securities Identification Number of the ETF and the <code class="docutils literal notranslate"><span class="pre">security_type</span></code> should be set to <code class="docutils literal notranslate"><span class="pre">etf</span></code>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">stockdex</span> <span class="kn">import</span> <span class="n">Ticker</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
 <span class="n">etf</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">isin</span><span class="o">=</span><span class="s2">&quot;IE00B4L5Y983&quot;</span><span class="p">,</span> <span class="n">security_type</span><span class="o">=</span><span class="s2">&quot;etf&quot;</span><span class="p">)</span>
 
@@ -228,8 +228,8 @@ forecast_price_to_earnings__growth_rates = ticker.forecast_peg_rate
 <section id="raw-data">
 <h4>Raw data:<a class="headerlink" href="#raw-data" title="Permalink to this heading"></a></h4>
 <p>Following functions will return the data extracted from Yahoo Finance API in the form of a pandas DataFrame:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">stockdex</span> <span class="kn">import</span> <span class="n">Ticker</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
 
 <span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
 
@@ -251,7 +251,7 @@ forecast_price_to_earnings__growth_rates = ticker.forecast_peg_rate
 <h4>Plotting data:<a class="headerlink" href="#plotting-data" title="Permalink to this heading"></a></h4>
 <p>Following functions will plot the data extracted from Yahoo Finance API using the <code class="docutils literal notranslate"><span class="pre">plotly</span></code> library:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
-<span class="kn">from</span> <span class="nn">stockdex</span> <span class="kn">import</span> <span class="n">Ticker</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
 <span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;MSFT&quot;</span><span class="p">)</span>
 
@@ -271,7 +271,7 @@ forecast_price_to_earnings__growth_rates = ticker.forecast_peg_rate
 <section id="sankey-charts">
 <h2>Sankey charts:<a class="headerlink" href="#sankey-charts" title="Permalink to this heading"></a></h2>
 <p>Sankey charts are used to visualize the flow of cash in a company. The <code class="docutils literal notranslate"><span class="pre">plot_sankey_chart</span></code> function will plot a sankey chart based on data extracted from the Yahoo Finance API. Below is an example of how to plot a sankey chart for <code class="docutils literal notranslate"><span class="pre">AAPL</span></code> stock:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">stockdex</span> <span class="kn">import</span> <span class="n">Ticker</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
 <span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
 
@@ -288,7 +288,7 @@ forecast_price_to_earnings__growth_rates = ticker.forecast_peg_rate
 <section id="id1">
 <h4>Raw data:<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h4>
 <p>Following functions will return the data extracted from Digrin website in the form of a pandas DataFrame:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">stockdex</span> <span class="kn">import</span> <span class="n">Ticker</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
 <span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
 
@@ -319,7 +319,7 @@ forecast_price_to_earnings__growth_rates = ticker.forecast_peg_rate
 <section id="id2">
 <h4>Plotting data:<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h4>
 <p>Following functions will plot the data extracted from Digrin website using the <code class="docutils literal notranslate"><span class="pre">plotly</span></code> library:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">stockdex</span> <span class="kn">import</span> <span class="n">Ticker</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
 <span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;ASML&quot;</span><span class="p">)</span>
 
@@ -339,7 +339,7 @@ forecast_price_to_earnings__growth_rates = ticker.forecast_peg_rate
   <img src="docs/images/plot_digrin_cash_and_debt_asml.png" alt="Stockdex Logo" width="auto" height="auto" style="width: auto; height: auto; border-radius: 15px;">
 </p>
 <p>Plots with too many data points are plotted as a lie chart, instead of the default bar chart. Below is an example of a line chart for <code class="docutils literal notranslate"><span class="pre">CAT</span></code> stock historical price:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">stockdex</span> <span class="kn">import</span> <span class="n">Ticker</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
 <span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;CAT&quot;</span><span class="p">)</span>
 
@@ -358,7 +358,7 @@ forecast_price_to_earnings__growth_rates = ticker.forecast_peg_rate
 <section id="id3">
 <h4>Raw data:<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h4>
 <p>Following functions will return the data extracted from Macrotrends website in the form of a pandas DataFrame:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">stockdex</span> <span class="kn">import</span> <span class="n">Ticker</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
 <span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
 
@@ -381,7 +381,7 @@ forecast_price_to_earnings__growth_rates = ticker.forecast_peg_rate
 <h4>Plotting data:<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h4>
 <p>Following functions will plot the data extracted from Macrotrends website using the <code class="docutils literal notranslate"><span class="pre">plotly</span></code> library:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
-<span class="kn">from</span> <span class="nn">stockdex</span> <span class="kn">import</span> <span class="n">Ticker</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
 <span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;GOOGL&quot;</span><span class="p">)</span>
 
@@ -399,7 +399,7 @@ forecast_price_to_earnings__growth_rates = ticker.forecast_peg_rate
 </section>
 <section id="data-from-yahoo-finance-website-web-scraping">
 <h3>Data from <code class="docutils literal notranslate"><span class="pre">Yahoo</span> <span class="pre">Finance</span></code> website (web scraping):<a class="headerlink" href="#data-from-yahoo-finance-website-web-scraping" title="Permalink to this heading"></a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">stockdex</span> <span class="kn">import</span> <span class="n">Ticker</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
 <span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
 
@@ -438,7 +438,7 @@ forecast_price_to_earnings__growth_rates = ticker.forecast_peg_rate
 <section id="eu-etf-data-from-justetf-web-scraping">
 <h3>EU ETF data from <code class="docutils literal notranslate"><span class="pre">justETF</span></code> (web scraping):<a class="headerlink" href="#eu-etf-data-from-justetf-web-scraping" title="Permalink to this heading"></a></h3>
 <p>For EU ETFS, the <code class="docutils literal notranslate"><span class="pre">isin</span></code> and <code class="docutils literal notranslate"><span class="pre">security_type</span></code> should be passed to the <code class="docutils literal notranslate"><span class="pre">Ticker</span></code> object. The <code class="docutils literal notranslate"><span class="pre">isin</span></code> is the International Securities Identification Number of the ETF and the <code class="docutils literal notranslate"><span class="pre">security_type</span></code> should be set to <code class="docutils literal notranslate"><span class="pre">etf</span></code>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">stockdex</span> <span class="kn">import</span> <span class="n">Ticker</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
 <span class="n">etf</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">isin</span><span class="o">=</span><span class="s2">&quot;IE00B4L5Y983&quot;</span><span class="p">,</span> <span class="n">security_type</span><span class="o">=</span><span class="s2">&quot;etf&quot;</span><span class="p">)</span>
 
@@ -461,8 +461,8 @@ forecast_price_to_earnings__growth_rates = ticker.forecast_peg_rate
 <h3>Building dashboards with multiple plots:<a class="headerlink" href="#building-dashboards-with-multiple-plots" title="Permalink to this heading"></a></h3>
 <p>In previous examples, we have seen how to use the functions with <code class="docutils literal notranslate"><span class="pre">plot_</span></code> prefix to create single plots that depict the data. There might be instances where you want to create a dashboard with multiple plots. Below is an example of how to use the functions to create a dashboard with multiple plots using the <code class="docutils literal notranslate"><span class="pre">dash</span></code> library.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
-<span class="kn">from</span> <span class="nn">stockdex.ticker</span> <span class="kn">import</span> <span class="n">Ticker</span>
-<span class="kn">from</span> <span class="nn">stockdex.lib</span> <span class="kn">import</span> <span class="n">plot_multiple_categories</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.lib</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_multiple_categories</span>
 
 <span class="c1"># choose the stock</span>
 <span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;MSFT&quot;</span><span class="p">)</span>

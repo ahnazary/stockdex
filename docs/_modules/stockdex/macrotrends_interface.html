@@ -74,26 +74,26 @@
 <span class="sd">Module for interfacing with the Macrotrends website.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">plotly.express</span> <span class="k">as</span> <span class="nn">px</span>
-<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">plotly.express</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">px</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bs4</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeautifulSoup</span>
 
-<span class="kn">from</span> <span class="nn">stockdex.config</span> <span class="kn">import</span> <span class="n">MACROTRENDS_BASE_URL</span><span class="p">,</span> <span class="n">VALID_SECURITY_TYPES</span>
-<span class="kn">from</span> <span class="nn">stockdex.exceptions</span> <span class="kn">import</span> <span class="n">FieldNotExists</span>
-<span class="kn">from</span> <span class="nn">stockdex.lib</span> <span class="kn">import</span> <span class="n">check_security_type</span><span class="p">,</span> <span class="n">plot_dataframe</span>
-<span class="kn">from</span> <span class="nn">stockdex.selenium_interface</span> <span class="kn">import</span> <span class="n">selenium_interface</span>
-<span class="kn">from</span> <span class="nn">stockdex.ticker_base</span> <span class="kn">import</span> <span class="n">TickerBase</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">MACROTRENDS_BASE_URL</span><span class="p">,</span> <span class="n">VALID_SECURITY_TYPES</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">FieldNotExists</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.lib</span><span class="w"> </span><span class="kn">import</span> <span class="n">check_security_type</span><span class="p">,</span> <span class="n">plot_dataframe</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.selenium_interface</span><span class="w"> </span><span class="kn">import</span> <span class="n">selenium_interface</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker_base</span><span class="w"> </span><span class="kn">import</span> <span class="n">TickerBase</span>
 
 
-<div class="viewcode-block" id="MacrotrendsInterface"><a class="viewcode-back" href="../../stockdex.html#stockdex.macrotrends_interface.MacrotrendsInterface">[docs]</a><span class="k">class</span> <span class="nc">MacrotrendsInterface</span><span class="p">(</span><span class="n">TickerBase</span><span class="p">):</span>
+<div class="viewcode-block" id="MacrotrendsInterface"><a class="viewcode-back" href="../../stockdex.html#stockdex.macrotrends_interface.MacrotrendsInterface">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">MacrotrendsInterface</span><span class="p">(</span><span class="n">TickerBase</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Interface for interacting with the Macrotrends website.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">ticker</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
         <span class="n">isin</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
@@ -104,7 +104,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">security_type</span> <span class="o">=</span> <span class="n">security_type</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">full_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">full_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve the full name of the security.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -113,7 +113,7 @@
 
         <span class="k">return</span> <span class="n">full_name</span>
 
-    <span class="k">def</span> <span class="nf">_find_table_in_url</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_find_table_in_url</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">text_to_look_for</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">soup</span><span class="p">:</span> <span class="n">BeautifulSoup</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -155,7 +155,7 @@
         <span class="k">return</span> <span class="n">data</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">macrotrends_income_statement</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">macrotrends_income_statement</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve the income statement for the given ticker.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -178,7 +178,7 @@
         <span class="k">return</span> <span class="n">data</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">macrotrends_balance_sheet</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">macrotrends_balance_sheet</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve the balance sheet for the given ticker.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -202,7 +202,7 @@
         <span class="k">return</span> <span class="n">data</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">macrotrends_cash_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">macrotrends_cash_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve the cash flow statement for the given ticker.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -226,7 +226,7 @@
         <span class="k">return</span> <span class="n">data</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">macrotrends_key_financial_ratios</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">macrotrends_key_financial_ratios</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve the key financial ratios for the given ticker.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -249,7 +249,7 @@
 
         <span class="k">return</span> <span class="n">data</span>
 
-    <span class="k">def</span> <span class="nf">_find_margins_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">text_to_look_for</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_find_margins_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">text_to_look_for</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 
         <span class="c1"># Parse the HTML content of the website</span>
@@ -273,7 +273,7 @@
         <span class="k">return</span> <span class="n">data</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">macrotrends_operating_margin</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">macrotrends_operating_margin</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve the operating margin for the given ticker.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -283,7 +283,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_margins_table</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;TTM Operating Income&quot;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">macrotrends_gross_margin</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">macrotrends_gross_margin</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve the gross margin for the given ticker.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -293,7 +293,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_margins_table</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;Gross Margin&quot;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">macrotrends_ebitda_margin</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">macrotrends_ebitda_margin</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve the EBITDA margin for the given ticker.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -303,7 +303,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_margins_table</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;TTM EBITDA&quot;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">macrotrends_pre_tax_margin</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">macrotrends_pre_tax_margin</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve the pre-tax margin for the given ticker.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -313,7 +313,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_margins_table</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;TTM Pre-Tax Income&quot;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">macrotrends_net_margin</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">macrotrends_net_margin</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve the net profit margin for the given ticker.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -322,7 +322,7 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_margins_table</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;TTM Net Income&quot;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="MacrotrendsInterface.plot_macrotrends_income_statement"><a class="viewcode-back" href="../../stockdex.html#stockdex.macrotrends_interface.MacrotrendsInterface.plot_macrotrends_income_statement">[docs]</a>    <span class="k">def</span> <span class="nf">plot_macrotrends_income_statement</span><span class="p">(</span>
+<div class="viewcode-block" id="MacrotrendsInterface.plot_macrotrends_income_statement"><a class="viewcode-back" href="../../stockdex.html#stockdex.macrotrends_interface.MacrotrendsInterface.plot_macrotrends_income_statement">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_macrotrends_income_statement</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">fields_to_include</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Revenue&quot;</span><span class="p">,</span> <span class="s2">&quot;Income After Taxes&quot;</span><span class="p">],</span>
         <span class="n">group_by</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;field&quot;</span><span class="p">,</span> <span class="s2">&quot;timeframe&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;timeframe&quot;</span><span class="p">,</span>
@@ -354,7 +354,7 @@
 
         <span class="k">return</span> <span class="n">fig</span></div>
 
-<div class="viewcode-block" id="MacrotrendsInterface.plot_macrotrends_balance_sheet"><a class="viewcode-back" href="../../stockdex.html#stockdex.macrotrends_interface.MacrotrendsInterface.plot_macrotrends_balance_sheet">[docs]</a>    <span class="k">def</span> <span class="nf">plot_macrotrends_balance_sheet</span><span class="p">(</span>
+<div class="viewcode-block" id="MacrotrendsInterface.plot_macrotrends_balance_sheet"><a class="viewcode-back" href="../../stockdex.html#stockdex.macrotrends_interface.MacrotrendsInterface.plot_macrotrends_balance_sheet">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_macrotrends_balance_sheet</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">fields_to_include</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Cash On Hand&quot;</span><span class="p">,</span> <span class="s2">&quot;Total Assets&quot;</span><span class="p">,</span> <span class="s2">&quot;Total Liabilities&quot;</span><span class="p">],</span>
         <span class="n">group_by</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;field&quot;</span><span class="p">,</span> <span class="s2">&quot;timeframe&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;timeframe&quot;</span><span class="p">,</span>
@@ -388,7 +388,7 @@
 
         <span class="k">return</span> <span class="n">fig</span></div>
 
-<div class="viewcode-block" id="MacrotrendsInterface.plot_macrotrends_cash_flow"><a class="viewcode-back" href="../../stockdex.html#stockdex.macrotrends_interface.MacrotrendsInterface.plot_macrotrends_cash_flow">[docs]</a>    <span class="k">def</span> <span class="nf">plot_macrotrends_cash_flow</span><span class="p">(</span>
+<div class="viewcode-block" id="MacrotrendsInterface.plot_macrotrends_cash_flow"><a class="viewcode-back" href="../../stockdex.html#stockdex.macrotrends_interface.MacrotrendsInterface.plot_macrotrends_cash_flow">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_macrotrends_cash_flow</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">fields_to_include</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[</span>
             <span class="s2">&quot;Net Income\/Loss&quot;</span><span class="p">,</span>  <span class="c1"># noqa: W605</span>
@@ -424,7 +424,7 @@
 
         <span class="k">return</span> <span class="n">fig</span></div>
 
-    <span class="k">def</span> <span class="nf">_transform_df_for_plotting_macrotrends</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_transform_df_for_plotting_macrotrends</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">fields_to_include</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">group_by</span><span class="p">:</span> <span class="nb">str</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>

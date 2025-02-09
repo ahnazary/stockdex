@@ -75,21 +75,21 @@
 <span class="sd">The main Ticker class inherits from this class</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">plotly.express</span> <span class="k">as</span> <span class="nn">px</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">plotly.express</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">px</span>
 
-<span class="kn">from</span> <span class="nn">stockdex</span> <span class="kn">import</span> <span class="n">config</span>
-<span class="kn">from</span> <span class="nn">stockdex.config</span> <span class="kn">import</span> <span class="n">VALID_DATA_SOURCES</span><span class="p">,</span> <span class="n">VALID_SECURITY_TYPES</span>
-<span class="kn">from</span> <span class="nn">stockdex.exceptions</span> <span class="kn">import</span> <span class="n">FieldNotExists</span>
-<span class="kn">from</span> <span class="nn">stockdex.lib</span> <span class="kn">import</span> <span class="n">plot_dataframe</span>
-<span class="kn">from</span> <span class="nn">stockdex.ticker_base</span> <span class="kn">import</span> <span class="n">TickerBase</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">VALID_DATA_SOURCES</span><span class="p">,</span> <span class="n">VALID_SECURITY_TYPES</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">FieldNotExists</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.lib</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_dataframe</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker_base</span><span class="w"> </span><span class="kn">import</span> <span class="n">TickerBase</span>
 
 
-<div class="viewcode-block" id="YahooAPI"><a class="viewcode-back" href="../../stockdex.html#stockdex.yahoo_api_interface.YahooAPI">[docs]</a><span class="k">class</span> <span class="nc">YahooAPI</span><span class="p">(</span><span class="n">TickerBase</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<div class="viewcode-block" id="YahooAPI"><a class="viewcode-back" href="../../stockdex.html#stockdex.yahoo_api_interface.YahooAPI">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">YahooAPI</span><span class="p">(</span><span class="n">TickerBase</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">ticker</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
         <span class="n">isin</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
@@ -104,7 +104,7 @@
     <span class="n">today</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">today</span><span class="p">()</span>
     <span class="n">five_years_ago</span> <span class="o">=</span> <span class="n">today</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="n">today</span><span class="o">.</span><span class="n">year</span> <span class="o">-</span> <span class="mi">5</span><span class="p">)</span>
 
-<div class="viewcode-block" id="YahooAPI.yahoo_api_price"><a class="viewcode-back" href="../../stockdex.html#stockdex.yahoo_api_interface.YahooAPI.yahoo_api_price">[docs]</a>    <span class="k">def</span> <span class="nf">yahoo_api_price</span><span class="p">(</span>
+<div class="viewcode-block" id="YahooAPI.yahoo_api_price"><a class="viewcode-back" href="../../stockdex.html#stockdex.yahoo_api_interface.YahooAPI.yahoo_api_price">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">yahoo_api_price</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="nb">range</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span>
             <span class="s2">&quot;1d&quot;</span><span class="p">,</span> <span class="s2">&quot;5d&quot;</span><span class="p">,</span> <span class="s2">&quot;1mo&quot;</span><span class="p">,</span> <span class="s2">&quot;3mo&quot;</span><span class="p">,</span> <span class="s2">&quot;6mo&quot;</span><span class="p">,</span> <span class="s2">&quot;1y&quot;</span><span class="p">,</span> <span class="s2">&quot;2y&quot;</span><span class="p">,</span> <span class="s2">&quot;5y&quot;</span><span class="p">,</span> <span class="s2">&quot;10y&quot;</span><span class="p">,</span> <span class="s2">&quot;ytd&quot;</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span>
@@ -178,7 +178,7 @@
         <span class="p">)</span></div>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">yahoo_api_current_trading_period</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">yahoo_api_current_trading_period</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the current trading period for the stock</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -210,7 +210,7 @@
             <span class="p">}</span>
         <span class="p">)</span>
 
-<div class="viewcode-block" id="YahooAPI.yahoo_api_income_statement"><a class="viewcode-back" href="../../stockdex.html#stockdex.yahoo_api_interface.YahooAPI.yahoo_api_income_statement">[docs]</a>    <span class="k">def</span> <span class="nf">yahoo_api_income_statement</span><span class="p">(</span>
+<div class="viewcode-block" id="YahooAPI.yahoo_api_income_statement"><a class="viewcode-back" href="../../stockdex.html#stockdex.yahoo_api_interface.YahooAPI.yahoo_api_income_statement">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">yahoo_api_income_statement</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">frequency</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;annual&quot;</span><span class="p">,</span> <span class="s2">&quot;quarterly&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;annual&quot;</span><span class="p">,</span>
         <span class="nb">format</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;fmt&quot;</span><span class="p">,</span> <span class="s2">&quot;raw&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;fmt&quot;</span><span class="p">,</span>
@@ -246,7 +246,7 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_dataframe</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="nb">format</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="YahooAPI.yahoo_api_cash_flow"><a class="viewcode-back" href="../../stockdex.html#stockdex.yahoo_api_interface.YahooAPI.yahoo_api_cash_flow">[docs]</a>    <span class="k">def</span> <span class="nf">yahoo_api_cash_flow</span><span class="p">(</span>
+<div class="viewcode-block" id="YahooAPI.yahoo_api_cash_flow"><a class="viewcode-back" href="../../stockdex.html#stockdex.yahoo_api_interface.YahooAPI.yahoo_api_cash_flow">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">yahoo_api_cash_flow</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">frequency</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;annual&quot;</span><span class="p">,</span> <span class="s2">&quot;quarterly&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;annual&quot;</span><span class="p">,</span>
         <span class="nb">format</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;fmt&quot;</span><span class="p">,</span> <span class="s2">&quot;raw&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;fmt&quot;</span><span class="p">,</span>
@@ -282,7 +282,7 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_dataframe</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="nb">format</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="YahooAPI.yahoo_api_balance_sheet"><a class="viewcode-back" href="../../stockdex.html#stockdex.yahoo_api_interface.YahooAPI.yahoo_api_balance_sheet">[docs]</a>    <span class="k">def</span> <span class="nf">yahoo_api_balance_sheet</span><span class="p">(</span>
+<div class="viewcode-block" id="YahooAPI.yahoo_api_balance_sheet"><a class="viewcode-back" href="../../stockdex.html#stockdex.yahoo_api_interface.YahooAPI.yahoo_api_balance_sheet">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">yahoo_api_balance_sheet</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">frequency</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;annual&quot;</span><span class="p">,</span> <span class="s2">&quot;quarterly&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;annual&quot;</span><span class="p">,</span>
         <span class="nb">format</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;fmt&quot;</span><span class="p">,</span> <span class="s2">&quot;raw&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;fmt&quot;</span><span class="p">,</span>
@@ -318,7 +318,7 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_dataframe</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="nb">format</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="YahooAPI.yahoo_api_financials"><a class="viewcode-back" href="../../stockdex.html#stockdex.yahoo_api_interface.YahooAPI.yahoo_api_financials">[docs]</a>    <span class="k">def</span> <span class="nf">yahoo_api_financials</span><span class="p">(</span>
+<div class="viewcode-block" id="YahooAPI.yahoo_api_financials"><a class="viewcode-back" href="../../stockdex.html#stockdex.yahoo_api_interface.YahooAPI.yahoo_api_financials">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">yahoo_api_financials</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">frequency</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;annual&quot;</span><span class="p">,</span> <span class="s2">&quot;quarterly&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;annual&quot;</span><span class="p">,</span>
         <span class="nb">format</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;fmt&quot;</span><span class="p">,</span> <span class="s2">&quot;raw&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;fmt&quot;</span><span class="p">,</span>
@@ -354,7 +354,7 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_dataframe</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="nb">format</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="YahooAPI.build_url"><a class="viewcode-back" href="../../stockdex.html#stockdex.yahoo_api_interface.YahooAPI.build_url">[docs]</a>    <span class="k">def</span> <span class="nf">build_url</span><span class="p">(</span>
+<div class="viewcode-block" id="YahooAPI.build_url"><a class="viewcode-back" href="../../stockdex.html#stockdex.yahoo_api_interface.YahooAPI.build_url">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">build_url</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">frequency</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">period1</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span>
@@ -396,7 +396,7 @@
         <span class="n">url</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;&amp;period1=</span><span class="si">{</span><span class="n">period1</span><span class="si">}</span><span class="s2">&amp;period2=</span><span class="si">{</span><span class="n">period2</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="k">return</span> <span class="n">url</span></div>
 
-<div class="viewcode-block" id="YahooAPI.extract_dataframe"><a class="viewcode-back" href="../../stockdex.html#stockdex.yahoo_api_interface.YahooAPI.extract_dataframe">[docs]</a>    <span class="k">def</span> <span class="nf">extract_dataframe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;fmt&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<div class="viewcode-block" id="YahooAPI.extract_dataframe"><a class="viewcode-back" href="../../stockdex.html#stockdex.yahoo_api_interface.YahooAPI.extract_dataframe">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">extract_dataframe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;fmt&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Extract the dataframes from the response</span>
 
@@ -428,7 +428,7 @@
 
         <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">dated_index</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="YahooAPI.plot_yahoo_api_income_statement"><a class="viewcode-back" href="../../stockdex.html#stockdex.yahoo_api_interface.YahooAPI.plot_yahoo_api_income_statement">[docs]</a>    <span class="k">def</span> <span class="nf">plot_yahoo_api_income_statement</span><span class="p">(</span>
+<div class="viewcode-block" id="YahooAPI.plot_yahoo_api_income_statement"><a class="viewcode-back" href="../../stockdex.html#stockdex.yahoo_api_interface.YahooAPI.plot_yahoo_api_income_statement">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_yahoo_api_income_statement</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">frequency</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;annual&quot;</span><span class="p">,</span> <span class="s2">&quot;quarterly&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;annual&quot;</span><span class="p">,</span>
         <span class="n">period1</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="n">five_years_ago</span><span class="p">,</span>
@@ -497,7 +497,7 @@
 
         <span class="k">return</span> <span class="n">fig</span></div>
 
-<div class="viewcode-block" id="YahooAPI.plot_yahoo_api_cash_flow"><a class="viewcode-back" href="../../stockdex.html#stockdex.yahoo_api_interface.YahooAPI.plot_yahoo_api_cash_flow">[docs]</a>    <span class="k">def</span> <span class="nf">plot_yahoo_api_cash_flow</span><span class="p">(</span>
+<div class="viewcode-block" id="YahooAPI.plot_yahoo_api_cash_flow"><a class="viewcode-back" href="../../stockdex.html#stockdex.yahoo_api_interface.YahooAPI.plot_yahoo_api_cash_flow">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_yahoo_api_cash_flow</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">frequency</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;annual&quot;</span><span class="p">,</span> <span class="s2">&quot;quarterly&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;annual&quot;</span><span class="p">,</span>
         <span class="n">period1</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="n">five_years_ago</span><span class="p">,</span>
@@ -563,7 +563,7 @@
 
         <span class="k">return</span> <span class="n">fig</span></div>
 
-<div class="viewcode-block" id="YahooAPI.plot_yahoo_api_balance_sheet"><a class="viewcode-back" href="../../stockdex.html#stockdex.yahoo_api_interface.YahooAPI.plot_yahoo_api_balance_sheet">[docs]</a>    <span class="k">def</span> <span class="nf">plot_yahoo_api_balance_sheet</span><span class="p">(</span>
+<div class="viewcode-block" id="YahooAPI.plot_yahoo_api_balance_sheet"><a class="viewcode-back" href="../../stockdex.html#stockdex.yahoo_api_interface.YahooAPI.plot_yahoo_api_balance_sheet">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_yahoo_api_balance_sheet</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">frequency</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;annual&quot;</span><span class="p">,</span> <span class="s2">&quot;quarterly&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;annual&quot;</span><span class="p">,</span>
         <span class="n">period1</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="n">five_years_ago</span><span class="p">,</span>
@@ -629,7 +629,7 @@
 
         <span class="k">return</span> <span class="n">fig</span></div>
 
-<div class="viewcode-block" id="YahooAPI.plot_yahoo_api_financials"><a class="viewcode-back" href="../../stockdex.html#stockdex.yahoo_api_interface.YahooAPI.plot_yahoo_api_financials">[docs]</a>    <span class="k">def</span> <span class="nf">plot_yahoo_api_financials</span><span class="p">(</span>
+<div class="viewcode-block" id="YahooAPI.plot_yahoo_api_financials"><a class="viewcode-back" href="../../stockdex.html#stockdex.yahoo_api_interface.YahooAPI.plot_yahoo_api_financials">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_yahoo_api_financials</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">frequency</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;annual&quot;</span><span class="p">,</span> <span class="s2">&quot;quarterly&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;annual&quot;</span><span class="p">,</span>
         <span class="n">period1</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="n">five_years_ago</span><span class="p">,</span>
@@ -698,7 +698,7 @@
 
         <span class="k">return</span> <span class="n">fig</span></div>
 
-    <span class="k">def</span> <span class="nf">_transform_df_for_plotting</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_transform_df_for_plotting</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">group_by</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">fields_to_include</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">frequency</span><span class="p">:</span> <span class="nb">str</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
