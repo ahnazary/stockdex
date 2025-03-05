@@ -265,3 +265,68 @@ class JustETF(TickerBase):
         data_df.set_index("sector name", inplace=True)
 
         return data_df
+
+    @property
+    def justetf_price(self) -> pd.DataFrame:
+        """
+        Get the basic pricing information of the ETF
+        return data frame with columns:
+            - price
+            - currency
+            - date
+            - time
+            - exchange
+            - daily_change
+            - daily_change_percent
+            - buy|sell
+            - spread
+
+        Returns:
+        ----------------
+        pd.DataFrame: DataFrame containing the pricing information
+        """
+        df = pd.DataFrame()
+
+        url = f"{JUSTETF_BASE_URL}/etf-profile.html?isin={self.isin}"
+        # build selenium interface object if not already built
+        if not hasattr(self, "selenium_interface"):
+            self.selenium_interface = selenium_interface()
+
+        x_path = '//*[@id="profile-tabs"]/ul/li[1]/a'
+        soup = self.selenium_interface.just_etf_get_html_after_click(url, x_path)
+
+        # <div class="col-xs-7">
+        div_price = soup.find("div", {"class": "col-xs-7"})
+        price_currency = div_price.find_all("span")[0].text
+        price = div_price.find_all("span")[1].text
+
+        df["price"] = [price]
+        df["currency"] = [price_currency]
+
+        datetime_and_exchange = div_price.find("div", {"class": "vallabel"}).text.split(
+            " "
+        )
+
+        df["date"] = [datetime_and_exchange[0]]
+        df["time"] = [datetime_and_exchange[1]]
+        df["exchange"] = [datetime_and_exchange[2]]
+
+        div_daily_change = soup.find("div", {"class": "col-xs-5"})
+        daily_change = div_daily_change.find_all("span")[0].text
+        daily_change_percent = div_daily_change.find_all("span")[1].text
+
+        df["daily_change"] = [daily_change]
+        df["daily_change_percent"] = [daily_change_percent]
+
+        # buy | sell
+        div_buy_sell = soup.find("div", {"class": "col-xs-12 col-md-6"})
+        buy_sell = div_buy_sell.find_all("span")[1].text
+
+        df["buy|sell"] = [buy_sell]
+
+        # spread
+        sread = div_buy_sell.find_all("span")[3].text
+
+        df["spread"] = [sread]
+
+        return df
