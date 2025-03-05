@@ -2,13 +2,20 @@
 Module to test the justetf module.
 """
 
+import os
+
 import pandas as pd
 import pytest
 
 from stockdex.exceptions import WrongSecurityType
 from stockdex.ticker import Ticker
 
+skip_test = bool(os.getenv("SKIP_TEST", False))
 
+
+@pytest.mark.skipif(
+    skip_test, reason="Skipping in GH action as it reaches the limit of requests"
+)
 @pytest.mark.parametrize(
     "isin",
     [
@@ -31,6 +38,9 @@ def test_justetf_general_info(isin: str) -> None:
         assert justetf_general_info.iloc[0][i] != ""
 
 
+@pytest.mark.skipif(
+    skip_test, reason="Skipping in GH action as it reaches the limit of requests"
+)
 def test_justetf_general_info_wrong_security_type() -> None:
     """
     Test the WrongSecurityType exception
@@ -40,6 +50,9 @@ def test_justetf_general_info_wrong_security_type() -> None:
         ticker.justetf_general_info
 
 
+@pytest.mark.skipif(
+    skip_test, reason="Skipping in GH action as it reaches the limit of requests"
+)
 @pytest.mark.parametrize(
     "isin, expected",
     [
@@ -58,6 +71,9 @@ def test_justetf_wkn(isin: str, expected: str) -> None:
     assert justetf_wkn == expected
 
 
+@pytest.mark.skipif(
+    skip_test, reason="Skipping in GH action as it reaches the limit of requests"
+)
 def test_justetf_wkn_wrong_security_type() -> None:
     """
     Test the WrongSecurityType exception
@@ -70,6 +86,9 @@ def test_justetf_wkn_wrong_security_type() -> None:
         ticker.justetf_wkn
 
 
+@pytest.mark.skipif(
+    skip_test, reason="Skipping in GH action as it reaches the limit of requests"
+)
 def test_no_isin() -> None:
     """
     Test the NoISINError exception
@@ -96,6 +115,9 @@ def test_justetf_description(isin: str) -> None:
     assert len(justetf_description) > 0
 
 
+@pytest.mark.skipif(
+    skip_test, reason="Skipping in GH action as it reaches the limit of requests"
+)
 def test_justetf_description_wrong_security_type() -> None:
     """
     Test the WrongSecurityType exception
@@ -125,6 +147,9 @@ def test_justetf_description_wrong_security_type() -> None:
 #     assert isinstance(quote, pd.DataFrame)
 
 
+@pytest.mark.skipif(
+    skip_test, reason="Skipping in GH action as it reaches the limit of requests"
+)
 @pytest.mark.parametrize(
     "isin",
     [
@@ -167,6 +192,9 @@ def test_justetf_basics_wrong_security_type() -> None:
         ticker.justetf_basics
 
 
+@pytest.mark.skipif(
+    skip_test, reason="Skipping in GH action as it reaches the limit of requests"
+)
 @pytest.mark.parametrize(
     "isin",
     [
@@ -186,6 +214,9 @@ def test_justetf_holdings_companies(isin: str) -> None:
     assert etf_holdings.shape[1] == 1
 
 
+@pytest.mark.skipif(
+    skip_test, reason="Skipping in GH action as it reaches the limit of requests"
+)
 def test_justetf_holdings_companies_wrong_security_type() -> None:
     """
     Test the WrongSecurityType exception
@@ -198,6 +229,9 @@ def test_justetf_holdings_companies_wrong_security_type() -> None:
         ticker.justetf_holdings_companies
 
 
+@pytest.mark.skipif(
+    skip_test, reason="Skipping in GH action as it reaches the limit of requests"
+)
 @pytest.mark.parametrize(
     "isin",
     [
@@ -218,6 +252,9 @@ def test_justetf_holdings_countries(isin: str) -> None:
     assert etf_holdings.shape[1] == 1
 
 
+@pytest.mark.skipif(
+    skip_test, reason="Skipping in GH action as it reaches the limit of requests"
+)
 def test_justetf_holdings_countries_wrong_security_type() -> None:
     """
     Test the WrongSecurityType exception
@@ -230,6 +267,9 @@ def test_justetf_holdings_countries_wrong_security_type() -> None:
         ticker.justetf_holdings_countries
 
 
+@pytest.mark.skipif(
+    skip_test, reason="Skipping in GH action as it reaches the limit of requests"
+)
 @pytest.mark.parametrize(
     "isin",
     [
@@ -250,6 +290,9 @@ def test_justetf_holdings_sectors(isin: str) -> None:
     assert etf_holdings.shape[1] == 1
 
 
+@pytest.mark.skipif(
+    skip_test, reason="Skipping in GH action as it reaches the limit of requests"
+)
 def test_justetf_holdings_sectors_wrong_security_type() -> None:
     """
     Test the WrongSecurityType exception
@@ -260,3 +303,48 @@ def test_justetf_holdings_sectors_wrong_security_type() -> None:
             security_type="wrong_security_type",
         )
         ticker.justetf_holdings_sectors
+
+
+@pytest.mark.skipif(
+    skip_test, reason="Skipping in GH action as it reaches the limit of requests"
+)
+@pytest.mark.parametrize(
+    "isin",
+    [
+        ("IE00B4L5Y983"),
+        ("IE00B53SZB19"),
+        ("IE00BTJRMP35"),
+        ("IE00B4L5Y983"),
+    ],
+)
+def test_justetf_price(isin: str) -> None:
+    """
+    Test the etf_holdings property of the JustETF class
+
+        Get the basic pricing information of the ETF
+        return data frame with columns:
+            - price
+            - currency
+            - date
+            - time
+            - exchange
+            - daily_change
+            - daily_change_percent
+            - buy|sell
+            - spread
+
+        Returns:
+        ----------------
+        pd.DataFrame: DataFrame containing the pricing information
+
+    """
+
+    etf = etf = Ticker(isin=isin, security_type="etf")
+
+    etf_holdings = etf.justetf_price
+    assert isinstance(etf_holdings, pd.DataFrame)
+    assert etf_holdings.shape[0] == 1
+    assert etf_holdings.shape[1] >= 5
+    assert etf_holdings.iloc[0]["price"] != ""
+    for i in range(1, etf_holdings.shape[1]):
+        assert etf_holdings.iloc[0][i] != ""
