@@ -50,11 +50,41 @@ class selenium_interface:
         # Use Beautiful Soup to parse the HTML content
         return BeautifulSoup(page_source, "html.parser")
 
-    def click_on_element(self, xpath: str, wait_time: int = 3):
+    def click_on_element(
+        self, xpath: str, driver: webdriver.Chrome, wait_time: int = 3
+    ):
         """
         Method that clicks on an element
         """
-        element = WebDriverWait(self.driver, wait_time).until(
+        element = WebDriverWait(driver, wait_time).until(
             EC.presence_of_element_located((By.XPATH, xpath))
         )
         element.click()
+
+    def just_etf_get_html_after_click(
+        self, url: str, button_xpath: str
+    ) -> BeautifulSoup:
+        """
+        Opens a webpage, clicks a button and returns the updated HTML.
+        It is specifically designed for JustETF module.
+
+        Args:
+        ----------------
+        url (str): The URL of the page to load.
+        button_xpath (str): The XPath of the button to click.
+        wait_time (int): The time to wait after clicking for the page to update.
+
+        Returns:
+        ----------------
+        BeautifulSoup: Parsed HTML after the button click.
+        """
+        driver = webdriver.Chrome(options=self.chrome_options)
+        driver.get(url)
+
+        # close the cookie consent popup
+        x_path = '//*[@id="CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll"]'
+        self.click_on_element(x_path, driver)
+
+        self.click_on_element(button_xpath, driver)
+
+        return BeautifulSoup(driver.page_source, "html.parser")
