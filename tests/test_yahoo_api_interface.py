@@ -14,10 +14,13 @@ from stockdex.ticker import Ticker
         ("GOOGL", "1d", "1h"),
         ("MSFT", "1d", "1d"),
         ("AAPL", "1h", "1m"),
+        ("MSFT", "1h", "1m"),
         ("GOOGL", "5d", "1d"),
         ("MSFT", "1d", "1d"),
         ("NVDA", "max", "3mo"),
         ("SAP", "1y", "1mo"),
+        ("ASML", "1y", "1mo"),
+        ("AAPL", "1d", "1m"),
     ],
 )
 def test_yahoo_api_price(ticker, range, dataGranularity):

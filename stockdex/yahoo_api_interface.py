@@ -79,15 +79,29 @@ class YahooAPI(TickerBase):
         exchangeName = meta["exchangeName"]
         instrumentType = meta["instrumentType"]
 
-        timestamp = response.json()["chart"]["result"][0]["timestamp"]
-        timestamp = pd.to_datetime(timestamp, unit="s")
+        timestamp = (
+            response.json()["chart"]["result"][0]["timestamp"]
+            if "timestamp" in response.json()["chart"]["result"][0]
+            else None
+        )
+        timestamp = (
+            pd.to_datetime(timestamp, unit="s") if timestamp else ["Data Not Available"]
+        )
 
-        indicators = response.json()["chart"]["result"][0]["indicators"]
-        volume = indicators["quote"][0]["volume"]
-        close = indicators["quote"][0]["close"]
-        open = indicators["quote"][0]["open"]
-        high = indicators["quote"][0]["high"]
-        low = indicators["quote"][0]["low"]
+        indicators = (
+            response.json()
+            .get("chart", {})
+            .get("result", [{}])[0]
+            .get("indicators", {})
+        )
+
+        quote = indicators.get("quote", [{}])[0]  # Get the first item safely
+
+        volume = quote.get("volume", ["Data Not Available"])
+        close = quote.get("close", ["Data Not Available"])
+        open = quote.get("open", ["Data Not Available"])
+        high = quote.get("high", ["Data Not Available"])
+        low = quote.get("low", ["Data Not Available"])
 
         return pd.DataFrame(
             {
@@ -102,7 +116,7 @@ class YahooAPI(TickerBase):
                 "exchangeTimezoneName": exchangeTimezoneName,
                 "exchangeName": exchangeName,
                 "instrumentType": instrumentType,
-            }
+            },
         )
 
     @property
