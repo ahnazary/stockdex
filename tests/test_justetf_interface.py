@@ -312,23 +312,6 @@ def test_justetf_holdings_sectors_wrong_security_type() -> None:
 def test_justetf_price(isin: str) -> None:
     """
     Test the etf_holdings property of the JustETF class
-
-        Get the basic pricing information of the ETF
-        return data frame with columns:
-            - price
-            - currency
-            - date
-            - time
-            - exchange
-            - daily_change
-            - daily_change_percent
-            - buy|sell
-            - spread
-
-        Returns:
-        ----------------
-        pd.DataFrame: DataFrame containing the pricing information
-
     """
 
     etf = etf = Ticker(isin=isin, security_type="etf")
