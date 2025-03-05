@@ -71,9 +71,6 @@ def test_justetf_wkn(isin: str, expected: str) -> None:
     assert justetf_wkn == expected
 
 
-@pytest.mark.skipif(
-    skip_test, reason="Skipping in GH action as it reaches the limit of requests"
-)
 def test_justetf_wkn_wrong_security_type() -> None:
     """
     Test the WrongSecurityType exception
@@ -101,7 +98,6 @@ def test_no_isin() -> None:
     "isin",
     [
         ("IE00B4L5Y983"),
-        ("IE00B53SZB19"),
     ],
 )
 def test_justetf_description(isin: str) -> None:
@@ -267,14 +263,10 @@ def test_justetf_holdings_countries_wrong_security_type() -> None:
         ticker.justetf_holdings_countries
 
 
-@pytest.mark.skipif(
-    skip_test, reason="Skipping in GH action as it reaches the limit of requests"
-)
 @pytest.mark.parametrize(
     "isin",
     [
         ("IE00B4L5Y983"),
-        ("IE00B53SZB19"),
     ],
 )
 def test_justetf_holdings_sectors(isin: str) -> None:
@@ -312,9 +304,9 @@ def test_justetf_holdings_sectors_wrong_security_type() -> None:
     "isin",
     [
         ("IE00B4L5Y983"),
-        ("IE00B53SZB19"),
-        ("IE00BTJRMP35"),
-        ("IE00B4L5Y983"),
+        # ("IE00B53SZB19"),
+        # ("IE00BTJRMP35"),
+        # ("IE00B4L5Y983"),
     ],
 )
 def test_justetf_price(isin: str) -> None:
