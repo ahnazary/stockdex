@@ -39,7 +39,7 @@ class YahooWeb(TickerBase):
         """
         response = self.get_response(url)
         soup = BeautifulSoup(response.content, "html.parser").find(
-            "div", {"class": "table yf-1pgoo1f"}
+            "div", {"class": "table yf-9ft13"}
         )
 
         # Extract column headers
