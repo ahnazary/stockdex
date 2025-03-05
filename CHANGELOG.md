@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.4
+
+### Added
+
+- Added `justetf_price` method to fetch price data from `justetf` website.
+- fix bugs in `yahoo_web` module.
+
 ## 1.0.2
 
 ### Added
