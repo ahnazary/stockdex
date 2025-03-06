@@ -374,6 +374,9 @@ etf_general_info = etf.justetf_general_info
 etf_wkn = etf.justetf_wkn
 etf_description = etf.justetf_description
 
+# Price data and chabges
+etf_price = etf.justetf_price
+
 # Basic data about the ETF
 etf_basics = etf.justetf_basics
 
