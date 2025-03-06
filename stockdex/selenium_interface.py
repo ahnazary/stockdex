@@ -17,8 +17,10 @@ class selenium_interface:
         self.chrome_options.add_argument("--headless")  # Ensure GUI is off
         self.chrome_options.add_argument("--no-sandbox")
         self.chrome_options.add_argument("--disable-dev-shm-usage")
+
+        # add the package insallation path as base
         self.chrome_options.binary_location = os.path.join(
-            os.getcwd(), "stockdex/chromedriver_linux64"
+            os.path.dirname(__file__), "chromedriver_linux64"
         )
         self.chrome_options.add_argument("--disable-gpu")
         self.chrome_options.add_argument("--disable-extensions")
