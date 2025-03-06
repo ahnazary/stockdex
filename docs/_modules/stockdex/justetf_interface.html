@@ -336,7 +336,72 @@
         <span class="n">data_df</span><span class="p">[</span><span class="s2">&quot;shares in percent&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">shares_percent</span>
         <span class="n">data_df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;sector name&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">data_df</span></div>
+        <span class="k">return</span> <span class="n">data_df</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">justetf_price</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the basic pricing information of the ETF</span>
+<span class="sd">        return data frame with columns:</span>
+<span class="sd">            - price</span>
+<span class="sd">            - currency</span>
+<span class="sd">            - date</span>
+<span class="sd">            - time</span>
+<span class="sd">            - exchange</span>
+<span class="sd">            - daily_change</span>
+<span class="sd">            - daily_change_percent</span>
+<span class="sd">            - buy|sell</span>
+<span class="sd">            - spread</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        ----------------</span>
+<span class="sd">        pd.DataFrame: DataFrame containing the pricing information</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">JUSTETF_BASE_URL</span><span class="si">}</span><span class="s2">/etf-profile.html?isin=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">isin</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="c1"># build selenium interface object if not already built</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;selenium_interface&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">selenium_interface</span> <span class="o">=</span> <span class="n">selenium_interface</span><span class="p">()</span>
+
+        <span class="n">x_path</span> <span class="o">=</span> <span class="s1">&#39;//*[@id=&quot;profile-tabs&quot;]/ul/li[1]/a&#39;</span>
+        <span class="n">soup</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selenium_interface</span><span class="o">.</span><span class="n">just_etf_get_html_after_click</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">x_path</span><span class="p">)</span>
+
+        <span class="c1"># &lt;div class=&quot;col-xs-7&quot;&gt;</span>
+        <span class="n">div_price</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;div&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;col-xs-7&quot;</span><span class="p">})</span>
+        <span class="n">price_currency</span> <span class="o">=</span> <span class="n">div_price</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&quot;span&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>
+        <span class="n">price</span> <span class="o">=</span> <span class="n">div_price</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&quot;span&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>
+
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;price&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">price</span><span class="p">]</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;currency&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">price_currency</span><span class="p">]</span>
+
+        <span class="n">datetime_and_exchange</span> <span class="o">=</span> <span class="n">div_price</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;div&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;vallabel&quot;</span><span class="p">})</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span>
+            <span class="s2">&quot; &quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">datetime_and_exchange</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">datetime_and_exchange</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;exchange&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">datetime_and_exchange</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
+
+        <span class="n">div_daily_change</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;div&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;col-xs-5&quot;</span><span class="p">})</span>
+        <span class="n">daily_change</span> <span class="o">=</span> <span class="n">div_daily_change</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&quot;span&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>
+        <span class="n">daily_change_percent</span> <span class="o">=</span> <span class="n">div_daily_change</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&quot;span&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>
+
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;daily_change&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">daily_change</span><span class="p">]</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;daily_change_percent&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">daily_change_percent</span><span class="p">]</span>
+
+        <span class="c1"># buy | sell</span>
+        <span class="n">div_buy_sell</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;div&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;col-xs-12 col-md-6&quot;</span><span class="p">})</span>
+        <span class="n">buy_sell</span> <span class="o">=</span> <span class="n">div_buy_sell</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&quot;span&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>
+
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;buy|sell&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">buy_sell</span><span class="p">]</span>
+
+        <span class="c1"># spread</span>
+        <span class="n">sread</span> <span class="o">=</span> <span class="n">div_buy_sell</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&quot;span&quot;</span><span class="p">)[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>
+
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;spread&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">sread</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">df</span></div>
 </pre></div>
 
            </div>

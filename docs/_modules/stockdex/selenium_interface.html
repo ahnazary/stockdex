@@ -122,14 +122,44 @@
         <span class="c1"># Use Beautiful Soup to parse the HTML content</span>
         <span class="k">return</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">page_source</span><span class="p">,</span> <span class="s2">&quot;html.parser&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="selenium_interface.click_on_element"><a class="viewcode-back" href="../../stockdex.html#stockdex.selenium_interface.selenium_interface.click_on_element">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">click_on_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xpath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">wait_time</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">):</span>
+<div class="viewcode-block" id="selenium_interface.click_on_element"><a class="viewcode-back" href="../../stockdex.html#stockdex.selenium_interface.selenium_interface.click_on_element">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">click_on_element</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">xpath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">driver</span><span class="p">:</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Chrome</span><span class="p">,</span> <span class="n">wait_time</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method that clicks on an element</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">element</span> <span class="o">=</span> <span class="n">WebDriverWait</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">driver</span><span class="p">,</span> <span class="n">wait_time</span><span class="p">)</span><span class="o">.</span><span class="n">until</span><span class="p">(</span>
+        <span class="n">element</span> <span class="o">=</span> <span class="n">WebDriverWait</span><span class="p">(</span><span class="n">driver</span><span class="p">,</span> <span class="n">wait_time</span><span class="p">)</span><span class="o">.</span><span class="n">until</span><span class="p">(</span>
             <span class="n">EC</span><span class="o">.</span><span class="n">presence_of_element_located</span><span class="p">((</span><span class="n">By</span><span class="o">.</span><span class="n">XPATH</span><span class="p">,</span> <span class="n">xpath</span><span class="p">))</span>
         <span class="p">)</span>
-        <span class="n">element</span><span class="o">.</span><span class="n">click</span><span class="p">()</span></div></div>
+        <span class="n">element</span><span class="o">.</span><span class="n">click</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="selenium_interface.just_etf_get_html_after_click"><a class="viewcode-back" href="../../stockdex.html#stockdex.selenium_interface.selenium_interface.just_etf_get_html_after_click">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">just_etf_get_html_after_click</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">button_xpath</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BeautifulSoup</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Opens a webpage, clicks a button and returns the updated HTML.</span>
+<span class="sd">        It is specifically designed for JustETF module.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">        ----------------</span>
+<span class="sd">        url (str): The URL of the page to load.</span>
+<span class="sd">        button_xpath (str): The XPath of the button to click.</span>
+<span class="sd">        wait_time (int): The time to wait after clicking for the page to update.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        ----------------</span>
+<span class="sd">        BeautifulSoup: Parsed HTML after the button click.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Chrome</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">chrome_options</span><span class="p">)</span>
+        <span class="n">driver</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+        <span class="c1"># close the cookie consent popup</span>
+        <span class="n">x_path</span> <span class="o">=</span> <span class="s1">&#39;//*[@id=&quot;CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll&quot;]&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">click_on_element</span><span class="p">(</span><span class="n">x_path</span><span class="p">,</span> <span class="n">driver</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">click_on_element</span><span class="p">(</span><span class="n">button_xpath</span><span class="p">,</span> <span class="n">driver</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">driver</span><span class="o">.</span><span class="n">page_source</span><span class="p">,</span> <span class="s2">&quot;html.parser&quot;</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>

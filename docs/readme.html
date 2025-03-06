@@ -58,6 +58,30 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#detailed-usage-instructions-for-the-stockdex-package">Detailed usage instructions for the stockdex package</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#data-from-yahoo-finance-api">Data from <code class="docutils literal notranslate"><span class="pre">Yahoo</span> <span class="pre">Finance</span></code> API:</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Raw data:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#plotting-data">Plotting data:</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#sankey-charts">Sankey charts:</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#stocks-data-from-digrin-web-scraping">Stocks data from <code class="docutils literal notranslate"><span class="pre">Digrin</span></code> (web scraping):</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id2">Raw data:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">Plotting data:</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#stocks-data-from-macrotrends-web-scraping">Stocks data from <code class="docutils literal notranslate"><span class="pre">macrotrends</span></code> (web scraping):</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id4">Raw data:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id5">Plotting data:</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#data-from-yahoo-finance-website-web-scraping">Data from <code class="docutils literal notranslate"><span class="pre">Yahoo</span> <span class="pre">Finance</span></code> website (web scraping):</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">EU ETF data from <code class="docutils literal notranslate"><span class="pre">justETF</span></code> (web scraping):</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#building-dashboards-with-multiple-plots">Building dashboards with multiple plots:</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#detailed-usage-instructions-for-the-stockdex-package">Detailed usage instructions for the stockdex package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#data-from-yahoo-finance-api">Data from <code class="docutils literal notranslate"><span class="pre">Yahoo</span> <span class="pre">Finance</span></code> API:</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#raw-data">Raw data:</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#plotting-data">Plotting data:</a></li>
 </ul>
@@ -206,7 +230,7 @@ forecast_price_to_earnings__growth_rates = ticker.forecast_peg_rate
 </section>
 <section id="eu-etf-data-from-justetf-web-scraping">
 <h3>EU ETF data from <code class="docutils literal notranslate"><span class="pre">justETF</span></code> (web scraping):<a class="headerlink" href="#eu-etf-data-from-justetf-web-scraping" title="Permalink to this heading"></a></h3>
-<p>For EU ETFS, the <code class="docutils literal notranslate"><span class="pre">isin</span></code> and <code class="docutils literal notranslate"><span class="pre">security_type</span></code> should be passed to the <code class="docutils literal notranslate"><span class="pre">Ticker</span></code> object. The <code class="docutils literal notranslate"><span class="pre">isin</span></code> is the International Securities Identification Number of the ETF and the <code class="docutils literal notranslate"><span class="pre">security_type</span></code> should be set to <code class="docutils literal notranslate"><span class="pre">etf</span></code>.</p>
+<p>For EU ETFS, the <code class="docutils literal notranslate"><span class="pre">isin</span></code> and <code class="docutils literal notranslate"><span class="pre">security_type</span></code> should be passed to the <code class="docutils literal notranslate"><span class="pre">Ticker</span></code> object. The <code class="docutils literal notranslate"><span class="pre">isin</span></code> is the International Securities Identification Number of the ETF and the <code class="docutils literal notranslate"><span class="pre">security_type</span></code> should be set to <code class="docutils literal notranslate"><span class="pre">etf</span></code>. Note that justETF has strict rate limiting, so it is recommended to use the data sparingly.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
 <span class="n">etf</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">isin</span><span class="o">=</span><span class="s2">&quot;IE00B4L5Y983&quot;</span><span class="p">,</span> <span class="n">security_type</span><span class="o">=</span><span class="s2">&quot;etf&quot;</span><span class="p">)</span>
@@ -215,6 +239,280 @@ forecast_price_to_earnings__growth_rates = ticker.forecast_peg_rate
 </pre></div>
 </div>
 <br />
+</section>
+</section>
+<hr class="docutils" />
+<section id="detailed-usage-instructions-for-the-stockdex-package">
+<h2>Detailed usage instructions for the stockdex package<a class="headerlink" href="#detailed-usage-instructions-for-the-stockdex-package" title="Permalink to this heading"></a></h2>
+<p>Below you will find available functions based on the source of the data. Each function is prefixed with the source of the data. For example functions with <code class="docutils literal notranslate"><span class="pre">yahoo_api_&lt;function_name&gt;</span></code> pattern are used to access data from Yahoo Finance API and functions with <code class="docutils literal notranslate"><span class="pre">yahoo_web_&lt;function_name&gt;</span></code> pattern are used to access data from Yahoo Finance website. Below are some examples of how to access data from different sources.</p>
+<p>Functions prefixed with <code class="docutils literal notranslate"><span class="pre">plot</span></code> will use the <code class="docutils literal notranslate"><span class="pre">plotly</span></code> library to plot the data. The output of such functions is a plotly figure object. each plot function has a field called <code class="docutils literal notranslate"><span class="pre">show_plot</span></code>, default value is <code class="docutils literal notranslate"><span class="pre">True</span></code>, which when set to <code class="docutils literal notranslate"><span class="pre">False</span></code> will return the plotly figure object instead of showing the plot, this can be helpful plotting multiple figure in dashboards (such as dash). At the end of this document, you will find examples of how to use the functions to build complex dashboards.</p>
+<section id="data-from-yahoo-finance-api">
+<h3>Data from <code class="docutils literal notranslate"><span class="pre">Yahoo</span> <span class="pre">Finance</span></code> API:<a class="headerlink" href="#data-from-yahoo-finance-api" title="Permalink to this heading"></a></h3>
+<section id="id1">
+<h4>Raw data:<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h4>
+<p>Following functions will return the data extracted from Yahoo Finance API in the form of a pandas DataFrame:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
+
+<span class="c1"># Price data (use range and dataGranularity to make range and granularity more specific)</span>
+<span class="n">price</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_api_price</span><span class="p">(</span><span class="nb">range</span><span class="o">=</span><span class="s1">&#39;1y&#39;</span><span class="p">,</span> <span class="n">dataGranularity</span><span class="o">=</span><span class="s1">&#39;1d&#39;</span><span class="p">)</span>
+
+<span class="c1"># Current trading period of the stock (pre-market, regular, post-market trading periods)</span>
+<span class="n">current_trading_period</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_api_current_trading_period</span>
+
+<span class="c1"># Fundamental data (use frequency, format, period1 and period2 to fine-tune the returned data)</span>
+<span class="n">income_statement</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_api_income_statement</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="s1">&#39;quarterly&#39;</span><span class="p">)</span>
+<span class="n">cash_flow</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_api_cash_flow</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;raw&#39;</span><span class="p">)</span>
+<span class="n">balance_sheet</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_api_balance_sheet</span><span class="p">(</span><span class="n">period1</span><span class="o">=</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2020</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">financials</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_api_financials</span><span class="p">(</span><span class="n">period1</span><span class="o">=</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2022</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">period2</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">today</span><span class="p">())</span>
+</pre></div>
+</div>
+</section>
+<section id="plotting-data">
+<h4>Plotting data:<a class="headerlink" href="#plotting-data" title="Permalink to this heading"></a></h4>
+<p>Following functions will plot the data extracted from Yahoo Finance API using the <code class="docutils literal notranslate"><span class="pre">plotly</span></code> library:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;MSFT&quot;</span><span class="p">)</span>
+
+<span class="n">ticker</span><span class="o">.</span><span class="n">plot_yahoo_api_financials</span><span class="p">(</span><span class="n">group_by</span><span class="o">=</span><span class="s2">&quot;field&quot;</span><span class="p">)</span>
+<span class="n">ticker</span><span class="o">.</span><span class="n">plot_yahoo_api_income_statement</span><span class="p">(</span><span class="n">group_by</span><span class="o">=</span><span class="s2">&quot;timeframe&quot;</span><span class="p">)</span>
+<span class="n">ticker</span><span class="o">.</span><span class="n">plot_yahoo_api_cash_flow</span><span class="p">(</span><span class="n">freq</span><span class="o">=</span><span class="s2">&quot;quarterly&quot;</span><span class="p">)</span>
+<span class="n">ticker</span><span class="o">.</span><span class="n">plot_yahoo_api_balance_sheet</span><span class="p">(</span><span class="n">freq</span><span class="o">=</span><span class="s2">&quot;quarterly&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Running each function will open a tab in default browser showing the plot:</p>
+<p align="center">
+  <img src="docs/images/msft_financials_annual.png" alt="Stockdex Logo" width="auto" height="auto" style="width: auto; height: auto; border-radius: 15px;">
+</p>
+</section>
+</section>
+</section>
+<section id="sankey-charts">
+<h2>Sankey charts:<a class="headerlink" href="#sankey-charts" title="Permalink to this heading"></a></h2>
+<p>Sankey charts are used to visualize the flow of cash in a company. The <code class="docutils literal notranslate"><span class="pre">plot_sankey_chart</span></code> function will plot a sankey chart based on data extracted from the Yahoo Finance API. Below is an example of how to plot a sankey chart for <code class="docutils literal notranslate"><span class="pre">AAPL</span></code> stock:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
+
+<span class="n">ticker</span><span class="o">.</span><span class="n">plot_sankey_chart</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The output of the function is a sankey chart showing the income statement of the company. Hovering over the chart will show the amount of cash in each category. Below is the output for <code class="docutils literal notranslate"><span class="pre">AAPL</span></code> stock based on annual data:</p>
+<p align="center">
+  <img src="docs/images/plot_sankey_chart_aapl_annual.png" alt="Stockdex Logo" width="auto" height="auto" style="width: auto; height: auto; border-radius: 15px;">
+</p>
+<section id="stocks-data-from-digrin-web-scraping">
+<h3>Stocks data from <code class="docutils literal notranslate"><span class="pre">Digrin</span></code> (web scraping):<a class="headerlink" href="#stocks-data-from-digrin-web-scraping" title="Permalink to this heading"></a></h3>
+<p>Data on Digrin website includes all historical data of the stock in certain categories, unlike Yahoo Finance which only provides the last 5 years of data at most.</p>
+<section id="id2">
+<h4>Raw data:<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h4>
+<p>Following functions will return the data extracted from Digrin website in the form of a pandas DataFrame:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
+
+<span class="c1"># Complete historical data of the stock in certain categories</span>
+<span class="n">dividend</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">digrin_dividend</span>
+<span class="n">payout_ratio</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">digrin_payout_ratio</span>
+<span class="n">stock_splits</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">digrin_stock_splits</span>
+<span class="n">price</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">digrin_price</span>
+
+<span class="c1"># Non-historical data</span>
+<span class="n">assets_vs_liabilities</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">digrin_assets_vs_liabilities</span>
+<span class="n">free_cash_flow</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">digrin_free_cash_flow</span>
+<span class="n">net_income</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">digrin_net_income</span>
+<span class="n">cash_and_debt</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">digrin_cash_and_debt</span>
+<span class="n">shares_outstanding</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">digrin_shares_outstanding</span>
+<span class="n">expenses</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">digrin_expenses</span>
+<span class="n">cost_of_revenue</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">digrin_cost_of_revenue</span>
+<span class="n">upcoming_estimated_earnings</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">digrin_upcoming_estimated_earnings</span>
+
+<span class="c1"># Dividend data</span>
+<span class="n">dividend</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">digrin_dividend</span>
+<span class="n">dgr3</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">digrin_dgr3</span>
+<span class="n">dgr5</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">digrin_dgr5</span>
+<span class="n">dgr10</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">digrin_dgr10</span>
+</pre></div>
+</div>
+</section>
+<section id="id3">
+<h4>Plotting data:<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h4>
+<p>Following functions will plot the data extracted from Digrin website using the <code class="docutils literal notranslate"><span class="pre">plotly</span></code> library:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;ASML&quot;</span><span class="p">)</span>
+
+<span class="n">ticker</span><span class="o">.</span><span class="n">plot_digrin_shares_outstanding</span><span class="p">()</span>
+<span class="n">ticker</span><span class="o">.</span><span class="n">plot_digrin_price</span><span class="p">()</span>
+<span class="n">ticker</span><span class="o">.</span><span class="n">plot_digrin_dividend</span><span class="p">()</span>
+<span class="n">ticker</span><span class="o">.</span><span class="n">plot_digrin_assets_vs_liabilities</span><span class="p">()</span>
+<span class="n">ticker</span><span class="o">.</span><span class="n">plot_digrin_free_cash_flow</span><span class="p">()</span>
+<span class="n">ticker</span><span class="o">.</span><span class="n">plot_digrin_cash_and_debt</span><span class="p">()</span>
+<span class="n">ticker</span><span class="o">.</span><span class="n">plot_digrin_net_income</span><span class="p">()</span>
+<span class="n">ticker</span><span class="o">.</span><span class="n">plot_digrin_expenses</span><span class="p">()</span>
+<span class="n">ticker</span><span class="o">.</span><span class="n">plot_digrin_cost_of_revenue</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Running each function will open a tab in default browser showing the plot. Below the output for <code class="docutils literal notranslate"><span class="pre">ticker.plot_digrin_cash_and_debt()</span></code> is illustrated for <code class="docutils literal notranslate"><span class="pre">ASML</span></code> stock:</p>
+<p align="center">
+  <img src="docs/images/plot_digrin_cash_and_debt_asml.png" alt="Stockdex Logo" width="auto" height="auto" style="width: auto; height: auto; border-radius: 15px;">
+</p>
+<p>Plots with too many data points are plotted as a lie chart, instead of the default bar chart. Below is an example of a line chart for <code class="docutils literal notranslate"><span class="pre">CAT</span></code> stock historical price:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;CAT&quot;</span><span class="p">)</span>
+
+<span class="n">ticker</span><span class="o">.</span><span class="n">plot_digrin_price</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The output of the function is a line chart showing the historical price (real and adjusted) of the stock. Below is the output for <code class="docutils literal notranslate"><span class="pre">CAT</span></code> stock:</p>
+<p align="center">
+  <img src="docs/images/plot_digrin_price_cat.png" alt="Stockdex Logo" width="auto" height="auto" style="width: auto; height: auto; border-radius: 15px;">
+</p>
+</section>
+</section>
+<section id="stocks-data-from-macrotrends-web-scraping">
+<h3>Stocks data from <code class="docutils literal notranslate"><span class="pre">macrotrends</span></code> (web scraping):<a class="headerlink" href="#stocks-data-from-macrotrends-web-scraping" title="Permalink to this heading"></a></h3>
+<p>Data on Macrotrends website includes historical data in a span years. Below are some of the data that can be retrieved from the Macrotrends website.</p>
+<section id="id4">
+<h4>Raw data:<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h4>
+<p>Following functions will return the data extracted from Macrotrends website in the form of a pandas DataFrame:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
+
+<span class="c1"># Financial data</span>
+<span class="n">income_statement</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">macrotrends_income_statement</span>
+<span class="n">balance_sheet</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">macrotrends_balance_sheet</span>
+<span class="n">cash_flow</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">macrotrends_cash_flow</span>
+<span class="n">key_financial_ratios</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">macrotrends_key_financial_ratios</span>
+
+<span class="c1"># Margins</span>
+<span class="n">gross_margin</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">macrotrends_gross_margin</span>
+<span class="n">operating_margin</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">macrotrends_operating_margin</span>
+<span class="n">ebitda_margin</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">macrotrends_ebitda_margin</span>
+<span class="n">pre_tax_margin</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">macrotrends_pre_tax_margin</span>
+<span class="n">net_margin</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">macrotrends_net_margin</span>
+</pre></div>
+</div>
+</section>
+<section id="id5">
+<h4>Plotting data:<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h4>
+<p>Following functions will plot the data extracted from Macrotrends website using the <code class="docutils literal notranslate"><span class="pre">plotly</span></code> library:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;GOOGL&quot;</span><span class="p">)</span>
+
+<span class="n">ticker</span><span class="o">.</span><span class="n">plot_macrotrends_income_statement</span><span class="p">()</span>
+<span class="n">ticker</span><span class="o">.</span><span class="n">plot_macrotrends_balance_sheet</span><span class="p">()</span>
+<span class="n">ticker</span><span class="o">.</span><span class="n">plot_macrotrends_cash_flow</span><span class="p">()</span>
+
+</pre></div>
+</div>
+<p>Running each function will open a tab in default browser showing the plot. Below the output for <code class="docutils literal notranslate"><span class="pre">ticker.plot_macrotrends_income_statement()</span></code> is illustrated for <code class="docutils literal notranslate"><span class="pre">GOOGL</span></code> stock:</p>
+<p align="center">
+  <img src="docs/images/plot_macrotrends_income_statement_googl.png" alt="Stockdex Logo" width="auto" height="auto" style="width: auto; height: auto; border-radius: 15px;">
+</p>
+</section>
+</section>
+<section id="data-from-yahoo-finance-website-web-scraping">
+<h3>Data from <code class="docutils literal notranslate"><span class="pre">Yahoo</span> <span class="pre">Finance</span></code> website (web scraping):<a class="headerlink" href="#data-from-yahoo-finance-website-web-scraping" title="Permalink to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
+
+<span class="c1"># Summary including general financial information</span>
+<span class="n">summary</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_web_summary</span>
+
+<span class="c1"># Financial data as it is seen in the yahoo finance website</span>
+<span class="n">income_stmt</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_web_income_stmt</span>
+<span class="n">balance_sheet</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_web_balance_sheet</span>
+<span class="n">cash_flow</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_web_cashflow</span>
+
+<span class="c1"># Analysts and estimates</span>
+<span class="n">analysis</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_web_analysis</span>
+
+<span class="c1"># Data about options</span>
+<span class="n">calls</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_web_calls</span>
+<span class="n">puts</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_web_puts</span>
+
+<span class="c1"># Profile data</span>
+<span class="n">key_executives</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_web_key_executives</span>
+<span class="n">description</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_web_description</span>
+<span class="n">corporate_governance</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_web_corporate_governance</span>
+
+<span class="c1"># Data about shareholders</span>
+<span class="n">major_holders</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_web_major_holders</span>
+<span class="n">top_institutional_holders</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_web_top_institutional_holders</span>
+<span class="n">top_mutual_fund_holders</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_web_top_mutual_fund_holders</span>
+
+<span class="c1"># Statistics</span>
+<span class="n">valuation_measures</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_web_valuation_measures</span>
+<span class="n">financial_highlights</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_web_financial_highlights</span>
+<span class="n">trading_information</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_web_trading_information</span>
+</pre></div>
+</div>
+</section>
+<section id="id6">
+<h3>EU ETF data from <code class="docutils literal notranslate"><span class="pre">justETF</span></code> (web scraping):<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h3>
+<p>For EU ETFS, the <code class="docutils literal notranslate"><span class="pre">isin</span></code> and <code class="docutils literal notranslate"><span class="pre">security_type</span></code> should be passed to the <code class="docutils literal notranslate"><span class="pre">Ticker</span></code> object. The <code class="docutils literal notranslate"><span class="pre">isin</span></code> is the International Securities Identification Number of the ETF and the <code class="docutils literal notranslate"><span class="pre">security_type</span></code> should be set to <code class="docutils literal notranslate"><span class="pre">etf</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="n">etf</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">isin</span><span class="o">=</span><span class="s2">&quot;IE00B4L5Y983&quot;</span><span class="p">,</span> <span class="n">security_type</span><span class="o">=</span><span class="s2">&quot;etf&quot;</span><span class="p">)</span>
+
+<span class="n">etf_general_info</span> <span class="o">=</span> <span class="n">etf</span><span class="o">.</span><span class="n">justetf_general_info</span>
+<span class="n">etf_wkn</span> <span class="o">=</span> <span class="n">etf</span><span class="o">.</span><span class="n">justetf_wkn</span>
+<span class="n">etf_description</span> <span class="o">=</span> <span class="n">etf</span><span class="o">.</span><span class="n">justetf_description</span>
+
+<span class="c1"># Basic data about the ETF</span>
+<span class="n">etf_basics</span> <span class="o">=</span> <span class="n">etf</span><span class="o">.</span><span class="n">justetf_basics</span>
+
+<span class="c1"># Holdings of the ETF by company, country and sector</span>
+<span class="n">etf_holdings_companies</span> <span class="o">=</span> <span class="n">etf</span><span class="o">.</span><span class="n">justetf_holdings_companies</span>
+<span class="n">etf_holdings_countries</span> <span class="o">=</span> <span class="n">etf</span><span class="o">.</span><span class="n">justetf_holdings_countries</span>
+<span class="n">etf_holdings_sectors</span> <span class="o">=</span> <span class="n">etf</span><span class="o">.</span><span class="n">justetf_holdings_sectors</span>
+</pre></div>
+</div>
+<br />
+</section>
+<section id="building-dashboards-with-multiple-plots">
+<h3>Building dashboards with multiple plots:<a class="headerlink" href="#building-dashboards-with-multiple-plots" title="Permalink to this heading"></a></h3>
+<p>In previous examples, we have seen how to use the functions with <code class="docutils literal notranslate"><span class="pre">plot_</span></code> prefix to create single plots that depict the data. There might be instances where you want to create a dashboard with multiple plots. Below is an example of how to use the functions to create a dashboard with multiple plots using the <code class="docutils literal notranslate"><span class="pre">dash</span></code> library.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.lib</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_multiple_categories</span>
+
+<span class="c1"># choose the stock</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;MSFT&quot;</span><span class="p">)</span>
+
+<span class="c1"># Here you will choose arbitrary figures to plot. In this example we will plot data extracted from digrin website</span>
+<span class="c1"># IMPORTANT: make sure to set show_plot=False in each function to return the plotly figure object instead of showing the plot. Not setting this parameter will show the plots in separate tabs.</span>
+<span class="n">figures</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">ticker</span><span class="o">.</span><span class="n">plot_digrin_shares_outstanding</span><span class="p">(</span><span class="n">show_plot</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">ticker</span><span class="o">.</span><span class="n">plot_digrin_price</span><span class="p">(</span><span class="n">show_plot</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">ticker</span><span class="o">.</span><span class="n">plot_digrin_dividend</span><span class="p">(</span><span class="n">show_plot</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">ticker</span><span class="o">.</span><span class="n">plot_digrin_assets_vs_liabilities</span><span class="p">(</span><span class="n">show_plot</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">ticker</span><span class="o">.</span><span class="n">plot_digrin_free_cash_flow</span><span class="p">(</span><span class="n">show_plot</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">ticker</span><span class="o">.</span><span class="n">plot_digrin_net_income</span><span class="p">(</span><span class="n">show_plot</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">ticker</span><span class="o">.</span><span class="n">plot_digrin_cash_and_debt</span><span class="p">(</span><span class="n">show_plot</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">ticker</span><span class="o">.</span><span class="n">plot_digrin_expenses</span><span class="p">(</span><span class="n">show_plot</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">ticker</span><span class="o">.</span><span class="n">plot_digrin_cost_of_revenue</span><span class="p">(</span><span class="n">show_plot</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+<span class="p">]</span>
+
+<span class="c1"># main functions that will create the dash app</span>
+<span class="n">plot_multiple_categories</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="n">ticker</span><span class="o">.</span><span class="n">ticker</span><span class="p">,</span> <span class="n">figures</span><span class="o">=</span><span class="n">figures</span><span class="p">)</span>
+
+</pre></div>
+</div>
+<p>The output of the above code will be a dashboard on <code class="docutils literal notranslate"><span class="pre">http://127.0.0.1:8050/</span></code> by default. The dashboard will have multiple plots showing the data extracted from the Digrin website. Below is the output of the dashboard:</p>
+<p align="center">
+  <img src="docs/images/combined_image_vertical.png" alt="Stockdex Logo" width="auto" height="auto" style="width: auto; height: auto; border-radius: 15px;">
+</p>
 <hr class="docutils" />
 <p>Check out sphinx documentation <a class="reference external" href="https://ahnazary.github.io/stockdex/">here</a> for more information about the package.</p>
 </section>
