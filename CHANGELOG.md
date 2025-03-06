@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.5
+
+### Fixed
+
+- Fixed bug with selenium driver path. 
+
 ## 1.0.4
 
 ### Added
