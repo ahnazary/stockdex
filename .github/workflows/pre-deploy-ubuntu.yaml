@@ -1,4 +1,4 @@
-name: pre-deploy
+name: pre-deploy-ubuntu-latest
 
 on:
   push:

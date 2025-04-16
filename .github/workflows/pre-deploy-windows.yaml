@@ -1,0 +1,51 @@
+name: pre-deploy-windows-latest
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ '*' ]
+    paths:
+      - src/**.py
+      - tests/**.py
+  workflow_dispatch:
+  
+jobs:
+  pylint:
+    name: check code style with pylint
+    uses: ahnazary/actions-library/.github/workflows/pylint.yaml@main
+  
+  black:
+    name: check code style with black
+    uses: ahnazary/actions-library/.github/workflows/black.yaml@main
+
+  isort:
+    name: check code style with isort
+    uses: ahnazary/actions-library/.github/workflows/isort.yaml@main
+
+  ruff:
+    name: check code style with ruff
+    uses: ahnazary/actions-library/.github/workflows/ruff.yaml@main
+
+  test:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python version
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.11
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements_tests.txt
+
+    - name: run pytest
+      env:
+        SKIP_TEST: ${{ secrets.SKIP_TEST }}  
+      run: |
+        pytest
