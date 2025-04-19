@@ -258,13 +258,13 @@ Running each function will open a tab in default browser showing the plot. Below
 
 Plots with too many data points are plotted as a lie chart, instead of the default bar chart. Below is an example of a line chart for `CAT` stock historical price:
 
-````
+```python
 from stockdex import Ticker
 
 ticker = Ticker(ticker="CAT")
 
 ticker.plot_digrin_price()
-````
+```
 
 The output of the function is a line chart showing the historical price (real and adjusted) of the stock. Below is the output for `CAT` stock:
 
