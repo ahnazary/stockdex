@@ -16,6 +16,11 @@ from stockdex.lib import get_user_agent
 class TickerBase:
     request_headers = {
         "User-Agent": get_user_agent(),
+        "Accept": "application/json, text/javascript, */*; q=0.01",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Referer": "https://finance.yahoo.com/",
+        "Origin": "https://finance.yahoo.com",
+        "Connection": "keep-alive",
     }
     logger = getLogger(__name__)
 
@@ -34,7 +39,6 @@ class TickerBase:
         requests.Response
             The response from the website
         """
-
         # Send an HTTP GET request to the website
         session = requests.Session()
         params = {

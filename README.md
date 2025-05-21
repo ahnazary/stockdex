@@ -14,7 +14,7 @@
 
 # Stock Data Extractor (Stockdex)
 
-Stockdex is a Python package that provides a simple interface to access financial data from various soruces and plotting capabilities using Plotly.
+Stockdex is a Python package that provides a simple interface to access financial data from various sources and plotting capabilities using Plotly.
 
 <br />
 
@@ -256,7 +256,7 @@ Running each function will open a tab in default browser showing the plot. Below
   <img src="docs/images/plot_digrin_cash_and_debt_asml.png" alt="Stockdex Logo" width="auto" height="auto" style="width: auto; height: auto; border-radius: 15px;">
 </p>
 
-Plots with too many data points are plotted as a lie chart, instead of the default bar chart. Below is an example of a line chart for `CAT` stock historical price:
+Plots with too many data points are plotted as a line chart, instead of the default bar chart. Below is an example of a line chart for `CAT` stock historical price:
 
 ```python
 from stockdex import Ticker

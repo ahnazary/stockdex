@@ -21,6 +21,7 @@ from stockdex.ticker import Ticker
         ("SAP", "1y", "1mo"),
         ("ASML", "1y", "1mo"),
         ("AAPL", "1d", "1m"),
+        ("SPCE", "1d", "1d"),
     ],
 )
 def test_yahoo_api_price(ticker, range, dataGranularity):
