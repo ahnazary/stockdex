@@ -146,7 +146,7 @@
 </p> -->
 <section id="stock-data-extractor-stockdex">
 <h2>Stock Data Extractor (Stockdex)<a class="headerlink" href="#stock-data-extractor-stockdex" title="Permalink to this heading"></a></h2>
-<p>Stockdex is a Python package that provides a simple interface to access financial data from various soruces and plotting capabilities using Plotly.</p>
+<p>Stockdex is a Python package that provides a simple interface to access financial data from various sources and plotting capabilities using Plotly.</p>
 <br />
 </section>
 <section id="advantages-of-stockdex-over-similar-packages">
@@ -361,8 +361,8 @@ forecast_price_to_earnings__growth_rates = ticker.forecast_peg_rate
 <p align="center">
   <img src="docs/images/plot_digrin_cash_and_debt_asml.png" alt="Stockdex Logo" width="auto" height="auto" style="width: auto; height: auto; border-radius: 15px;">
 </p>
-<p>Plots with too many data points are plotted as a lie chart, instead of the default bar chart. Below is an example of a line chart for <code class="docutils literal notranslate"><span class="pre">CAT</span></code> stock historical price:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+<p>Plots with too many data points are plotted as a line chart, instead of the default bar chart. Below is an example of a line chart for <code class="docutils literal notranslate"><span class="pre">CAT</span></code> stock historical price:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
 <span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;CAT&quot;</span><span class="p">)</span>
 
@@ -468,6 +468,9 @@ forecast_price_to_earnings__growth_rates = ticker.forecast_peg_rate
 <span class="n">etf_general_info</span> <span class="o">=</span> <span class="n">etf</span><span class="o">.</span><span class="n">justetf_general_info</span>
 <span class="n">etf_wkn</span> <span class="o">=</span> <span class="n">etf</span><span class="o">.</span><span class="n">justetf_wkn</span>
 <span class="n">etf_description</span> <span class="o">=</span> <span class="n">etf</span><span class="o">.</span><span class="n">justetf_description</span>
+
+<span class="c1"># Price data and chabges</span>
+<span class="n">etf_price</span> <span class="o">=</span> <span class="n">etf</span><span class="o">.</span><span class="n">justetf_price</span>
 
 <span class="c1"># Basic data about the ETF</span>
 <span class="n">etf_basics</span> <span class="o">=</span> <span class="n">etf</span><span class="o">.</span><span class="n">justetf_basics</span>
@@ -637,7 +640,7 @@ forecast_price_to_earnings__growth_rates = ticker.forecast_peg_rate
   <img src="docs/images/plot_digrin_cash_and_debt_asml.png" alt="Stockdex Logo" width="auto" height="auto" style="width: auto; height: auto; border-radius: 15px;">
 </p>
 <p>Plots with too many data points are plotted as a lie chart, instead of the default bar chart. Below is an example of a line chart for <code class="docutils literal notranslate"><span class="pre">CAT</span></code> stock historical price:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
 <span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;CAT&quot;</span><span class="p">)</span>
 

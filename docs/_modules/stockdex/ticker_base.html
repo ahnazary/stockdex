@@ -88,6 +88,11 @@
 <div class="viewcode-block" id="TickerBase"><a class="viewcode-back" href="../../stockdex.html#stockdex.ticker_base.TickerBase">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">TickerBase</span><span class="p">:</span>
     <span class="n">request_headers</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;User-Agent&quot;</span><span class="p">:</span> <span class="n">get_user_agent</span><span class="p">(),</span>
+        <span class="s2">&quot;Accept&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json, text/javascript, */*; q=0.01&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Accept-Language&quot;</span><span class="p">:</span> <span class="s2">&quot;en-US,en;q=0.9&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Referer&quot;</span><span class="p">:</span> <span class="s2">&quot;https://finance.yahoo.com/&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Origin&quot;</span><span class="p">:</span> <span class="s2">&quot;https://finance.yahoo.com&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Connection&quot;</span><span class="p">:</span> <span class="s2">&quot;keep-alive&quot;</span><span class="p">,</span>
     <span class="p">}</span>
     <span class="n">logger</span> <span class="o">=</span> <span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
@@ -106,7 +111,6 @@
 <span class="sd">        requests.Response</span>
 <span class="sd">            The response from the website</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="c1"># Send an HTTP GET request to the website</span>
         <span class="n">session</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
         <span class="n">response</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
