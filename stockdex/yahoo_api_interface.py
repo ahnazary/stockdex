@@ -10,7 +10,7 @@ import pandas as pd
 import plotly.express as px
 
 from stockdex import config
-from stockdex.config import VALID_DATA_SOURCES, VALID_SECURITY_TYPES
+from stockdex.config import VALID_DATA_SOURCES, VALID_SECURITY_TYPES, QUOTE_BASE_URL
 from stockdex.exceptions import FieldNotExists
 from stockdex.lib import plot_dataframe
 from stockdex.ticker_base import TickerBase
@@ -687,3 +687,17 @@ class YahooAPI(TickerBase):
             df = df.T
 
         return df
+
+    def get_funds_data(self) -> pd.DataFrame:
+        """
+        Get the funds data for the stock
+
+        Returns:
+        ----------------
+        pd.DataFrame: The funds data
+        """
+
+        url = f"{QUOTE_BASE_URL}/{self.ticker}"
+        response = self.get_response(url)
+
+        return response.json()

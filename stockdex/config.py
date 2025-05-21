@@ -12,6 +12,7 @@ BASE_URL = "https://query2.finance.yahoo.com/v8/finance"
 FUNDAMENTALS_BASE_URL = (
     "https://query2.finance.yahoo.com/ws/fundamentals-timeseries/v1/finance/timeseries"
 )
+QUOTE_BASE_URL = "https://query2.finance.yahoo.com/v10/finance/quoteSummary"
 JUSTETF_BASE_URL = "https://www.justetf.com/en"
 NASDAQ_BASE_URL = "https://www.nasdaq.com/market-activity/stocks"
 DIGRIN_BASE_URL = "https://www.digrin.com/stocks/detail"

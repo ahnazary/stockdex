@@ -276,3 +276,22 @@ def test_plot_yahoo_api_financials_wrong_field():
             period2=datetime.today(),
             fields_to_include=["wrong_field"],
         )
+
+
+@pytest.mark.parametrize(
+    "fund",
+    [
+        ("SPY"),
+    ],
+)
+def test_get_fund_data(fund):
+    """
+    Test the price property of the YahooAPI class
+    """
+
+    fund = Ticker(fund)
+    yahoo_api_fund = fund.get_funds_data()
+
+    assert isinstance(yahoo_api_fund, pd.DataFrame)
+    assert yahoo_api_fund.shape[0] > 0
+    assert yahoo_api_fund.shape[1] > 0
