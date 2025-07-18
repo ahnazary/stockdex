@@ -77,6 +77,7 @@ class MacrotrendsInterface(TickerBase):
         # convert the data to a pandas DataFrame
         data = data.replace(";", "")
         data = data.replace("null", "None")
+        data = data.replace("\\/", "/")
         data = eval(data)
         data = pd.DataFrame(data)
 
@@ -319,7 +320,7 @@ class MacrotrendsInterface(TickerBase):
     def plot_macrotrends_cash_flow(
         self,
         fields_to_include: list = [
-            "Net Income\/Loss",  # noqa: W605
+            r"Net Income/Loss",  # noqa: W605
             "Common Stock Dividends Paid",
             "Net Long-Term Debt",
         ],
