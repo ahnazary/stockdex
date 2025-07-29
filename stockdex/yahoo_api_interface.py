@@ -10,7 +10,7 @@ import pandas as pd
 import plotly.express as px
 
 from stockdex import config
-from stockdex.config import VALID_DATA_SOURCES, VALID_SECURITY_TYPES, QUOTE_BASE_URL
+from stockdex.config import VALID_DATA_SOURCES, VALID_SECURITY_TYPES
 from stockdex.exceptions import FieldNotExists
 from stockdex.lib import plot_dataframe
 from stockdex.ticker_base import TickerBase
@@ -697,7 +697,32 @@ class YahooAPI(TickerBase):
         pd.DataFrame: The funds data
         """
 
-        url = f"{QUOTE_BASE_URL}/{self.ticker}"
-        response = self.get_response(url)
+        # url = f"{QUOTE_BASE_URL}/{self.ticker}"
+        # response = self.get_response(url)
 
-        return response.json()
+        user_agent_headers = {
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36"  # noqa: E501
+        }
+        user_agent_headers = {
+            "User-Agent": "Mozilla/5.0 (X11; Linux i686; rv:135.0) Gecko/20100101 Firefox/135.0"
+        }
+        _QUOTE_SUMMARY_URL_ = (
+            "https://query2.finance.yahoo.com/v10/finance/quoteSummary/"
+        )
+        modules = ",".join(
+            ["quoteType", "summaryProfile", "topHoldings", "fundProfile"]
+        )
+        params_dict = {
+            "modules": modules,
+            "corsDomain": "finance.yahoo.com",
+            "symbol": self.ticker,
+            "formatted": "false",
+        }
+        result = self._data.get_raw_json(
+            _QUOTE_SUMMARY_URL_ + self.ticker,
+            user_agent_headers=user_agent_headers,
+            params=params_dict,
+            proxy=None,
+        )
+
+        return result

@@ -39,19 +39,9 @@ class TickerBase:
         requests.Response
             The response from the website
         """
-        # Send an HTTP GET request to the website
         session = requests.Session()
-        params = {
-            "modules": "quoteType,summaryProfile,topHoldings,fundProfile",
-            "corsDomain": "finance.yahoo.com",
-            "symbol": "SPY",
-            "formatted": "false",
-        }
-        # headers = {
-        #     "User-Agent": "Mozilla/5.0 (X11; Linux i686; rv:135.0) Gecko/20100101 Firefox/135.0"
-        # }
         response = session.get(
-            url, headers=self.request_headers, timeout=RESPONSE_TIMEOUT, params=params
+            url, headers=self.request_headers, timeout=RESPONSE_TIMEOUT
         )
         # If the HTTP GET request can't be served
         if response.status_code != 200 and response.status_code != 429:

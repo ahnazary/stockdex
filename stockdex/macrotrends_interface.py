@@ -319,7 +319,7 @@ class MacrotrendsInterface(TickerBase):
     def plot_macrotrends_cash_flow(
         self,
         fields_to_include: list = [
-            "Net Income\/Loss",  # noqa: W605
+            "Net Income/Loss",
             "Common Stock Dividends Paid",
             "Net Long-Term Debt",
         ],
