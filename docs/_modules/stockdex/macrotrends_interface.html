@@ -149,6 +149,7 @@
         <span class="c1"># convert the data to a pandas DataFrame</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;null&quot;</span><span class="p">,</span> <span class="s2">&quot;None&quot;</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">/&quot;</span><span class="p">,</span> <span class="s2">&quot;/&quot;</span><span class="p">)</span>
         <span class="n">data</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
@@ -391,7 +392,7 @@
 <div class="viewcode-block" id="MacrotrendsInterface.plot_macrotrends_cash_flow"><a class="viewcode-back" href="../../stockdex.html#stockdex.macrotrends_interface.MacrotrendsInterface.plot_macrotrends_cash_flow">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_macrotrends_cash_flow</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">fields_to_include</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="s2">&quot;Net Income\/Loss&quot;</span><span class="p">,</span>  <span class="c1"># noqa: W605</span>
+            <span class="sa">r</span><span class="s2">&quot;Net Income/Loss&quot;</span><span class="p">,</span>  <span class="c1"># noqa: W605</span>
             <span class="s2">&quot;Common Stock Dividends Paid&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Net Long-Term Debt&quot;</span><span class="p">,</span>
         <span class="p">],</span>
