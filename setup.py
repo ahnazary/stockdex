@@ -8,6 +8,7 @@ setup(
     install_requires=open("requirements.txt").read().splitlines(),
     python_requires=">=3.8",
     author="Amir Nazary",
+    author_email="ah.nazary.aghchemazary@gmail.com",
     description="A package to get stock data from Yahoo Finance",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
