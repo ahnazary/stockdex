@@ -6,3 +6,4 @@ Requests==2.32.3
 selenium==4.25.0
 plotly>=5.24.1
 dash>=2.18.0
+curl_cffi==0.12.0
