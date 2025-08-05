@@ -287,9 +287,6 @@ def test_yahoo_web_summary_wrong_security_type():
         ticker.yahoo_web_summary
 
 
-# @pytest.mark.skip(
-#     reason="This test is skipped because github actions is not able to access the yahoo finance page"  # noqa E501
-# )
 @pytest.mark.parametrize(
     "ticker",
     [

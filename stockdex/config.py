@@ -2,7 +2,7 @@
 
 from typing import Literal
 
-RESPONSE_TIMEOUT = 2
+RESPONSE_TIMEOUT = 5
 RETRY_AFTER_TIMEOUT = 2
 
 VALID_SECURITY_TYPES = Literal["stock", "etf", "cryptocurrency", "index", "commodity"]
