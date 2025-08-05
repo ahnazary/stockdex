@@ -41,7 +41,10 @@ class TickerBase:
             raise RuntimeError(f"Error fetching Yahoo crumb: {e}")
 
     def get_response(self, url: str) -> requests.Response:
-        crumb = self._get_yahoo_crumb()
+        # Use cached crumb if available, else fetch
+        if self._yahoo_crumb is None:
+            self._yahoo_crumb = self._get_yahoo_crumb()
+        crumb = self._yahoo_crumb
 
         response = self.session.get(
             url,
