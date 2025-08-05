@@ -3,17 +3,17 @@ Base class for ticker objects to inherit from
 """
 
 import time
-from logging import getLogger
 from typing import Union
 
-import requests
 from bs4 import BeautifulSoup
+from curl_cffi import requests
 
 from stockdex.config import RESPONSE_TIMEOUT
 from stockdex.lib import get_user_agent
 
 
 class TickerBase:
+    session = requests.Session(impersonate="chrome110")
     request_headers = {
         "User-Agent": get_user_agent(),
         "Accept": "application/json, text/javascript, */*; q=0.01",
@@ -22,53 +22,54 @@ class TickerBase:
         "Origin": "https://finance.yahoo.com",
         "Connection": "keep-alive",
     }
-    logger = getLogger(__name__)
+    _yahoo_crumb: Union[str, None] = None
+
+    def _get_yahoo_crumb(self) -> str:
+        try:
+            self.session.get("https://fc.yahoo.com", timeout=10, allow_redirects=True)
+            response = self.session.get(
+                "https://query1.finance.yahoo.com/v1/test/getcrumb",
+                timeout=10,
+                allow_redirects=True,
+            )
+            crumb = response.text.strip()
+            if response.status_code == 429 or "Too Many Requests" in crumb:
+                raise RuntimeError("Rate limited while getting crumb")
+            if crumb == "" or "<html>" in crumb:
+                raise RuntimeError("Invalid crumb received")
+            return crumb
+        except Exception as e:
+            raise RuntimeError(f"Error fetching Yahoo crumb: {e}")
 
     def get_response(self, url: str) -> requests.Response:
-        """
-        Send an HTTP GET request to the website
+        if self._yahoo_crumb is None:
+            self._yahoo_crumb = self._get_yahoo_crumb()
 
-        Args:
-        ----------
-        url: str
-            The URL to send the HTTP GET request to
-
-
-        Returns:
-        ----------
-        requests.Response
-            The response from the website
-        """
-        # Send an HTTP GET request to the website
-        session = requests.Session()
-        response = session.get(
-            url, headers=self.request_headers, timeout=RESPONSE_TIMEOUT
+        response = self.session.get(
+            url,
+            headers=self.request_headers,
+            timeout=RESPONSE_TIMEOUT,
+            params={"crumb": self._yahoo_crumb},
         )
-        # If the HTTP GET request can't be served
-        if response.status_code != 200 and response.status_code != 429:
-            raise Exception(
-                f"""
-                Failed to load page (status code: {response.status_code}).
-                Check if the ticker symbol exists
-                """
-            )
 
-        # sleep if rate limit is reached and retry after time is given
-        elif response.status_code == 429:
-            # retry 5 times with 10 seconds intervals and after that raise an exception
+        if response.status_code == 200:
+            return response
+
+        if response.status_code == 429:
             for _ in range(5):
-                retry_after = 10
-                self.logger.warning(
-                    f"Rate limit reached. Retrying after {retry_after} seconds"
-                )
-                time.sleep(retry_after)
-                response = session.get(
-                    url, headers=self.request_headers, timeout=RESPONSE_TIMEOUT
+                time.sleep(10)
+                response = self.session.get(
+                    url,
+                    headers=self.request_headers,
+                    timeout=RESPONSE_TIMEOUT,
+                    params={"crumb": self._yahoo_crumb},
                 )
                 if response.status_code == 200:
-                    break
+                    return response
 
-        return response
+        raise RuntimeError(
+            f"Failed to fetch URL (status {response.status_code}): {url}"
+        )
 
     def find_parent_by_text(
         self,

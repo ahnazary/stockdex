@@ -7,7 +7,7 @@ import re
 import pandas as pd
 from bs4 import BeautifulSoup
 
-from stockdex.config import VALID_SECURITY_TYPES
+from stockdex.config import VALID_SECURITY_TYPES, YAHOO_WEB_BASE_URL
 from stockdex.lib import check_security_type
 from stockdex.ticker_base import TickerBase
 
@@ -87,7 +87,7 @@ class YahooWeb(TickerBase):
         check_security_type(security_type=self.security_type, valid_types=["stock"])
 
         # URL of the website to scrape
-        url = f"https://finance.yahoo.com/quote/{self.ticker}/cash-flow"
+        url = f"{YAHOO_WEB_BASE_URL}/{self.ticker}/cash-flow"
         return self.yahoo_web_financials_table(url)
 
     @property
@@ -103,7 +103,7 @@ class YahooWeb(TickerBase):
         check_security_type(security_type=self.security_type, valid_types=["stock"])
 
         # URL of the website to scrape
-        url = f"https://finance.yahoo.com/quote/{self.ticker}/balance-sheet"
+        url = f"{YAHOO_WEB_BASE_URL}/{self.ticker}/balance-sheet"
         return self.yahoo_web_financials_table(url)
 
     @property
@@ -119,7 +119,7 @@ class YahooWeb(TickerBase):
         check_security_type(security_type=self.security_type, valid_types=["stock"])
 
         # URL of the website to scrape
-        url = f"https://finance.yahoo.com/quote/{self.ticker}/financials"
+        url = f"{YAHOO_WEB_BASE_URL}/{self.ticker}/financials"
         return self.yahoo_web_financials_table(url)
 
     @property
@@ -136,7 +136,7 @@ class YahooWeb(TickerBase):
         )
 
         # URL of the website to scrape
-        url = f"https://finance.yahoo.com/quote/{self.ticker}/options"
+        url = f"{YAHOO_WEB_BASE_URL}/{self.ticker}/options"
         response = self.get_response(url)
 
         # Parse the HTML content of the website
@@ -170,7 +170,7 @@ class YahooWeb(TickerBase):
         )
 
         # URL of the website to scrape
-        url = f"https://finance.yahoo.com/quote/{self.ticker}/options"
+        url = f"{YAHOO_WEB_BASE_URL}/{self.ticker}/options"
         response = self.get_response(url)
 
         # Parse the HTML content of the website
@@ -200,7 +200,7 @@ class YahooWeb(TickerBase):
         """
 
         # URL of the website to scrape
-        url = f"https://finance.yahoo.com/quote/{self.ticker}/profile"
+        url = f"{YAHOO_WEB_BASE_URL}/{self.ticker}/profile"
         response = self.get_response(url)
 
         # Parse the HTML content of the website
@@ -220,7 +220,7 @@ class YahooWeb(TickerBase):
         check_security_type(security_type=self.security_type, valid_types=["stock"])
 
         # URL of the website to scrape
-        url = f"https://finance.yahoo.com/quote/{self.ticker}/profile"
+        url = f"{YAHOO_WEB_BASE_URL}/{self.ticker}/profile"
         response = self.get_response(url)
 
         # Parse the HTML content of the website
@@ -251,7 +251,7 @@ class YahooWeb(TickerBase):
         check_security_type(security_type=self.security_type, valid_types=["stock"])
 
         # URL of the website to scrape
-        url = f"https://finance.yahoo.com/quote/{self.ticker}/profile"
+        url = f"{YAHOO_WEB_BASE_URL}/{self.ticker}/profile"
         response = self.get_response(url)
 
         # Parse the HTML content of the website
@@ -275,7 +275,7 @@ class YahooWeb(TickerBase):
         check_security_type(security_type=self.security_type, valid_types=["stock"])
 
         # URL of the website to scrape
-        url = f"https://finance.yahoo.com/quote/{self.ticker}/holders"
+        url = f"{YAHOO_WEB_BASE_URL}/{self.ticker}/holders"
         response = self.get_response(url)
 
         # Parse the HTML content of the website
@@ -311,7 +311,7 @@ class YahooWeb(TickerBase):
         check_security_type(security_type=self.security_type, valid_types=["stock"])
 
         # URL of the website to scrape
-        url = f"https://finance.yahoo.com/quote/{self.ticker}/holders"
+        url = f"{YAHOO_WEB_BASE_URL}/{self.ticker}/holders"
         response = self.get_response(url)
 
         # Parse the HTML content of the website
@@ -349,7 +349,7 @@ class YahooWeb(TickerBase):
         check_security_type(security_type=self.security_type, valid_types=["stock"])
 
         # URL of the website to scrape
-        url = f"https://finance.yahoo.com/quote/{self.ticker}/holders"
+        url = f"{YAHOO_WEB_BASE_URL}/{self.ticker}/holders"
         response = self.get_response(url)
 
         # Parse the HTML content of the website
@@ -380,7 +380,7 @@ class YahooWeb(TickerBase):
         check_security_type(security_type=self.security_type, valid_types=["stock"])
 
         # URL of the website to scrape
-        url = f"https://finance.yahoo.com/quote/{self.ticker}"
+        url = f"{YAHOO_WEB_BASE_URL}/{self.ticker}"
         response = self.get_response(url)
 
         # Parse the HTML content of the website
@@ -411,7 +411,7 @@ class YahooWeb(TickerBase):
         check_security_type(security_type=self.security_type, valid_types=["stock"])
 
         # URL of the website to scrape
-        url = f"https://finance.yahoo.com/quote/{self.ticker}/key-statistics"
+        url = f"{YAHOO_WEB_BASE_URL}/{self.ticker}/key-statistics"
         response = self.get_response(url)
 
         # Parse the HTML content of the website
@@ -448,7 +448,7 @@ class YahooWeb(TickerBase):
         check_security_type(security_type=self.security_type, valid_types=["stock"])
 
         # URL of the website to scrape
-        url = f"https://finance.yahoo.com/quote/{self.ticker}/key-statistics"
+        url = f"{YAHOO_WEB_BASE_URL}/{self.ticker}/key-statistics"
         response = self.get_response(url)
 
         # Parse the HTML content of the website
@@ -479,7 +479,7 @@ class YahooWeb(TickerBase):
         check_security_type(security_type=self.security_type, valid_types=["stock"])
 
         # URL of the website to scrape
-        url = f"https://finance.yahoo.com/quote/{self.ticker}/key-statistics"
+        url = f"{YAHOO_WEB_BASE_URL}/{self.ticker}/key-statistics"
         response = self.get_response(url)
 
         # Parse the HTML content of the website
@@ -510,7 +510,7 @@ class YahooWeb(TickerBase):
         check_security_type(security_type=self.security_type, valid_types=["stock"])
 
         # URL of the website to scrape
-        url = f"https://finance.yahoo.com/quote/{self.ticker}/"
+        url = f"{YAHOO_WEB_BASE_URL}/{self.ticker}/"
         response = self.get_response(url)
 
         # Parse the HTML content of the website
@@ -534,7 +534,7 @@ class YahooWeb(TickerBase):
         check_security_type(security_type=self.security_type, valid_types=["stock"])
 
         # URL of the website to scrape
-        url = f"https://finance.yahoo.com/quote/{self.ticker}/analysis"
+        url = f"{YAHOO_WEB_BASE_URL}/{self.ticker}/analysis"
         response = self.get_response(url)
 
         # Parse the HTML content of the website
@@ -569,7 +569,7 @@ class YahooWeb(TickerBase):
         check_security_type(security_type=self.security_type, valid_types=["stock"])
 
         # URL of the website to scrape
-        url = f"https://finance.yahoo.com/quote/{self.ticker}/analysis"
+        url = f"{YAHOO_WEB_BASE_URL}/{self.ticker}/analysis"
         response = self.get_response(url)
 
         # Parse the HTML content of the website
@@ -604,7 +604,7 @@ class YahooWeb(TickerBase):
         check_security_type(security_type=self.security_type, valid_types=["stock"])
 
         # URL of the website to scrape
-        url = f"https://finance.yahoo.com/quote/{self.ticker}/analysis"
+        url = f"{YAHOO_WEB_BASE_URL}/{self.ticker}/analysis"
         response = self.get_response(url)
 
         # Parse the HTML content of the website
@@ -639,7 +639,7 @@ class YahooWeb(TickerBase):
         check_security_type(security_type=self.security_type, valid_types=["stock"])
 
         # URL of the website to scrape
-        url = f"https://finance.yahoo.com/quote/{self.ticker}/analysis"
+        url = f"{YAHOO_WEB_BASE_URL}/{self.ticker}/analysis"
         response = self.get_response(url)
 
         # Parse the HTML content of the website
@@ -674,7 +674,7 @@ class YahooWeb(TickerBase):
         check_security_type(security_type=self.security_type, valid_types=["stock"])
 
         # URL of the website to scrape
-        url = f"https://finance.yahoo.com/quote/{self.ticker}/analysis"
+        url = f"{YAHOO_WEB_BASE_URL}/{self.ticker}/analysis"
         response = self.get_response(url)
 
         # Parse the HTML content of the website
@@ -709,7 +709,7 @@ class YahooWeb(TickerBase):
         check_security_type(security_type=self.security_type, valid_types=["stock"])
 
         # URL of the website to scrape
-        url = f"https://finance.yahoo.com/quote/{self.ticker}/analysis"
+        url = f"{YAHOO_WEB_BASE_URL}/{self.ticker}/analysis"
         response = self.get_response(url)
 
         # Parse the HTML content of the website
