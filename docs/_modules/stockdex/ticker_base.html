@@ -75,17 +75,17 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">logging</span><span class="w"> </span><span class="kn">import</span> <span class="n">getLogger</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">bs4</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeautifulSoup</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">curl_cffi</span><span class="w"> </span><span class="kn">import</span> <span class="n">requests</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">RESPONSE_TIMEOUT</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.lib</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_user_agent</span>
 
 
 <div class="viewcode-block" id="TickerBase"><a class="viewcode-back" href="../../stockdex.html#stockdex.ticker_base.TickerBase">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">TickerBase</span><span class="p">:</span>
+    <span class="n">session</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">(</span><span class="n">impersonate</span><span class="o">=</span><span class="s2">&quot;chrome110&quot;</span><span class="p">)</span>
     <span class="n">request_headers</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;User-Agent&quot;</span><span class="p">:</span> <span class="n">get_user_agent</span><span class="p">(),</span>
         <span class="s2">&quot;Accept&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json, text/javascript, */*; q=0.01&quot;</span><span class="p">,</span>
@@ -94,53 +94,54 @@
         <span class="s2">&quot;Origin&quot;</span><span class="p">:</span> <span class="s2">&quot;https://finance.yahoo.com&quot;</span><span class="p">,</span>
         <span class="s2">&quot;Connection&quot;</span><span class="p">:</span> <span class="s2">&quot;keep-alive&quot;</span><span class="p">,</span>
     <span class="p">}</span>
-    <span class="n">logger</span> <span class="o">=</span> <span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+    <span class="n">_yahoo_crumb</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_yahoo_crumb</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://fc.yahoo.com&quot;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">allow_redirects</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="s2">&quot;https://query1.finance.yahoo.com/v1/test/getcrumb&quot;</span><span class="p">,</span>
+                <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                <span class="n">allow_redirects</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">crumb</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">429</span> <span class="ow">or</span> <span class="s2">&quot;Too Many Requests&quot;</span> <span class="ow">in</span> <span class="n">crumb</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Rate limited while getting crumb&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">crumb</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="ow">or</span> <span class="s2">&quot;&lt;html&gt;&quot;</span> <span class="ow">in</span> <span class="n">crumb</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Invalid crumb received&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">crumb</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error fetching Yahoo crumb: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="TickerBase.get_response"><a class="viewcode-back" href="../../stockdex.html#stockdex.ticker_base.TickerBase.get_response">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">requests</span><span class="o">.</span><span class="n">Response</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Send an HTTP GET request to the website</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_yahoo_crumb</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_yahoo_crumb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_yahoo_crumb</span><span class="p">()</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">        ----------</span>
-<span class="sd">        url: str</span>
-<span class="sd">            The URL to send the HTTP GET request to</span>
-
-
-<span class="sd">        Returns:</span>
-<span class="sd">        ----------</span>
-<span class="sd">        requests.Response</span>
-<span class="sd">            The response from the website</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Send an HTTP GET request to the website</span>
-        <span class="n">session</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-            <span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">request_headers</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">RESPONSE_TIMEOUT</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="n">url</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">request_headers</span><span class="p">,</span>
+            <span class="n">timeout</span><span class="o">=</span><span class="n">RESPONSE_TIMEOUT</span><span class="p">,</span>
+            <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;crumb&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_yahoo_crumb</span><span class="p">},</span>
         <span class="p">)</span>
-        <span class="c1"># If the HTTP GET request can&#39;t be served</span>
-        <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span> <span class="ow">and</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">429</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">                Failed to load page (status code: </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">).</span>
-<span class="s2">                Check if the ticker symbol exists</span>
-<span class="s2">                &quot;&quot;&quot;</span>
-            <span class="p">)</span>
 
-        <span class="c1"># sleep if rate limit is reached and retry after time is given</span>
-        <span class="k">elif</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">429</span><span class="p">:</span>
-            <span class="c1"># retry 5 times with 10 seconds intervals and after that raise an exception</span>
+        <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">response</span>
+
+        <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">429</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
-                <span class="n">retry_after</span> <span class="o">=</span> <span class="mi">10</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Rate limit reached. Retrying after </span><span class="si">{</span><span class="n">retry_after</span><span class="si">}</span><span class="s2"> seconds&quot;</span>
-                <span class="p">)</span>
-                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">retry_after</span><span class="p">)</span>
-                <span class="n">response</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-                    <span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">request_headers</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">RESPONSE_TIMEOUT</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+                <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                    <span class="n">url</span><span class="p">,</span>
+                    <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">request_headers</span><span class="p">,</span>
+                    <span class="n">timeout</span><span class="o">=</span><span class="n">RESPONSE_TIMEOUT</span><span class="p">,</span>
+                    <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;crumb&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_yahoo_crumb</span><span class="p">},</span>
                 <span class="p">)</span>
                 <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
-                    <span class="k">break</span>
+                    <span class="k">return</span> <span class="n">response</span>
 
-        <span class="k">return</span> <span class="n">response</span></div>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Failed to fetch URL (status </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span></div>
 
 <div class="viewcode-block" id="TickerBase.find_parent_by_text"><a class="viewcode-back" href="../../stockdex.html#stockdex.ticker_base.TickerBase.find_parent_by_text">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">find_parent_by_text</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>

@@ -79,7 +79,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">bs4</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeautifulSoup</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">VALID_SECURITY_TYPES</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">VALID_SECURITY_TYPES</span><span class="p">,</span> <span class="n">YAHOO_WEB_BASE_URL</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.lib</span><span class="w"> </span><span class="kn">import</span> <span class="n">check_security_type</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker_base</span><span class="w"> </span><span class="kn">import</span> <span class="n">TickerBase</span>
 
@@ -159,7 +159,7 @@
         <span class="n">check_security_type</span><span class="p">(</span><span class="n">security_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">security_type</span><span class="p">,</span> <span class="n">valid_types</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;stock&quot;</span><span class="p">])</span>
 
         <span class="c1"># URL of the website to scrape</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://finance.yahoo.com/quote/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/cash-flow&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">YAHOO_WEB_BASE_URL</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/cash-flow&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">yahoo_web_financials_table</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 
     <span class="nd">@property</span>
@@ -175,7 +175,7 @@
         <span class="n">check_security_type</span><span class="p">(</span><span class="n">security_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">security_type</span><span class="p">,</span> <span class="n">valid_types</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;stock&quot;</span><span class="p">])</span>
 
         <span class="c1"># URL of the website to scrape</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://finance.yahoo.com/quote/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/balance-sheet&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">YAHOO_WEB_BASE_URL</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/balance-sheet&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">yahoo_web_financials_table</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 
     <span class="nd">@property</span>
@@ -191,7 +191,7 @@
         <span class="n">check_security_type</span><span class="p">(</span><span class="n">security_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">security_type</span><span class="p">,</span> <span class="n">valid_types</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;stock&quot;</span><span class="p">])</span>
 
         <span class="c1"># URL of the website to scrape</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://finance.yahoo.com/quote/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/financials&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">YAHOO_WEB_BASE_URL</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/financials&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">yahoo_web_financials_table</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 
     <span class="nd">@property</span>
@@ -208,7 +208,7 @@
         <span class="p">)</span>
 
         <span class="c1"># URL of the website to scrape</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://finance.yahoo.com/quote/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/options&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">YAHOO_WEB_BASE_URL</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/options&quot;</span>
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 
         <span class="c1"># Parse the HTML content of the website</span>
@@ -242,7 +242,7 @@
         <span class="p">)</span>
 
         <span class="c1"># URL of the website to scrape</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://finance.yahoo.com/quote/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/options&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">YAHOO_WEB_BASE_URL</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/options&quot;</span>
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 
         <span class="c1"># Parse the HTML content of the website</span>
@@ -272,7 +272,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># URL of the website to scrape</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://finance.yahoo.com/quote/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/profile&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">YAHOO_WEB_BASE_URL</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/profile&quot;</span>
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 
         <span class="c1"># Parse the HTML content of the website</span>
@@ -292,7 +292,7 @@
         <span class="n">check_security_type</span><span class="p">(</span><span class="n">security_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">security_type</span><span class="p">,</span> <span class="n">valid_types</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;stock&quot;</span><span class="p">])</span>
 
         <span class="c1"># URL of the website to scrape</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://finance.yahoo.com/quote/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/profile&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">YAHOO_WEB_BASE_URL</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/profile&quot;</span>
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 
         <span class="c1"># Parse the HTML content of the website</span>
@@ -323,7 +323,7 @@
         <span class="n">check_security_type</span><span class="p">(</span><span class="n">security_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">security_type</span><span class="p">,</span> <span class="n">valid_types</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;stock&quot;</span><span class="p">])</span>
 
         <span class="c1"># URL of the website to scrape</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://finance.yahoo.com/quote/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/profile&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">YAHOO_WEB_BASE_URL</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/profile&quot;</span>
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 
         <span class="c1"># Parse the HTML content of the website</span>
@@ -347,7 +347,7 @@
         <span class="n">check_security_type</span><span class="p">(</span><span class="n">security_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">security_type</span><span class="p">,</span> <span class="n">valid_types</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;stock&quot;</span><span class="p">])</span>
 
         <span class="c1"># URL of the website to scrape</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://finance.yahoo.com/quote/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/holders&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">YAHOO_WEB_BASE_URL</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/holders&quot;</span>
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 
         <span class="c1"># Parse the HTML content of the website</span>
@@ -383,7 +383,7 @@
         <span class="n">check_security_type</span><span class="p">(</span><span class="n">security_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">security_type</span><span class="p">,</span> <span class="n">valid_types</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;stock&quot;</span><span class="p">])</span>
 
         <span class="c1"># URL of the website to scrape</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://finance.yahoo.com/quote/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/holders&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">YAHOO_WEB_BASE_URL</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/holders&quot;</span>
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 
         <span class="c1"># Parse the HTML content of the website</span>
@@ -421,7 +421,7 @@
         <span class="n">check_security_type</span><span class="p">(</span><span class="n">security_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">security_type</span><span class="p">,</span> <span class="n">valid_types</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;stock&quot;</span><span class="p">])</span>
 
         <span class="c1"># URL of the website to scrape</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://finance.yahoo.com/quote/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/holders&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">YAHOO_WEB_BASE_URL</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/holders&quot;</span>
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 
         <span class="c1"># Parse the HTML content of the website</span>
@@ -452,7 +452,7 @@
         <span class="n">check_security_type</span><span class="p">(</span><span class="n">security_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">security_type</span><span class="p">,</span> <span class="n">valid_types</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;stock&quot;</span><span class="p">])</span>
 
         <span class="c1"># URL of the website to scrape</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://finance.yahoo.com/quote/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">YAHOO_WEB_BASE_URL</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 
         <span class="c1"># Parse the HTML content of the website</span>
@@ -483,7 +483,7 @@
         <span class="n">check_security_type</span><span class="p">(</span><span class="n">security_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">security_type</span><span class="p">,</span> <span class="n">valid_types</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;stock&quot;</span><span class="p">])</span>
 
         <span class="c1"># URL of the website to scrape</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://finance.yahoo.com/quote/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/key-statistics&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">YAHOO_WEB_BASE_URL</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/key-statistics&quot;</span>
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 
         <span class="c1"># Parse the HTML content of the website</span>
@@ -520,7 +520,7 @@
         <span class="n">check_security_type</span><span class="p">(</span><span class="n">security_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">security_type</span><span class="p">,</span> <span class="n">valid_types</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;stock&quot;</span><span class="p">])</span>
 
         <span class="c1"># URL of the website to scrape</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://finance.yahoo.com/quote/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/key-statistics&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">YAHOO_WEB_BASE_URL</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/key-statistics&quot;</span>
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 
         <span class="c1"># Parse the HTML content of the website</span>
@@ -551,7 +551,7 @@
         <span class="n">check_security_type</span><span class="p">(</span><span class="n">security_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">security_type</span><span class="p">,</span> <span class="n">valid_types</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;stock&quot;</span><span class="p">])</span>
 
         <span class="c1"># URL of the website to scrape</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://finance.yahoo.com/quote/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/key-statistics&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">YAHOO_WEB_BASE_URL</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/key-statistics&quot;</span>
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 
         <span class="c1"># Parse the HTML content of the website</span>
@@ -582,7 +582,7 @@
         <span class="n">check_security_type</span><span class="p">(</span><span class="n">security_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">security_type</span><span class="p">,</span> <span class="n">valid_types</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;stock&quot;</span><span class="p">])</span>
 
         <span class="c1"># URL of the website to scrape</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://finance.yahoo.com/quote/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">YAHOO_WEB_BASE_URL</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/&quot;</span>
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 
         <span class="c1"># Parse the HTML content of the website</span>
@@ -606,7 +606,7 @@
         <span class="n">check_security_type</span><span class="p">(</span><span class="n">security_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">security_type</span><span class="p">,</span> <span class="n">valid_types</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;stock&quot;</span><span class="p">])</span>
 
         <span class="c1"># URL of the website to scrape</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://finance.yahoo.com/quote/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/analysis&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">YAHOO_WEB_BASE_URL</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/analysis&quot;</span>
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 
         <span class="c1"># Parse the HTML content of the website</span>
@@ -641,7 +641,7 @@
         <span class="n">check_security_type</span><span class="p">(</span><span class="n">security_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">security_type</span><span class="p">,</span> <span class="n">valid_types</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;stock&quot;</span><span class="p">])</span>
 
         <span class="c1"># URL of the website to scrape</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://finance.yahoo.com/quote/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/analysis&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">YAHOO_WEB_BASE_URL</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/analysis&quot;</span>
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 
         <span class="c1"># Parse the HTML content of the website</span>
@@ -676,7 +676,7 @@
         <span class="n">check_security_type</span><span class="p">(</span><span class="n">security_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">security_type</span><span class="p">,</span> <span class="n">valid_types</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;stock&quot;</span><span class="p">])</span>
 
         <span class="c1"># URL of the website to scrape</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://finance.yahoo.com/quote/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/analysis&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">YAHOO_WEB_BASE_URL</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/analysis&quot;</span>
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 
         <span class="c1"># Parse the HTML content of the website</span>
@@ -711,7 +711,7 @@
         <span class="n">check_security_type</span><span class="p">(</span><span class="n">security_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">security_type</span><span class="p">,</span> <span class="n">valid_types</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;stock&quot;</span><span class="p">])</span>
 
         <span class="c1"># URL of the website to scrape</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://finance.yahoo.com/quote/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/analysis&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">YAHOO_WEB_BASE_URL</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/analysis&quot;</span>
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 
         <span class="c1"># Parse the HTML content of the website</span>
@@ -746,7 +746,7 @@
         <span class="n">check_security_type</span><span class="p">(</span><span class="n">security_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">security_type</span><span class="p">,</span> <span class="n">valid_types</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;stock&quot;</span><span class="p">])</span>
 
         <span class="c1"># URL of the website to scrape</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://finance.yahoo.com/quote/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/analysis&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">YAHOO_WEB_BASE_URL</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/analysis&quot;</span>
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 
         <span class="c1"># Parse the HTML content of the website</span>
@@ -781,7 +781,7 @@
         <span class="n">check_security_type</span><span class="p">(</span><span class="n">security_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">security_type</span><span class="p">,</span> <span class="n">valid_types</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;stock&quot;</span><span class="p">])</span>
 
         <span class="c1"># URL of the website to scrape</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://finance.yahoo.com/quote/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/analysis&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">YAHOO_WEB_BASE_URL</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/analysis&quot;</span>
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 
         <span class="c1"># Parse the HTML content of the website</span>
