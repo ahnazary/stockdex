@@ -55,13 +55,12 @@ class TickerBase:
 
         if response.status_code == 429:
             for _ in range(5):
-                self.logger.warning("Rate limit hit. Retrying...")
                 time.sleep(10)
                 response = self.session.get(
                     url,
                     headers=self.request_headers,
                     timeout=RESPONSE_TIMEOUT,
-                    params={"crumb": self.crumb},
+                    params={"crumb": crumb},
                 )
                 if response.status_code == 200:
                     return response
