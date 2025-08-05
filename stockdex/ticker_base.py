@@ -22,6 +22,7 @@ class TickerBase:
         "Origin": "https://finance.yahoo.com",
         "Connection": "keep-alive",
     }
+    _yahoo_crumb: Union[str, None] = None
 
     def _get_yahoo_crumb(self) -> str:
         try:
@@ -41,16 +42,14 @@ class TickerBase:
             raise RuntimeError(f"Error fetching Yahoo crumb: {e}")
 
     def get_response(self, url: str) -> requests.Response:
-        # Use cached crumb if available, else fetch
         if self._yahoo_crumb is None:
             self._yahoo_crumb = self._get_yahoo_crumb()
-        crumb = self._yahoo_crumb
 
         response = self.session.get(
             url,
             headers=self.request_headers,
             timeout=RESPONSE_TIMEOUT,
-            params={"crumb": crumb},
+            params={"crumb": self._yahoo_crumb},
         )
 
         if response.status_code == 200:
@@ -63,7 +62,7 @@ class TickerBase:
                     url,
                     headers=self.request_headers,
                     timeout=RESPONSE_TIMEOUT,
-                    params={"crumb": crumb},
+                    params={"crumb": self._yahoo_crumb},
                 )
                 if response.status_code == 200:
                     return response
