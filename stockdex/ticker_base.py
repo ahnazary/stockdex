@@ -61,7 +61,7 @@ class TickerBase:
                     url,
                     headers=self.request_headers,
                     timeout=RESPONSE_TIMEOUT,
-                    params={"crumb": self.crumb},
+                    params={"crumb": crumb},
                 )
                 if response.status_code == 200:
                     return response
