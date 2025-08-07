@@ -88,6 +88,9 @@ income_statement = ticker.macrotrends_income_statement
 # Summary including general financial information from Yahoo Finance website
 summary = ticker.yahoo_web_summary
 
+# Quarterly and yearly revenue data from macrotrends website
+quarterly_revenue = ticker.macrotrends_revenue(frequency='quarterly')
+annual_revenue = ticker.macrotrends_revenue(frequency='annual')
 ```
 
 <!-- ## NASDAQ data from `NASDAQ` website (web scraping):
