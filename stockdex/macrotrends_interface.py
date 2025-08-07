@@ -251,6 +251,31 @@ class MacrotrendsInterface(TickerBase):
 
         return self._find_margins_table(url, "TTM Net Income")
 
+    def macrotrends_revenue(
+        self, frequency: Literal["annual", "quarterly"] = "annual"
+    ) -> pd.DataFrame:
+        """
+        Retrieve the revenue for the given ticker.
+        """
+        check_security_type(self.security_type, valid_types=["stock"])
+        url = f"{MACROTRENDS_BASE_URL}/{self.ticker}/TBD/revenue"
+
+        # build selenium interface object if not already built
+        if not hasattr(self, "selenium_interface"):
+            self.selenium_interface = selenium_interface()
+
+        soup = self.selenium_interface.get_html_content(url)
+
+        # find tables with class = historical_data_table
+        tables = soup.find_all("table", class_="historical_data_table")
+
+        if frequency == "annual":
+            df = pd.read_html(str(tables[0]))[0]
+        elif frequency == "quarterly":
+            df = pd.read_html(str(tables[1]))[0]
+
+        return df
+
     def plot_macrotrends_income_statement(
         self,
         fields_to_include: list = ["Revenue", "Income After Taxes"],

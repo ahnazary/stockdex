@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.8
+
+### Added
+
+- Added `macrotrends_revenue` method to fetch quarterly and annual revenue data from `macrotrends` website.
+
 ## 1.0.5
 
 ### Fixed

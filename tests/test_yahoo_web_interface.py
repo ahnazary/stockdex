@@ -35,7 +35,7 @@ def test_yahoo_web_cashflow_wrong_security_type():
 
 @pytest.mark.parametrize(
     "ticker",
-    [("AAPL"), ("GOOGL"), ("TSLA")],
+    [("AAPL"), ("GOOGL"), ("TSLA"), ("TNK")],
 )
 def test_yahoo_web_balance_sheet(ticker):
     ticker = Ticker(ticker)
@@ -187,6 +187,23 @@ def test_yahoo_web_corporate_governance_wrong_security_type():
     with pytest.raises(WrongSecurityType):
         ticker = Ticker(ticker="AAPL", security_type="etf")
         ticker.yahoo_web_corporate_governance
+
+
+@pytest.mark.parametrize(
+    "ticker, frequency",
+    [
+        ("PANW", "annual"),
+        ("GOOGL", "quarterly"),
+    ],
+)
+def test_macrotrends_revenue(ticker, frequency):
+    ticker = Ticker(ticker)
+    macrotrends_revenue = ticker.macrotrends_revenue(frequency=frequency)
+
+    # Check if the response is as expected
+    assert isinstance(macrotrends_revenue, pd.DataFrame)
+    assert macrotrends_revenue.shape[0] > 0
+    assert macrotrends_revenue.shape[1] > 0
 
 
 @pytest.mark.parametrize(
