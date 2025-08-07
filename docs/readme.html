@@ -210,6 +210,9 @@
 <span class="c1"># Summary including general financial information from Yahoo Finance website</span>
 <span class="n">summary</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_web_summary</span>
 
+<span class="c1"># Quarterly and yearly revenue data from macrotrends website</span>
+<span class="n">quarterly_revenue</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">macrotrends_revenue</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="s1">&#39;quarterly&#39;</span><span class="p">)</span>
+<span class="n">annual_revenue</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">macrotrends_revenue</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="s1">&#39;annual&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <!-- ## NASDAQ data from `NASDAQ` website (web scraping):
