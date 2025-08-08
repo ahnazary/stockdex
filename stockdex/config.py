@@ -18,6 +18,7 @@ JUSTETF_BASE_URL = "https://www.justetf.com/en"
 NASDAQ_BASE_URL = "https://www.nasdaq.com/market-activity/stocks"
 DIGRIN_BASE_URL = "https://www.digrin.com/stocks/detail"
 MACROTRENDS_BASE_URL = "https://www.macrotrends.net/stocks/charts"
+FINVIZ_BASE_URL = "https://finviz.com/quote.ashx?t="
 
 INCOME_STATEMENT_COLUMNS = [
     "TaxEffectOfUnusualItems",
