@@ -1,4 +1,5 @@
 import json
+from functools import lru_cache
 
 import pandas as pd
 from bs4 import BeautifulSoup
@@ -51,18 +52,79 @@ class FinvizInterface(TickerBase):
 
         return pd.DataFrame(data, columns=column_names)
 
-    def price_reaction_to_earnings_report(self) -> pd.DataFrame:
-        """Fetch price reaction to earnings data for the specified ticker."""
+    @lru_cache(maxsize=None)
+    def _earnings_reaction_raw_data(self) -> dict:
+        """
+        Return and caches the raw earnings reaction data.
+        """
 
         url = f"{FINVIZ_BASE_URL}{self.ticker}&ty=ea&p=d"
         response = self.get_response(url)
 
         soup = BeautifulSoup(response.text, "html.parser")
 
-        # script id="route-init-data" type="application/json">
-        initial_data = soup.find("script", {"id": "route-init-data"})
+        raw_data = soup.find("script", {"id": "route-init-data"})
+        raw_data_json = json.loads(raw_data.string)
 
-        # Extract the JSON data into a json object
-        initial_data_json = json.loads(initial_data.string)
+        return raw_data_json
 
-        return initial_data_json
+    def price_reaction_to_earnings_report(self) -> pd.DataFrame:
+        """
+        Fetch price reaction to earnings data for the specified ticker
+
+        :return: DataFrame containing price reaction data
+        """
+
+        raw_data = self._earnings_reaction_raw_data()
+
+        price_reaction_data = raw_data.get("priceReactionData", [])
+        df = pd.DataFrame(price_reaction_data, columns=price_reaction_data[0].keys())
+
+        return df
+
+    def earnings_revisions_data(self) -> pd.DataFrame:
+        """
+        Fetch earnings revisions data for the specified ticker
+
+        :return: DataFrame containing earnings revisions data
+        """
+
+        raw_data = self._earnings_reaction_raw_data()
+
+        earnings_revisions_data = raw_data.get("earningsRevisionsData", [])
+        df = pd.DataFrame(
+            earnings_revisions_data, columns=earnings_revisions_data[0].keys()
+        )
+        df["ticker"] = self.ticker
+
+        return df
+
+    def earnings_annual_data(self) -> pd.DataFrame:
+        """
+        Fetch earnings annual data for the specified ticker
+
+        :return: DataFrame containing earnings annual data
+        """
+
+        raw_data = self._earnings_reaction_raw_data()
+
+        earnings_annual_data = raw_data.get("earningsAnnualData", [])
+        df = pd.DataFrame(earnings_annual_data, columns=earnings_annual_data[0].keys())
+        df["ticker"] = self.ticker
+
+        return df
+
+    def earnings_data(self) -> pd.DataFrame:
+        """
+        Fetch earnings data for the specified ticker
+
+        :return: DataFrame containing earnings data
+        """
+
+        raw_data = self._earnings_reaction_raw_data()
+
+        earnings_data = raw_data.get("earningsData", [])
+        df = pd.DataFrame(earnings_data, columns=earnings_data[0].keys())
+        df["ticker"] = self.ticker
+
+        return df
