@@ -1,3 +1,5 @@
+import json
+
 import pandas as pd
 from bs4 import BeautifulSoup
 
@@ -20,9 +22,7 @@ class FinvizInterface(TickerBase):
         """Fetch insider trading data for the specified ticker."""
 
         url = f"{FINVIZ_BASE_URL}{self.ticker}"
-        response = self.get_response(
-            url,
-        )
+        response = self.get_response(url)
 
         soup = BeautifulSoup(response.text, "html.parser")
 
@@ -50,3 +50,19 @@ class FinvizInterface(TickerBase):
             data.append(row_data)
 
         return pd.DataFrame(data, columns=column_names)
+
+    def price_reaction_to_earnings_report(self) -> pd.DataFrame:
+        """Fetch price reaction to earnings data for the specified ticker."""
+
+        url = f"{FINVIZ_BASE_URL}{self.ticker}&ty=ea&p=d"
+        response = self.get_response(url)
+
+        soup = BeautifulSoup(response.text, "html.parser")
+
+        # script id="route-init-data" type="application/json">
+        initial_data = soup.find("script", {"id": "route-init-data"})
+
+        # Extract the JSON data into a json object
+        initial_data_json = json.loads(initial_data.string)
+
+        return initial_data_json
