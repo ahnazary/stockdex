@@ -13,10 +13,10 @@ from stockdex.finviz_interface import FinvizInterface
         "BAC",
     ],
 )
-def test_get_insider_trading(ticker):
+def test_finviz_get_insider_trading(ticker):
     """Test the get_insider_trading method of FinvizInterface."""
     finviz = FinvizInterface(ticker=ticker)
-    result = finviz.get_insider_trading()
+    result = finviz.finviz_get_insider_trading()
 
     assert isinstance(result, pd.DataFrame)
     expected_columns = [
@@ -56,10 +56,10 @@ def test_get_insider_trading(ticker):
         "BAC",
     ],
 )
-def test_price_reaction_to_earnings_report(ticker):
+def test_finviz_price_reaction_to_earnings_report(ticker):
     """Test the price_reaction_to_earnings_report method of FinvizInterface."""
     finviz = FinvizInterface(ticker=ticker)
-    result = finviz.price_reaction_to_earnings_report()
+    result = finviz.finviz_price_reaction_to_earnings_report()
 
     assert isinstance(result, pd.DataFrame)
     expected_columns = [
@@ -107,10 +107,10 @@ def test_price_reaction_to_earnings_report(ticker):
         "BAC",
     ],
 )
-def test_earnings_revisions(ticker):
+def test_finviz_earnings_revisions(ticker):
     """Test the earnings_revisions_data method of FinvizInterface."""
     finviz = FinvizInterface(ticker=ticker)
-    result = finviz.earnings_revisions_data()
+    result = finviz.finviz_earnings_revisions_data()
 
     assert isinstance(result, pd.DataFrame)
     expected_columns = [
@@ -154,10 +154,10 @@ def test_earnings_revisions(ticker):
         "BAC",
     ],
 )
-def test_earnings_annual_data(ticker):
+def test_finviz_earnings_annual_data(ticker):
     """Test the earnings_annual_data method of FinvizInterface."""
     finviz = FinvizInterface(ticker=ticker)
-    result = finviz.earnings_annual_data()
+    result = finviz.finviz_earnings_annual_data()
 
     assert isinstance(result, pd.DataFrame)
     expected_columns = [
@@ -192,10 +192,10 @@ def test_earnings_annual_data(ticker):
         "BAC",
     ],
 )
-def test_earnings_data(ticker):
+def test_finviz_earnings_data(ticker):
     """Test the earnings_data method of FinvizInterface."""
     finviz = FinvizInterface(ticker=ticker)
-    result = finviz.earnings_data()
+    result = finviz.finviz_earnings_data()
 
     assert isinstance(result, pd.DataFrame)
     expected_columns = [

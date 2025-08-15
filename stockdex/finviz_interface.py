@@ -19,7 +19,7 @@ class FinvizInterface(TickerBase):
         self.ticker = ticker
         self.security_type = security_type
 
-    def get_insider_trading(self) -> pd.DataFrame:
+    def finviz_get_insider_trading(self) -> pd.DataFrame:
         """Fetch insider trading data for the specified ticker."""
 
         url = f"{FINVIZ_BASE_URL}{self.ticker}"
@@ -53,7 +53,7 @@ class FinvizInterface(TickerBase):
         return pd.DataFrame(data, columns=column_names)
 
     @lru_cache(maxsize=None)
-    def _earnings_reaction_raw_data(self) -> dict:
+    def _finviz_earnings_reaction_raw_data(self) -> dict:
         """
         Return and caches the raw earnings reaction data.
         """
@@ -68,28 +68,28 @@ class FinvizInterface(TickerBase):
 
         return raw_data_json
 
-    def price_reaction_to_earnings_report(self) -> pd.DataFrame:
+    def finviz_price_reaction_to_earnings_report(self) -> pd.DataFrame:
         """
         Fetch price reaction to earnings data for the specified ticker
 
         :return: DataFrame containing price reaction data
         """
 
-        raw_data = self._earnings_reaction_raw_data()
+        raw_data = self._finviz_earnings_reaction_raw_data()
 
         price_reaction_data = raw_data.get("priceReactionData", [])
         df = pd.DataFrame(price_reaction_data, columns=price_reaction_data[0].keys())
 
         return df
 
-    def earnings_revisions_data(self) -> pd.DataFrame:
+    def finviz_earnings_revisions_data(self) -> pd.DataFrame:
         """
         Fetch earnings revisions data for the specified ticker
 
         :return: DataFrame containing earnings revisions data
         """
 
-        raw_data = self._earnings_reaction_raw_data()
+        raw_data = self._finviz_earnings_reaction_raw_data()
 
         earnings_revisions_data = raw_data.get("earningsRevisionsData", [])
         df = pd.DataFrame(
@@ -99,14 +99,14 @@ class FinvizInterface(TickerBase):
 
         return df
 
-    def earnings_annual_data(self) -> pd.DataFrame:
+    def finviz_earnings_annual_data(self) -> pd.DataFrame:
         """
         Fetch earnings annual data for the specified ticker
 
         :return: DataFrame containing earnings annual data
         """
 
-        raw_data = self._earnings_reaction_raw_data()
+        raw_data = self._finviz_earnings_reaction_raw_data()
 
         earnings_annual_data = raw_data.get("earningsAnnualData", [])
         df = pd.DataFrame(earnings_annual_data, columns=earnings_annual_data[0].keys())
@@ -114,14 +114,14 @@ class FinvizInterface(TickerBase):
 
         return df
 
-    def earnings_data(self) -> pd.DataFrame:
+    def finviz_earnings_data(self) -> pd.DataFrame:
         """
         Fetch earnings data for the specified ticker
 
         :return: DataFrame containing earnings data
         """
 
-        raw_data = self._earnings_reaction_raw_data()
+        raw_data = self._finviz_earnings_reaction_raw_data()
 
         earnings_data = raw_data.get("earningsData", [])
         df = pd.DataFrame(earnings_data, columns=earnings_data[0].keys())
