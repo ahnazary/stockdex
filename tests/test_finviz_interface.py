@@ -272,3 +272,38 @@ def test_finviz_dividends_date_data(ticker):
             result["Ticker"].notnull().all()
         ), "Ticker column should not have null values"
     assert result.shape[1] > 0, "DataFrame should have 4 columns even if empty"
+
+
+@pytest.mark.parametrize(
+    "ticker",
+    [
+        "AAPL",
+        "GOOGL",
+        "TSLA",
+        "BAC",
+    ],
+)
+def test_finviz_dividends_annual_data(ticker):
+    """Test the dividends_annual_data method of FinvizInterface."""
+    finviz = FinvizInterface(ticker=ticker)
+    result = finviz.finviz_dividends_annual_data()
+
+    assert isinstance(result, pd.DataFrame)
+    expected_columns = [
+        "Ticker",
+        "FiscalPeriod",
+        "Amount",
+        "Yield",
+        "Payout",
+        "Estimate",
+    ]
+    assert all(col in result.columns for col in expected_columns)
+
+    if not result.empty:
+        assert result.shape[0] > 0, "Dividend annual data should not be empty"
+        assert (
+            result["Ticker"].notnull().all()
+        ), "Ticker column should not have null values"
+    assert (
+        result.shape[1] > 0
+    ), "DataFrame should have more than 0 columns even if empty"

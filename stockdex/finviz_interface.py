@@ -178,3 +178,17 @@ class FinvizInterface(TickerBase):
             df = pd.DataFrame(columns=["Ticker", "Exdate", "Ordinary", "Special"])
 
         return df
+
+    def finviz_dividends_annual_data(self) -> pd.DataFrame:
+        """
+        Fetch annual dividend data for the specified ticker
+
+        :return: DataFrame containing annual dividend data
+        """
+
+        raw_data = self._finviz_dividend_payout_history_raw_data()
+
+        dividend_annual_data = raw_data.get("dividendsAnnualData", [])
+        df = pd.DataFrame(dividend_annual_data, columns=dividend_annual_data[0].keys())
+
+        return df
