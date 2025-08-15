@@ -68,6 +68,22 @@ class FinvizInterface(TickerBase):
 
         return raw_data_json
 
+    @lru_cache
+    def _finviz_dividend_payout_history_raw_data(self) -> dict:
+        """
+        Return and caches the raw dividend payout history data.
+        """
+
+        url = f"{FINVIZ_BASE_URL}{self.ticker}&ty=dv&p=d"
+        response = self.get_response(url)
+
+        soup = BeautifulSoup(response.text, "html.parser")
+
+        raw_data = soup.find("script", {"id": "route-init-data"})
+        raw_data_json = json.loads(raw_data.string)
+
+        return raw_data_json
+
     def finviz_price_reaction_to_earnings_report(self) -> pd.DataFrame:
         """
         Fetch price reaction to earnings data for the specified ticker
@@ -126,5 +142,21 @@ class FinvizInterface(TickerBase):
         earnings_data = raw_data.get("earningsData", [])
         df = pd.DataFrame(earnings_data, columns=earnings_data[0].keys())
         df["ticker"] = self.ticker
+
+        return df
+
+    def finviz_overall_dividend(self) -> pd.DataFrame:
+        """
+        Fetch overall dividend data for the specified ticker
+
+        :return: DataFrame containing overall dividend data
+        """
+
+        raw_data = self._finviz_dividend_payout_history_raw_data()
+
+        raw_data.pop("dividendsData", None)
+        raw_data.pop("dividendsAnnualData", None)
+
+        df = pd.DataFrame([raw_data])
 
         return df

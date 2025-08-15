@@ -216,3 +216,28 @@ def test_finviz_earnings_data(ticker):
     assert all(col in result.columns for col in expected_columns)
     assert result.shape[0] > 0, "Earnings data should not be empty"
     assert result["ticker"].notnull().all(), "Ticker column should not have null values"
+
+
+@pytest.mark.parametrize(
+    "ticker",
+    [
+        "AAPL",
+        "GOOGL",
+        "TSLA",
+        "BAC",
+    ],
+)
+def test_finviz_overall_dividend(ticker):
+    """Test the overall_dividend method of FinvizInterface."""
+    finviz = FinvizInterface(ticker=ticker)
+    result = finviz.finviz_overall_dividend()
+
+    assert isinstance(result, pd.DataFrame)
+    expected_columns = [
+        "lastClose",
+        "dividendExDate",
+        "dividendEstimate",
+        "dividendTTM",
+    ]
+    assert all(col in result.columns for col in expected_columns)
+    assert result.shape[0] > 0, "Overall dividend data should not be empty"
