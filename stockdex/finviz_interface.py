@@ -219,3 +219,45 @@ class FinvizInterface(TickerBase):
             result[key] = df
 
         return result
+
+    def finviz_revenue_by_segment(self) -> dict:
+        """
+        Fetch revenue by segment data for the specified ticker
+
+        :return: a dict of dataframes for each segment
+        """
+
+        raw_data = self._finviz_revenue_raw_data()
+
+        revenue_data_raw = raw_data.get("segment")
+        if revenue_data_raw is None:
+            return {}
+        revenue_data = revenue_data_raw.get("revenues", [])
+
+        result = {}
+        for key, segment in revenue_data.items():
+            df = pd.DataFrame(segment)
+            result[key] = df
+
+        return result
+
+    def finviz_revenue_by_regions(self) -> dict:
+        """
+        Fetch revenue by regions data for the specified ticker
+
+        :return: a dict of dataframes for each region
+        """
+
+        raw_data = self._finviz_revenue_raw_data()
+
+        revenue_data_raw = raw_data.get("regions")
+        if revenue_data_raw is None:
+            return {}
+        revenue_data = revenue_data_raw.get("revenues", [])
+
+        result = {}
+        for key, region in revenue_data.items():
+            df = pd.DataFrame(region)
+            result[key] = df
+
+        return result

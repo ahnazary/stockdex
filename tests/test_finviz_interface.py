@@ -344,3 +344,43 @@ def test_finviz_revenue_by_products_and_services(ticker):
     for key, df in result.items():
         assert isinstance(df, pd.DataFrame)
         assert not df.empty, f"DataFrame for {key} should not be empty"
+
+
+@pytest.mark.parametrize(
+    "ticker",
+    [
+        "AAPL",
+        "GOOGL",
+        "TSLA",
+        "BAC",
+    ],
+)
+def test_finviz_revenue_by_segment(ticker):
+    """Test the finviz_revenue_by_segment method of FinvizInterface."""
+    finviz = FinvizInterface(ticker=ticker)
+    result = finviz.finviz_revenue_by_segment()
+
+    assert isinstance(result, dict)
+    for key, df in result.items():
+        assert isinstance(df, pd.DataFrame)
+        assert not df.empty, f"DataFrame for {key} should not be empty"
+
+
+@pytest.mark.parametrize(
+    "ticker",
+    [
+        "AAPL",
+        "GOOGL",
+        "TSLA",
+        "BAC",
+    ],
+)
+def test_finviz_revenue_by_regions(ticker):
+    """Test the finviz_revenue_by_regions method of FinvizInterface."""
+    finviz = FinvizInterface(ticker=ticker)
+    result = finviz.finviz_revenue_by_regions()
+
+    assert isinstance(result, dict)
+    for key, df in result.items():
+        assert isinstance(df, pd.DataFrame)
+        assert not df.empty, f"DataFrame for {key} should not be empty"
