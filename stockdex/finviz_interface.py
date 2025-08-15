@@ -198,3 +198,24 @@ class FinvizInterface(TickerBase):
         df = pd.DataFrame(dividend_annual_data, columns=dividend_annual_data[0].keys())
 
         return df
+
+    def finviz_revenue_by_products_and_services(self) -> dict:
+        """
+        Fetch revenue by products and services data for the specified ticker
+
+        :return: a dict of dataframes for each service or product
+        """
+
+        raw_data = self._finviz_revenue_raw_data()
+
+        revenue_data_raw = raw_data.get("products_and_services")
+        if revenue_data_raw is None:
+            return {}
+        revenue_data = revenue_data_raw.get("revenues", [])
+
+        result = {}
+        for key, service_or_product in revenue_data.items():
+            df = pd.DataFrame(service_or_product)
+            result[key] = df
+
+        return result

@@ -324,3 +324,23 @@ def test__finviz_revenue_raw_data(ticker):
     result = finviz._finviz_revenue_raw_data()
 
     assert isinstance(result, dict)
+
+
+@pytest.mark.parametrize(
+    "ticker",
+    [
+        "AAPL",
+        "GOOGL",
+        "TSLA",
+        "BAC",
+    ],
+)
+def test_finviz_revenue_by_products_and_services(ticker):
+    """Test the finviz_revenue_by_products_and_services method of FinvizInterface."""
+    finviz = FinvizInterface(ticker=ticker)
+    result = finviz.finviz_revenue_by_products_and_services()
+
+    assert isinstance(result, dict)
+    for key, df in result.items():
+        assert isinstance(df, pd.DataFrame)
+        assert not df.empty, f"DataFrame for {key} should not be empty"
