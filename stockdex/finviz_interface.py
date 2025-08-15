@@ -84,19 +84,25 @@ class FinvizInterface(TickerBase):
 
         return raw_data_json
 
-    def finviz_price_reaction_to_earnings_report(self) -> pd.DataFrame:
+    @lru_cache
+    def _finviz_revenue_raw_data(self) -> dict:
         """
+        Return and caches the raw revenue data.
         Fetch price reaction to earnings data for the specified ticker
 
         :return: DataFrame containing price reaction data
         """
 
-        raw_data = self._finviz_earnings_reaction_raw_data()
+        url = f"{FINVIZ_BASE_URL}{self.ticker}&ty=rv&p=d"
 
-        price_reaction_data = raw_data.get("priceReactionData", [])
-        df = pd.DataFrame(price_reaction_data, columns=price_reaction_data[0].keys())
+        response = self.get_response(url)
 
-        return df
+        soup = BeautifulSoup(response.text, "html.parser")
+
+        raw_data = soup.find("script", {"id": "route-init-data"})
+        raw_data_json = json.loads(raw_data.string)
+
+        return raw_data_json
 
     def finviz_earnings_revisions_data(self) -> pd.DataFrame:
         """

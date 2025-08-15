@@ -307,3 +307,20 @@ def test_finviz_dividends_annual_data(ticker):
     assert (
         result.shape[1] > 0
     ), "DataFrame should have more than 0 columns even if empty"
+
+
+@pytest.mark.parametrize(
+    "ticker",
+    [
+        "AAPL",
+        "GOOGL",
+        "TSLA",
+        "BAC",
+    ],
+)
+def test__finviz_revenue_raw_data(ticker):
+    """Test the _finviz_revenue_raw_data method of FinvizInterface."""
+    finviz = FinvizInterface(ticker=ticker)
+    result = finviz._finviz_revenue_raw_data()
+
+    assert isinstance(result, dict)
