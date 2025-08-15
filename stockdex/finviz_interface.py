@@ -160,3 +160,21 @@ class FinvizInterface(TickerBase):
         df = pd.DataFrame([raw_data])
 
         return df
+
+    def finviz_dividends_date_data(self) -> pd.DataFrame:
+        """
+        Fetch dividend date data for the specified ticker
+
+        :return: DataFrame containing dividend date data
+        """
+
+        raw_data = self._finviz_dividend_payout_history_raw_data()
+
+        dividend_date_data = raw_data.get("dividendsData", [])
+
+        if dividend_date_data:
+            df = pd.DataFrame(dividend_date_data, columns=dividend_date_data[0].keys())
+        else:
+            df = pd.DataFrame(columns=["Ticker", "Exdate", "Ordinary", "Special"])
+
+        return df
