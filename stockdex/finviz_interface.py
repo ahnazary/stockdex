@@ -261,3 +261,16 @@ class FinvizInterface(TickerBase):
             result[key] = df
 
         return result
+
+    def finviz_price_reaction_to_earnings_report(self) -> pd.DataFrame:
+        """
+        Fetch price reaction to earnings report data for the specified ticker
+
+        :return: DataFrame containing price reaction to earnings report data
+        """
+        raw_data = self._finviz_earnings_reaction_raw_data()
+
+        price_reaction_data = raw_data.get("priceReactionData", [])
+        df = pd.DataFrame(price_reaction_data, columns=price_reaction_data[0].keys())
+
+        return df
