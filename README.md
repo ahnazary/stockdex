@@ -93,7 +93,7 @@ quarterly_revenue = ticker.macrotrends_revenue(frequency='quarterly')
 annual_revenue = ticker.macrotrends_revenue(frequency='annual')
 ```
 
-<!-- ## NASDAQ data from `NASDAQ` website (web scraping):
+<!-- ## NASDAQ data from `NASDAQ` website (web scraping): 
 
 Data on NASDAQ website gets updated more frequently than Yahoo Finance data. Below are some of the data that can be retrieved from the NASDAQ website.
 
@@ -195,6 +195,27 @@ The output of the function is a sankey chart showing the income statement of the
   <img src="docs/images/plot_sankey_chart_aapl_annual.png" alt="Stockdex Logo" width="auto" height="auto" style="width: auto; height: auto; border-radius: 15px;">  
 </p>
 
+## Stocks data from `Finviz` (web scraping):
+
+Data from Finviz website includes dividend data, revenue data (by segment, region and product/service), and earnings reaction data. Below are some sample functions to retrieve this data:
+
+```python
+from stockdex import Ticker
+
+ticker = Ticker(ticker="AAPL")
+
+# Dividend data
+dividends = ticker.finviz_dividends_date_data()
+dividends_annual = ticker.finviz_dividends_annual_data()
+
+# Revenue data
+revenue_by_products = ticker.finviz_revenue_by_products_and_services()
+revenue_by_segments = ticker.finviz_revenue_by_segment()
+revenue_by_regions = ticker.finviz_revenue_by_regions()
+
+# Earnings reaction data
+earnings_reaction = ticker.finviz_price_reaction_to_earnings_report()
+```
 
 ## Stocks data from `Digrin` (web scraping):
 
