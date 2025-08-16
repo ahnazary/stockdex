@@ -21,7 +21,7 @@ Stockdex is a Python package that provides a simple interface to access financia
 
 # Advantages of `Stockdex` over similar packages
 
-- **Various data sources**: `Stockdex` provides data from Yahoo Finance API and website, Digrin, Macrotrends, and JustETF (for EU ETFs).
+- **Various data sources**: `Stockdex` provides data from Yahoo Finance API and website, Digrin, Finviz, Macrotrends and JustETF (for EU ETFs).
 
 - **Numerous data categories**: `Stockdex` provides various data including financial statements, earnings, dividends, stock splits, list of key executives, major shareholders, and many more.
 
