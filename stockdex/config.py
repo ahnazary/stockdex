@@ -2,11 +2,11 @@
 
 from typing import Literal
 
-RESPONSE_TIMEOUT = 5
+RESPONSE_TIMEOUT = 10
 RETRY_AFTER_TIMEOUT = 2
 
 VALID_SECURITY_TYPES = Literal["stock", "etf", "cryptocurrency", "index", "commodity"]
-VALID_DATA_SOURCES = Literal["yahoo_web", "yahoo_api", "justetf", "digrin"]
+VALID_DATA_SOURCES = Literal["yahoo_web", "yahoo_api", "justetf", "digrin", "finviz"]
 
 BASE_URL = "https://query2.finance.yahoo.com/v8/finance"
 YAHOO_WEB_BASE_URL = "https://finance.yahoo.com/quote"
