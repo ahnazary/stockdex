@@ -1,9 +1,9 @@
+import os
+
 import pandas as pd
 import pytest
 
 from stockdex.finviz_interface import FinvizInterface
-
-import os
 
 skip_test = bool(os.getenv("SKIP_TEST", False))
 
