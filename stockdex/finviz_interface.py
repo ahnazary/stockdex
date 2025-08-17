@@ -2,6 +2,7 @@ import json
 from functools import lru_cache
 
 import pandas as pd
+import plotly.express as px
 from bs4 import BeautifulSoup
 
 from stockdex.config import FINVIZ_BASE_URL, VALID_SECURITY_TYPES
@@ -274,3 +275,54 @@ class FinvizInterface(TickerBase):
         df = pd.DataFrame(price_reaction_data, columns=price_reaction_data[0].keys())
 
         return df
+
+    def _plot_finviz_revenue_data(self, data: dict, logarithmic: False) -> px.bar:
+        for key, df in data.items():
+            df["partition"] = key
+
+        fig = px.bar(
+            pd.concat(data.values()),
+            x="fiscal_year",
+            y="value",
+            color="partition",
+            title="Revenue by Segment",
+            barmode="group",
+            log_y=logarithmic,
+        )
+
+        fig.update_xaxes(title_text="Fiscal Year")
+        fig.update_yaxes(title_text="Revenue")
+        return fig
+
+    def plot_finviz_revenue_by_regions(self, logarithmic: bool) -> None:
+        """
+        Plot revenue by regions data for the specified ticker
+
+        :return: None
+        """
+        data = self.finviz_revenue_by_regions()
+        fig = self._plot_finviz_revenue_data(data, logarithmic=logarithmic)
+
+        fig.show()
+
+    def plot_finviz_revenue_by_segments(self, logarithmic: bool) -> None:
+        """
+        Plot revenue by segments data for the specified ticker
+
+        :return: None
+        """
+        data = self.finviz_revenue_by_segment()
+        fig = self._plot_finviz_revenue_data(data, logarithmic=logarithmic)
+
+        fig.show()
+
+    def plot_finviz_revenue_by_products_and_services(self, logarithmic: bool) -> None:
+        """
+        Plot revenue by products and services data for the specified ticker
+
+        :return: None
+        """
+        data = self.finviz_revenue_by_products_and_services()
+        fig = self._plot_finviz_revenue_data(data, logarithmic=logarithmic)
+
+        fig.show()

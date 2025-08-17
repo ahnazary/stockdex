@@ -3,6 +3,10 @@ import pytest
 
 from stockdex.finviz_interface import FinvizInterface
 
+import os
+
+skip_test = bool(os.getenv("SKIP_TEST", False))
+
 
 @pytest.mark.parametrize(
     "ticker",
@@ -384,3 +388,56 @@ def test_finviz_revenue_by_regions(ticker):
     for key, df in result.items():
         assert isinstance(df, pd.DataFrame)
         assert not df.empty, f"DataFrame for {key} should not be empty"
+
+
+@pytest.mark.skipif(skip_test, reason="Skipping in GH action as it throws error 403")
+@pytest.mark.parametrize(
+    "ticker, logarithmic",
+    [
+        ("AAPL", False),
+        ("AAPL", True),
+        ("MSFT", True),
+    ],
+)
+def test_plot_finviz_revenue_by_regions(ticker, logarithmic):
+    """Test the plot_finviz_revenue_by_regions method of FinvizInterface."""
+    finviz = FinvizInterface(ticker=ticker)
+    result = finviz.plot_finviz_revenue_by_regions(logarithmic=logarithmic)
+
+    assert result is None
+
+
+@pytest.mark.skipif(skip_test, reason="Skipping in GH action as it throws error 403")
+@pytest.mark.parametrize(
+    "ticker, logarithmic",
+    [
+        ("AAPL", False),
+        ("AAPL", True),
+        ("MSFT", True),
+    ],
+)
+def test_plot_finviz_revenue_by_segments(ticker, logarithmic):
+    """Test the plot_finviz_revenue_by_segments method of FinvizInterface."""
+    finviz = FinvizInterface(ticker=ticker)
+    result = finviz.plot_finviz_revenue_by_segments(logarithmic=logarithmic)
+
+    assert result is None
+
+
+@pytest.mark.skipif(skip_test, reason="Skipping in GH action as it throws error 403")
+@pytest.mark.parametrize(
+    "ticker, logarithmic",
+    [
+        ("AAPL", False),
+        ("AAPL", True),
+        ("MSFT", True),
+    ],
+)
+def test_plot_finviz_revenue_by_products_and_services(ticker, logarithmic):
+    """Test the plot_finviz_revenue_by_products_and_services method of FinvizInterface."""
+    finviz = FinvizInterface(ticker=ticker)
+    result = finviz.plot_finviz_revenue_by_products_and_services(
+        logarithmic=logarithmic
+    )
+
+    assert result is None
