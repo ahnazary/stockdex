@@ -278,14 +278,14 @@ class FinvizInterface(TickerBase):
 
     def _plot_finviz_revenue_data(self, data: dict, logarithmic: False) -> px.bar:
         for key, df in data.items():
-            df["partition"] = key
+            df["category"] = key
 
         fig = px.bar(
             pd.concat(data.values()),
             x="fiscal_year",
             y="value",
-            color="partition",
-            title="Revenue by Segment",
+            color="category",
+            title="Revenue by category",
             barmode="group",
             log_y=logarithmic,
         )
