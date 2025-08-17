@@ -61,7 +61,7 @@ from stockdex import Ticker
 ticker = Ticker(ticker="AAPL")
 ```
 
-## Data from `Yahoo Finance`, `Digrin`, and `Macrotrends`:
+## Data from `Yahoo Finance`, `Digrin`, `Macrotrends` and `Finviz`:
 
 The `Ticker` object provides data from Yahoo Finance API and website, Digrin, and Macrotrends. Below are some of the data that can be retrieved from these sources (more detailed info with output can be found [here](USAGE.md)).
 
@@ -91,6 +91,18 @@ summary = ticker.yahoo_web_summary
 # Quarterly and yearly revenue data from macrotrends website
 quarterly_revenue = ticker.macrotrends_revenue(frequency='quarterly')
 annual_revenue = ticker.macrotrends_revenue(frequency='annual')
+
+# Dividend data from Finviz
+dividends = ticker.finviz_dividends_date_data()
+dividends_annual = ticker.finviz_dividends_annual_data()
+
+# Revenue data from Finviz
+revenue_by_products = ticker.finviz_revenue_by_products_and_services()
+revenue_by_segments = ticker.finviz_revenue_by_segment()
+revenue_by_regions = ticker.finviz_revenue_by_regions()
+
+# Earnings reaction data from Finviz
+earnings_reaction = ticker.finviz_price_reaction_to_earnings_report()
 ```
 
 <!-- ## NASDAQ data from `NASDAQ` website (web scraping): 
@@ -157,6 +169,8 @@ financials = ticker.yahoo_api_financials(period1=datetime(2022, 1, 1), period2=d
 
 ### Plotting data:
 
+
+#### Yahoo Finance
 Following functions will plot the data extracted from Yahoo Finance API using the `plotly` library:
 
 ```python
@@ -177,6 +191,26 @@ Running each function will open a tab in default browser showing the plot:
   <img src="docs/images/msft_financials_annual.png" alt="Stockdex Logo" width="auto" height="auto" style="width: auto; height: auto; border-radius: 15px;">
 </p>
 
+#### Finviz
+
+Following functions will plot the data extracted from Finviz website using the `plotly` library:
+
+```python
+from stockdex import Ticker
+
+ticker = Ticker(ticker="AAPL")
+
+ticker.plot_finviz_revenue_by_products_and_services(log_scale=True)
+ticker.plot_finviz_revenue_by_segment(log_scale=False)
+ticker.plot_finviz_revenue_by_regions(log_scale=True)
+```
+
+Below the chart for `AAPL` revenue by products and services is shown in logarithmic scale:
+
+<p align="center">
+  <img src="docs/images/plot_finviz_aapl_service_and_product.png" alt="Stockdex Logo" width="auto" height="auto" style="width: auto; height: auto; border-radius: 15px;">  
+</p>
+
 # Sankey charts:
 
 Sankey charts are used to visualize the flow of cash in a company. The `plot_sankey_chart` function will plot a sankey chart based on data extracted from the Yahoo Finance API. Below is an example of how to plot a sankey chart for `AAPL` stock:
@@ -195,27 +229,6 @@ The output of the function is a sankey chart showing the income statement of the
   <img src="docs/images/plot_sankey_chart_aapl_annual.png" alt="Stockdex Logo" width="auto" height="auto" style="width: auto; height: auto; border-radius: 15px;">  
 </p>
 
-## Stocks data from `Finviz` (web scraping):
-
-Data from Finviz website includes dividend data, revenue data (by segment, region and product/service), and earnings reaction data. Below are some sample functions to retrieve this data:
-
-```python
-from stockdex import Ticker
-
-ticker = Ticker(ticker="AAPL")
-
-# Dividend data
-dividends = ticker.finviz_dividends_date_data()
-dividends_annual = ticker.finviz_dividends_annual_data()
-
-# Revenue data
-revenue_by_products = ticker.finviz_revenue_by_products_and_services()
-revenue_by_segments = ticker.finviz_revenue_by_segment()
-revenue_by_regions = ticker.finviz_revenue_by_regions()
-
-# Earnings reaction data
-earnings_reaction = ticker.finviz_price_reaction_to_earnings_report()
-```
 
 ## Stocks data from `Digrin` (web scraping):
 
