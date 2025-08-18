@@ -5,10 +5,17 @@ from stockdex.macrotrends_interface import MacrotrendsInterface
 from stockdex.sankey_charts import SankeyCharts
 from stockdex.yahoo_api_interface import YahooAPI
 from stockdex.yahoo_web_interface import YahooWeb
+from stockdex.finviz_interface import FinvizInterface
 
 
 class Ticker(
-    YahooAPI, JustETF, DigrinInterface, YahooWeb, MacrotrendsInterface, SankeyCharts
+    YahooAPI,
+    JustETF,
+    DigrinInterface,
+    YahooWeb,
+    MacrotrendsInterface,
+    SankeyCharts,
+    FinvizInterface,
 ):
     """
     Class for the Ticker
