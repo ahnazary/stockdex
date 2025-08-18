@@ -49,7 +49,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#advantages-of-stockdex-over-similar-packages">Advantages of <code class="docutils literal notranslate"><span class="pre">Stockdex</span></code> over similar packages</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#data-from-yahoo-finance-digrin-and-macrotrends">Data from <code class="docutils literal notranslate"><span class="pre">Yahoo</span> <span class="pre">Finance</span></code>, <code class="docutils literal notranslate"><span class="pre">Digrin</span></code>, and <code class="docutils literal notranslate"><span class="pre">Macrotrends</span></code>:</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#data-from-yahoo-finance-digrin-macrotrends-and-finviz">Data from <code class="docutils literal notranslate"><span class="pre">Yahoo</span> <span class="pre">Finance</span></code>, <code class="docutils literal notranslate"><span class="pre">Digrin</span></code>, <code class="docutils literal notranslate"><span class="pre">Macrotrends</span></code> and <code class="docutils literal notranslate"><span class="pre">Finviz</span></code>:</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#raw-data">Raw data:</a></li>
 </ul>
 </li>
@@ -65,7 +65,6 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#sankey-charts">Sankey charts:</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#stocks-data-from-finviz-web-scraping">Stocks data from <code class="docutils literal notranslate"><span class="pre">Finviz</span></code> (web scraping):</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#stocks-data-from-digrin-web-scraping">Stocks data from <code class="docutils literal notranslate"><span class="pre">Digrin</span></code> (web scraping):</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#id2">Raw data:</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#id3">Plotting data:</a></li>
@@ -153,7 +152,7 @@
 <section id="advantages-of-stockdex-over-similar-packages">
 <h2>Advantages of <code class="docutils literal notranslate"><span class="pre">Stockdex</span></code> over similar packages<a class="headerlink" href="#advantages-of-stockdex-over-similar-packages" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><strong>Various data sources</strong>: <code class="docutils literal notranslate"><span class="pre">Stockdex</span></code> provides data from Yahoo Finance API and website, Digrin, Macrotrends, and JustETF (for EU ETFs).</p></li>
+<li><p><strong>Various data sources</strong>: <code class="docutils literal notranslate"><span class="pre">Stockdex</span></code> provides data from Yahoo Finance API and website, Digrin, Finviz, Macrotrends and JustETF (for EU ETFs).</p></li>
 <li><p><strong>Numerous data categories</strong>: <code class="docutils literal notranslate"><span class="pre">Stockdex</span></code> provides various data including financial statements, earnings, dividends, stock splits, list of key executives, major shareholders, and many more.</p></li>
 <li><p><strong>Historical data</strong>: <code class="docutils literal notranslate"><span class="pre">Stockdex</span></code> provides a wide time range of data, e.g. Digrin and Macrotrends sources, which provide data ranging from 4 years to historical data.</p></li>
 <li><p><span style="font-size: 17px; font-weight: bold; animation: rainbow 1.8s infinite; background: linear-gradient(90deg, orange, green, blue, indigo, violet); background-size: 13
@@ -185,8 +184,8 @@
 <span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<section id="data-from-yahoo-finance-digrin-and-macrotrends">
-<h3>Data from <code class="docutils literal notranslate"><span class="pre">Yahoo</span> <span class="pre">Finance</span></code>, <code class="docutils literal notranslate"><span class="pre">Digrin</span></code>, and <code class="docutils literal notranslate"><span class="pre">Macrotrends</span></code>:<a class="headerlink" href="#data-from-yahoo-finance-digrin-and-macrotrends" title="Permalink to this heading"></a></h3>
+<section id="data-from-yahoo-finance-digrin-macrotrends-and-finviz">
+<h3>Data from <code class="docutils literal notranslate"><span class="pre">Yahoo</span> <span class="pre">Finance</span></code>, <code class="docutils literal notranslate"><span class="pre">Digrin</span></code>, <code class="docutils literal notranslate"><span class="pre">Macrotrends</span></code> and <code class="docutils literal notranslate"><span class="pre">Finviz</span></code>:<a class="headerlink" href="#data-from-yahoo-finance-digrin-macrotrends-and-finviz" title="Permalink to this heading"></a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">Ticker</span></code> object provides data from Yahoo Finance API and website, Digrin, and Macrotrends. Below are some of the data that can be retrieved from these sources (more detailed info with output can be found <a class="reference internal" href="#USAGE.md"><span class="xref myst">here</span></a>).</p>
 <section id="raw-data">
 <h4>Raw data:<a class="headerlink" href="#raw-data" title="Permalink to this heading"></a></h4>
@@ -214,6 +213,18 @@
 <span class="c1"># Quarterly and yearly revenue data from macrotrends website</span>
 <span class="n">quarterly_revenue</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">macrotrends_revenue</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="s1">&#39;quarterly&#39;</span><span class="p">)</span>
 <span class="n">annual_revenue</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">macrotrends_revenue</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="s1">&#39;annual&#39;</span><span class="p">)</span>
+
+<span class="c1"># Dividend data from Finviz</span>
+<span class="n">dividends</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">finviz_dividends_date_data</span><span class="p">()</span>
+<span class="n">dividends_annual</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">finviz_dividends_annual_data</span><span class="p">()</span>
+
+<span class="c1"># Revenue data from Finviz</span>
+<span class="n">revenue_by_products</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">finviz_revenue_by_products_and_services</span><span class="p">()</span>
+<span class="n">revenue_by_segments</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">finviz_revenue_by_segment</span><span class="p">()</span>
+<span class="n">revenue_by_regions</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">finviz_revenue_by_regions</span><span class="p">()</span>
+
+<span class="c1"># Earnings reaction data from Finviz</span>
+<span class="n">earnings_reaction</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">finviz_price_reaction_to_earnings_report</span><span class="p">()</span>
 </pre></div>
 </div>
 <!-- ## NASDAQ data from `NASDAQ` website (web scraping):
@@ -276,6 +287,8 @@ forecast_price_to_earnings__growth_rates = ticker.forecast_peg_rate
 </section>
 <section id="plotting-data">
 <h4>Plotting data:<a class="headerlink" href="#plotting-data" title="Permalink to this heading"></a></h4>
+<section id="yahoo-finance">
+<h5>Yahoo Finance<a class="headerlink" href="#yahoo-finance" title="Permalink to this heading"></a></h5>
 <p>Following functions will plot the data extracted from Yahoo Finance API using the <code class="docutils literal notranslate"><span class="pre">plotly</span></code> library:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
@@ -293,6 +306,24 @@ forecast_price_to_earnings__growth_rates = ticker.forecast_peg_rate
   <img src="docs/images/msft_financials_annual.png" alt="Stockdex Logo" width="auto" height="auto" style="width: auto; height: auto; border-radius: 15px;">
 </p>
 </section>
+<section id="finviz">
+<h5>Finviz<a class="headerlink" href="#finviz" title="Permalink to this heading"></a></h5>
+<p>Following functions will plot the data extracted from Finviz website using the <code class="docutils literal notranslate"><span class="pre">plotly</span></code> library:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
+
+<span class="n">ticker</span><span class="o">.</span><span class="n">plot_finviz_revenue_by_products_and_services</span><span class="p">(</span><span class="n">log_scale</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ticker</span><span class="o">.</span><span class="n">plot_finviz_revenue_by_segment</span><span class="p">(</span><span class="n">log_scale</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">ticker</span><span class="o">.</span><span class="n">plot_finviz_revenue_by_regions</span><span class="p">(</span><span class="n">log_scale</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Below the chart for <code class="docutils literal notranslate"><span class="pre">AAPL</span></code> revenue by products and services is shown in logarithmic scale:</p>
+<p align="center">
+  <img src="docs/images/plot_finviz_aapl_service_and_product.png" alt="Stockdex Logo" width="auto" height="auto" style="width: auto; height: auto; border-radius: 15px;">
+</p>
+</section>
+</section>
 </section>
 </section>
 <section id="sankey-charts">
@@ -309,27 +340,6 @@ forecast_price_to_earnings__growth_rates = ticker.forecast_peg_rate
 <p align="center">
   <img src="docs/images/plot_sankey_chart_aapl_annual.png" alt="Stockdex Logo" width="auto" height="auto" style="width: auto; height: auto; border-radius: 15px;">
 </p>
-<section id="stocks-data-from-finviz-web-scraping">
-<h3>Stocks data from <code class="docutils literal notranslate"><span class="pre">Finviz</span></code> (web scraping):<a class="headerlink" href="#stocks-data-from-finviz-web-scraping" title="Permalink to this heading"></a></h3>
-<p>Data from Finviz website includes dividend data, revenue data (by segment, region and product/service), and earnings reaction data. Below are some sample functions to retrieve this data:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
-
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
-
-<span class="c1"># Dividend data</span>
-<span class="n">dividends</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">finviz_dividends_date_data</span><span class="p">()</span>
-<span class="n">dividends_annual</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">finviz_dividends_annual_data</span><span class="p">()</span>
-
-<span class="c1"># Revenue data</span>
-<span class="n">revenue_by_products</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">finviz_revenue_by_products_and_services</span><span class="p">()</span>
-<span class="n">revenue_by_segments</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">finviz_revenue_by_segment</span><span class="p">()</span>
-<span class="n">revenue_by_regions</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">finviz_revenue_by_regions</span><span class="p">()</span>
-
-<span class="c1"># Earnings reaction data</span>
-<span class="n">earnings_reaction</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">finviz_price_reaction_to_earnings_report</span><span class="p">()</span>
-</pre></div>
-</div>
-</section>
 <section id="stocks-data-from-digrin-web-scraping">
 <h3>Stocks data from <code class="docutils literal notranslate"><span class="pre">Digrin</span></code> (web scraping):<a class="headerlink" href="#stocks-data-from-digrin-web-scraping" title="Permalink to this heading"></a></h3>
 <p>Data on Digrin website includes all historical data of the stock in certain categories, unlike Yahoo Finance which only provides the last 5 years of data at most.</p>
