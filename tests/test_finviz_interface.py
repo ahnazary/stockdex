@@ -427,11 +427,7 @@ def test_plot_finviz_revenue_by_segments(ticker, logarithmic):
 @pytest.mark.skipif(skip_test, reason="Skipping in GH action as it throws error 403")
 @pytest.mark.parametrize(
     "ticker, logarithmic",
-    [
-        ("AAPL", False),
-        ("AAPL", True),
-        ("MSFT", True),
-    ],
+    [("AAPL", False), ("AAPL", True), ("MSFT", True), ("NVDA", True), ("NVDA", False)],
 )
 def test_plot_finviz_revenue_by_products_and_services(ticker, logarithmic):
     """Test the plot_finviz_revenue_by_products_and_services method of FinvizInterface."""
