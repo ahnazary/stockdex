@@ -36,6 +36,7 @@ class Ticker(
         security_type (str): The security type of the ticker
             default is "stock"
         """
+        super().__init__(ticker=ticker, isin=isin, security_type=security_type)
 
         self.ticker = ticker
         self.isin = isin
@@ -44,4 +45,4 @@ class Ticker(
         if not ticker and not isin:
             raise Exception("Please provide either a ticker or an ISIN")
 
-        super().__init__(ticker=ticker, isin=isin, security_type=security_type)
+        # super().__init__(ticker=ticker, isin=isin, security_type=security_type)
