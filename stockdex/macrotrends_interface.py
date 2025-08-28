@@ -3,6 +3,7 @@ Module for interfacing with the Macrotrends website.
 """
 
 import re
+from functools import lru_cache
 from typing import Literal, Union
 
 import pandas as pd
@@ -83,15 +84,27 @@ class MacrotrendsInterface(TickerBase):
 
         return data
 
-    @property
-    def macrotrends_income_statement(self) -> pd.DataFrame:
+    def macrotrends_income_statement(
+        self, frequency: Literal["quarterly", "annual"]
+    ) -> pd.DataFrame:
         """
         Retrieve the income statement for the given ticker.
         """
         check_security_type(self.security_type, valid_types=["stock"])
-        url = f"{MACROTRENDS_BASE_URL}/{self.ticker}/TBD/income-statement"
+        frequency_suffix = "?freq=A" if frequency == "annual" else "?freq=Q"
 
-        response = self.get_response(url)
+        if frequency == "annual":
+            url = f"{MACROTRENDS_BASE_URL}/{self.ticker}/TBD/income-statement{frequency_suffix}"
+            response = self.get_response(url)
+
+        elif frequency == "quarterly":
+            url = f"{MACROTRENDS_BASE_URL}/{self.ticker}/TBD/income-statement{frequency_suffix}"
+            response = self.get_response(url)
+
+            # get the company slug from the response
+            company_slug = response.url.split("/")[-2]
+            url = f"{MACROTRENDS_BASE_URL}/{self.ticker}/{company_slug}/income-statement{frequency_suffix}"  # Noqa E501
+            response = self.get_response(url)
 
         # Parse the HTML content of the website
         soup = BeautifulSoup(response.content, "html.parser")
@@ -155,6 +168,7 @@ class MacrotrendsInterface(TickerBase):
         return data
 
     @property
+    @lru_cache(maxsize=None)
     def macrotrends_key_financial_ratios(self) -> pd.DataFrame:
         """
         Retrieve the key financial ratios for the given ticker.
@@ -276,6 +290,7 @@ class MacrotrendsInterface(TickerBase):
 
         return df
 
+    @lru_cache(maxsize=None)
     def plot_macrotrends_income_statement(
         self,
         fields_to_include: list = ["Revenue", "Income After Taxes"],

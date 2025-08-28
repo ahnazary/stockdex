@@ -9,20 +9,27 @@ skip_test = bool(os.getenv("SKIP_TEST", False))
 
 
 @pytest.mark.parametrize(
-    "ticker",
+    "ticker, frequency",
     [
-        ("PANW"),
+        ("PANW", "quarterly"),
+        ("PANW", "annual"),
+        ("BAC", "annual"),
+        ("BAC", "quarterly"),
     ],
 )
-def test_macrotrends_income_statement(ticker):
+def test_macrotrends_income_statement(ticker, frequency):
     ticker = Ticker(ticker=ticker)
-    macrotrends_income_statement = ticker.macrotrends_income_statement
+    macrotrends_income_statement = ticker.macrotrends_income_statement(
+        frequency=frequency
+    )
 
     # Check if the response is as expected
     assert isinstance(macrotrends_income_statement, pd.DataFrame)
     assert macrotrends_income_statement.shape[0] > 0
     assert macrotrends_income_statement.shape[1] > 0
     assert "Revenue" in macrotrends_income_statement.index
+    assert "Gross Profit" in macrotrends_income_statement.index
+    assert "Operating Income" in macrotrends_income_statement.index
 
 
 @pytest.mark.parametrize(
