@@ -8,7 +8,7 @@ from typing import Union
 from bs4 import BeautifulSoup
 from curl_cffi import requests
 
-from stockdex.config import RESPONSE_TIMEOUT
+from stockdex.config import MACROTRENDS_BASE_URL, RESPONSE_TIMEOUT
 from stockdex.lib import get_user_agent
 
 
@@ -105,3 +105,13 @@ class TickerBase:
                     element = element.find_next(tag)
                 return element
         return None
+
+    def get_company_slug(self, ticker: str) -> str:
+        """
+        Retrieve the company slug for the given ticker using macrotrends.
+        """
+        url = f"{MACROTRENDS_BASE_URL}/{ticker}/TBD/income-statement"
+        response = self.get_response(url)
+        company_slug = response.url.split("/")[-2]
+
+        return company_slug

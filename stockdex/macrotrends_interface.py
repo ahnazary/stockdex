@@ -93,18 +93,13 @@ class MacrotrendsInterface(TickerBase):
         check_security_type(self.security_type, valid_types=["stock"])
         frequency_suffix = "?freq=A" if frequency == "annual" else "?freq=Q"
 
-        if frequency == "annual":
-            url = f"{MACROTRENDS_BASE_URL}/{self.ticker}/TBD/income-statement{frequency_suffix}"
-            response = self.get_response(url)
+        url = (
+            f"{MACROTRENDS_BASE_URL}/{self.ticker}/{self.get_company_slug(self.ticker)}/income-statement{frequency_suffix}"  # Noqa E501
+            if frequency == "quarterly"
+            else f"{MACROTRENDS_BASE_URL}/{self.ticker}/TBD/income-statement{frequency_suffix}"
+        )
 
-        elif frequency == "quarterly":
-            url = f"{MACROTRENDS_BASE_URL}/{self.ticker}/TBD/income-statement{frequency_suffix}"
-            response = self.get_response(url)
-
-            # get the company slug from the response
-            company_slug = response.url.split("/")[-2]
-            url = f"{MACROTRENDS_BASE_URL}/{self.ticker}/{company_slug}/income-statement{frequency_suffix}"  # Noqa E501
-            response = self.get_response(url)
+        response = self.get_response(url)
 
         # Parse the HTML content of the website
         soup = BeautifulSoup(response.content, "html.parser")
