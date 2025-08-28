@@ -84,6 +84,7 @@ class MacrotrendsInterface(TickerBase):
 
         return data
 
+    @lru_cache(maxsize=None)
     def macrotrends_income_statement(
         self, frequency: Literal["quarterly", "annual"]
     ) -> pd.DataFrame:
@@ -114,13 +115,21 @@ class MacrotrendsInterface(TickerBase):
 
         return data
 
-    @property
-    def macrotrends_balance_sheet(self) -> pd.DataFrame:
+    @lru_cache(maxsize=None)
+    def macrotrends_balance_sheet(
+        self, frequency: Literal["quarterly", "annual"]
+    ) -> pd.DataFrame:
         """
         Retrieve the balance sheet for the given ticker.
         """
         check_security_type(self.security_type, valid_types=["stock"])
-        url = f"{MACROTRENDS_BASE_URL}/{self.ticker}/TBD/balance-sheet"
+        frequency_suffix = "?freq=A" if frequency == "annual" else "?freq=Q"
+
+        url = (
+            f"{MACROTRENDS_BASE_URL}/{self.ticker}/{self.get_company_slug(self.ticker)}/balance-sheet{frequency_suffix}"  # Noqa E501
+            if frequency == "quarterly"
+            else f"{MACROTRENDS_BASE_URL}/{self.ticker}/TBD/balance-sheet{frequency_suffix}"
+        )
 
         # build selenium interface object if not already built
         if not hasattr(self, "selenium_interface"):
@@ -138,13 +147,21 @@ class MacrotrendsInterface(TickerBase):
 
         return data
 
-    @property
-    def macrotrends_cash_flow(self) -> pd.DataFrame:
+    @lru_cache(maxsize=None)
+    def macrotrends_cash_flow(
+        self, frequency: Literal["quarterly", "annual"]
+    ) -> pd.DataFrame:
         """
         Retrieve the cash flow statement for the given ticker.
         """
         check_security_type(self.security_type, valid_types=["stock"])
-        url = f"{MACROTRENDS_BASE_URL}/{self.ticker}/TBD/cash-flow-statement"
+        frequency_suffix = "?freq=A" if frequency == "annual" else "?freq=Q"
+
+        url = (
+            f"{MACROTRENDS_BASE_URL}/{self.ticker}/{self.get_company_slug(self.ticker)}/cash-flow-statement{frequency_suffix}"  # Noqa E501
+            if frequency == "quarterly"
+            else f"{MACROTRENDS_BASE_URL}/{self.ticker}/TBD/cash-flow-statement{frequency_suffix}"
+        )
 
         # build selenium interface object if not already built
         if not hasattr(self, "selenium_interface"):
@@ -289,6 +306,7 @@ class MacrotrendsInterface(TickerBase):
     def plot_macrotrends_income_statement(
         self,
         fields_to_include: list = ["Revenue", "Income After Taxes"],
+        frequency: Literal["annual", "quarterly"] = "annual",
         group_by: Literal["field", "timeframe"] = "timeframe",
         show_plot: bool = True,
     ) -> Union[px.line, px.bar]:
@@ -297,6 +315,12 @@ class MacrotrendsInterface(TickerBase):
 
         Args:
         ----------
+        fields_to_include : list
+            The fields to include in the plot.
+        frequency : Literal["annual", "quarterly"]
+            The frequency of the data to plot.
+        group_by : Literal["field", "timeframe"]
+            The level at which to group the data.
         show_plot : bool
             If the plot should be shown or not.
             If dash is used, this should be set to False
@@ -307,7 +331,9 @@ class MacrotrendsInterface(TickerBase):
         Union[px.line, px.bar]: The plotly figure
         """
         df = self._transform_df_for_plotting_macrotrends(
-            self.macrotrends_income_statement, fields_to_include, group_by
+            self.macrotrends_income_statement(frequency=frequency),
+            fields_to_include,
+            group_by,
         )
 
         fig = plot_dataframe(
@@ -321,6 +347,7 @@ class MacrotrendsInterface(TickerBase):
     def plot_macrotrends_balance_sheet(
         self,
         fields_to_include: list = ["Cash On Hand", "Total Assets", "Total Liabilities"],
+        frequency: Literal["annual", "quarterly"] = "annual",
         group_by: Literal["field", "timeframe"] = "timeframe",
         show_plot: bool = True,
     ) -> Union[px.line, px.bar]:
@@ -339,7 +366,7 @@ class MacrotrendsInterface(TickerBase):
         Union[px.line, px.bar]: The plotly figure
         """
         df = self._transform_df_for_plotting_macrotrends(
-            self.macrotrends_balance_sheet,
+            self.macrotrends_balance_sheet(frequency=frequency),
             fields_to_include,
             group_by,
         )
@@ -359,6 +386,7 @@ class MacrotrendsInterface(TickerBase):
             "Common Stock Dividends Paid",
             "Net Long-Term Debt",
         ],
+        frequency: Literal["annual", "quarterly"] = "annual",
         group_by: Literal["field", "timeframe"] = "timeframe",
         show_plot: bool = True,
     ) -> None:
@@ -377,12 +405,12 @@ class MacrotrendsInterface(TickerBase):
         Union[px.line, px.bar]: The plotly figure
         """
         df = self._transform_df_for_plotting_macrotrends(
-            self.macrotrends_cash_flow, fields_to_include, group_by
+            self.macrotrends_cash_flow(frequency=frequency), fields_to_include, group_by
         )
 
         fig = plot_dataframe(
             df,
-            title=f"{self.ticker} Cash Flow Statement (from Macrotrends)",
+            title=f"{self.ticker} Cash Flow Statement (from Macrotrends) using {frequency} data",
             show_plot=show_plot,
         )
 
@@ -425,9 +453,9 @@ class MacrotrendsInterface(TickerBase):
         # fill NaN values with 0
         df = df.fillna(0)
 
-        # convert all values to float and replace empty cells with 0
+        # convert all values to float if they are not and replace empty cells with 0
         df = df.replace(r"^\s*$", "0", regex=True).applymap(
-            lambda x: float(x.replace(",", ""))
+            lambda x: float(x.replace(",", "")) if isinstance(x, str) else x
         )
 
         # sort index in ascending order

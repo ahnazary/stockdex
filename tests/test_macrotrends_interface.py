@@ -30,40 +30,54 @@ def test_macrotrends_income_statement(ticker, frequency):
     assert "Revenue" in macrotrends_income_statement.index
     assert "Gross Profit" in macrotrends_income_statement.index
     assert "Operating Income" in macrotrends_income_statement.index
+    if frequency == "quarterly":
+        assert macrotrends_income_statement.shape[1] > 28
+    else:
+        assert macrotrends_income_statement.shape[1] > 6
 
 
 @pytest.mark.parametrize(
-    "ticker",
+    "ticker, frequency",
     [
-        ("BAC"),
+        ("BAC", "quarterly"),
+        ("BAC", "annual"),
     ],
 )
-def test_macrotrends_balance_sheet(ticker):
+def test_macrotrends_balance_sheet(ticker, frequency):
     ticker = Ticker(ticker=ticker)
-    macrotrends_balance_sheet = ticker.macrotrends_balance_sheet
+    macrotrends_balance_sheet = ticker.macrotrends_balance_sheet(frequency=frequency)
 
     # Check if the response is as expected
     assert isinstance(macrotrends_balance_sheet, pd.DataFrame)
     assert macrotrends_balance_sheet.shape[0] > 0
     assert macrotrends_balance_sheet.shape[1] > 0
     assert "Total Assets" in macrotrends_balance_sheet.index
+    if frequency == "quarterly":
+        assert macrotrends_balance_sheet.shape[1] > 28
+    else:
+        assert macrotrends_balance_sheet.shape[1] > 6
 
 
 @pytest.mark.parametrize(
-    "ticker",
+    "ticker, frequency",
     [
-        ("PANW"),
+        ("PANW", "quarterly"),
+        ("PANW", "annual"),
     ],
 )
-def test_macrotrends_cash_flow(ticker):
+def test_macrotrends_cash_flow(ticker, frequency):
     ticker = Ticker(ticker=ticker)
-    macrotrends_cash_flow = ticker.macrotrends_cash_flow
+    macrotrends_cash_flow = ticker.macrotrends_cash_flow(frequency=frequency)
 
     # Check if the response is as expected
     assert isinstance(macrotrends_cash_flow, pd.DataFrame)
     assert macrotrends_cash_flow.shape[0] > 0
     assert macrotrends_cash_flow.shape[1] > 0
     assert macrotrends_cash_flow.iloc[0][1] is not None
+    if frequency == "quarterly":
+        assert macrotrends_cash_flow.shape[1] > 28
+    else:
+        assert macrotrends_cash_flow.shape[1] > 6
 
 
 @pytest.mark.skipif(
@@ -183,39 +197,42 @@ def test_macrotrends_net_margin(ticker):
 
 @pytest.mark.skipif(skip_test, reason="Skipping in GH action as it is visual")
 @pytest.mark.parametrize(
-    "ticker, group_by",
+    "ticker, group_by, frequency",
     [
-        ("AAPL", "field"),
-        ("GOOGL", "timeframe"),
+        ("AAPL", "field", "quarterly"),
+        ("GOOGL", "timeframe", "annual"),
+        ("GOOGL", "timeframe", "quarterly"),
     ],
 )
-def test_plot_macrotrends_income_statement(ticker, group_by):
+def test_plot_macrotrends_income_statement(ticker, group_by, frequency):
     ticker = Ticker(ticker=ticker)
-    ticker.plot_macrotrends_income_statement(group_by=group_by)
+    ticker.plot_macrotrends_income_statement(group_by=group_by, frequency=frequency)
     assert True
 
 
 @pytest.mark.skipif(skip_test, reason="Skipping in GH action as it is visual")
 @pytest.mark.parametrize(
-    "ticker, group_by",
+    "ticker, group_by, frequency",
     [
-        ("AAPL", "field"),
-        ("GOOGL", "timeframe"),
+        ("AAPL", "field", "quarterly"),
+        ("GOOGL", "timeframe", "annual"),
+        ("GOOGL", "timeframe", "quarterly"),
     ],
 )
-def test_plot_macrotrends_balance_sheet(ticker, group_by):
+def test_plot_macrotrends_balance_sheet(ticker, group_by, frequency):
     ticker = Ticker(ticker=ticker)
-    ticker.plot_macrotrends_balance_sheet(group_by=group_by)
+    ticker.plot_macrotrends_balance_sheet(group_by=group_by, frequency=frequency)
 
 
 @pytest.mark.skipif(skip_test, reason="Skipping in GH action as it is visual")
 @pytest.mark.parametrize(
-    "ticker, group_by",
+    "ticker, group_by, frequency",
     [
-        ("AAPL", "field"),
-        ("GOOGL", "timeframe"),
+        ("AAPL", "field", "quarterly"),
+        ("GOOGL", "timeframe", "annual"),
+        ("GOOGL", "timeframe", "quarterly"),
     ],
 )
-def test_plot_macrotrends_cash_flow(ticker, group_by):
+def test_plot_macrotrends_cash_flow(ticker, group_by, frequency):
     ticker = Ticker(ticker=ticker)
-    ticker.plot_macrotrends_cash_flow(group_by=group_by)
+    ticker.plot_macrotrends_cash_flow(group_by=group_by, frequency=frequency)
