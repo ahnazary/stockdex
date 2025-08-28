@@ -356,6 +356,12 @@ class MacrotrendsInterface(TickerBase):
 
         Args:
         ----------
+        fields_to_include : list
+            The fields to include in the plot.
+        frequency : Literal["annual", "quarterly"]
+            The frequency of the data to plot.
+        group_by : Literal["field", "timeframe"]
+            The level at which to group the data.
         show_plot : bool
             If the plot should be shown or not.
             If dash is used, this should be set to False
@@ -395,6 +401,12 @@ class MacrotrendsInterface(TickerBase):
 
         Args:
         ----------
+        fields_to_include : list
+            The fields to include in the plot.
+        frequency : Literal["annual", "quarterly"]
+            The frequency of the data to plot.
+        group_by : Literal["field", "timeframe"]
+            The level at which to group the data.
         show_plot : bool
             If the plot should be shown or not.
             If dash is used, this should be set to False
