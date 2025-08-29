@@ -354,12 +354,13 @@ class YahooWeb(TickerBase):
 
         # Parse the HTML content of the website
         soup = BeautifulSoup(response.content, "html.parser")
-        raw_data = soup.find_all("table")
+        table = self.find_parent_by_text(
+            soup, "div", "Top Institutional Holders"
+        ).find_all("tr")
 
         data_df = pd.DataFrame()
         data = []
 
-        table = raw_data[2].find_all("tr")
         for tr in table:
             data.append([td.text for td in tr.find_all("td")])
 
