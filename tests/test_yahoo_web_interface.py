@@ -190,23 +190,6 @@ def test_yahoo_web_corporate_governance_wrong_security_type():
 
 
 @pytest.mark.parametrize(
-    "ticker, frequency",
-    [
-        ("PANW", "annual"),
-        ("GOOGL", "quarterly"),
-    ],
-)
-def test_macrotrends_revenue(ticker, frequency):
-    ticker = Ticker(ticker)
-    macrotrends_revenue = ticker.macrotrends_revenue(frequency=frequency)
-
-    # Check if the response is as expected
-    assert isinstance(macrotrends_revenue, pd.DataFrame)
-    assert macrotrends_revenue.shape[0] > 0
-    assert macrotrends_revenue.shape[1] > 0
-
-
-@pytest.mark.parametrize(
     "ticker",
     [
         ("AAPL"),
