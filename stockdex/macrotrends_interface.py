@@ -1,10 +1,12 @@
 """
 Module for interfacing with the Macrotrends website.
 """
-
 import re
+from functools import lru_cache
 from typing import Literal, Union
 
+import requests
+import json
 import pandas as pd
 import plotly.express as px
 from bs4 import BeautifulSoup
@@ -20,16 +22,17 @@ class MacrotrendsInterface(TickerBase):
     """
     Interface for interacting with the Macrotrends website.
     """
-
-    def __init__(
-        self,
-        ticker: str = "",
-        isin: str = "",
-        security_type: VALID_SECURITY_TYPES = "stock",
-    ) -> None:
+    def __init__(self, ticker: str = "", isin: str = "", security_type: str = "stock") -> None:
+        super().__init__(ticker=ticker, isin=isin, security_type=security_type)
         self.isin = isin
         self.ticker = ticker
         self.security_type = security_type
+
+        # caches so we don’t re-fetch unnecessarily
+        self._income_stmt_cache = {}
+        self._balance_sheet_cache = {}
+        self._cashflow_stmt_cache = {}
+
 
     @property
     def full_name(self) -> str:
@@ -41,123 +44,267 @@ class MacrotrendsInterface(TickerBase):
 
         return full_name
 
-    def _find_table_in_url(
-        self, text_to_look_for: str, soup: BeautifulSoup
-    ) -> pd.DataFrame:
-        """
-        Retrieve the table with the given id from the given URL.
+    # ---------- Remove the Property Wrappers ----------
+    def get_macrotrends_income_statement(self, freq="annual", transpose=False) -> pd.DataFrame:
+        if freq not in self._income_stmt_cache:
+            stmt = self._fetch_macrotrends_income_statement(freq)
+            self._income_stmt_cache[freq] = stmt 
+        return self._income_stmt_cache[freq]
 
-        Args:
-        ----------
-        url: str
-            The URL to retrieve the table from.
-        text_to_look_for: str
-            The text to look for in the table.
+    def get_macrotrends_balance_sheet(self, freq="annual", transpose=False) -> pd.DataFrame:
+        if freq not in self._balance_sheet_cache:
+            stmt = self._fetch_macrotrends_balance_sheet(freq)
+            self._balance_sheet_cache[freq] = stmt
+        return self._balance_sheet_cache[freq]
 
-        Returns:
-        ----------
-        pd.DataFrame
-            The table as a pandas DataFrame.
-        """
-        table = self.find_parent_by_text(soup=soup, tag="div", text=text_to_look_for)
+    def get_macrotrends_cashflow_statement(self, freq="annual", transpose=False) -> pd.DataFrame:
+        if freq not in self._cashflow_stmt_cache:
+            stmt = self._fetch_macrotrends_cashflow_statement(freq)
+            self._cashflow_stmt_cache[freq] = stmt
+        return self._cashflow_stmt_cache[freq]
 
-        data = []
-        # get var originalData from the table
-        for script in table.find_all("script"):
-            if "originalData" in script.get_text():
-                original_data = script.get_text()
-                break
+    # ---------- Private Income Statement Methods ----------
+    def _fetch_macrotrends_income_statement(self, freq="annual", transpose=False) -> pd.DataFrame:
+        MARKER = "Revenue"
+        THING = "income-statement"
+        #print(f"_fetch_macrotrends_income_statement: freq is {freq}")
+        if freq not in self._income_stmt_cache:
+            """
+            Retrieve the statement for the given ticker, with annual or quarterly frequency.
+            freq: "annual" or "quarterly" (case insensitive); default is "annual".
+            """
+            check_security_type(self.security_type, valid_types=["stock"])
+            freq_map = {"annual": "A", "quarterly": "Q"}
+            freq_clean = str(freq).strip().lower()
+            freq_param = freq_map.get(freq_clean, "A")  # Default to "A"
+            mnemonic = getattr(self, "mnemonic", "TBD")  # use injected mnemonic or fallback
+            #print(f"The mnemonic attribute from Ticker Class is: {mnemonic}")
+            url = f"{MACROTRENDS_BASE_URL}/{self.ticker}/{mnemonic}/{THING}?freq={freq_param}"
+            print(f"The url is: {url}")
+            headers = {'User-Agent': 'Mozilla/5.0'}
+            response = requests.get(url, headers=headers)
+            response.raise_for_status()
+            #response = self.get_response(url)
 
-        # get the data from the script
-        for line in original_data.split("\n"):
-            if "originalData" in line:
-                data = line.split(" = ")[1]
-                break
+            # Cloudflare is becoming a nemesis for screen scraping
+            pattern = re.compile(r"Cloudflare Ray ID:|You are unable to access|Unable to access")
+            error_present = pattern.search(response.text)
+            if error_present:
+                #print("Cloudflare error detected")
+                raise ValueError("Cloudflare error detected")
 
-        # convert the data to a pandas DataFrame
-        data = data.replace(";", "")
-        data = data.replace("null", "None")
-        data = data.replace("\\/", "/")
-        data = eval(data)
-        data = pd.DataFrame(data)
+            # Check for the originalData and bail if we cannot locate it.
+            match = re.search(r'var originalData = (\[.*?\]);', response.text)
+            if not match:
+                raise ValueError("Couldn't find originalData variable in the page")
+            data = json.loads(match.group(1))
 
-        return data
+            # Clean the field names and extract dates
+            field_names = [
+                BeautifulSoup(row['field_name'], 'html.parser').get_text(strip=True)
+                for row in data
+            ]
+            # Check if marker is present in any field name
+            if not any(MARKER in name for name in field_names):
+                raise ValueError(f"The expected marker label: {MARKER} was not found in any field_name")
 
-    @property
-    def macrotrends_income_statement(self) -> pd.DataFrame:
-        """
-        Retrieve the income statement for the given ticker.
-        """
-        check_security_type(self.security_type, valid_types=["stock"])
-        url = f"{MACROTRENDS_BASE_URL}/{self.ticker}/TBD/income-statement"
+            records = []
+            for row in data:
+                field_name = BeautifulSoup(row['field_name'], 'html.parser').get_text(strip=True)
+                record = {'Metric': field_name}
+                for k, v in row.items():
+                    if re.match(r'\d{4}-\d{2}-\d{2}', k):  # Date format
+                        record[k] = float(v) if v not in (None, '') else None
+                records.append(record)
 
-        response = self.get_response(url)
+            df = pd.DataFrame(records)
 
-        # Parse the HTML content of the website
-        soup = BeautifulSoup(response.content, "html.parser")
+            if (transpose):
+                # pivot the table so it looks more like the yahoo format
+                print("Transpose set to true...pivoting the result table")
+                df_reset = df.reset_index(drop=True)  # Move index to a column named 'Metric'
+                df_reset.rename(columns={'Metric': 'index'}, inplace=True)  # Rename the 'Metric' column to 'Item'
+                # Transpose the DataFrame
+                df_transposed = df_reset.set_index('index').T.reset_index()
+                # Rename 'index' column to 'Period'
+                df_transposed.rename(columns={'index': 'Period'}, inplace=True)
+                df_transposed['Period'] = pd.to_datetime(df_transposed['Period'])  # Convert Period to datetime
+                df_transposed.index.name = None  # Remove the name label above the index column
+                #print("Transposed df")
+                #print(df_transposed)
+                return df_transposed
+            else:
+                #print("Transpose set to false...sending back raw result table")
+                df.rename(columns={'index': 'Item', 'Metric': 'Item'}, inplace=True)
 
-        data = self._find_table_in_url("Revenue", soup)
+            # print(df)
+            return(df)
 
-        data["field_name"] = data["field_name"].apply(
-            lambda x: re.search(">(.*)<", x).group(1)
-        )
-        data = data.set_index("field_name")
-        data.drop(columns=["popup_icon"], inplace=True)
+    # ---------- Balance Sheet Methods ----------
+    def _fetch_macrotrends_balance_sheet(self, freq: str = "annual", transpose=False) -> pd.DataFrame:
+        MARKER = "Cash On Hand"
+        THING = "balance-sheet"
+        #print(f"_fetch_macrotrends_balance_sheet: freq is {freq}")
+        if freq not in self._income_stmt_cache:
+            """
+            Retrieve the statement for the given ticker, with annual or quarterly frequency.
+            freq: "annual" or "quarterly" (case insensitive); default is "annual".
+            """
+            check_security_type(self.security_type, valid_types=["stock"])
+            freq_map = {"annual": "A", "quarterly": "Q"}
+            freq_clean = str(freq).strip().lower()
+            freq_param = freq_map.get(freq_clean, "A")  # Default to "A"
+            mnemonic = getattr(self, "mnemonic", "TBD")  # use injected mnemonic or fallback
+            print(f"The mnemonic attribute from Ticker Class is: {mnemonic}")
+            url = f"{MACROTRENDS_BASE_URL}/{self.ticker}/{mnemonic}/{THING}?freq={freq_param}"
+            print(f"The url is: {url}")
+            headers = {'User-Agent': 'Mozilla/5.0'}
+            #response = requests.get(url, headers=headers)
+            #response.raise_for_status()
+            response = self.get_response(url)
 
-        return data
+            # Cloudflare is becoming a nemesis for screen scraping
+            pattern = re.compile(r"Cloudflare Ray ID:|You are unable to access|Unable to access")
+            error_present = pattern.search(response.text)
+            if error_present:
+                print("Cloudflare error detected")
+                raise ValueError("Cloudflare error detected")
 
-    @property
-    def macrotrends_balance_sheet(self) -> pd.DataFrame:
-        """
-        Retrieve the balance sheet for the given ticker.
-        """
-        check_security_type(self.security_type, valid_types=["stock"])
-        url = f"{MACROTRENDS_BASE_URL}/{self.ticker}/TBD/balance-sheet"
+            # Check for the originalData and bail if we cannot locate it.
+            match = re.search(r'var originalData = (\[.*?\]);', response.text)
+            if not match:
+                raise ValueError("Couldn't find originalData variable in the page")
+            data = json.loads(match.group(1))
 
-        # build selenium interface object if not already built
-        if not hasattr(self, "selenium_interface"):
-            self.selenium_interface = selenium_interface()
+            # Clean the field names and extract dates
+            field_names = [
+                BeautifulSoup(row['field_name'], 'html.parser').get_text(strip=True)
+                for row in data
+            ]
+            # Check if marker is present in any field name
+            if not any(MARKER in name for name in field_names):
+                raise ValueError(f"The expected marker label: {MARKER} was not found in any field_name")
 
-        soup = self.selenium_interface.get_html_content(url)
+            records = []
+            for row in data:
+                field_name = BeautifulSoup(row['field_name'], 'html.parser').get_text(strip=True)
+                record = {'Metric': field_name}
+                for k, v in row.items():
+                    if re.match(r'\d{4}-\d{2}-\d{2}', k):  # Date format
+                        record[k] = float(v) if v not in (None, '') else None
+                records.append(record)
 
-        data = self._find_table_in_url("Cash On Hand", soup)
+            df = pd.DataFrame(records)
 
-        data["field_name"] = data["field_name"].apply(
-            lambda x: re.search(">(.*)<", x).group(1)
-        )
-        data = data.set_index("field_name")
-        data.drop(columns=["popup_icon"], inplace=True)
+            if (transpose):
+                # pivot the table so it looks more like the yahoo format
+                print("Transpose set to true...pivoting the result table")
+                df_reset = df.reset_index(drop=True)  # Move index to a column named 'Metric'
+                df_reset.rename(columns={'Metric': 'index'}, inplace=True)  # Rename the 'Metric' column to 'Item'
+                # Transpose the DataFrame
+                df_transposed = df_reset.set_index('index').T.reset_index()
+                # Rename 'index' column to 'Period'
+                df_transposed.rename(columns={'index': 'Period'}, inplace=True)
+                df_transposed['Period'] = pd.to_datetime(df_transposed['Period'])  # Convert Period to datetime
+                df_transposed.index.name = None  # Remove the name label above the index column
+                #print("Transposed df")
+                #print(df_transposed)
+                return df_transposed
+            else:
+                #print("Transpose set to false...sending back raw result table")
+                df.rename(columns={'index': 'Item', 'Metric': 'Item'}, inplace=True)
 
-        return data
+            #print(df)
+            return(df)
 
-    @property
-    def macrotrends_cash_flow(self) -> pd.DataFrame:
-        """
-        Retrieve the cash flow statement for the given ticker.
-        """
-        check_security_type(self.security_type, valid_types=["stock"])
-        url = f"{MACROTRENDS_BASE_URL}/{self.ticker}/TBD/cash-flow-statement"
 
-        # build selenium interface object if not already built
-        if not hasattr(self, "selenium_interface"):
-            self.selenium_interface = selenium_interface()
+    # ---------- Cash Flow Methods ----------
 
-        soup = self.selenium_interface.get_html_content(url)
+    def _fetch_macrotrends_cashflow_statement(self, freq: str = "annual", transpose=False) -> pd.DataFrame:
+        MARKER = "Net Income/Loss"
+        THING = "cash-flow-statement"
+        #print(f"_fetch_macrotrends_cashflow_statement: freq is {freq}")
+        if freq not in self._income_stmt_cache:
+            """
+            Retrieve the statement for the given ticker, with annual or quarterly frequency.
+            freq: "annual" or "quarterly" (case insensitive); default is "annual".
+            """
+            check_security_type(self.security_type, valid_types=["stock"])
+            freq_map = {"annual": "A", "quarterly": "Q"}
+            freq_clean = str(freq).strip().lower()
+            freq_param = freq_map.get(freq_clean, "A")  # Default to "A"
+            mnemonic = getattr(self, "mnemonic", "TBD")  # use injected mnemonic or fallback
+            #print(f"The mnemonic attribute from Ticker Class is: {mnemonic}")
+            url = f"{MACROTRENDS_BASE_URL}/{self.ticker}/{mnemonic}/{THING}?freq={freq_param}"
+            print(f"The url is: {url}")
+            headers = {'User-Agent': 'Mozilla/5.0'}
+            #response = requests.get(url, headers=headers)
+            #response.raise_for_status()
+            response = self.get_response(url)
 
-        data = self._find_table_in_url("Net Income/Loss", soup)
+            # Cloudflare is becoming a nemesis for screen scraping
+            pattern = re.compile(r"Cloudflare Ray ID:|You are unable to access|Unable to access")
+            error_present = pattern.search(response.text)
+            if error_present:
+                #print("Cloudflare error detected")
+                raise ValueError("Cloudflare error detected")
 
-        data["field_name"] = data["field_name"].apply(
-            lambda x: re.search(">(.*)<", x).group(1)
-        )
-        data = data.set_index("field_name")
-        data.drop(columns=["popup_icon"], inplace=True)
+            # Check for the originalData and bail if we cannot locate it.
+            match = re.search(r'var originalData = (\[.*?\]);', response.text)
+            if not match:
+                raise ValueError("Couldn't find originalData variable in the page")
+            data = json.loads(match.group(1))
 
-        return data
+            # Clean the field names and extract dates
+            field_names = [
+                BeautifulSoup(row['field_name'], 'html.parser').get_text(strip=True)
+                for row in data
+            ]
+            # Check if marker is present in any field name
+            if not any(MARKER in name for name in field_names):
+                raise ValueError(f"The expected marker label: {MARKER} was not found in any field_name")
+
+            records = []
+            for row in data:
+                field_name = BeautifulSoup(row['field_name'], 'html.parser').get_text(strip=True)
+                record = {'Metric': field_name}
+                for k, v in row.items():
+                    if re.match(r'\d{4}-\d{2}-\d{2}', k):  # Date format
+                        record[k] = float(v) if v not in (None, '') else None
+                records.append(record)
+
+            df = pd.DataFrame(records)
+
+            if (transpose):
+                # pivot the table so it looks more like the yahoo format
+                print("Transpose set to true...pivoting the result table")
+                df_reset = df.reset_index(drop=True)  # Move index to a column named 'Metric'
+                df_reset.rename(columns={'Metric': 'index'}, inplace=True)  # Rename the 'Metric' column to 'Item'
+                # Transpose the DataFrame
+                df_transposed = df_reset.set_index('index').T.reset_index()
+                # Rename 'index' column to 'Period'
+                df_transposed.rename(columns={'index': 'Period'}, inplace=True)
+                df_transposed['Period'] = pd.to_datetime(df_transposed['Period'])  # Convert Period to datetime
+                df_transposed.index.name = None  # Remove the name label above the index column
+                #print("Transposed df")
+                #print(df_transposed)
+                return df_transposed
+            else:
+                #print("Transpose set to false...sending back raw result table")
+                df.rename(columns={'index': 'Item', 'Metric': 'Item'}, inplace=True)
+
+            #print(df)
+            return(df)
 
     @property
     def macrotrends_key_financial_ratios(self) -> pd.DataFrame:
         """
         Retrieve the key financial ratios for the given ticker.
+        NOTE: the financial ratios are all encompassing ANNUAL ratios
+              from period X to period Y. this is a time and processing
+              saver if you are wanting annual ratios in a fell swoop.
+              if you want quarterly ratios you will need to self-calculate 
+              those from the statements yourself.
         """
         check_security_type(self.security_type, valid_types=["stock"])
         url = f"{MACROTRENDS_BASE_URL}/{self.ticker}/TBD/financial-ratios"
@@ -205,6 +352,9 @@ class MacrotrendsInterface(TickerBase):
     def macrotrends_operating_margin(self) -> pd.DataFrame:
         """
         Retrieve the operating margin for the given ticker.
+        NOTE: this call does not seem to work with a frequency parameter.
+              but it DOES have parameters for the graphs which are 
+              currently unsupported.
         """
         check_security_type(self.security_type, valid_types=["stock"])
         url = f"{MACROTRENDS_BASE_URL}/{self.ticker}/TBD/operating-margin"
@@ -215,6 +365,9 @@ class MacrotrendsInterface(TickerBase):
     def macrotrends_gross_margin(self) -> pd.DataFrame:
         """
         Retrieve the gross margin for the given ticker.
+        NOTE: this call does not seem to work with a frequency parameter.
+              but it DOES have parameters for the graphs which are 
+              currently unsupported.
         """
         check_security_type(self.security_type, valid_types=["stock"])
         url = f"{MACROTRENDS_BASE_URL}/{self.ticker}/TBD/gross-margin"
@@ -225,6 +378,9 @@ class MacrotrendsInterface(TickerBase):
     def macrotrends_ebitda_margin(self) -> pd.DataFrame:
         """
         Retrieve the EBITDA margin for the given ticker.
+        NOTE: this call does not seem to work with a frequency parameter.
+              but it DOES have parameters for the graphs which are 
+              currently unsupported.
         """
         check_security_type(self.security_type, valid_types=["stock"])
         url = f"{MACROTRENDS_BASE_URL}/{self.ticker}/TBD/ebitda-margin"
@@ -235,6 +391,9 @@ class MacrotrendsInterface(TickerBase):
     def macrotrends_pre_tax_margin(self) -> pd.DataFrame:
         """
         Retrieve the pre-tax margin for the given ticker.
+        NOTE: this call does not seem to work with a frequency parameter.
+              but it DOES have parameters for the graphs which are 
+              currently unsupported.
         """
         check_security_type(self.security_type, valid_types=["stock"])
         url = f"{MACROTRENDS_BASE_URL}/{self.ticker}/TBD/pre-tax-profit-margin"
@@ -245,6 +404,9 @@ class MacrotrendsInterface(TickerBase):
     def macrotrends_net_margin(self) -> pd.DataFrame:
         """
         Retrieve the net profit margin for the given ticker.
+        NOTE: this call does not seem to work with a frequency parameter.
+              but it DOES have parameters for the graphs which are 
+              currently unsupported.
         """
         check_security_type(self.security_type, valid_types=["stock"])
         url = f"{MACROTRENDS_BASE_URL}/{self.ticker}/TBD/net-profit-margin"
@@ -256,6 +418,9 @@ class MacrotrendsInterface(TickerBase):
     ) -> pd.DataFrame:
         """
         Retrieve the revenue for the given ticker.
+        NOTE: this call does not seem to work with a frequency parameter.
+              but it DOES have parameters for the graphs which are 
+              currently unsupported.
         """
         check_security_type(self.security_type, valid_types=["stock"])
         url = f"{MACROTRENDS_BASE_URL}/{self.ticker}/TBD/revenue"
@@ -367,7 +532,7 @@ class MacrotrendsInterface(TickerBase):
         Union[px.line, px.bar]: The plotly figure
         """
         df = self._transform_df_for_plotting_macrotrends(
-            self.macrotrends_cash_flow, fields_to_include, group_by
+            self.macrotrends_cashflow_statement, fields_to_include, group_by
         )
 
         fig = plot_dataframe(
