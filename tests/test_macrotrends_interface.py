@@ -36,6 +36,9 @@ def test_macrotrends_income_statement(ticker, frequency):
         assert macrotrends_income_statement.shape[1] > 6
 
 
+@pytest.mark.skipif(
+    skip_test, reason="Skipping in GH action as it reaches the limit of requests"
+)
 @pytest.mark.parametrize(
     "ticker, frequency",
     [
@@ -58,6 +61,9 @@ def test_macrotrends_balance_sheet(ticker, frequency):
         assert macrotrends_balance_sheet.shape[1] > 6
 
 
+@pytest.mark.skipif(
+    skip_test, reason="Skipping in GH action as it reaches the limit of requests"
+)
 @pytest.mark.parametrize(
     "ticker, frequency",
     [
