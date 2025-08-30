@@ -324,9 +324,9 @@ from stockdex import Ticker
 ticker = Ticker(ticker="AAPL")
 
 # Financial data
-income_statement = ticker.macrotrends_income_statement
-balance_sheet = ticker.macrotrends_balance_sheet
-cash_flow = ticker.macrotrends_cash_flow
+income_statement = ticker.macrotrends_income_statement(frequency="quarterly")
+balance_sheet = ticker.macrotrends_balance_sheet(frequency="quarterly")
+cash_flow = ticker.macrotrends_cash_flow(frequency="annual")
 key_financial_ratios = ticker.macrotrends_key_financial_ratios
 
 # Margins
