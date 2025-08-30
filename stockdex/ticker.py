@@ -1,11 +1,11 @@
 from stockdex.config import VALID_SECURITY_TYPES
 from stockdex.digrin_interface import DigrinInterface
+from stockdex.finviz_interface import FinvizInterface
 from stockdex.justetf_interface import JustETF
 from stockdex.macrotrends_interface import MacrotrendsInterface
 from stockdex.sankey_charts import SankeyCharts
 from stockdex.yahoo_api_interface import YahooAPI
 from stockdex.yahoo_web_interface import YahooWeb
-from stockdex.finviz_interface import FinvizInterface
 
 
 class Ticker(
