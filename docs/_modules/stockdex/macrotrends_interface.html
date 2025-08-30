@@ -75,6 +75,7 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">lru_cache</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
@@ -155,13 +156,21 @@
 
         <span class="k">return</span> <span class="n">data</span>
 
-    <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">macrotrends_income_statement</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<div class="viewcode-block" id="MacrotrendsInterface.macrotrends_income_statement"><a class="viewcode-back" href="../../stockdex.html#stockdex.macrotrends_interface.MacrotrendsInterface.macrotrends_income_statement">[docs]</a>    <span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">macrotrends_income_statement</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">frequency</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;quarterly&quot;</span><span class="p">,</span> <span class="s2">&quot;annual&quot;</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve the income statement for the given ticker.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">check_security_type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">security_type</span><span class="p">,</span> <span class="n">valid_types</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;stock&quot;</span><span class="p">])</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">MACROTRENDS_BASE_URL</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/TBD/income-statement&quot;</span>
+        <span class="n">frequency_suffix</span> <span class="o">=</span> <span class="s2">&quot;?freq=A&quot;</span> <span class="k">if</span> <span class="n">frequency</span> <span class="o">==</span> <span class="s2">&quot;annual&quot;</span> <span class="k">else</span> <span class="s2">&quot;?freq=Q&quot;</span>
+
+        <span class="n">url</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">MACROTRENDS_BASE_URL</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">get_company_slug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="p">)</span><span class="si">}</span><span class="s2">/income-statement</span><span class="si">{</span><span class="n">frequency_suffix</span><span class="si">}</span><span class="s2">&quot;</span>  <span class="c1"># Noqa E501</span>
+            <span class="k">if</span> <span class="n">frequency</span> <span class="o">==</span> <span class="s2">&quot;quarterly&quot;</span>
+            <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">MACROTRENDS_BASE_URL</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/TBD/income-statement</span><span class="si">{</span><span class="n">frequency_suffix</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
 
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 
@@ -176,15 +185,23 @@
         <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;field_name&quot;</span><span class="p">)</span>
         <span class="n">data</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;popup_icon&quot;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">data</span>
+        <span class="k">return</span> <span class="n">data</span></div>
 
-    <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">macrotrends_balance_sheet</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<div class="viewcode-block" id="MacrotrendsInterface.macrotrends_balance_sheet"><a class="viewcode-back" href="../../stockdex.html#stockdex.macrotrends_interface.MacrotrendsInterface.macrotrends_balance_sheet">[docs]</a>    <span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">macrotrends_balance_sheet</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">frequency</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;quarterly&quot;</span><span class="p">,</span> <span class="s2">&quot;annual&quot;</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve the balance sheet for the given ticker.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">check_security_type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">security_type</span><span class="p">,</span> <span class="n">valid_types</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;stock&quot;</span><span class="p">])</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">MACROTRENDS_BASE_URL</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/TBD/balance-sheet&quot;</span>
+        <span class="n">frequency_suffix</span> <span class="o">=</span> <span class="s2">&quot;?freq=A&quot;</span> <span class="k">if</span> <span class="n">frequency</span> <span class="o">==</span> <span class="s2">&quot;annual&quot;</span> <span class="k">else</span> <span class="s2">&quot;?freq=Q&quot;</span>
+
+        <span class="n">url</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">MACROTRENDS_BASE_URL</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">get_company_slug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="p">)</span><span class="si">}</span><span class="s2">/balance-sheet</span><span class="si">{</span><span class="n">frequency_suffix</span><span class="si">}</span><span class="s2">&quot;</span>  <span class="c1"># Noqa E501</span>
+            <span class="k">if</span> <span class="n">frequency</span> <span class="o">==</span> <span class="s2">&quot;quarterly&quot;</span>
+            <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">MACROTRENDS_BASE_URL</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/TBD/balance-sheet</span><span class="si">{</span><span class="n">frequency_suffix</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
 
         <span class="c1"># build selenium interface object if not already built</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;selenium_interface&quot;</span><span class="p">):</span>
@@ -200,15 +217,23 @@
         <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;field_name&quot;</span><span class="p">)</span>
         <span class="n">data</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;popup_icon&quot;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">data</span>
+        <span class="k">return</span> <span class="n">data</span></div>
 
-    <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">macrotrends_cash_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<div class="viewcode-block" id="MacrotrendsInterface.macrotrends_cash_flow"><a class="viewcode-back" href="../../stockdex.html#stockdex.macrotrends_interface.MacrotrendsInterface.macrotrends_cash_flow">[docs]</a>    <span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">macrotrends_cash_flow</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">frequency</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;quarterly&quot;</span><span class="p">,</span> <span class="s2">&quot;annual&quot;</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve the cash flow statement for the given ticker.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">check_security_type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">security_type</span><span class="p">,</span> <span class="n">valid_types</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;stock&quot;</span><span class="p">])</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">MACROTRENDS_BASE_URL</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/TBD/cash-flow-statement&quot;</span>
+        <span class="n">frequency_suffix</span> <span class="o">=</span> <span class="s2">&quot;?freq=A&quot;</span> <span class="k">if</span> <span class="n">frequency</span> <span class="o">==</span> <span class="s2">&quot;annual&quot;</span> <span class="k">else</span> <span class="s2">&quot;?freq=Q&quot;</span>
+
+        <span class="n">url</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">MACROTRENDS_BASE_URL</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">get_company_slug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="p">)</span><span class="si">}</span><span class="s2">/cash-flow-statement</span><span class="si">{</span><span class="n">frequency_suffix</span><span class="si">}</span><span class="s2">&quot;</span>  <span class="c1"># Noqa E501</span>
+            <span class="k">if</span> <span class="n">frequency</span> <span class="o">==</span> <span class="s2">&quot;quarterly&quot;</span>
+            <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">MACROTRENDS_BASE_URL</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/TBD/cash-flow-statement</span><span class="si">{</span><span class="n">frequency_suffix</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
 
         <span class="c1"># build selenium interface object if not already built</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;selenium_interface&quot;</span><span class="p">):</span>
@@ -224,9 +249,10 @@
         <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;field_name&quot;</span><span class="p">)</span>
         <span class="n">data</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;popup_icon&quot;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">data</span>
+        <span class="k">return</span> <span class="n">data</span></div>
 
     <span class="nd">@property</span>
+    <span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">macrotrends_key_financial_ratios</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve the key financial ratios for the given ticker.</span>
@@ -348,9 +374,11 @@
 
         <span class="k">return</span> <span class="n">df</span></div>
 
-<div class="viewcode-block" id="MacrotrendsInterface.plot_macrotrends_income_statement"><a class="viewcode-back" href="../../stockdex.html#stockdex.macrotrends_interface.MacrotrendsInterface.plot_macrotrends_income_statement">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_macrotrends_income_statement</span><span class="p">(</span>
+<div class="viewcode-block" id="MacrotrendsInterface.plot_macrotrends_income_statement"><a class="viewcode-back" href="../../stockdex.html#stockdex.macrotrends_interface.MacrotrendsInterface.plot_macrotrends_income_statement">[docs]</a>    <span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot_macrotrends_income_statement</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">fields_to_include</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Revenue&quot;</span><span class="p">,</span> <span class="s2">&quot;Income After Taxes&quot;</span><span class="p">],</span>
+        <span class="n">frequency</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;annual&quot;</span><span class="p">,</span> <span class="s2">&quot;quarterly&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;annual&quot;</span><span class="p">,</span>
         <span class="n">group_by</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;field&quot;</span><span class="p">,</span> <span class="s2">&quot;timeframe&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;timeframe&quot;</span><span class="p">,</span>
         <span class="n">show_plot</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">px</span><span class="o">.</span><span class="n">line</span><span class="p">,</span> <span class="n">px</span><span class="o">.</span><span class="n">bar</span><span class="p">]:</span>
@@ -359,6 +387,12 @@
 
 <span class="sd">        Args:</span>
 <span class="sd">        ----------</span>
+<span class="sd">        fields_to_include : list</span>
+<span class="sd">            The fields to include in the plot.</span>
+<span class="sd">        frequency : Literal[&quot;annual&quot;, &quot;quarterly&quot;]</span>
+<span class="sd">            The frequency of the data to plot.</span>
+<span class="sd">        group_by : Literal[&quot;field&quot;, &quot;timeframe&quot;]</span>
+<span class="sd">            The level at which to group the data.</span>
 <span class="sd">        show_plot : bool</span>
 <span class="sd">            If the plot should be shown or not.</span>
 <span class="sd">            If dash is used, this should be set to False</span>
@@ -369,7 +403,9 @@
 <span class="sd">        Union[px.line, px.bar]: The plotly figure</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transform_df_for_plotting_macrotrends</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">macrotrends_income_statement</span><span class="p">,</span> <span class="n">fields_to_include</span><span class="p">,</span> <span class="n">group_by</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">macrotrends_income_statement</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="n">frequency</span><span class="p">),</span>
+            <span class="n">fields_to_include</span><span class="p">,</span>
+            <span class="n">group_by</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="n">fig</span> <span class="o">=</span> <span class="n">plot_dataframe</span><span class="p">(</span>
@@ -383,6 +419,7 @@
 <div class="viewcode-block" id="MacrotrendsInterface.plot_macrotrends_balance_sheet"><a class="viewcode-back" href="../../stockdex.html#stockdex.macrotrends_interface.MacrotrendsInterface.plot_macrotrends_balance_sheet">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_macrotrends_balance_sheet</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">fields_to_include</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Cash On Hand&quot;</span><span class="p">,</span> <span class="s2">&quot;Total Assets&quot;</span><span class="p">,</span> <span class="s2">&quot;Total Liabilities&quot;</span><span class="p">],</span>
+        <span class="n">frequency</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;annual&quot;</span><span class="p">,</span> <span class="s2">&quot;quarterly&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;annual&quot;</span><span class="p">,</span>
         <span class="n">group_by</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;field&quot;</span><span class="p">,</span> <span class="s2">&quot;timeframe&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;timeframe&quot;</span><span class="p">,</span>
         <span class="n">show_plot</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">px</span><span class="o">.</span><span class="n">line</span><span class="p">,</span> <span class="n">px</span><span class="o">.</span><span class="n">bar</span><span class="p">]:</span>
@@ -391,6 +428,12 @@
 
 <span class="sd">        Args:</span>
 <span class="sd">        ----------</span>
+<span class="sd">        fields_to_include : list</span>
+<span class="sd">            The fields to include in the plot.</span>
+<span class="sd">        frequency : Literal[&quot;annual&quot;, &quot;quarterly&quot;]</span>
+<span class="sd">            The frequency of the data to plot.</span>
+<span class="sd">        group_by : Literal[&quot;field&quot;, &quot;timeframe&quot;]</span>
+<span class="sd">            The level at which to group the data.</span>
 <span class="sd">        show_plot : bool</span>
 <span class="sd">            If the plot should be shown or not.</span>
 <span class="sd">            If dash is used, this should be set to False</span>
@@ -401,7 +444,7 @@
 <span class="sd">        Union[px.line, px.bar]: The plotly figure</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transform_df_for_plotting_macrotrends</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">macrotrends_balance_sheet</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">macrotrends_balance_sheet</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="n">frequency</span><span class="p">),</span>
             <span class="n">fields_to_include</span><span class="p">,</span>
             <span class="n">group_by</span><span class="p">,</span>
         <span class="p">)</span>
@@ -421,6 +464,7 @@
             <span class="s2">&quot;Common Stock Dividends Paid&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Net Long-Term Debt&quot;</span><span class="p">,</span>
         <span class="p">],</span>
+        <span class="n">frequency</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;annual&quot;</span><span class="p">,</span> <span class="s2">&quot;quarterly&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;annual&quot;</span><span class="p">,</span>
         <span class="n">group_by</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;field&quot;</span><span class="p">,</span> <span class="s2">&quot;timeframe&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;timeframe&quot;</span><span class="p">,</span>
         <span class="n">show_plot</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -429,6 +473,12 @@
 
 <span class="sd">        Args:</span>
 <span class="sd">        ----------</span>
+<span class="sd">        fields_to_include : list</span>
+<span class="sd">            The fields to include in the plot.</span>
+<span class="sd">        frequency : Literal[&quot;annual&quot;, &quot;quarterly&quot;]</span>
+<span class="sd">            The frequency of the data to plot.</span>
+<span class="sd">        group_by : Literal[&quot;field&quot;, &quot;timeframe&quot;]</span>
+<span class="sd">            The level at which to group the data.</span>
 <span class="sd">        show_plot : bool</span>
 <span class="sd">            If the plot should be shown or not.</span>
 <span class="sd">            If dash is used, this should be set to False</span>
@@ -439,12 +489,12 @@
 <span class="sd">        Union[px.line, px.bar]: The plotly figure</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transform_df_for_plotting_macrotrends</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">macrotrends_cash_flow</span><span class="p">,</span> <span class="n">fields_to_include</span><span class="p">,</span> <span class="n">group_by</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">macrotrends_cash_flow</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="n">frequency</span><span class="p">),</span> <span class="n">fields_to_include</span><span class="p">,</span> <span class="n">group_by</span>
         <span class="p">)</span>
 
         <span class="n">fig</span> <span class="o">=</span> <span class="n">plot_dataframe</span><span class="p">(</span>
             <span class="n">df</span><span class="p">,</span>
-            <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2"> Cash Flow Statement (from Macrotrends)&quot;</span><span class="p">,</span>
+            <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="si">}</span><span class="s2"> Cash Flow Statement (from Macrotrends) using </span><span class="si">{</span><span class="n">frequency</span><span class="si">}</span><span class="s2"> data&quot;</span><span class="p">,</span>
             <span class="n">show_plot</span><span class="o">=</span><span class="n">show_plot</span><span class="p">,</span>
         <span class="p">)</span>
 
@@ -487,9 +537,9 @@
         <span class="c1"># fill NaN values with 0</span>
         <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
-        <span class="c1"># convert all values to float and replace empty cells with 0</span>
+        <span class="c1"># convert all values to float if they are not and replace empty cells with 0</span>
         <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^\s*$&quot;</span><span class="p">,</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">applymap</span><span class="p">(</span>
-            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">x</span>
         <span class="p">)</span>
 
         <span class="c1"># sort index in ascending order</span>

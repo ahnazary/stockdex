@@ -80,7 +80,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">bs4</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeautifulSoup</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">curl_cffi</span><span class="w"> </span><span class="kn">import</span> <span class="n">requests</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">RESPONSE_TIMEOUT</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">MACROTRENDS_BASE_URL</span><span class="p">,</span> <span class="n">RESPONSE_TIMEOUT</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.lib</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_user_agent</span>
 
 
@@ -176,7 +176,17 @@
                 <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">skip</span><span class="p">):</span>
                     <span class="n">element</span> <span class="o">=</span> <span class="n">element</span><span class="o">.</span><span class="n">find_next</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
                 <span class="k">return</span> <span class="n">element</span>
-        <span class="k">return</span> <span class="kc">None</span></div></div>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="TickerBase.get_company_slug"><a class="viewcode-back" href="../../stockdex.html#stockdex.ticker_base.TickerBase.get_company_slug">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_company_slug</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ticker</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieve the company slug for the given ticker using macrotrends.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">MACROTRENDS_BASE_URL</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">ticker</span><span class="si">}</span><span class="s2">/TBD/income-statement&quot;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">company_slug</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">url</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">company_slug</span></div></div>
 </pre></div>
 
            </div>

@@ -421,9 +421,9 @@ forecast_price_to_earnings__growth_rates = ticker.forecast_peg_rate
 <span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
 
 <span class="c1"># Financial data</span>
-<span class="n">income_statement</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">macrotrends_income_statement</span>
-<span class="n">balance_sheet</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">macrotrends_balance_sheet</span>
-<span class="n">cash_flow</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">macrotrends_cash_flow</span>
+<span class="n">income_statement</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">macrotrends_income_statement</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="s2">&quot;quarterly&quot;</span><span class="p">)</span>
+<span class="n">balance_sheet</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">macrotrends_balance_sheet</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="s2">&quot;quarterly&quot;</span><span class="p">)</span>
+<span class="n">cash_flow</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">macrotrends_cash_flow</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="s2">&quot;annual&quot;</span><span class="p">)</span>
 <span class="n">key_financial_ratios</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">macrotrends_key_financial_ratios</span>
 
 <span class="c1"># Margins</span>
