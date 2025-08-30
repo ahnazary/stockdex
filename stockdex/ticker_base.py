@@ -109,6 +109,10 @@ class TickerBase:
     def get_company_slug(self, ticker: str) -> str:
         """
         Retrieve the company slug for the given ticker using macrotrends.
+
+
+        :param ticker: The stock ticker symbol
+        :return: The company slug, e.g. "BAC" -> "bank-of-america"
         """
         url = f"{MACROTRENDS_BASE_URL}/{ticker}/TBD/income-statement"
         response = self.get_response(url)
