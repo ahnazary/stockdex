@@ -33,6 +33,7 @@ class MacrotrendsInterface(TickerBase):
         self.security_type = security_type
 
     @property
+    @lru_cache(maxsize=None)
     def full_name(self) -> str:
         """
         Retrieve the full name of the security.
@@ -228,6 +229,7 @@ class MacrotrendsInterface(TickerBase):
         return data
 
     @property
+    @lru_cache(maxsize=None)
     def macrotrends_operating_margin(self) -> pd.DataFrame:
         """
         Retrieve the operating margin for the given ticker.
@@ -238,6 +240,7 @@ class MacrotrendsInterface(TickerBase):
         return self._find_margins_table(url, "TTM Operating Income")
 
     @property
+    @lru_cache(maxsize=None)
     def macrotrends_gross_margin(self) -> pd.DataFrame:
         """
         Retrieve the gross margin for the given ticker.
@@ -248,6 +251,7 @@ class MacrotrendsInterface(TickerBase):
         return self._find_margins_table(url, "Gross Margin")
 
     @property
+    @lru_cache(maxsize=None)
     def macrotrends_ebitda_margin(self) -> pd.DataFrame:
         """
         Retrieve the EBITDA margin for the given ticker.
@@ -258,6 +262,7 @@ class MacrotrendsInterface(TickerBase):
         return self._find_margins_table(url, "TTM EBITDA")
 
     @property
+    @lru_cache(maxsize=None)
     def macrotrends_pre_tax_margin(self) -> pd.DataFrame:
         """
         Retrieve the pre-tax margin for the given ticker.
@@ -268,6 +273,7 @@ class MacrotrendsInterface(TickerBase):
         return self._find_margins_table(url, "TTM Pre-Tax Income")
 
     @property
+    @lru_cache(maxsize=None)
     def macrotrends_net_margin(self) -> pd.DataFrame:
         """
         Retrieve the net profit margin for the given ticker.
@@ -277,6 +283,7 @@ class MacrotrendsInterface(TickerBase):
 
         return self._find_margins_table(url, "TTM Net Income")
 
+    @lru_cache(maxsize=None)
     def macrotrends_revenue(
         self, frequency: Literal["annual", "quarterly"] = "annual"
     ) -> pd.DataFrame:

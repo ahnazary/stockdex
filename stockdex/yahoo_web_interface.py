@@ -520,7 +520,7 @@ class YahooWeb(TickerBase):
         header = self.find_parent_by_text(soup, "h1", f"({self.ticker})")
 
         # get the word till the first special character including space
-        return re.findall(r"[\w\s]+", header.text)[0]
+        return re.findall(r"[\w\s]+", header.text)[0].strip()
 
     @property
     def yahoo_web_earnings_estimate(self) -> pd.DataFrame:

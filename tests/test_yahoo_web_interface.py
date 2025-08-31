@@ -363,21 +363,22 @@ def test_yahoo_web_trading_information_wrong_security_type():
 
 
 @pytest.mark.parametrize(
-    "ticker",
+    "ticker, expected_name",
     [
-        ("PANW"),
-        ("AAPL"),
-        ("GOOGL"),
-        ("MSFT"),
+        ("PANW", "Palo Alto Networks"),
+        ("AAPL", "Apple Inc"),
+        ("GOOGL", "Alphabet Inc"),
+        ("MSFT", "Microsoft Corporation"),
     ],
 )
-def test_yahoo_web_full_name(ticker):
+def test_yahoo_web_full_name(ticker, expected_name):
     ticker = Ticker(ticker)
     yahoo_web_full_name = ticker.yahoo_web_full_name
 
     # Check if the response is as expected
     assert isinstance(yahoo_web_full_name, str)
     assert len(yahoo_web_full_name) > 0
+    assert yahoo_web_full_name == expected_name
 
 
 @pytest.mark.parametrize(
@@ -401,7 +402,7 @@ def test_yahoo_web_earnings_estimate(ticker):
 def test_yahoo_web_earnings_estimate_wrong_security_type():
     with pytest.raises(WrongSecurityType):
         ticker = Ticker(ticker="AAPL", security_type="etf")
-        ticker.yahoo_web_earnings_estimate  #
+        ticker.yahoo_web_earnings_estimate
 
 
 @pytest.mark.parametrize(

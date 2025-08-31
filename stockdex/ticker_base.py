@@ -3,6 +3,7 @@ Base class for ticker objects to inherit from
 """
 
 import time
+from functools import lru_cache
 from typing import Union
 
 from bs4 import BeautifulSoup
@@ -106,6 +107,7 @@ class TickerBase:
                 return element
         return None
 
+    @lru_cache(maxsize=None)
     def get_company_slug(self, ticker: str) -> str:
         """
         Retrieve the company slug for the given ticker using macrotrends.
