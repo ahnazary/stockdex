@@ -4,6 +4,12 @@ Module for custom exceptions
 
 from stockdex.config import VALID_DATA_SOURCES
 
+class SymbolDelisted(Exception):
+    def __init__(self, message: str = "Symbol is delisted") -> None:
+        self.message = message
+        super().__init__(self.message)
+    def __str__(self) -> str:
+        return self.message
 
 class NoISINError(Exception):
     def __init__(self, message: str = "No ISIN provided") -> None:

@@ -12,7 +12,7 @@ import plotly.express as px
 from bs4 import BeautifulSoup
 
 from stockdex.config import MACROTRENDS_BASE_URL, VALID_SECURITY_TYPES
-from stockdex.exceptions import FieldNotExists
+from stockdex.exceptions import FieldNotExists, SymbolDelisted
 from stockdex.lib import check_security_type, plot_dataframe
 from stockdex.selenium_interface import selenium_interface
 from stockdex.ticker_base import TickerBase
@@ -83,8 +83,16 @@ class MacrotrendsInterface(TickerBase):
             print(f"The url is: {url}")
             headers = {'User-Agent': 'Mozilla/5.0'}
             response = requests.get(url, headers=headers)
-            response.raise_for_status()
+            lowercase_resp = response.url.lower()
             #response = self.get_response(url)
+            # Detect delisted by URL or page content
+            if "delisted" in lowercase_resp:
+                raise SymbolDelisted(f"Symbol {self.ticker} appears delisted (detected in URL).")
+            # RESERVED - in case we need to do more.
+            #delisted_phrases = ["delisted", "no data", "no financials found", "company has been delisted"]
+            #if any(phrase in response.text.lower() for phrase in delisted_phrases):
+            #    raise SymbolDelisted(f"Symbol {self.ticker} appears delisted (detected by page content).")
+            response.raise_for_status()
 
             # Cloudflare is becoming a nemesis for screen scraping
             pattern = re.compile(r"Cloudflare Ray ID:|You are unable to access|Unable to access")
@@ -159,9 +167,17 @@ class MacrotrendsInterface(TickerBase):
             url = f"{MACROTRENDS_BASE_URL}/{self.ticker}/{mnemonic}/{THING}?freq={freq_param}"
             print(f"The url is: {url}")
             headers = {'User-Agent': 'Mozilla/5.0'}
-            #response = requests.get(url, headers=headers)
-            #response.raise_for_status()
-            response = self.get_response(url)
+            response = requests.get(url, headers=headers)
+            lowercase_resp = response.url.lower()
+            #response = self.get_response(url)
+            # Detect delisted by URL or page content
+            if "delisted" in lowercase_resp:
+                raise SymbolDelisted(f"Symbol {self.ticker} appears delisted (detected in URL).")
+            # RESERVED - in case we need to do more.
+            #delisted_phrases = ["delisted", "no data", "no financials found", "company has been delisted"]
+            #if any(phrase in response.text.lower() for phrase in delisted_phrases):
+            #    raise SymbolDelisted(f"Symbol {self.ticker} appears delisted (detected by page content).")
+            response.raise_for_status()
 
             # Cloudflare is becoming a nemesis for screen scraping
             pattern = re.compile(r"Cloudflare Ray ID:|You are unable to access|Unable to access")
@@ -238,9 +254,17 @@ class MacrotrendsInterface(TickerBase):
             url = f"{MACROTRENDS_BASE_URL}/{self.ticker}/{mnemonic}/{THING}?freq={freq_param}"
             print(f"The url is: {url}")
             headers = {'User-Agent': 'Mozilla/5.0'}
-            #response = requests.get(url, headers=headers)
-            #response.raise_for_status()
-            response = self.get_response(url)
+            response = requests.get(url, headers=headers)
+            lowercase_resp = response.url.lower()
+            #response = self.get_response(url)
+            # Detect delisted by URL or page content
+            if "delisted" in lowercase_resp:
+                raise SymbolDelisted(f"Symbol {self.ticker} appears delisted (detected in URL).")
+            # RESERVED - in case we need to do more.
+            #delisted_phrases = ["delisted", "no data", "no financials found", "company has been delisted"]
+            #if any(phrase in response.text.lower() for phrase in delisted_phrases):
+            #    raise SymbolDelisted(f"Symbol {self.ticker} appears delisted (detected by page content).")
+            response.raise_for_status()
 
             # Cloudflare is becoming a nemesis for screen scraping
             pattern = re.compile(r"Cloudflare Ray ID:|You are unable to access|Unable to access")
