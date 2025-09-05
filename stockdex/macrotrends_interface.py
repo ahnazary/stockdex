@@ -400,11 +400,7 @@ class MacrotrendsInterface(TickerBase):
         Union[px.line, px.bar]: The plotly figure
         """
         df = self._transform_df_for_plotting_macrotrends(
-<<<<<<< HEAD
-            self.macrotrends_cashflow_statement, fields_to_include, group_by
-=======
             self.macrotrends_cash_flow(frequency=frequency), fields_to_include, group_by
->>>>>>> main
         )
 
         fig = plot_dataframe(
