@@ -35,6 +35,7 @@ class MacrotrendsInterface(TickerBase):
 
 
     @property
+    @lru_cache(maxsize=None)
     def full_name(self) -> str:
         """
         Retrieve the full name of the security.
@@ -133,6 +134,7 @@ class MacrotrendsInterface(TickerBase):
         return self._fetch_macrotrends_statement("cash-flow-statement", "Net Income/Loss", freq, transpose)
 
     @property
+    @lru_cache(maxsize=None)
     def macrotrends_key_financial_ratios(self) -> pd.DataFrame:
         """
         Retrieve the key financial ratios for the given ticker.
@@ -185,6 +187,7 @@ class MacrotrendsInterface(TickerBase):
         return data
 
     @property
+    @lru_cache(maxsize=None)
     def macrotrends_operating_margin(self) -> pd.DataFrame:
         """
         Retrieve the operating margin for the given ticker.
@@ -198,6 +201,7 @@ class MacrotrendsInterface(TickerBase):
         return self._find_margins_table(url, "TTM Operating Income")
 
     @property
+    @lru_cache(maxsize=None)
     def macrotrends_gross_margin(self) -> pd.DataFrame:
         """
         Retrieve the gross margin for the given ticker.
@@ -211,6 +215,7 @@ class MacrotrendsInterface(TickerBase):
         return self._find_margins_table(url, "Gross Margin")
 
     @property
+    @lru_cache(maxsize=None)
     def macrotrends_ebitda_margin(self) -> pd.DataFrame:
         """
         Retrieve the EBITDA margin for the given ticker.
@@ -224,6 +229,7 @@ class MacrotrendsInterface(TickerBase):
         return self._find_margins_table(url, "TTM EBITDA")
 
     @property
+    @lru_cache(maxsize=None)
     def macrotrends_pre_tax_margin(self) -> pd.DataFrame:
         """
         Retrieve the pre-tax margin for the given ticker.
@@ -237,6 +243,7 @@ class MacrotrendsInterface(TickerBase):
         return self._find_margins_table(url, "TTM Pre-Tax Income")
 
     @property
+    @lru_cache(maxsize=None)
     def macrotrends_net_margin(self) -> pd.DataFrame:
         """
         Retrieve the net profit margin for the given ticker.
@@ -249,6 +256,7 @@ class MacrotrendsInterface(TickerBase):
 
         return self._find_margins_table(url, "TTM Net Income")
 
+    @lru_cache(maxsize=None)
     def macrotrends_revenue(
         self, frequency: Literal["annual", "quarterly"] = "annual"
     ) -> pd.DataFrame:
@@ -277,9 +285,11 @@ class MacrotrendsInterface(TickerBase):
 
         return df
 
+    @lru_cache(maxsize=None)
     def plot_macrotrends_income_statement(
         self,
         fields_to_include: list = ["Revenue", "Income After Taxes"],
+        frequency: Literal["annual", "quarterly"] = "annual",
         group_by: Literal["field", "timeframe"] = "timeframe",
         show_plot: bool = True,
     ) -> Union[px.line, px.bar]:
@@ -288,6 +298,12 @@ class MacrotrendsInterface(TickerBase):
 
         Args:
         ----------
+        fields_to_include : list
+            The fields to include in the plot.
+        frequency : Literal["annual", "quarterly"]
+            The frequency of the data to plot.
+        group_by : Literal["field", "timeframe"]
+            The level at which to group the data.
         show_plot : bool
             If the plot should be shown or not.
             If dash is used, this should be set to False
@@ -298,7 +314,9 @@ class MacrotrendsInterface(TickerBase):
         Union[px.line, px.bar]: The plotly figure
         """
         df = self._transform_df_for_plotting_macrotrends(
-            self.macrotrends_income_statement, fields_to_include, group_by
+            self.macrotrends_income_statement(frequency=frequency),
+            fields_to_include,
+            group_by,
         )
 
         fig = plot_dataframe(
@@ -312,6 +330,7 @@ class MacrotrendsInterface(TickerBase):
     def plot_macrotrends_balance_sheet(
         self,
         fields_to_include: list = ["Cash On Hand", "Total Assets", "Total Liabilities"],
+        frequency: Literal["annual", "quarterly"] = "annual",
         group_by: Literal["field", "timeframe"] = "timeframe",
         show_plot: bool = True,
     ) -> Union[px.line, px.bar]:
@@ -320,6 +339,12 @@ class MacrotrendsInterface(TickerBase):
 
         Args:
         ----------
+        fields_to_include : list
+            The fields to include in the plot.
+        frequency : Literal["annual", "quarterly"]
+            The frequency of the data to plot.
+        group_by : Literal["field", "timeframe"]
+            The level at which to group the data.
         show_plot : bool
             If the plot should be shown or not.
             If dash is used, this should be set to False
@@ -330,7 +355,7 @@ class MacrotrendsInterface(TickerBase):
         Union[px.line, px.bar]: The plotly figure
         """
         df = self._transform_df_for_plotting_macrotrends(
-            self.macrotrends_balance_sheet,
+            self.macrotrends_balance_sheet(frequency=frequency),
             fields_to_include,
             group_by,
         )
@@ -350,6 +375,7 @@ class MacrotrendsInterface(TickerBase):
             "Common Stock Dividends Paid",
             "Net Long-Term Debt",
         ],
+        frequency: Literal["annual", "quarterly"] = "annual",
         group_by: Literal["field", "timeframe"] = "timeframe",
         show_plot: bool = True,
     ) -> None:
@@ -358,6 +384,12 @@ class MacrotrendsInterface(TickerBase):
 
         Args:
         ----------
+        fields_to_include : list
+            The fields to include in the plot.
+        frequency : Literal["annual", "quarterly"]
+            The frequency of the data to plot.
+        group_by : Literal["field", "timeframe"]
+            The level at which to group the data.
         show_plot : bool
             If the plot should be shown or not.
             If dash is used, this should be set to False
@@ -368,12 +400,16 @@ class MacrotrendsInterface(TickerBase):
         Union[px.line, px.bar]: The plotly figure
         """
         df = self._transform_df_for_plotting_macrotrends(
+<<<<<<< HEAD
             self.macrotrends_cashflow_statement, fields_to_include, group_by
+=======
+            self.macrotrends_cash_flow(frequency=frequency), fields_to_include, group_by
+>>>>>>> main
         )
 
         fig = plot_dataframe(
             df,
-            title=f"{self.ticker} Cash Flow Statement (from Macrotrends)",
+            title=f"{self.ticker} Cash Flow Statement (from Macrotrends) using {frequency} data",
             show_plot=show_plot,
         )
 
@@ -416,9 +452,9 @@ class MacrotrendsInterface(TickerBase):
         # fill NaN values with 0
         df = df.fillna(0)
 
-        # convert all values to float and replace empty cells with 0
+        # convert all values to float if they are not and replace empty cells with 0
         df = df.replace(r"^\s*$", "0", regex=True).applymap(
-            lambda x: float(x.replace(",", ""))
+            lambda x: float(x.replace(",", "")) if isinstance(x, str) else x
         )
 
         # sort index in ascending order

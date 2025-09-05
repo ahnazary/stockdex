@@ -38,12 +38,12 @@ class YahooWeb(TickerBase):
         pd.DataFrame: A pandas DataFrame including the financials table
         """
         response = self.get_response(url)
-        soup = BeautifulSoup(response.content, "html.parser").find(
-            "div", {"class": "table yf-9ft13"}
-        )
+        soup = BeautifulSoup(response.content, "html.parser")
+
+        table = self.find_parent_by_text(soup, "div", "Breakdown")
 
         # Extract column headers
-        header_row = soup.find("div", class_="tableHeader")
+        header_row = table.find("div", class_="tableHeader")
         columns = [
             col.get_text(strip=True)
             for col in header_row.find_all("div", class_="column")
@@ -354,12 +354,13 @@ class YahooWeb(TickerBase):
 
         # Parse the HTML content of the website
         soup = BeautifulSoup(response.content, "html.parser")
-        raw_data = soup.find_all("table")
+        table = self.find_parent_by_text(
+            soup, "div", "Top Institutional Holders"
+        ).find_all("tr")
 
         data_df = pd.DataFrame()
         data = []
 
-        table = raw_data[2].find_all("tr")
         for tr in table:
             data.append([td.text for td in tr.find_all("td")])
 
@@ -519,7 +520,7 @@ class YahooWeb(TickerBase):
         header = self.find_parent_by_text(soup, "h1", f"({self.ticker})")
 
         # get the word till the first special character including space
-        return re.findall(r"[\w\s]+", header.text)[0]
+        return re.findall(r"[\w\s]+", header.text)[0].strip()
 
     @property
     def yahoo_web_earnings_estimate(self) -> pd.DataFrame:
