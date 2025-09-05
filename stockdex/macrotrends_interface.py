@@ -64,261 +64,73 @@ class MacrotrendsInterface(TickerBase):
         return self._cashflow_stmt_cache[freq]
 
     # ---------- Private Income Statement Methods ----------
-    def _fetch_macrotrends_income_statement(self, freq="annual", transpose=False) -> pd.DataFrame:
-        MARKER = "Revenue"
-        THING = "income-statement"
-        #print(f"_fetch_macrotrends_income_statement: freq is {freq}")
-        if freq not in self._income_stmt_cache:
-            """
-            Retrieve the statement for the given ticker, with annual or quarterly frequency.
-            freq: "annual" or "quarterly" (case insensitive); default is "annual".
-            """
-            check_security_type(self.security_type, valid_types=["stock"])
-            freq_map = {"annual": "A", "quarterly": "Q"}
-            freq_clean = str(freq).strip().lower()
-            freq_param = freq_map.get(freq_clean, "A")  # Default to "A"
-            mnemonic = getattr(self, "mnemonic", "TBD")  # use injected mnemonic or fallback
-            #print(f"The mnemonic attribute from Ticker Class is: {mnemonic}")
-            url = f"{MACROTRENDS_BASE_URL}/{self.ticker}/{mnemonic}/{THING}?freq={freq_param}"
-            print(f"The url is: {url}")
-            headers = {'User-Agent': 'Mozilla/5.0'}
-            response = requests.get(url, headers=headers)
-            lowercase_resp = response.url.lower()
-            #response = self.get_response(url)
-            # Detect delisted by URL or page content
-            if "delisted" in lowercase_resp:
-                raise SymbolDelisted(f"Symbol {self.ticker} appears delisted (detected in URL).")
-            # RESERVED - in case we need to do more.
-            #delisted_phrases = ["delisted", "no data", "no financials found", "company has been delisted"]
-            #if any(phrase in response.text.lower() for phrase in delisted_phrases):
-            #    raise SymbolDelisted(f"Symbol {self.ticker} appears delisted (detected by page content).")
-            response.raise_for_status()
+    def _fetch_macrotrends_statement(self, thing, marker, freq="annual", transpose=False):
+        """
+        Base function to retrieve a statement from macrotrends based on a statement type and
+        frequency parameter. There is also a transpose function that will transpose the 
+        resultant dataframe on its x y axis so that instead of period being columns, periods 
+        would be rows (a la yahoo). This is an optional transposition feature since 
+        upstream code may already be pivoting and or standardizing the resultant dataframe. 
+        """
+        # Standardize frequency parameter
+        freq_map = {"annual": "A", "quarterly": "Q"}
+        freq_clean = str(freq).strip().lower()
+        freq_param = freq_map.get(freq_clean, "A")
+        mnemonic = getattr(self, "mnemonic", "TBD")
+        url = f"{MACROTRENDS_BASE_URL}/{self.ticker}/{mnemonic}/{thing}?freq={freq_param}"
+        print(f"The url is: {url}")
+    
+        headers = {'User-Agent': 'Mozilla/5.0'}
+        response = requests.get(url, headers=headers)
+        lowercase_resp = response.url.lower()
+        if "delisted" in lowercase_resp:
+            raise SymbolDelisted(f"Symbol {self.ticker} appears delisted (detected in URL).")
+    
+        response.raise_for_status()
+    
+        pattern = re.compile(r"Cloudflare Ray ID:|You are unable to access|Unable to access")
+        if pattern.search(response.text):
+            raise ValueError("Cloudflare error detected")
+    
+        match = re.search(r'var originalData = (\[.*?\]);', response.text)
+        if not match:
+            raise ValueError("Couldn't find originalData variable in the page")
+        data = json.loads(match.group(1))
+    
+        field_names = [
+            BeautifulSoup(row['field_name'], 'html.parser').get_text(strip=True) for row in data
+        ]
+        if not any(marker in name for name in field_names):
+            raise ValueError(f"The expected marker label: {marker} was not found in any field_name")
+        records = []
+        for row in data:
+            field_name = BeautifulSoup(row['field_name'], 'html.parser').get_text(strip=True)
+            record = {'Metric': field_name}
+            for k, v in row.items():
+                if re.match(r'\d{4}-\d{2}-\d{2}', k):
+                    record[k] = float(v) if v not in (None, '') else None
+            records.append(record)
+        df = pd.DataFrame(records)
+        if transpose:
+            df_reset = df.reset_index(drop=True)
+            df_reset.rename(columns={'Metric': 'index'}, inplace=True)
+            df_transposed = df_reset.set_index('index').T.reset_index()
+            df_transposed.rename(columns={'index': 'Period'}, inplace=True)
+            df_transposed['Period'] = pd.to_datetime(df_transposed['Period'])
+            df_transposed.index.name = None
+            return df_transposed
+        else:
+            df.rename(columns={'index': 'Item', 'Metric': 'Item'}, inplace=True)
+            return df
 
-            # Cloudflare is becoming a nemesis for screen scraping
-            pattern = re.compile(r"Cloudflare Ray ID:|You are unable to access|Unable to access")
-            error_present = pattern.search(response.text)
-            if error_present:
-                #print("Cloudflare error detected")
-                raise ValueError("Cloudflare error detected")
+    def _fetch_macrotrends_income_statement(self, freq="annual", transpose=False):
+        return self._fetch_macrotrends_statement("income-statement", "Revenue", freq, transpose)
 
-            # Check for the originalData and bail if we cannot locate it.
-            match = re.search(r'var originalData = (\[.*?\]);', response.text)
-            if not match:
-                raise ValueError("Couldn't find originalData variable in the page")
-            data = json.loads(match.group(1))
+    def _fetch_macrotrends_balance_sheet(self, freq="annual", transpose=False):
+        return self._fetch_macrotrends_statement("balance-sheet", "Cash On Hand", freq, transpose)
 
-            # Clean the field names and extract dates
-            field_names = [
-                BeautifulSoup(row['field_name'], 'html.parser').get_text(strip=True)
-                for row in data
-            ]
-            # Check if marker is present in any field name
-            if not any(MARKER in name for name in field_names):
-                raise ValueError(f"The expected marker label: {MARKER} was not found in any field_name")
-
-            records = []
-            for row in data:
-                field_name = BeautifulSoup(row['field_name'], 'html.parser').get_text(strip=True)
-                record = {'Metric': field_name}
-                for k, v in row.items():
-                    if re.match(r'\d{4}-\d{2}-\d{2}', k):  # Date format
-                        record[k] = float(v) if v not in (None, '') else None
-                records.append(record)
-
-            df = pd.DataFrame(records)
-
-            if (transpose):
-                # pivot the table so it looks more like the yahoo format
-                print("Transpose set to true...pivoting the result table")
-                df_reset = df.reset_index(drop=True)  # Move index to a column named 'Metric'
-                df_reset.rename(columns={'Metric': 'index'}, inplace=True)  # Rename the 'Metric' column to 'Item'
-                # Transpose the DataFrame
-                df_transposed = df_reset.set_index('index').T.reset_index()
-                # Rename 'index' column to 'Period'
-                df_transposed.rename(columns={'index': 'Period'}, inplace=True)
-                df_transposed['Period'] = pd.to_datetime(df_transposed['Period'])  # Convert Period to datetime
-                df_transposed.index.name = None  # Remove the name label above the index column
-                #print("Transposed df")
-                #print(df_transposed)
-                return df_transposed
-            else:
-                #print("Transpose set to false...sending back raw result table")
-                df.rename(columns={'index': 'Item', 'Metric': 'Item'}, inplace=True)
-
-            # print(df)
-            return(df)
-
-    # ---------- Balance Sheet Methods ----------
-    def _fetch_macrotrends_balance_sheet(self, freq: str = "annual", transpose=False) -> pd.DataFrame:
-        MARKER = "Cash On Hand"
-        THING = "balance-sheet"
-        #print(f"_fetch_macrotrends_balance_sheet: freq is {freq}")
-        if freq not in self._income_stmt_cache:
-            """
-            Retrieve the statement for the given ticker, with annual or quarterly frequency.
-            freq: "annual" or "quarterly" (case insensitive); default is "annual".
-            """
-            check_security_type(self.security_type, valid_types=["stock"])
-            freq_map = {"annual": "A", "quarterly": "Q"}
-            freq_clean = str(freq).strip().lower()
-            freq_param = freq_map.get(freq_clean, "A")  # Default to "A"
-            mnemonic = getattr(self, "mnemonic", "TBD")  # use injected mnemonic or fallback
-            print(f"The mnemonic attribute from Ticker Class is: {mnemonic}")
-            url = f"{MACROTRENDS_BASE_URL}/{self.ticker}/{mnemonic}/{THING}?freq={freq_param}"
-            print(f"The url is: {url}")
-            headers = {'User-Agent': 'Mozilla/5.0'}
-            response = requests.get(url, headers=headers)
-            lowercase_resp = response.url.lower()
-            #response = self.get_response(url)
-            # Detect delisted by URL or page content
-            if "delisted" in lowercase_resp:
-                raise SymbolDelisted(f"Symbol {self.ticker} appears delisted (detected in URL).")
-            # RESERVED - in case we need to do more.
-            #delisted_phrases = ["delisted", "no data", "no financials found", "company has been delisted"]
-            #if any(phrase in response.text.lower() for phrase in delisted_phrases):
-            #    raise SymbolDelisted(f"Symbol {self.ticker} appears delisted (detected by page content).")
-            response.raise_for_status()
-
-            # Cloudflare is becoming a nemesis for screen scraping
-            pattern = re.compile(r"Cloudflare Ray ID:|You are unable to access|Unable to access")
-            error_present = pattern.search(response.text)
-            if error_present:
-                print("Cloudflare error detected")
-                raise ValueError("Cloudflare error detected")
-
-            # Check for the originalData and bail if we cannot locate it.
-            match = re.search(r'var originalData = (\[.*?\]);', response.text)
-            if not match:
-                raise ValueError("Couldn't find originalData variable in the page")
-            data = json.loads(match.group(1))
-
-            # Clean the field names and extract dates
-            field_names = [
-                BeautifulSoup(row['field_name'], 'html.parser').get_text(strip=True)
-                for row in data
-            ]
-            # Check if marker is present in any field name
-            if not any(MARKER in name for name in field_names):
-                raise ValueError(f"The expected marker label: {MARKER} was not found in any field_name")
-
-            records = []
-            for row in data:
-                field_name = BeautifulSoup(row['field_name'], 'html.parser').get_text(strip=True)
-                record = {'Metric': field_name}
-                for k, v in row.items():
-                    if re.match(r'\d{4}-\d{2}-\d{2}', k):  # Date format
-                        record[k] = float(v) if v not in (None, '') else None
-                records.append(record)
-
-            df = pd.DataFrame(records)
-
-            if (transpose):
-                # pivot the table so it looks more like the yahoo format
-                print("Transpose set to true...pivoting the result table")
-                df_reset = df.reset_index(drop=True)  # Move index to a column named 'Metric'
-                df_reset.rename(columns={'Metric': 'index'}, inplace=True)  # Rename the 'Metric' column to 'Item'
-                # Transpose the DataFrame
-                df_transposed = df_reset.set_index('index').T.reset_index()
-                # Rename 'index' column to 'Period'
-                df_transposed.rename(columns={'index': 'Period'}, inplace=True)
-                df_transposed['Period'] = pd.to_datetime(df_transposed['Period'])  # Convert Period to datetime
-                df_transposed.index.name = None  # Remove the name label above the index column
-                #print("Transposed df")
-                #print(df_transposed)
-                return df_transposed
-            else:
-                #print("Transpose set to false...sending back raw result table")
-                df.rename(columns={'index': 'Item', 'Metric': 'Item'}, inplace=True)
-
-            #print(df)
-            return(df)
-
-
-    # ---------- Cash Flow Methods ----------
-
-    def _fetch_macrotrends_cashflow_statement(self, freq: str = "annual", transpose=False) -> pd.DataFrame:
-        MARKER = "Net Income/Loss"
-        THING = "cash-flow-statement"
-        #print(f"_fetch_macrotrends_cashflow_statement: freq is {freq}")
-        if freq not in self._income_stmt_cache:
-            """
-            Retrieve the statement for the given ticker, with annual or quarterly frequency.
-            freq: "annual" or "quarterly" (case insensitive); default is "annual".
-            """
-            check_security_type(self.security_type, valid_types=["stock"])
-            freq_map = {"annual": "A", "quarterly": "Q"}
-            freq_clean = str(freq).strip().lower()
-            freq_param = freq_map.get(freq_clean, "A")  # Default to "A"
-            mnemonic = getattr(self, "mnemonic", "TBD")  # use injected mnemonic or fallback
-            #print(f"The mnemonic attribute from Ticker Class is: {mnemonic}")
-            url = f"{MACROTRENDS_BASE_URL}/{self.ticker}/{mnemonic}/{THING}?freq={freq_param}"
-            print(f"The url is: {url}")
-            headers = {'User-Agent': 'Mozilla/5.0'}
-            response = requests.get(url, headers=headers)
-            lowercase_resp = response.url.lower()
-            #response = self.get_response(url)
-            # Detect delisted by URL or page content
-            if "delisted" in lowercase_resp:
-                raise SymbolDelisted(f"Symbol {self.ticker} appears delisted (detected in URL).")
-            # RESERVED - in case we need to do more.
-            #delisted_phrases = ["delisted", "no data", "no financials found", "company has been delisted"]
-            #if any(phrase in response.text.lower() for phrase in delisted_phrases):
-            #    raise SymbolDelisted(f"Symbol {self.ticker} appears delisted (detected by page content).")
-            response.raise_for_status()
-
-            # Cloudflare is becoming a nemesis for screen scraping
-            pattern = re.compile(r"Cloudflare Ray ID:|You are unable to access|Unable to access")
-            error_present = pattern.search(response.text)
-            if error_present:
-                #print("Cloudflare error detected")
-                raise ValueError("Cloudflare error detected")
-
-            # Check for the originalData and bail if we cannot locate it.
-            match = re.search(r'var originalData = (\[.*?\]);', response.text)
-            if not match:
-                raise ValueError("Couldn't find originalData variable in the page")
-            data = json.loads(match.group(1))
-
-            # Clean the field names and extract dates
-            field_names = [
-                BeautifulSoup(row['field_name'], 'html.parser').get_text(strip=True)
-                for row in data
-            ]
-            # Check if marker is present in any field name
-            if not any(MARKER in name for name in field_names):
-                raise ValueError(f"The expected marker label: {MARKER} was not found in any field_name")
-
-            records = []
-            for row in data:
-                field_name = BeautifulSoup(row['field_name'], 'html.parser').get_text(strip=True)
-                record = {'Metric': field_name}
-                for k, v in row.items():
-                    if re.match(r'\d{4}-\d{2}-\d{2}', k):  # Date format
-                        record[k] = float(v) if v not in (None, '') else None
-                records.append(record)
-
-            df = pd.DataFrame(records)
-
-            if (transpose):
-                # pivot the table so it looks more like the yahoo format
-                print("Transpose set to true...pivoting the result table")
-                df_reset = df.reset_index(drop=True)  # Move index to a column named 'Metric'
-                df_reset.rename(columns={'Metric': 'index'}, inplace=True)  # Rename the 'Metric' column to 'Item'
-                # Transpose the DataFrame
-                df_transposed = df_reset.set_index('index').T.reset_index()
-                # Rename 'index' column to 'Period'
-                df_transposed.rename(columns={'index': 'Period'}, inplace=True)
-                df_transposed['Period'] = pd.to_datetime(df_transposed['Period'])  # Convert Period to datetime
-                df_transposed.index.name = None  # Remove the name label above the index column
-                #print("Transposed df")
-                #print(df_transposed)
-                return df_transposed
-            else:
-                #print("Transpose set to false...sending back raw result table")
-                df.rename(columns={'index': 'Item', 'Metric': 'Item'}, inplace=True)
-
-            #print(df)
-            return(df)
+    def _fetch_macrotrends_cashflow_statement(self, freq="annual", transpose=False):
+        return self._fetch_macrotrends_statement("cash-flow-statement", "Net Income/Loss", freq, transpose)
 
     @property
     def macrotrends_key_financial_ratios(self) -> pd.DataFrame:
