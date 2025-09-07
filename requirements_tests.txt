@@ -10,7 +10,6 @@ myst-parser==2.0.0
 pandas==2.0.3
 beautifulsoup4==4.12.2
 pytest >=8.0.0
-requests==2.31.0
 selenium==4.18.1
 numpy==1.25.1
 plotly==5.24.1
