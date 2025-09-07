@@ -105,6 +105,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">security_type</span> <span class="o">=</span> <span class="n">security_type</span>
 
     <span class="nd">@property</span>
+    <span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">full_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve the full name of the security.</span>
@@ -300,6 +301,7 @@
         <span class="k">return</span> <span class="n">data</span>
 
     <span class="nd">@property</span>
+    <span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">macrotrends_operating_margin</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve the operating margin for the given ticker.</span>
@@ -310,6 +312,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_margins_table</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;TTM Operating Income&quot;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
+    <span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">macrotrends_gross_margin</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve the gross margin for the given ticker.</span>
@@ -320,6 +323,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_margins_table</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;Gross Margin&quot;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
+    <span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">macrotrends_ebitda_margin</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve the EBITDA margin for the given ticker.</span>
@@ -330,6 +334,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_margins_table</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;TTM EBITDA&quot;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
+    <span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">macrotrends_pre_tax_margin</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve the pre-tax margin for the given ticker.</span>
@@ -340,6 +345,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_margins_table</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;TTM Pre-Tax Income&quot;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
+    <span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">macrotrends_net_margin</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve the net profit margin for the given ticker.</span>
@@ -349,7 +355,8 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_margins_table</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;TTM Net Income&quot;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="MacrotrendsInterface.macrotrends_revenue"><a class="viewcode-back" href="../../stockdex.html#stockdex.macrotrends_interface.MacrotrendsInterface.macrotrends_revenue">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">macrotrends_revenue</span><span class="p">(</span>
+<div class="viewcode-block" id="MacrotrendsInterface.macrotrends_revenue"><a class="viewcode-back" href="../../stockdex.html#stockdex.macrotrends_interface.MacrotrendsInterface.macrotrends_revenue">[docs]</a>    <span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">macrotrends_revenue</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">frequency</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;annual&quot;</span><span class="p">,</span> <span class="s2">&quot;quarterly&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;annual&quot;</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
