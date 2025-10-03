@@ -1,4 +1,4 @@
-sphinx-rtd-theme==1.2.2
+sphinx-rtd-theme>=3.0.2
 sphinxcontrib-applehelp==1.0.4
 sphinxcontrib-devhelp==1.0.2
 sphinxcontrib-htmlhelp==2.0.1
@@ -6,7 +6,9 @@ sphinxcontrib-jquery==4.1
 sphinxcontrib-jsmath==1.0.1
 sphinxcontrib-qthelp==1.0.3
 sphinxcontrib-serializinghtml==1.1.5
-myst-parser==2.0.0
+sphinx-copybutton>=0.5.2
+myst-parser>=4.0.1
 plotly>=5.24.1
 dash>=2.18.0
 numpy==1.25.1
+furo>=2025.9.25
