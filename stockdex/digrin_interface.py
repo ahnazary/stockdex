@@ -57,7 +57,7 @@ class DigrinInterface(TickerBase):
         for tr in table.find_all("tbody")[0].find_all("tr"):
             data.append([td.text for td in tr.find_all("td")])
 
-        data_df = pd.DataFrame(data, columns=headers)
+        data_df = pd.DataFrame(data, columns=headers).replace("\n", "", regex=True)
         return data_df
 
     @property
@@ -91,7 +91,7 @@ class DigrinInterface(TickerBase):
         for tr in table.find_all("tbody")[0].find_all("tr"):
             data.append([td.text for td in tr.find_all("td")])
 
-        data_df = pd.DataFrame(data, columns=headers)
+        data_df = pd.DataFrame(data, columns=headers).replace("\n", "", regex=True)
         return data_df
 
     @property
@@ -123,7 +123,7 @@ class DigrinInterface(TickerBase):
         for tr in table.find_all("tbody")[0].find_all("tr"):
             data.append([td.text for td in tr.find_all("td")])
 
-        data_df = pd.DataFrame(data, columns=headers)
+        data_df = pd.DataFrame(data, columns=headers).replace("\n", "", regex=True)
         return data_df
 
     @property
@@ -157,7 +157,7 @@ class DigrinInterface(TickerBase):
         for tr in table.find_all("tbody")[0].find_all("tr"):
             data.append([td.text for td in tr.find_all("td")])
 
-        data_df = pd.DataFrame(data, columns=headers)
+        data_df = pd.DataFrame(data, columns=headers).replace("\n", "", regex=True)
         return data_df
 
     def _get_table_from_url(self, keyword: str, url: str) -> pd.DataFrame:
@@ -198,7 +198,7 @@ class DigrinInterface(TickerBase):
         for tr in table.find_all("tbody")[0].find_all("tr"):
             data.append([td.text for td in tr.find_all("td")])
 
-        data_df = pd.DataFrame(data, columns=headers)
+        data_df = pd.DataFrame(data, columns=headers).replace("\n", "", regex=True)
         return data_df
 
     @property
