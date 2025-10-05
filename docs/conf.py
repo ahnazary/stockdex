@@ -6,13 +6,7 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-import os
-import sys
-
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-
-
-project = "stockdex"
+project = "Stockdex"
 copyright = "2024, Amir Nazary"
 author = "Amir Nazary"
 
@@ -25,6 +19,7 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx_rtd_theme",
     "myst_parser",
+    "sphinx_copybutton",
 ]
 
 templates_path = ["_templates"]
@@ -34,5 +29,7 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-# html_theme = 'alabaster'
-html_theme = "sphinx_rtd_theme"
+html_theme = "furo"
+
+pygments_style = "sphinx"
+pygments_dark_style = "monokai"
