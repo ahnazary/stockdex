@@ -116,7 +116,7 @@ Results:
 
 
 Assets vs Liabilities
-~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
@@ -141,7 +141,7 @@ Results:
 
 
 Free Cash Flow
-~~~~~~~~~~~~~
+~~~~~~~~~~~~~~
 
 .. code-block:: python
 

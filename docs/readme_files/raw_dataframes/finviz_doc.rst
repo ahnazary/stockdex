@@ -1,6 +1,8 @@
 Finviz
 ======
 
+Data extracted from Finviz includes historical data on different criteria and includes revenue breakdowns by products, services, and regions. Examples are provided below.
+
 .. important::
    In each result dataframe, only the first 5 rows of the DataFrame are shown at most to keep the documentation concise. The actual DataFrame returned by each function may contain more rows.
 
