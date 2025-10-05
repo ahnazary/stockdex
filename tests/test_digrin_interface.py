@@ -472,3 +472,60 @@ def test_plot_digrin_cost_of_revenue(ticker, show_plot):
     ticker = Ticker(ticker=ticker)
     ticker.plot_digrin_cost_of_revenue(show_plot=show_plot)
     assert True
+
+
+@pytest.mark.parametrize(
+    "input_date, expected_output",
+    [
+        # Test standard formats
+        ("Dec. 31, 2023", "2023-12-31"),
+        ("Jan. 1, 2024", "2024-01-01"),
+        ("Feb. 15, 2022", "2022-02-15"),
+        ("March 31, 2023", "2023-03-31"),
+        ("Apr. 30, 2024", "2024-04-30"),
+        ("May 15, 2023", "2023-05-15"),
+        ("June 30, 2024", "2024-06-30"),
+        ("Jul. 4, 2023", "2023-07-04"),
+        ("Aug. 25, 2024", "2024-08-25"),
+        ("Sept. 30, 2023", "2023-09-30"),
+        ("Oct. 15, 2024", "2024-10-15"),
+        ("Nov. 30, 2023", "2023-11-30"),
+        # Test without periods
+        ("Dec 31, 2023", "2023-12-31"),
+        ("Jan 1, 2024", "2024-01-01"),
+        ("March 15, 2022", "2022-03-15"),
+        # Test single digit days
+        ("Dec. 1, 2023", "2023-12-01"),
+        ("Jan. 5, 2024", "2024-01-05"),
+        ("Feb. 9, 2022", "2022-02-09"),
+        # Test alternative month abbreviations
+        ("Mar. 15, 2023", "2023-03-15"),
+        ("Sep. 22, 2024", "2024-09-22"),
+        # Test edge cases for days
+        ("Jan. 01, 2023", "2023-01-01"),
+        ("Dec. 09, 2024", "2024-12-09"),
+    ],
+)
+def test_human_date_format_to_raw(input_date, expected_output):
+    """Test the _human_date_format_to_raw function with various date formats"""
+    ticker = Ticker(ticker="AAPL")
+    result = ticker._human_date_format_to_raw(input_date)
+    assert result == expected_output
+
+
+@pytest.mark.parametrize(
+    "invalid_input",
+    [
+        "Invalid date",
+        "Dec 31",  # Missing year
+        "2023-12-31",  # Wrong format
+        "13. 31, 2023",  # Invalid month
+        "Unknown 15, 2023",  # Unknown month name
+        "",  # Empty string
+    ],
+)
+def test_human_date_format_to_raw_invalid_inputs(invalid_input):
+    """Test the _human_date_format_to_raw function with invalid inputs"""
+    ticker = Ticker(ticker="AAPL")
+    with pytest.raises((ValueError, KeyError, IndexError)):
+        ticker._human_date_format_to_raw(invalid_input)

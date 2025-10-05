@@ -544,10 +544,17 @@ class DigrinInterface(TickerBase):
     def _human_date_format_to_raw(self, entry: str) -> str:
         """
         Convert human readable date format (e.g. "Dec. 31, 2023") to raw format (e.g. 2023-12-31)
+
+        Handles various input formats:
+        - "Dec. 31, 2023" -> "2023-12-31"
+        - "Dec 31, 2023" -> "2023-12-31"
+        - "March 1, 2023" -> "2023-03-01"
+        - Single digit days are zero-padded
         """
         conversion_dict = {
             "Jan": "01",
             "Feb": "02",
+            "Mar": "03",
             "March": "03",
             "Apr": "04",
             "May": "05",
@@ -555,16 +562,39 @@ class DigrinInterface(TickerBase):
             "Jul": "07",
             "Aug": "08",
             "Sept": "09",
+            "Sep": "09",
             "Oct": "10",
             "Nov": "11",
             "Dec": "12",
         }
 
-        month, day, year = entry.split(" ")
-        month = month.replace(".", "")
-        month = conversion_dict[month]
-        day = day.replace(",", "")
-        return f"{year}-{month}-{day}"
+        # Split the date string
+        parts = entry.split(" ")
+        if len(parts) != 3:
+            raise ValueError(
+                f"Invalid date format: {entry}. Expected format: 'Month Day, Year'"
+            )
+
+        month_str, day_str, year_str = parts
+
+        # Clean up month (remove periods)
+        month_str = month_str.replace(".", "").strip()
+
+        # Clean up day (remove commas)
+        day_str = day_str.replace(",", "").strip()
+
+        # Clean up year (should already be clean)
+        year_str = year_str.strip()
+
+        # Convert month to number
+        if month_str not in conversion_dict:
+            raise ValueError(f"Unknown month: {month_str}")
+        month = conversion_dict[month_str]
+
+        # Zero-pad day if needed
+        day = day_str.zfill(2)
+
+        return f"{year_str}-{month}-{day}"
 
     def plot_digrin_free_cash_flow(
         self, show_plot: bool = True
