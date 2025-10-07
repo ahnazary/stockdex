@@ -33,3 +33,6 @@ html_theme = "furo"
 
 pygments_style = "sphinx"
 pygments_dark_style = "monokai"
+
+html_static_path = ["_static"]
+html_css_files = ["custom.css"]
