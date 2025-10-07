@@ -1,7 +1,6 @@
 Digrin Plots
 ===============
 
-
 Number of Shares Outstanding Chart
 -----------------------------------
 

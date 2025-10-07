@@ -10,6 +10,8 @@ Data extracted from Finviz includes historical data on different criteria and in
 Insider Trading Data
 ~~~~~~~~~~~~~~~~~~~~
 
+Retrieves insider trading activity data including transaction details, relationships, and SEC form filings. Returns a **DataFrame**.
+
 .. code-block:: python
 
     from stockdex import Ticker 
@@ -36,6 +38,8 @@ Results:
 
 Earnings Revisions Data
 ~~~~~~~~~~~~~~~~~~~~~~~
+
+Retrieves analyst earnings estimate revisions data including revision counts and estimate changes over time. Returns a **DataFrame**.
 
 .. code-block:: python
 
@@ -64,6 +68,8 @@ Results:
 Earnings Annual Data
 ~~~~~~~~~~~~~~~~~~~~
 
+Retrieves annual earnings data including actual vs. estimated EPS, sales figures, and analyst counts. Returns a **DataFrame**.
+
 .. code-block:: python
 
     from stockdex import Ticker 
@@ -90,6 +96,8 @@ results:
 
 Earnings Data
 ~~~~~~~~~~~~~
+
+Retrieves quarterly earnings data including actual vs. estimated EPS and sales figures with analyst coverage information. Returns a **DataFrame**.
 
 .. code-block:: python
 
@@ -118,6 +126,8 @@ results:
 Overall Dividend
 ~~~~~~~~~~~~~~~~
 
+Retrieves overall dividend information including ex-date, estimates, and trailing twelve months data. Returns a **DataFrame**.
+
 .. code-block:: python
 
     from stockdex import Ticker 
@@ -136,6 +146,8 @@ results:
 
 Dividend Date
 ~~~~~~~~~~~~~
+
+Retrieves historical dividend payment dates and amounts including ordinary and special dividends. Returns a **DataFrame**.
 
 .. code-block:: python
 
@@ -164,6 +176,8 @@ results:
 Dividends Annual Data
 ~~~~~~~~~~~~~~~~~~~~~
 
+Retrieves annual dividend data including amounts, yields, payout ratios, and estimate indicators. Returns a **DataFrame**.
+
 .. code-block:: python
 
     from stockdex import Ticker 
@@ -191,7 +205,7 @@ results:
 Revenue by Products and Services
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The output is a dictionary where each key is a product or service name, and the value is another dictionary containing two lists: ``fiscal_year`` and ``value``. The ``fiscal_year`` list contains the fiscal years for which revenue data is available, and the ``value`` list contains the corresponding revenue figures.
+Retrieves revenue breakdown by different products and services over fiscal years. Returns a **dictionary** where each key is a product or service name, and the value is another dictionary containing two lists: ``fiscal_year`` and ``value``.
 
 .. note::
 
@@ -277,6 +291,9 @@ iPhone
 
 Revenue by Segment
 ~~~~~~~~~~~~~~~~~~
+
+Retrieves revenue breakdown by business segments over fiscal years. Returns a **dictionary** where each key is a segment name, and the value is another dictionary containing two lists: ``fiscal_year`` and ``value``.
+
 .. code-block:: python
 
     from stockdex import Ticker 
@@ -356,6 +373,8 @@ Rest of Asia Pacific
 Revenue by Regions
 ~~~~~~~~~~~~~~~~~~
 
+Retrieves revenue breakdown by geographic regions over fiscal years. Returns a **dictionary** where each key is a region name, and the value is another dictionary containing two lists: ``fiscal_year`` and ``value``.
+
 .. code-block:: python
 
     from stockdex import Ticker 
@@ -412,10 +431,12 @@ United States
 Price Reaction to Earnings Report
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-from stockdex import Ticker 
+... code-block:: python
 
-ticker = Ticker(ticker="PLTR")
-result = ticker.finviz_price_reaction_to_earnings_report()
+    from stockdex import Ticker 
+
+    ticker = Ticker(ticker="PLTR")
+    result = ticker.finviz_price_reaction_to_earnings_report()
 
 
 

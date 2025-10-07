@@ -12,4 +12,5 @@ The following plotting functions are documented here:
    :maxdepth: 2
 
    readme_files/plots_and_figures/sankey_charts
+   readme_files/plots_and_figures/digrin_plots
    readme_files/plots_and_figures/building_dash_apps

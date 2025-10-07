@@ -5,6 +5,10 @@ justETF
 For EU ETFS, the ``isin`` and ``security_type`` should be passed to the ``Ticker`` object. The ``isin`` is the International Securities Identification Number of the ETF (e.g ``IE00B4L5Y983``) and the ``security_type`` should be set to ``etf``.
 Below are examples of available methods from JustETF source.
 
+.. important::
+   In each result dataframe, only the first 5 rows of the DataFrame are shown at most to keep the documentation concise. The actual DataFrame returned by each function may contain more rows.
+
+
 General Info
 ~~~~~~~~~~~~
 

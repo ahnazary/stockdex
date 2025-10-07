@@ -1,7 +1,7 @@
 Contributing
 ============
 
-Stockdex is an open-source project, and contributions of **any kind** are welcome and appreciated!  
+Stockdex is an open-source project, and contributions of any kind are welcome and appreciated!  
 Whether you want to report a bug, suggest a new feature, improve documentation, or submit code, every contribution helps.
 
 How to contribute

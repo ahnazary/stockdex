@@ -9,7 +9,7 @@ Macrotrends
 Income Statement
 ----------------
 
-Pass frequency as "annual" or "quarterly"
+Retrieves detailed income statement data including revenue, expenses, and profit metrics. Pass frequency as "annual" or "quarterly". Returns a **DataFrame**.
 
 .. code-block:: python
 
@@ -38,7 +38,7 @@ Pass frequency as "annual" or "quarterly"
 Balance Sheet
 ----------------
 
-Pass frequency as "annual" or "quarterly"
+Retrieves balance sheet data showing assets, liabilities, and equity. Pass frequency as "annual" or "quarterly". Returns a **DataFrame**.
 
 .. code-block:: python
 
@@ -65,6 +65,8 @@ Pass frequency as "annual" or "quarterly"
 
 Cash Flow
 ----------------
+
+Retrieves cash flow statement data showing operating, investing, and financing cash flows. Returns a **DataFrame**.
 
 .. code-block:: python
 
@@ -94,6 +96,8 @@ Cash Flow
 Key Financial Ratios
 ---------------------
 
+Retrieves key financial ratios including liquidity, leverage, and profitability metrics over multiple periods. Returns a **DataFrame**.
+
 .. code-block:: python
 
     from stockdex import Ticker 
@@ -122,6 +126,8 @@ Key Financial Ratios
 Operating Margin
 ---------------------
 
+Retrieves operating margin data showing the percentage of revenue remaining after operating expenses. Returns a **DataFrame**.
+
 .. code-block:: python
 
     from stockdex import Ticker 
@@ -149,6 +155,8 @@ Operating Margin
 Gross Margin
 ---------------------
 
+Retrieves gross margin data showing the percentage of revenue remaining after cost of goods sold. Returns a **DataFrame**.
+
 .. code-block:: python
 
     from stockdex import Ticker 
@@ -172,6 +180,8 @@ Gross Margin
 
 EBITDA Margin
 ---------------------
+
+Retrieves EBITDA margin data showing earnings before interest, taxes, depreciation, and amortization as a percentage of revenue. Returns a **DataFrame**.
 
 .. code-block:: python
         
@@ -198,6 +208,8 @@ EBITDA Margin
 Pre-Tax Margin
 ---------------------
 
+Retrieves pre-tax margin data showing the percentage of revenue remaining before taxes. Returns a **DataFrame**.
+
 .. code-block:: python
 
     from stockdex import Ticker 
@@ -222,6 +234,8 @@ Pre-Tax Margin
 
 Net Margin
 ---------------------
+
+Retrieves net margin data showing the percentage of revenue remaining as net income after all expenses. Returns a **DataFrame**.
 
 .. code-block:: python
         
@@ -248,7 +262,7 @@ Net Margin
 Revenue
 ---------------------
 
-Pass frequency as "annual" or "quarterly"
+Retrieves company revenue data over time. Pass frequency as "annual" or "quarterly". Returns a **DataFrame**.
 
 .. code-block:: python
 

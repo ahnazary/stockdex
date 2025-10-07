@@ -22,16 +22,18 @@ Stockdex is a Python package that provides a simple interface to get financial d
 Advantages of ``Stockdex`` over similar packages
 ------------------------------------------------
 
-- **Various data sources**: ``Stockdex`` provides data from Yahoo Finance and other sources like Digrin, Finviz, Macrotrends, and JustETF (for EU ETFs).
+- **Various data sources**: Data from various sources like Yahoo Finance, Digrin, Finviz, Macrotrends and JustETF (for EU ETFs).
 
-- **Historical data**: ``Stockdex`` provides a wide time range of data.  
+- **Historical data**: A wide time range of historical data is available.
   For example, Digrin and Macrotrends sources provide historical data over many years.
 
-- **Numerous data categories**: ``Stockdex`` provides financial criteria including financial statements, earnings, dividends, stock splits, list of key executives, major shareholders, and more.
+- **Numerous data categories**: Various financial criteria including financial statements, earnings, dividends, stock splits, list of key executives, major shareholders, and more are available.
 
-- **Plotting capabilities (new feature)**:  
-  ``Stockdex`` provides plotting of financial data using bar, line, and Sankey plots.  
+- **Plotting capabilities**:  
+  Plotting financial data using bar, line, and Sankey plots is supported to some extent.
   Multiple plots can be combined into an interactive Dash app.
+
+
 
 Installation
 ------------
@@ -42,18 +44,14 @@ Install the package using pip:
 
    pip install stockdex -U
 
-Documentation
--------------
 
-## Installation
+Walkthrough
+----------------
 
-Install the package using pip:
+This documentation provides a walkthrough of the main features of the package. 
 
-```bash
-pip install stockdex -U
-```
+You can check out :doc:`data_sources` section for details on available data sources and their functionalities with examples.
 
-Usage
------
+You can also check out :doc:`plots_and_figures` section for details on plotting functions with examples.
 
-Details of available data sources and their usage can be found in :doc:`data_sources`. Also documentation of Plotly plotting functions can be found in :doc:`plots_and_figures`.
+

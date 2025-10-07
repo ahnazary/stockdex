@@ -2,12 +2,17 @@ Yahoo Finance (Website)
 =====================
 
 
+This section provides examples of available methods from Yahoo Finance (Website) source. All the data is extracted from the web pages of Yahoo Finance through web scraping.
+
+.. important::
+   In each result dataframe, only the first 5 rows of the DataFrame are shown at most to keep the documentation concise. The actual DataFrame returned by each function may contain more rows.
+
+
 
 Income Statement
 ----------------
 
-**Results:**
-
+Retrieves the company's income statement data including revenue, expenses, and profit metrics for multiple periods. Returns a **DataFrame**.
 
 .. code-block:: python
 
@@ -37,6 +42,8 @@ Income Statement
 Balance Sheet
 -----------------
 
+Retrieves the company's balance sheet data showing assets, liabilities, and equity for multiple reporting periods. Returns a **DataFrame**.
+
 .. code-block:: python
 
     from stockdex import Ticker
@@ -62,6 +69,8 @@ Balance Sheet
 
 Cash Flow Statement
 --------------------
+
+Retrieves the company's cash flow statement data showing operating, investing, and financing cash flows for multiple periods. Returns a **DataFrame**.
 
 .. code-block:: python
 
@@ -91,7 +100,7 @@ Cash Flow Statement
 Options (Calls)
 -----------------------
 
-Show available call options for the ticker.
+Retrieves available call options data for the ticker including contract details, prices, and trading information. Returns a **DataFrame**.
 
 .. code-block:: python
 
@@ -121,7 +130,7 @@ Show available call options for the ticker.
 Options (Puts)
 -----------------------
 
-Show available put options for the ticker.
+Retrieves available put options data for the ticker including contract details, prices, and trading information. Returns a **DataFrame**.
 
 .. code-block:: python
 
@@ -149,6 +158,8 @@ Show available put options for the ticker.
 Description
 -----------
 
+Retrieves the company's business description and overview. Returns a **string**.
+
 .. code-block:: python
 
     from stockdex import Ticker
@@ -165,6 +176,8 @@ Description
 
 Key Executives
 ----------------
+
+Retrieves information about the company's key executives including names, titles, compensation, and birth years. Returns a **DataFrame**.
 
 .. code-block:: python
 
@@ -195,6 +208,8 @@ from stockdex import Ticker
 Corporate Governance
 --------------------
 
+Retrieves the company's corporate governance score and related information. Returns a **string**.
+
 .. code-block:: python
 
     from stockdex import Ticker
@@ -210,6 +225,10 @@ Corporate Governance
 
 Major Holders
 ----------------
+
+Retrieves information about major shareholders including percentage of shares held by insiders and institutions. Returns a **DataFrame**.
+
+.. code-block:: python
 
     from stockdex import Ticker
 
@@ -232,6 +251,8 @@ Major Holders
 
 Top Institutional Holders
 --------------------------
+
+Retrieves detailed information about the largest institutional shareholders including holdings, dates, and values. Returns a **DataFrame**.
 
 .. code-block:: python
 
@@ -259,6 +280,8 @@ Top Institutional Holders
 Top Mutual Fund Holders
 --------------------------
 
+Retrieves detailed information about the largest mutual fund shareholders including holdings and ownership percentages. Returns a **DataFrame**.
+
 .. code-block:: python
 
     from stockdex import Ticker
@@ -283,6 +306,8 @@ Top Mutual Fund Holders
 
 Summary Information
 -------------------
+
+Retrieves basic market data and summary statistics for the stock including market state and price information. Returns a **DataFrame**.
 
 .. code-block:: python
 
@@ -312,6 +337,8 @@ Summary Information
 Valuation Measures
 -------------------
 
+Retrieves key valuation metrics including market cap, enterprise value, and various financial ratios over time. Returns a **DataFrame**.
+
 .. code-block:: python
 
     from stockdex import Ticker
@@ -340,6 +367,8 @@ Valuation Measures
 Financial Highlights
 --------------------
 
+Retrieves key financial metrics and ratios including profit margins, returns, and fiscal year information. Returns a **DataFrame**.
+
 .. code-block:: python
 
     from stockdex import Ticker
@@ -365,6 +394,8 @@ Financial Highlights
 
 Trading Information
 --------------------
+
+Retrieves trading-related metrics including beta, 52-week highs/lows, and performance comparisons. Returns a **DataFrame**.
 
 .. code-block:: python
 
@@ -392,6 +423,8 @@ Trading Information
 Full Name
 ---------
 
+Retrieves the company's full corporate name. Returns a **string**.
+
 .. code-block:: python
         
     from stockdex import Ticker
@@ -409,6 +442,8 @@ Full Name
 
 Earnings Estimate
 -----------------
+
+Retrieves analyst earnings estimates for current and future quarters/years including high, low, and average estimates. Returns a **DataFrame**.
 
 .. code-block:: python
 
@@ -437,6 +472,8 @@ Earnings Estimate
 Revenue Estimate
 -----------------
 
+Retrieves analyst revenue estimates for current and future quarters/years including high, low, and average estimates. Returns a **DataFrame**.
+
 .. code-block:: python
 
     from stockdex import Ticker
@@ -464,6 +501,8 @@ Revenue Estimate
 Earnings History
 -----------------
 
+Retrieves historical earnings data showing estimated vs. actual earnings and surprise percentages for past quarters. Returns a **DataFrame**.
+
 .. code-block:: python
 
     from stockdex import Ticker
@@ -488,6 +527,8 @@ Earnings History
 
 EPS Trend
 ---------
+
+Retrieves trends in earnings per share estimates showing how analyst expectations have changed over time. Returns a **DataFrame**.
 
 .. code-block:: python
 
@@ -517,6 +558,8 @@ EPS Trend
 EPS Revisions
 -------------
 
+Retrieves information about recent analyst earnings per share estimate revisions showing upward and downward changes. Returns a **DataFrame**.
+
 .. code-block:: python
 
     from stockdex import Ticker
@@ -541,6 +584,8 @@ EPS Revisions
 
 Growth Estimates
 ----------------
+
+Retrieves analyst growth estimates for the company compared to market benchmarks like the S&P 500. Returns a **DataFrame**.
 
 .. code-block:: python
 
