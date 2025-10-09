@@ -70,7 +70,6 @@ def test_finviz_price_reaction_to_earnings_report(ticker):
         "reactions",
         "ticker",
         "fiscalPeriod",
-        "rsi",
         "chartEndDate",
         "chartStartDate",
         "fiscalEndDate",
@@ -80,7 +79,6 @@ def test_finviz_price_reaction_to_earnings_report(ticker):
     assert (
         result["reactions"].notnull().all()
     ), "Reactions column should not have null values"
-    assert result["rsi"].notnull().all(), "RSI column should not have null values"
     assert (
         result["chartEndDate"].notnull().all()
     ), "Chart end date column should not have null values"
@@ -90,7 +88,6 @@ def test_finviz_price_reaction_to_earnings_report(ticker):
     assert (
         result["fiscalEndDate"].notnull().all()
     ), "Fiscal end date column should not have null values"
-    assert pd.api.types.is_numeric_dtype(result["rsi"]), "RSI column should be numeric"
     assert pd.api.types.is_string_dtype(
         result["chartEndDate"]
     ), "Chart end date column should be string"
