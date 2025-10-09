@@ -87,7 +87,7 @@ class MacrotrendsInterface(TickerBase):
 
     @lru_cache(maxsize=None)
     def macrotrends_income_statement(
-        self, frequency: Literal["quarterly", "annual"]
+        self, frequency: Literal["quarterly", "annual"] = "annual"
     ) -> pd.DataFrame:
         """
         Retrieve the income statement for the given ticker.
@@ -118,7 +118,7 @@ class MacrotrendsInterface(TickerBase):
 
     @lru_cache(maxsize=None)
     def macrotrends_balance_sheet(
-        self, frequency: Literal["quarterly", "annual"]
+        self, frequency: Literal["quarterly", "annual"] = "annual"
     ) -> pd.DataFrame:
         """
         Retrieve the balance sheet for the given ticker.

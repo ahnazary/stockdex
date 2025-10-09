@@ -63,7 +63,8 @@ class JustETF(TickerBase):
 
         soup = BeautifulSoup(response.text, "html.parser")
 
-        wkn = soup.find("span", {"id": "etf-second-id"}).text
+        # <span class="d-inline-block" id="etf_identifier_1">A0RPWH</span>
+        wkn = soup.find("span", {"id": "etf_identifier_1"}).text
 
         return wkn
 
@@ -295,6 +296,10 @@ class JustETF(TickerBase):
         x_path = '//*[@id="profile-tabs"]/ul/li[1]/a'
         soup = self.selenium_interface.just_etf_get_html_after_click(url, x_path)
 
+        # write into file
+        with open("justetf.html", "w", encoding="utf-8") as file:
+            file.write(str(soup))
+
         # <div class="col-xs-7">
         div_price = soup.find("div", {"class": "col-xs-7"})
         price_currency = div_price.find_all("span")[0].text
@@ -319,14 +324,12 @@ class JustETF(TickerBase):
         df["daily_change_percent"] = [daily_change_percent]
 
         # buy | sell
-        div_buy_sell = soup.find("div", {"class": "col-xs-12 col-md-6"})
-        buy_sell = div_buy_sell.find_all("span")[1].text
-
+        buy_sell = soup.find("div", {"class": "d-inline-flex gap-1"}).text.split()
+        buy_sell = " | ".join(buy_sell)
         df["buy|sell"] = [buy_sell]
 
         # spread
-        sread = div_buy_sell.find_all("span")[3].text
-
-        df["spread"] = [sread]
+        spread = soup.find("span", {"class": "val2"}).text
+        df["spread"] = [spread]
 
         return df
