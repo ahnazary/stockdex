@@ -10,7 +10,6 @@ Below is an example of how to use these functions to create a dashboard with mul
    from stockdex.ticker import Ticker
    from stockdex.lib import plot_multiple_categories
 
-   # choose the stock
    ticker = Ticker(ticker="MSFT")
 
    # Here you will choose arbitrary figures to plot. In this example we will plot data extracted from digrin website
@@ -35,9 +34,19 @@ The output of the above code will be a dashboard available at ``http://127.0.0.1
 The dashboard will have multiple plots showing the data extracted from the Digrin website.  
 Below is the output of the dashboard:
 
-** Result for MSFT stock: **
+**Results Example: MSFT dashboard**
 
-.. image:: ../../images/dashboard_multiple_plots_msft.png
-   :alt: Dashboard with multiple plots for MSFT stock
+.. image:: ../../images/plot_multiple_categories_msft_1.jpg
+   :alt: Dashboard for MSFT stock - part 1
+   :align: center
+   :width: 80%
+
+.. image:: ../../images/plot_multiple_categories_msft_2.jpg
+   :alt: Dashboard for MSFT stock - part 2
+   :align: center
+   :width: 80%
+
+.. image:: ../../images/plot_multiple_categories_msft_3.jpg
+   :alt: Dashboard for MSFT stock - part 3
    :align: center
    :width: 80%

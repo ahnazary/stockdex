@@ -9,9 +9,10 @@ Each data source has functions with the `plot_<data_srource>_<function_name>` pa
 The following plotting functions are documented here:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    readme_files/plots_and_figures/macrotrends_plots
-   readme_files/plots_and_figures/sankey_charts
+   readme_files/plots_and_figures/yahoo_api_plots
    readme_files/plots_and_figures/digrin_plots
+   readme_files/plots_and_figures/sankey_charts
    readme_files/plots_and_figures/building_dash_apps

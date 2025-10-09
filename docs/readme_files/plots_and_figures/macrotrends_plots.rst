@@ -1,6 +1,8 @@
 Macrotrends Plots
 =================
 
+This section contains interactive plotting functions that visualize financial data scraped from Macrotrends.com. These plots provide comprehensive views of income statements, balance sheets, and cash flow statements with customizable parameters for frequency, grouping, and field selection.
+
 Income Statement Chart
 ------------------------
 
@@ -9,10 +11,12 @@ Income Statement Chart
 Creates an interactive plot of income statement data for a given ticker from Macrotrends.
 
 **Input Parameters:**
-    - ``fields_to_include`` (list): Financial fields to include in the plot (default: ["Revenue", "Income After Taxes"])
-    - ``frequency`` (str): Data frequency - "annual" or "quarterly" (default: "annual")  
-    - ``group_by`` (str): Grouping method - "field" or "timeframe" (default: "timeframe")
-    - ``show_plot`` (bool): Whether to display the plot (default: True)
+    - ``fields_to_include`` (*list*): Financial fields to include in the plot. Defaults to:
+        - `Revenue` 
+        - `Income After Taxes`
+    - ``frequency`` (*str*): Data frequency - `annual` or `quarterly` (default: `annual`)  
+    - ``group_by`` (*str*): Grouping method - `field` or `timeframe` (default: `timeframe`)
+    - ``show_plot`` (*bool*): Whether to display the plot (default: `True`)
 
 **Returns:** plotly express line or bar chart object
 
@@ -72,10 +76,13 @@ Balance Sheet Chart
 Creates an interactive plot of balance sheet data for a given ticker from Macrotrends.
 
 **Input Parameters:**
-    - ``fields_to_include`` (list): Financial fields to include in the plot (default: ["Cash On Hand", "Total Assets", "Total Liabilities"])
-    - ``frequency`` (str): Data frequency - "annual" or "quarterly" (default: "annual")
-    - ``group_by`` (str): Grouping method - "field" or "timeframe" (default: "timeframe")  
-    - ``show_plot`` (bool): Whether to display the plot (default: True)
+    - ``fields_to_include`` (*list*): Financial fields to include in the plot. Defaults to:
+        - `Cash On Hand`
+        - `Total Assets` 
+        - `Total Liabilities`
+    - ``frequency`` (*str*): Data frequency - `annual` or `quarterly` (default: `annual`)
+    - ``group_by`` (*str*): Grouping method - `field` or `timeframe` (default: `timeframe`)  
+    - ``show_plot`` (*bool*): Whether to display the plot (default: `True`)
 
 **Returns:** plotly express line or bar chart object
 
@@ -136,10 +143,13 @@ Cash Flow Chart
 Creates an interactive plot of cash flow statement data for a given ticker from Macrotrends.
 
 **Input Parameters:**
-    - ``fields_to_include`` (list): Financial fields to include in the plot (default: ["Net Income/Loss", "Common Stock Dividends Paid", "Net Long-Term Debt"])
-    - ``frequency`` (str): Data frequency - "annual" or "quarterly" (default: "annual")
-    - ``group_by`` (str): Grouping method - "field" or "timeframe" (default: "timeframe")
-    - ``show_plot`` (bool): Whether to display the plot (default: True)
+    - ``fields_to_include`` (*list*): Financial fields to include in the plot. Defaults to:
+        - `Net Income/Loss`
+        - `Common Stock Dividends Paid` 
+        - `Net Long-Term Debt`
+    - ``frequency`` (*str*): Data frequency - `annual` or `quarterly` (default: `annual`)
+    - ``group_by`` (*str*): Grouping method - `field` or `timeframe` (default: `timeframe`)
+    - ``show_plot`` (*bool*): Whether to display the plot (default: `True`)
 
 **Returns:** plotly express line or bar chart object
 

@@ -1,5 +1,5 @@
 Yahoo Finance (Website)
-=====================
+=======================
 
 
 This section provides examples of available methods from Yahoo Finance (Website) source. All the data is extracted from the web pages of Yahoo Finance through web scraping.
