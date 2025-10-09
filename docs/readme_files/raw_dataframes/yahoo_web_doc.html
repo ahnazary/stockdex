@@ -1,0 +1,1504 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Finviz" href="finviz_doc.html"><link rel="prev" title="Yahoo Finance (API)" href="yahoo_api_doc.html">
+
+    <!-- Generated with Sphinx 7.2.2 and Furo 2025.09.25 -->
+        <title>Yahoo Finance (Website) - Stockdex documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=3629b78e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">Stockdex  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  <span class="sidebar-brand-text">Stockdex  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../../data_sources.html">Data Sources</a><input aria-label="Toggle navigation of Data Sources" checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="yahoo_api_doc.html">Yahoo Finance (API)</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Yahoo Finance (Website)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="finviz_doc.html">Finviz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="digrin_doc.html">Digrin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="macrotrends_doc.html">Macrotrends</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jsutetf_doc.html">justETF</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../plots_and_figures.html">Plots and figures</a><input aria-label="Toggle navigation of Plots and figures" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../plots_and_figures/macrotrends_plots.html">Macrotrends Plots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plots_and_figures/yahoo_api_plots.html">Yahoo API Plots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plots_and_figures/digrin_plots.html">Digrin Plots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plots_and_figures/sankey_charts.html">Sankey charts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plots_and_figures/building_dash_apps.html">Building dashboards with multiple plots</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="../../_sources/readme_files/raw_dataframes/yahoo_web_doc.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="yahoo-finance-website">
+<h1>Yahoo Finance (Website)<a class="headerlink" href="#yahoo-finance-website" title="Link to this heading"></a></h1>
+<p>This section provides examples of available methods from Yahoo Finance (Website) source. All the data is extracted from the web pages of Yahoo Finance through web scraping.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>In each result dataframe, only the first 5 rows of the DataFrame are shown at most to keep the documentation concise. The actual DataFrame returned by each function may contain more rows.</p>
+</div>
+<section id="income-statement">
+<h2>Income Statement<a class="headerlink" href="#income-statement" title="Link to this heading"></a></h2>
+<p>Retrieves the company’s income statement data including revenue, expenses, and profit metrics for multiple periods. Returns a <strong>DataFrame</strong>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;NVDA&quot;</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_web_income_stmt</span>
+</pre></div>
+</div>
+<p><strong>Results:</strong></p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>TTM</p></th>
+<th class="head"><p>1/31/2025</p></th>
+<th class="head"><p>1/31/2024</p></th>
+<th class="head"><p>1/31/2023</p></th>
+<th class="head"><p>1/31/2022</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Total Revenue</p></td>
+<td><p>165,218,000</p></td>
+<td><p>130,497,000</p></td>
+<td><p>60,922,000</p></td>
+<td><p>26,974,000</p></td>
+<td><p>26,914,000</p></td>
+</tr>
+<tr class="row-odd"><td><p>Cost of Revenue</p></td>
+<td><p>49,818,000</p></td>
+<td><p>32,639,000</p></td>
+<td><p>16,621,000</p></td>
+<td><p>11,618,000</p></td>
+<td><p>9,439,000</p></td>
+</tr>
+<tr class="row-even"><td><p>Gross Profit</p></td>
+<td><p>115,400,000</p></td>
+<td><p>97,858,000</p></td>
+<td><p>44,301,000</p></td>
+<td><p>15,356,000</p></td>
+<td><p>17,475,000</p></td>
+</tr>
+<tr class="row-odd"><td><p>Operating Expense</p></td>
+<td><p>19,420,000</p></td>
+<td><p>16,405,000</p></td>
+<td><p>11,329,000</p></td>
+<td><p>9,779,000</p></td>
+<td><p>7,434,000</p></td>
+</tr>
+<tr class="row-even"><td><p>Operating Income</p></td>
+<td><p>95,980,000</p></td>
+<td><p>81,453,000</p></td>
+<td><p>32,972,000</p></td>
+<td><p>5,577,000</p></td>
+<td><p>10,041,000</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="balance-sheet">
+<h2>Balance Sheet<a class="headerlink" href="#balance-sheet" title="Link to this heading"></a></h2>
+<p>Retrieves the company’s balance sheet data showing assets, liabilities, and equity for multiple reporting periods. Returns a <strong>DataFrame</strong>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;MSFT&quot;</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_web_balance_sheet</span>
+</pre></div>
+</div>
+<p><strong>Results:</strong></p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>6/30/2025</p></th>
+<th class="head"><p>6/30/2024</p></th>
+<th class="head"><p>6/30/2023</p></th>
+<th class="head"><p>6/30/2022</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Total Assets</p></td>
+<td><p>619,003,000</p></td>
+<td><p>512,163,000</p></td>
+<td><p>411,976,000</p></td>
+<td><p>364,840,000</p></td>
+</tr>
+<tr class="row-odd"><td><p>Total Liabilities Net Minority Interest</p></td>
+<td><p>275,524,000</p></td>
+<td><p>243,686,000</p></td>
+<td><p>205,753,000</p></td>
+<td><p>198,298,000</p></td>
+</tr>
+<tr class="row-even"><td><p>Total Equity Gross Minority Interest</p></td>
+<td><p>343,479,000</p></td>
+<td><p>268,477,000</p></td>
+<td><p>206,223,000</p></td>
+<td><p>166,542,000</p></td>
+</tr>
+<tr class="row-odd"><td><p>Total Capitalization</p></td>
+<td><p>383,631,000</p></td>
+<td><p>311,165,000</p></td>
+<td><p>248,213,000</p></td>
+<td><p>213,574,000</p></td>
+</tr>
+<tr class="row-even"><td><p>Common Stock Equity</p></td>
+<td><p>343,479,000</p></td>
+<td><p>268,477,000</p></td>
+<td><p>206,223,000</p></td>
+<td><p>166,542,000</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="cash-flow-statement">
+<h2>Cash Flow Statement<a class="headerlink" href="#cash-flow-statement" title="Link to this heading"></a></h2>
+<p>Retrieves the company’s cash flow statement data showing operating, investing, and financing cash flows for multiple periods. Returns a <strong>DataFrame</strong>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_web_cashflow</span>
+</pre></div>
+</div>
+<p><strong>Results:</strong></p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>TTM</p></th>
+<th class="head"><p>9/30/2024</p></th>
+<th class="head"><p>9/30/2023</p></th>
+<th class="head"><p>9/30/2022</p></th>
+<th class="head"><p>9/30/2021</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Operating Cash Flow</p></td>
+<td><p>108,565,000</p></td>
+<td><p>118,254,000</p></td>
+<td><p>110,543,000</p></td>
+<td><p>122,151,000</p></td>
+<td><p>104,038,000</p></td>
+</tr>
+<tr class="row-odd"><td><p>Investing Cash Flow</p></td>
+<td><p>19,227,000</p></td>
+<td><p>2,935,000</p></td>
+<td><p>3,705,000</p></td>
+<td><p>-22,354,000</p></td>
+<td><p>-14,545,000</p></td>
+</tr>
+<tr class="row-even"><td><p>Financing Cash Flow</p></td>
+<td><p>-118,158,000</p></td>
+<td><p>-121,983,000</p></td>
+<td><p>-108,488,000</p></td>
+<td><p>-110,749,000</p></td>
+<td><p>-93,353,000</p></td>
+</tr>
+<tr class="row-odd"><td><p>End Cash Position</p></td>
+<td><p>36,269,000</p></td>
+<td><p>29,943,000</p></td>
+<td><p>30,737,000</p></td>
+<td><p>24,977,000</p></td>
+<td><p>35,929,000</p></td>
+</tr>
+<tr class="row-even"><td><p>Income Tax Paid Supplemental Data</p></td>
+<td><p>44,204,000</p></td>
+<td><p>26,102,000</p></td>
+<td><p>18,679,000</p></td>
+<td><p>19,573,000</p></td>
+<td><p>25,385,000</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="options-calls">
+<h2>Options (Calls)<a class="headerlink" href="#options-calls" title="Link to this heading"></a></h2>
+<p>Retrieves available call options data for the ticker including contract details, prices, and trading information. Returns a <strong>DataFrame</strong>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;MSFT&quot;</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_web_calls</span>
+</pre></div>
+</div>
+<p><strong>Results:</strong></p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>Contract Name</p></th>
+<th class="head"><p>Last Trade Date (EDT)</p></th>
+<th class="head"><p>Strike</p></th>
+<th class="head"><p>Last Price</p></th>
+<th class="head"><p>Bid</p></th>
+<th class="head"><p>Ask</p></th>
+<th class="head"><p>Change</p></th>
+<th class="head"><p>% Change</p></th>
+<th class="head"><p>Volume</p></th>
+<th class="head"><p>Open Interest</p></th>
+<th class="head"><p>Implied Volatility</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>MSFT251010C00270000</p></td>
+<td><p>10/1/2025  1:24 PM</p></td>
+<td><p>270</p></td>
+<td><p>248.96</p></td>
+<td><p>245.8</p></td>
+<td><p>249.35</p></td>
+<td><p>0.46</p></td>
+<td><p>0.19%</p></td>
+<td><p>1</p></td>
+<td><p>3</p></td>
+<td><p>206.45%</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>MSFT251010C00290000</p></td>
+<td><p>9/11/2025  10:10 AM</p></td>
+<td><p>290</p></td>
+<td><p>212.25</p></td>
+<td><p>226.1</p></td>
+<td><p>229.3</p></td>
+<td><p>0</p></td>
+<td><p>0.00%</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>2</p></td>
+<td><p>195.90%</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>MSFT251010C00355000</p></td>
+<td><p>9/25/2025  9:30 AM</p></td>
+<td><p>355</p></td>
+<td><p>153.84</p></td>
+<td><p>161</p></td>
+<td><p>164.45</p></td>
+<td><p>0</p></td>
+<td><p>0.00%</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>7</p></td>
+<td><p>134.38%</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>MSFT251010C00380000</p></td>
+<td><p>10/1/2025  1:24 PM</p></td>
+<td><p>380</p></td>
+<td><p>138.65</p></td>
+<td><p>136.05</p></td>
+<td><p>139.55</p></td>
+<td><p>0</p></td>
+<td><p>0.00%</p></td>
+<td><p>3</p></td>
+<td><p>6</p></td>
+<td><p>115.72%</p></td>
+</tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>MSFT251010C00385000</p></td>
+<td><p>10/2/2025  11:49 AM</p></td>
+<td><p>385</p></td>
+<td><p>128.18</p></td>
+<td><p>130.85</p></td>
+<td><p>134.45</p></td>
+<td><p>0</p></td>
+<td><p>0.00%</p></td>
+<td><p>6</p></td>
+<td><p>5</p></td>
+<td><p>105.08%</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="options-puts">
+<h2>Options (Puts)<a class="headerlink" href="#options-puts" title="Link to this heading"></a></h2>
+<p>Retrieves available put options data for the ticker including contract details, prices, and trading information. Returns a <strong>DataFrame</strong>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;TSLA&quot;</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_web_puts</span>
+</pre></div>
+</div>
+<p><strong>Results:</strong></p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>Contract Name</p></th>
+<th class="head"><p>Last Trade Date (EDT)</p></th>
+<th class="head"><p>Strike</p></th>
+<th class="head"><p>Last Price</p></th>
+<th class="head"><p>Bid</p></th>
+<th class="head"><p>Ask</p></th>
+<th class="head"><p>Change</p></th>
+<th class="head"><p>% Change</p></th>
+<th class="head"><p>Volume</p></th>
+<th class="head"><p>Open Interest</p></th>
+<th class="head"><p>Implied Volatility</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>TSLA251010P00100000</p></td>
+<td><p>10/3/2025  3:54 PM</p></td>
+<td><p>100</p></td>
+<td><p>0.01</p></td>
+<td><p>0</p></td>
+<td><p>0.01</p></td>
+<td><p>0</p></td>
+<td><p>0.00%</p></td>
+<td><p>15</p></td>
+<td><p>371</p></td>
+<td><p>325.00%</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>TSLA251010P00110000</p></td>
+<td><p>9/25/2025  1:21 PM</p></td>
+<td><p>110</p></td>
+<td><p>0.02</p></td>
+<td><p>0</p></td>
+<td><p>0.01</p></td>
+<td><p>0</p></td>
+<td><p>0.00%</p></td>
+<td><p>3</p></td>
+<td><p>17</p></td>
+<td><p>300.00%</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>TSLA251010P00120000</p></td>
+<td><p>10/3/2025  11:12 AM</p></td>
+<td><p>120</p></td>
+<td><p>0.01</p></td>
+<td><p>0</p></td>
+<td><p>0.01</p></td>
+<td><p>-0.03</p></td>
+<td><p>-75.00%</p></td>
+<td><p>2</p></td>
+<td><p>12</p></td>
+<td><p>287.50%</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>TSLA251010P00130000</p></td>
+<td><p>10/2/2025  9:31 AM</p></td>
+<td><p>130</p></td>
+<td><p>0.01</p></td>
+<td><p>0</p></td>
+<td><p>0.01</p></td>
+<td><p>0</p></td>
+<td><p>0.00%</p></td>
+<td><p>3</p></td>
+<td><p>544</p></td>
+<td><p>268.75%</p></td>
+</tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>TSLA251010P00135000</p></td>
+<td><p>10/3/2025  11:12 AM</p></td>
+<td><p>135</p></td>
+<td><p>0.01</p></td>
+<td><p>0</p></td>
+<td><p>0.01</p></td>
+<td><p>0</p></td>
+<td><p>0.00%</p></td>
+<td><p>1</p></td>
+<td><p>61</p></td>
+<td><p>262.50%</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="description">
+<h2>Description<a class="headerlink" href="#description" title="Link to this heading"></a></h2>
+<p>Retrieves the company’s business description and overview. Returns a <strong>string</strong>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;TSLA&quot;</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_web_description</span>
+</pre></div>
+</div>
+<p><strong>Results:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Tesla, Inc. designs, develops, manufactures, leases, and sells electric vehicles, and energy generation and storage systems in the United States, China, and internationally. The company operates in two segments, Automotive; and Energy Generation and Storage. The Automotive segment offers electric vehicles, as well as sells automotive regulatory credits; and non-warranty after-sales vehicle, used vehicles, body shop and parts, supercharging, retail merchandise, and vehicle insurance services. This segment also provides sedans and sport utility vehicles through direct and used vehicle sales, a network of Tesla Superchargers, and in-app upgrades; purchase financing and leasing services; services for electric vehicles through its company-owned service locations and Tesla mobile service technicians; and vehicle limited warranties and extended service plans. The Energy Generation and Storage segment engages in the design, manufacture, installation, sale, and leasing of solar energy generation and energy storage products, and related services to residential, commercial, and industrial customers and utilities through its website, stores, and galleries, as well as through a network of channel partners. This segment also provides services and repairs to its energy product customers, including under warranty; and various financing options to its residential customers. The company was formerly known as Tesla Motors, Inc. and changed its name to Tesla, Inc. in February 2017. Tesla, Inc. was incorporated in 2003 and is headquartered in Austin, Texas.
+</pre></div>
+</div>
+</section>
+<section id="key-executives">
+<h2>Key Executives<a class="headerlink" href="#key-executives" title="Link to this heading"></a></h2>
+<p>Retrieves information about the company’s key executives including names, titles, compensation, and birth years. Returns a <strong>DataFrame</strong>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;TSLA&quot;</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_web_key_executives</span>
+</pre></div>
+</div>
+<p><strong>Results:</strong></p>
+<p>from stockdex import Ticker</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>Name</p></th>
+<th class="head"><p>Title</p></th>
+<th class="head"><p>Pay</p></th>
+<th class="head"><p>Exercised</p></th>
+<th class="head"><p>Year Born</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>Mr. Elon R. Musk</p></td>
+<td><p>Co-Founder, Technoking of Tesla, CEO &amp; Director</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+<td><p>1971</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>Mr. Vaibhav  Taneja</p></td>
+<td><p>Chief Financial Officer</p></td>
+<td><p>306.85k</p></td>
+<td><p>9.65M</p></td>
+<td><p>1978</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>Mr. Xiaotong  Zhu</p></td>
+<td><p>Senior Vice President of APAC &amp; Global Vehicle Manufacturing</p></td>
+<td><p>518.25k</p></td>
+<td><p>–</p></td>
+<td><p>1980</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>Travis  Axelrod</p></td>
+<td><p>Head of Investor Relations</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>Mr. Brandon  Ehrhart</p></td>
+<td><p>General Counsel &amp; Corporate Secretary</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="corporate-governance">
+<h2>Corporate Governance<a class="headerlink" href="#corporate-governance" title="Link to this heading"></a></h2>
+<p>Retrieves the company’s corporate governance score and related information. Returns a <strong>string</strong>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;NVDA&quot;</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_web_corporate_governance</span>
+</pre></div>
+</div>
+<p><strong>Results:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>NVIDIA Corporation’s ISS Governance QualityScore as of October 1, 2025 is 8. The pillar scores are Audit: 5; Board: 10; Shareholder Rights: 8; Compensation: 4.
+</pre></div>
+</div>
+</section>
+<section id="major-holders">
+<h2>Major Holders<a class="headerlink" href="#major-holders" title="Link to this heading"></a></h2>
+<p>Retrieves information about major shareholders including percentage of shares held by insiders and institutions. Returns a <strong>DataFrame</strong>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;NVDA&quot;</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_web_major_holders</span>
+</pre></div>
+</div>
+<p><strong>Results:</strong></p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>0</p></th>
+<th class="head"><p>1</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>4.33%</p></td>
+<td><p>% of Shares Held by All Insider</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>68.96%</p></td>
+<td><p>% of Shares Held by Institutions</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>72.08%</p></td>
+<td><p>% of Float Held by Institutions</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>6,743</p></td>
+<td><p>Number of Institutions Holding Shares</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="top-institutional-holders">
+<h2>Top Institutional Holders<a class="headerlink" href="#top-institutional-holders" title="Link to this heading"></a></h2>
+<p>Retrieves detailed information about the largest institutional shareholders including holdings, dates, and values. Returns a <strong>DataFrame</strong>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_web_top_institutional_holders</span>
+</pre></div>
+</div>
+<p><strong>Results:</strong></p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>Holder</p></th>
+<th class="head"><p>Shares</p></th>
+<th class="head"><p>Date Reported</p></th>
+<th class="head"><p>% Out</p></th>
+<th class="head"><p>Value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>VANGUARD INDEX FUNDS-Vanguard Total Stock Market Index Fund</p></td>
+<td><p>480.28M</p></td>
+<td><p>Jun 30, 2025</p></td>
+<td><p>3.24%</p></td>
+<td><p>123,922,796,029</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>VANGUARD INDEX FUNDS-Vanguard 500 Index Fund</p></td>
+<td><p>423.95M</p></td>
+<td><p>Jun 30, 2025</p></td>
+<td><p>2.86%</p></td>
+<td><p>109,387,814,300</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>Fidelity Concord Street Trust-Fidelity 500 Index Fund</p></td>
+<td><p>189.64M</p></td>
+<td><p>Aug 31, 2025</p></td>
+<td><p>1.28%</p></td>
+<td><p>48,931,770,439</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>SPDR S&amp;P 500 ETF TRUST</p></td>
+<td><p>180.39M</p></td>
+<td><p>Aug 31, 2025</p></td>
+<td><p>1.22%</p></td>
+<td><p>46,543,192,706</p></td>
+</tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>iShares Trust-iShares Core S&amp;P 500 ETF</p></td>
+<td><p>179.73M</p></td>
+<td><p>Aug 31, 2025</p></td>
+<td><p>1.21%</p></td>
+<td><p>46,373,298,412</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="top-mutual-fund-holders">
+<h2>Top Mutual Fund Holders<a class="headerlink" href="#top-mutual-fund-holders" title="Link to this heading"></a></h2>
+<p>Retrieves detailed information about the largest mutual fund shareholders including holdings and ownership percentages. Returns a <strong>DataFrame</strong>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_web_top_mutual_fund_holders</span>
+</pre></div>
+</div>
+<p><strong>Results:</strong></p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>holder</p></th>
+<th class="head"><p>shares</p></th>
+<th class="head"><p>date_reported</p></th>
+<th class="head"><p>percentage</p></th>
+<th class="head"><p>value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>1.97%</p></td>
+<td><p>% of Shares Held by All Insider</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>63.63%</p></td>
+<td><p>% of Shares Held by Institutions</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>64.91%</p></td>
+<td><p>% of Float Held by Institutions</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>6,949</p></td>
+<td><p>Number of Institutions Holding Shares</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="summary-information">
+<h2>Summary Information<a class="headerlink" href="#summary-information" title="Link to this heading"></a></h2>
+<p>Retrieves basic market data and summary statistics for the stock including market state and price information. Returns a <strong>DataFrame</strong>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_web_summary</span>
+</pre></div>
+</div>
+<p><strong>Results:</strong></p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>0</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>marketState</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>postMarketTime</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>regularMarketPreviousClose</p></td>
+<td><p>257.13</p></td>
+</tr>
+<tr class="row-odd"><td><p>regularMarketOpen</p></td>
+<td><p>254.66</p></td>
+</tr>
+<tr class="row-even"><td><p>regularMarketDayRange</p></td>
+<td><p>253.96 - 259.24</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="valuation-measures">
+<h2>Valuation Measures<a class="headerlink" href="#valuation-measures" title="Link to this heading"></a></h2>
+<p>Retrieves key valuation metrics including market cap, enterprise value, and various financial ratios over time. Returns a <strong>DataFrame</strong>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;PLTR&quot;</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_web_valuation_measures</span>
+</pre></div>
+</div>
+<p><strong>Results:</strong></p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>Current</p></th>
+<th class="head"><p>6/30/2025</p></th>
+<th class="head"><p>3/31/2025</p></th>
+<th class="head"><p>12/31/2024</p></th>
+<th class="head"><p>9/30/2024</p></th>
+<th class="head"><p>6/30/2024</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Market Cap</p></td>
+<td><p>443.75B</p></td>
+<td><p>323.33B</p></td>
+<td><p>199.16B</p></td>
+<td><p>176.88B</p></td>
+<td><p>84.44B</p></td>
+<td><p>56.41B</p></td>
+</tr>
+<tr class="row-odd"><td><p>Enterprise Value</p></td>
+<td><p>437.98B</p></td>
+<td><p>318.14B</p></td>
+<td><p>194.16B</p></td>
+<td><p>172.57B</p></td>
+<td><p>80.70B</p></td>
+<td><p>52.76B</p></td>
+</tr>
+<tr class="row-even"><td><p>Trailing P/E</p></td>
+<td><p>623.50</p></td>
+<td><p>592.70</p></td>
+<td><p>444.21</p></td>
+<td><p>378.15</p></td>
+<td><p>218.82</p></td>
+<td><p>211.08</p></td>
+</tr>
+<tr class="row-odd"><td><p>Forward P/E</p></td>
+<td><p>217.39</p></td>
+<td><p>250.00</p></td>
+<td><p>156.25</p></td>
+<td><p>158.73</p></td>
+<td><p>88.50</p></td>
+<td><p>76.92</p></td>
+</tr>
+<tr class="row-even"><td><p>PEG Ratio (5yr expected)</p></td>
+<td><p>3.62</p></td>
+<td><p>4.32</p></td>
+<td><p>3.03</p></td>
+<td><p>3.24</p></td>
+<td><p>1.92</p></td>
+<td><p>1.94</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="financial-highlights">
+<h2>Financial Highlights<a class="headerlink" href="#financial-highlights" title="Link to this heading"></a></h2>
+<p>Retrieves key financial metrics and ratios including profit margins, returns, and fiscal year information. Returns a <strong>DataFrame</strong>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_web_financial_highlights</span>
+</pre></div>
+</div>
+<p><strong>Results:</strong></p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Criteria</p></th>
+<th class="head"><p>Value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Fiscal Year Ends</p></td>
+<td><p>9/28/2024</p></td>
+</tr>
+<tr class="row-odd"><td><p>Most Recent Quarter  (mrq)</p></td>
+<td><p>6/28/2025</p></td>
+</tr>
+<tr class="row-even"><td><p>Profit Margin</p></td>
+<td><p>24.30%</p></td>
+</tr>
+<tr class="row-odd"><td><p>Operating Margin  (ttm)</p></td>
+<td><p>29.99%</p></td>
+</tr>
+<tr class="row-even"><td><p>Return on Assets  (ttm)</p></td>
+<td><p>24.55%</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="trading-information">
+<h2>Trading Information<a class="headerlink" href="#trading-information" title="Link to this heading"></a></h2>
+<p>Retrieves trading-related metrics including beta, 52-week highs/lows, and performance comparisons. Returns a <strong>DataFrame</strong>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_web_trading_information</span>
+</pre></div>
+</div>
+<p><strong>Results:</strong></p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Criteria</p></th>
+<th class="head"><p>Value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Beta (5Y Monthly)</p></td>
+<td><p>1.09</p></td>
+</tr>
+<tr class="row-odd"><td><p>52 Week Change 3</p></td>
+<td><p>16.39%</p></td>
+</tr>
+<tr class="row-even"><td><p>S&amp;P 500 52-Week Change 3</p></td>
+<td><p>17.90%</p></td>
+</tr>
+<tr class="row-odd"><td><p>52 Week High 3</p></td>
+<td><p>260.10</p></td>
+</tr>
+<tr class="row-even"><td><p>52 Week Low 3</p></td>
+<td><p>169.21</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="full-name">
+<h2>Full Name<a class="headerlink" href="#full-name" title="Link to this heading"></a></h2>
+<p>Retrieves the company’s full corporate name. Returns a <strong>string</strong>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;TSLA&quot;</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_web_full_name</span>
+</pre></div>
+</div>
+<p><strong>Results:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Tesla
+</pre></div>
+</div>
+</section>
+<section id="earnings-estimate">
+<h2>Earnings Estimate<a class="headerlink" href="#earnings-estimate" title="Link to this heading"></a></h2>
+<p>Retrieves analyst earnings estimates for current and future quarters/years including high, low, and average estimates. Returns a <strong>DataFrame</strong>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;NVDA&quot;</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_web_earnings_estimate</span>
+</pre></div>
+</div>
+<p><strong>Results:</strong></p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>Currency in USD</p></th>
+<th class="head"><p>Current Qtr. (Oct 2025)</p></th>
+<th class="head"><p>Next Qtr. (Jan 2026)</p></th>
+<th class="head"><p>Current Year (2026)</p></th>
+<th class="head"><p>Next Year (2027)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>No. of Analysts</p></td>
+<td><p>37</p></td>
+<td><p>36</p></td>
+<td><p>49</p></td>
+<td><p>51</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>Avg. Estimate</p></td>
+<td><p>1.24</p></td>
+<td><p>1.41</p></td>
+<td><p>4.5</p></td>
+<td><p>6.35</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>Low Estimate</p></td>
+<td><p>1.14</p></td>
+<td><p>1.24</p></td>
+<td><p>4.14</p></td>
+<td><p>4.91</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>High Estimate</p></td>
+<td><p>1.34</p></td>
+<td><p>1.81</p></td>
+<td><p>5</p></td>
+<td><p>7.5</p></td>
+</tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>Year Ago EPS</p></td>
+<td><p>0.81</p></td>
+<td><p>0.89</p></td>
+<td><p>2.99</p></td>
+<td><p>4.5</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="revenue-estimate">
+<h2>Revenue Estimate<a class="headerlink" href="#revenue-estimate" title="Link to this heading"></a></h2>
+<p>Retrieves analyst revenue estimates for current and future quarters/years including high, low, and average estimates. Returns a <strong>DataFrame</strong>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;NVDA&quot;</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_web_revenue_estimate</span>
+</pre></div>
+</div>
+<p><strong>Results:</strong></p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>Currency in USD</p></th>
+<th class="head"><p>Current Qtr. (Oct 2025)</p></th>
+<th class="head"><p>Next Qtr. (Jan 2026)</p></th>
+<th class="head"><p>Current Year (2026)</p></th>
+<th class="head"><p>Next Year (2027)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>No. of Analysts</p></td>
+<td><p>38</p></td>
+<td><p>37</p></td>
+<td><p>53</p></td>
+<td><p>58</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>Avg. Estimate</p></td>
+<td><p>54.6B</p></td>
+<td><p>61.09B</p></td>
+<td><p>206.45B</p></td>
+<td><p>274.51B</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>Low Estimate</p></td>
+<td><p>53.46B</p></td>
+<td><p>56.53B</p></td>
+<td><p>193.52B</p></td>
+<td><p>226.15B</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>High Estimate</p></td>
+<td><p>58.34B</p></td>
+<td><p>75.31B</p></td>
+<td><p>224.96B</p></td>
+<td><p>325.98B</p></td>
+</tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>Year Ago Sales</p></td>
+<td><p>35.08B</p></td>
+<td><p>39.33B</p></td>
+<td><p>130.5B</p></td>
+<td><p>206.45B</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="earnings-history">
+<h2>Earnings History<a class="headerlink" href="#earnings-history" title="Link to this heading"></a></h2>
+<p>Retrieves historical earnings data showing estimated vs. actual earnings and surprise percentages for past quarters. Returns a <strong>DataFrame</strong>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;NVDA&quot;</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_web_earnings_history</span>
+</pre></div>
+</div>
+<p><strong>Results:</strong></p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>Currency in USD</p></th>
+<th class="head"><p>10/31/2024</p></th>
+<th class="head"><p>1/31/2025</p></th>
+<th class="head"><p>4/30/2025</p></th>
+<th class="head"><p>7/31/2025</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>EPS Est.</p></td>
+<td><p>0.75</p></td>
+<td><p>0.85</p></td>
+<td><p>0.75</p></td>
+<td><p>1.01</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>EPS Actual</p></td>
+<td><p>0.81</p></td>
+<td><p>0.89</p></td>
+<td><p>0.81</p></td>
+<td><p>1.05</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>Difference</p></td>
+<td><p>0.06</p></td>
+<td><p>0.04</p></td>
+<td><p>0.06</p></td>
+<td><p>0.04</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>Surprise %</p></td>
+<td><p>8.52%</p></td>
+<td><p>5.25%</p></td>
+<td><p>8.02%</p></td>
+<td><p>4.05%</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="eps-trend">
+<h2>EPS Trend<a class="headerlink" href="#eps-trend" title="Link to this heading"></a></h2>
+<p>Retrieves trends in earnings per share estimates showing how analyst expectations have changed over time. Returns a <strong>DataFrame</strong>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_web_eps_trend</span>
+</pre></div>
+</div>
+<p><strong>Results:</strong></p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>Currency in USD</p></th>
+<th class="head"><p>Current Qtr. (Sep 2025)</p></th>
+<th class="head"><p>Next Qtr. (Dec 2025)</p></th>
+<th class="head"><p>Current Year (2025)</p></th>
+<th class="head"><p>Next Year (2026)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>Current Estimate</p></td>
+<td><p>1.76</p></td>
+<td><p>2.48</p></td>
+<td><p>7.37</p></td>
+<td><p>7.99</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>7 Days Ago</p></td>
+<td><p>1.76</p></td>
+<td><p>2.49</p></td>
+<td><p>7.37</p></td>
+<td><p>8</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>30 Days Ago</p></td>
+<td><p>1.76</p></td>
+<td><p>2.47</p></td>
+<td><p>7.38</p></td>
+<td><p>7.96</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>60 Days Ago</p></td>
+<td><p>1.76</p></td>
+<td><p>2.47</p></td>
+<td><p>7.37</p></td>
+<td><p>7.95</p></td>
+</tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>90 Days Ago</p></td>
+<td><p>1.65</p></td>
+<td><p>2.42</p></td>
+<td><p>7.17</p></td>
+<td><p>7.81</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="eps-revisions">
+<h2>EPS Revisions<a class="headerlink" href="#eps-revisions" title="Link to this heading"></a></h2>
+<p>Retrieves information about recent analyst earnings per share estimate revisions showing upward and downward changes. Returns a <strong>DataFrame</strong>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_web_eps_revisions</span>
+</pre></div>
+</div>
+<p><strong>Results:</strong></p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>Currency in USD</p></th>
+<th class="head"><p>Current Qtr. (Sep 2025)</p></th>
+<th class="head"><p>Next Qtr. (Dec 2025)</p></th>
+<th class="head"><p>Current Year (2025)</p></th>
+<th class="head"><p>Next Year (2026)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>Up Last 7 Days</p></td>
+<td><p>2</p></td>
+<td><p>2</p></td>
+<td><p>2</p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>Up Last 30 Days</p></td>
+<td><p>3</p></td>
+<td><p>3</p></td>
+<td><p>4</p></td>
+<td><p>5</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>Down Last 7 Days</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>Down Last 30 Days</p></td>
+<td><p>1</p></td>
+<td><p>2</p></td>
+<td><p>2</p></td>
+<td><p>2</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="growth-estimates">
+<h2>Growth Estimates<a class="headerlink" href="#growth-estimates" title="Link to this heading"></a></h2>
+<p>Retrieves analyst growth estimates for the company compared to market benchmarks like the S&amp;P 500. Returns a <strong>DataFrame</strong>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_web_growth_estimates</span>
+</pre></div>
+</div>
+<p><strong>Results:</strong></p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>Symbol</p></th>
+<th class="head"><p>Current Qtr.</p></th>
+<th class="head"><p>Next Qtr.</p></th>
+<th class="head"><p>Current Year</p></th>
+<th class="head"><p>Next Year</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>AAPL</p></td>
+<td><p>7.45%</p></td>
+<td><p>3.66%</p></td>
+<td><p>9.60%</p></td>
+<td><p>8.35%</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>S&amp;P 500</p></td>
+<td><p>6.89%</p></td>
+<td><p>6.07%</p></td>
+<td><p>9.10%</p></td>
+<td><p>14.19%</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="finviz_doc.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Finviz</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="yahoo_api_doc.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Yahoo Finance (API)</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2024, Amir Nazary
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Yahoo Finance (Website)</a><ul>
+<li><a class="reference internal" href="#income-statement">Income Statement</a></li>
+<li><a class="reference internal" href="#balance-sheet">Balance Sheet</a></li>
+<li><a class="reference internal" href="#cash-flow-statement">Cash Flow Statement</a></li>
+<li><a class="reference internal" href="#options-calls">Options (Calls)</a></li>
+<li><a class="reference internal" href="#options-puts">Options (Puts)</a></li>
+<li><a class="reference internal" href="#description">Description</a></li>
+<li><a class="reference internal" href="#key-executives">Key Executives</a></li>
+<li><a class="reference internal" href="#corporate-governance">Corporate Governance</a></li>
+<li><a class="reference internal" href="#major-holders">Major Holders</a></li>
+<li><a class="reference internal" href="#top-institutional-holders">Top Institutional Holders</a></li>
+<li><a class="reference internal" href="#top-mutual-fund-holders">Top Mutual Fund Holders</a></li>
+<li><a class="reference internal" href="#summary-information">Summary Information</a></li>
+<li><a class="reference internal" href="#valuation-measures">Valuation Measures</a></li>
+<li><a class="reference internal" href="#financial-highlights">Financial Highlights</a></li>
+<li><a class="reference internal" href="#trading-information">Trading Information</a></li>
+<li><a class="reference internal" href="#full-name">Full Name</a></li>
+<li><a class="reference internal" href="#earnings-estimate">Earnings Estimate</a></li>
+<li><a class="reference internal" href="#revenue-estimate">Revenue Estimate</a></li>
+<li><a class="reference internal" href="#earnings-history">Earnings History</a></li>
+<li><a class="reference internal" href="#eps-trend">EPS Trend</a></li>
+<li><a class="reference internal" href="#eps-revisions">EPS Revisions</a></li>
+<li><a class="reference internal" href="#growth-estimates">Growth Estimates</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../../_static/jquery.js?v=5d32c60e"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    </body>
+</html>

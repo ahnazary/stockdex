@@ -1,20 +1,11 @@
-Welcome to stockdex's documentation!
-====================================
 
-
-
-.. toctree::
-   :maxdepth: 4
-   :caption: Contents:
+.. include:: landing_page.rst
    
-      
-   readme
-   modules
+.. toctree::
+   :maxdepth: 3
+   :caption: Contents:
+   :hidden:
 
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   data_sources
+   plots_and_figures
+   contributing

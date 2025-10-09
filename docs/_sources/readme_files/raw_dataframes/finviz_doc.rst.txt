@@ -1,0 +1,445 @@
+Finviz
+======
+
+Data extracted from Finviz includes historical data on different criteria and includes revenue breakdowns by products, services, and regions. Examples are provided below.
+
+.. important::
+   In each result dataframe, only the first 5 rows of the DataFrame are shown at most to keep the documentation concise. The actual DataFrame returned by each function may contain more rows.
+
+
+Insider Trading Data
+~~~~~~~~~~~~~~~~~~~~
+
+Retrieves insider trading activity data including transaction details, relationships, and SEC form filings. Returns a **DataFrame**.
+
+.. code-block:: python
+
+    from stockdex import Ticker 
+
+    ticker = Ticker(ticker="msft")
+    result = ticker.finviz_get_insider_trading()
+
+Results:
+
++---+-----------------+------------------------------+------------+---------------+--------+---------+------------+---------------+-----------------+
+|   | Insider Trading | Relationship                 | Date       | Transaction   | Cost   | #Shares | Value ($)  | #Shares Total | SEC Form 4      |
++===+=================+==============================+============+===============+========+=========+============+===============+=================+
+| 0 | Nadella Satya   | Chief Executive Officer      | Sep 03 '25 | Sale          | 504.78 | 149,205 | 75,315,121 | 790,852       | Sep 04 06:01 PM |
++---+-----------------+------------------------------+------------+---------------+--------+---------+------------+---------------+-----------------+
+| 1 | SATYA NADELLA   | Director                     | Sep 03 '25 | Proposed Sale | 505.12 | 149,205 | 75,366,430 |               | Sep 03 04:31 PM |
++---+-----------------+------------------------------+------------+---------------+--------+---------+------------+---------------+-----------------+
+| 2 | Numoto Takeshi  | EVP, Chief Marketing Officer | Aug 12 '25 | Sale          | 527.32 | 4,850   | 2,557,506  | 39,111        | Aug 13 06:03 PM |
++---+-----------------+------------------------------+------------+---------------+--------+---------+------------+---------------+-----------------+
+| 3 | Numoto Takeshi  | Officer                      | Aug 05 '25 | Proposed Sale | 527.75 | 4,870   | 2,570,142  |               | Aug 05 04:55 PM |
++---+-----------------+------------------------------+------------+---------------+--------+---------+------------+---------------+-----------------+
+| 4 | Numoto Takeshi  | EVP, Chief Marketing Officer | Jun 03 '25 | Sale          | 463    | 3,000   | 1,389,000  | 43,930        | Jun 04 06:00 PM |
++---+-----------------+------------------------------+------------+---------------+--------+---------+------------+---------------+-----------------+
+
+
+Earnings Revisions Data
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Retrieves analyst earnings estimate revisions data including revision counts and estimate changes over time. Returns a **DataFrame**.
+
+.. code-block:: python
+
+    from stockdex import Ticker 
+
+    ticker = Ticker(ticker="msft")
+    result = ticker.finviz_earnings_revisions_data()
+
+Results:
+
++---+--------+--------------+--------------+---------------------+----------------------+-----------+-------------+---------------+--------+------+------+--------+
+|   | ticker | fiscalPeriod | estimateType | estimateDate        | relativeFiscalPeriod | estimates | upRevisions | downRevisions | mean   | high | low  | price  |
++===+========+==============+==============+=====================+======================+===========+=============+===============+========+======+======+========+
+| 0 | msft   | 2023FY       | E            | 2023-07-06T00:00:00 | 1                    | 43        | 39          | 0             | 9.6209 | 9.84 | 9.39 | 341.27 |
++---+--------+--------------+--------------+---------------------+----------------------+-----------+-------------+---------------+--------+------+------+--------+
+| 1 | msft   | 2023FY       | E            | 2023-07-09T00:00:00 | 1                    | 43        | 38          | 0             | 9.6209 | 9.84 | 9.39 | 337.22 |
++---+--------+--------------+--------------+---------------------+----------------------+-----------+-------------+---------------+--------+------+------+--------+
+| 2 | msft   | 2023FY       | E            | 2023-07-10T00:00:00 | 1                    | 43        | 5           | 0             | 9.6209 | 9.84 | 9.39 | 331.83 |
++---+--------+--------------+--------------+---------------------+----------------------+-----------+-------------+---------------+--------+------+------+--------+
+| 3 | msft   | 2023FY       | E            | 2023-07-12T00:00:00 | 1                    | 43        | 2           | 0             | 9.6196 | 9.84 | 9.39 | 337.2  |
++---+--------+--------------+--------------+---------------------+----------------------+-----------+-------------+---------------+--------+------+------+--------+
+| 4 | msft   | 2023FY       | E            | 2023-07-13T00:00:00 | 1                    | 43        | 2           | 0             | 9.6196 | 9.84 | 9.39 | 342.66 |
++---+--------+--------------+--------------+---------------------+----------------------+-----------+-------------+---------------+--------+------+------+--------+
+
+
+Earnings Annual Data
+~~~~~~~~~~~~~~~~~~~~
+
+Retrieves annual earnings data including actual vs. estimated EPS, sales figures, and analyst counts. Returns a **DataFrame**.
+
+.. code-block:: python
+
+    from stockdex import Ticker 
+
+    ticker = Ticker(ticker="GOOG")
+    result = ticker.finviz_earnings_annual_data()
+
+results:
+
++---+--------+--------------+--------------+---------------+-----------+-------------+-------------------+---------------------+-------------+---------------+-------------+---------------------+---------------+---------+-------------+---------+
+|   | ticker | fiscalPeriod | earningsDate | fiscalEndDate | epsActual | epsEstimate | epsReportedActual | epsReportedEstimate | salesActual | salesEstimate | epsAnalysts | epsReportedAnalysts | salesAnalysts | peRatio | peRatioGaap | psRatio |
++===+========+==============+==============+===============+===========+=============+===================+=====================+=============+===============+=============+=====================+===============+=========+=============+=========+
+| 0 | GOOG   | 2010FY       |              | 2010-12-31    | 0.7423    | 0.7252      | 0.6584            | 0.638               | 22006       | 21691.3       | 35          | 30                  | 38            | 332.009 | 374.317     | nan     |
++---+--------+--------------+--------------+---------------+-----------+-------------+-------------------+---------------------+-------------+---------------+-------------+---------------------+---------------+---------+-------------+---------+
+| 1 | GOOG   | 2011FY       |              | 2011-12-31    | 0.9026    | 0.9251      | 0.7447            | 0.7862              | 29095       | 29390.9       | 37          | 28                  | 33            | 273.045 | 330.939     | nan     |
++---+--------+--------------+--------------+---------------+-----------+-------------+-------------------+---------------------+-------------+---------------+-------------+---------------------+---------------+---------+-------------+---------+
+| 2 | GOOG   | 2012FY       |              | 2012-12-31    | 0.9817    | 0.9952      | 0.8085            | 0.8143              | 40419       | 41472.8       | 38          | 28                  | 32            | 251.044 | 304.824     | nan     |
++---+--------+--------------+--------------+---------------+-----------+-------------+-------------------+---------------------+-------------+---------------+-------------+---------------------+---------------+---------+-------------+---------+
+| 3 | GOOG   | 2013FY       |              | 2013-12-31    | 1.111     | 1.1025      | 0.9542            | 0.9457              | 47575       | 47592.7       | 39          | 28                  | 31            | 221.827 | 258.279     | nan     |
++---+--------+--------------+--------------+---------------+-----------+-------------+-------------------+---------------------+-------------+---------------+-------------+---------------------+---------------+---------+-------------+---------+
+| 4 | GOOG   | 2014FY       |              | 2014-12-31    | 1.2873    | 1.2892      | 1.051             | 1.0052              | 52511       | 52749.9       | 47          | 34                  | 39            | 191.447 | 234.491     | nan     |
++---+--------+--------------+--------------+---------------+-----------+-------------+-------------------+---------------------+-------------+---------------+-------------+---------------------+---------------+---------+-------------+---------+
+
+
+Earnings Data
+~~~~~~~~~~~~~
+
+Retrieves quarterly earnings data including actual vs. estimated EPS and sales figures with analyst coverage information. Returns a **DataFrame**.
+
+.. code-block:: python
+
+    from stockdex import Ticker 
+
+    ticker = Ticker(ticker="UNH")
+    result = ticker.finviz_earnings_data()
+
+results:
+
++---+--------+--------------+---------------------+---------------+-----------+-------------+-------------------+---------------------+-------------+---------------+-------------+---------------------+---------------+
+|   | ticker | fiscalPeriod | earningsDate        | fiscalEndDate | epsActual | epsEstimate | epsReportedActual | epsReportedEstimate | salesActual | salesEstimate | epsAnalysts | epsReportedAnalysts | salesAnalysts |
++===+========+==============+=====================+===============+===========+=============+===================+=====================+=============+===============+=============+=====================+===============+
+| 0 | UNH    | 2025Q2       | 2025-07-29T08:30:00 | 2025-06-30    | 4.08      | 4.4502      | 3.74              | 4.3225              | 111616      | 111523        | 23          | 14                  | 18            |
++---+--------+--------------+---------------------+---------------+-----------+-------------+-------------------+---------------------+-------------+---------------+-------------+---------------------+---------------+
+| 1 | UNH    | 2025Q1       | 2025-04-17T08:30:00 | 2025-03-31    | 7.2       | 7.2917      | 6.85              | 6.9024              | 109575      | 111579        | 23          | 13                  | 19            |
++---+--------+--------------+---------------------+---------------+-----------+-------------+-------------------+---------------------+-------------+---------------+-------------+---------------------+---------------+
+| 2 | UNH    | 2024Q4       | 2025-01-16T08:30:00 | 2024-12-31    | 6.81      | 6.7379      | 5.98              | 6.2509              | 100807      | 101595        | 24          | 15                  | 18            |
++---+--------+--------------+---------------------+---------------+-----------+-------------+-------------------+---------------------+-------------+---------------+-------------+---------------------+---------------+
+| 3 | UNH    | 2024Q3       | 2024-10-15T08:30:00 | 2024-09-30    | 7.15      | 7.0052      | 6.51              | 6.6621              | 100820      | 99139.4       | 24          | 15                  | 18            |
++---+--------+--------------+---------------------+---------------+-----------+-------------+-------------------+---------------------+-------------+---------------+-------------+---------------------+---------------+
+| 4 | UNH    | 2024Q2       | 2024-07-16T08:30:00 | 2024-06-30    | 6.8       | 6.6483      | 4.54              | 6.3021              | 98855       | 98785.6       | 23          | 13                  | 18            |
++---+--------+--------------+---------------------+---------------+-----------+-------------+-------------------+---------------------+-------------+---------------+-------------+---------------------+---------------+
+
+
+Overall Dividend
+~~~~~~~~~~~~~~~~
+
+Retrieves overall dividend information including ex-date, estimates, and trailing twelve months data. Returns a **DataFrame**.
+
+.. code-block:: python
+
+    from stockdex import Ticker 
+
+    ticker = Ticker(ticker="UNH")
+    result = ticker.finviz_overall_dividend()
+
+results:
+
++---+-----------+---------------------+------------------+-------------+
+|   | lastClose | dividendExDate      | dividendEstimate | dividendTTM |
++===+===========+=====================+==================+=============+
+| 0 | 497.85    | 2025-07-21T00:00:00 | 5.819            | 5.74        |
++---+-----------+---------------------+------------------+-------------+
+
+
+Dividend Date
+~~~~~~~~~~~~~
+
+Retrieves historical dividend payment dates and amounts including ordinary and special dividends. Returns a **DataFrame**.
+
+.. code-block:: python
+
+    from stockdex import Ticker 
+
+    ticker = Ticker(ticker="CAT")
+    result = ticker.finviz_dividends_date_data()
+
+results:
+
++---+--------+------------+----------+---------+
+|   | Ticker | Exdate     | Ordinary | Special |
++===+========+============+==========+=========+
+| 0 | CAT    | 2025-07-21 | 1.51     | 0       |
++---+--------+------------+----------+---------+
+| 1 | CAT    | 2025-04-21 | 1.41     | 0       |
++---+--------+------------+----------+---------+
+| 2 | CAT    | 2025-01-21 | 1.41     | 0       |
++---+--------+------------+----------+---------+
+| 3 | CAT    | 2024-10-21 | 1.41     | 0       |
++---+--------+------------+----------+---------+
+| 4 | CAT    | 2024-07-22 | 1.41     | 0       |
++---+--------+------------+----------+---------+
+
+
+Dividends Annual Data
+~~~~~~~~~~~~~~~~~~~~~
+
+Retrieves annual dividend data including amounts, yields, payout ratios, and estimate indicators. Returns a **DataFrame**.
+
+.. code-block:: python
+
+    from stockdex import Ticker 
+
+    ticker = Ticker(ticker="AAPL")
+    result = ticker.finviz_dividends_annual_data()
+
+results:
+
++---+--------+--------------+--------+-------+--------+----------+
+|   | Ticker | FiscalPeriod | Amount | Yield | Payout | Estimate |
++===+========+==============+========+=======+========+==========+
+| 0 | AAPL   | 2015FY       | 0.49   | 1.73  | 21.48  | False    |
++---+--------+--------------+--------+-------+--------+----------+
+| 1 | AAPL   | 2016FY       | 0.55   | 1.93  | 26.23  | False    |
++---+--------+--------------+--------+-------+--------+----------+
+| 2 | AAPL   | 2017FY       | 0.6    | 1.56  | 26.06  | False    |
++---+--------+--------------+--------+-------+--------+----------+
+| 3 | AAPL   | 2018FY       | 0.68   | 1.2   | 22.84  | False    |
++---+--------+--------------+--------+-------+--------+----------+
+| 4 | AAPL   | 2019FY       | 0.75   | 1.37  | 25.24  | False    |
++---+--------+--------------+--------+-------+--------+----------+
+
+
+Revenue by Products and Services
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Retrieves revenue breakdown by different products and services over fiscal years. Returns a **dictionary** where each key is a product or service name, and the value is another dictionary containing two lists: ``fiscal_year`` and ``value``.
+
+.. note::
+
+    Only first 2 entries are shown for each product/service for brevity. Full data can be obtained by running the code.
+
+.. code-block:: python
+
+    from stockdex import Ticker 
+
+    ticker = Ticker(ticker="AAPL")
+    result = ticker.finviz_revenue_by_products_and_services()
+
+Mac
+^^^^
+
++-------------+---------------+
+| Fiscal Year | Value         |
++=============+===============+
+| 2016        | 22831000000.0 |
++-------------+---------------+
+| 2017        | 25569000000.0 |
++-------------+---------------+
+
+
+Manufactured Product, Other
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
++-------------+---------------+
+| Fiscal Year | Value         |
++=============+===============+
+| 2016        | 11132000000.0 |
++-------------+---------------+
+| 2017        | 0.0           |
++-------------+---------------+
+
+
+Service
+^^^^^^^
+
++-------------+---------------+
+| Fiscal Year | Value         |
++=============+===============+
+| 2016        | 24348000000.0 |
++-------------+---------------+
+| 2017        | 32700000000.0 |
++-------------+---------------+
+
+Wearables, Home and Accessories
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
++-------------+---------------+
+| Fiscal Year | Value         |
++=============+===============+
+| 2017        | 12826000000.0 |
++-------------+---------------+
+| 2018        | 17381000000.0 |
++-------------+---------------+
+
+
+iPad
+^^^^
+
++-------------+---------------+
+| Fiscal Year | Value         |
++=============+===============+
+| 2016        | 20628000000.0 |
++-------------+---------------+
+| 2017        | 18802000000.0 |
++-------------+---------------+
+
+
+iPhone
+^^^^^^
+
++-------------+---------------+
+| Fiscal Year | Value         |
++=============+===============+
+| 2016        | 136700000000.0|
++-------------+---------------+
+| 2017        | 139337000000.0|
++-------------+---------------+
+
+
+Revenue by Segment
+~~~~~~~~~~~~~~~~~~
+
+Retrieves revenue breakdown by business segments over fiscal years. Returns a **dictionary** where each key is a segment name, and the value is another dictionary containing two lists: ``fiscal_year`` and ``value``.
+
+.. code-block:: python
+
+    from stockdex import Ticker 
+
+    ticker = Ticker(ticker="AAPL")
+    result = ticker.finviz_revenue_by_segment()
+
+The output is a dictionary where each key is a segment name, and the value is another dictionary containing two lists: ``fiscal_year`` and ``value``. The ``fiscal_year`` list contains the fiscal years for which revenue data is available, and the ``value`` list contains the corresponding revenue figures.
+
+.. note::
+    
+    Only first 2 entries are shown for each segment for brevity. Full data can be obtained by running the code.
+
+Americas
+^^^^^^^^
+
++-------------+---------------+
+| Fiscal Year | Value         |
++=============+===============+
+| 2016        | 86613000000.0 |
++-------------+---------------+
+| 2017        | 96600000000.0 |
++-------------+---------------+
+
+
+
+Europe
+^^^^^^
+
++-------------+---------------+
+| Fiscal Year | Value         |
++=============+===============+
+| 2016        | 49952000000.0 |
++-------------+---------------+
+| 2017        | 54938000000.0 |
++-------------+---------------+
+
+
+
+Greater China
+^^^^^^^^^^^^^
+
++-------------+---------------+
+| Fiscal Year | Value         |
++=============+===============+
+| 2016        | 48492000000.0 |
++-------------+---------------+
+| 2017        | 44764000000.0 |
++-------------+---------------+
+
+
+
+Japan
+^^^^^
+
++-------------+---------------+
+| Fiscal Year | Value         |
++=============+===============+
+| 2016        | 16928000000.0 |
++-------------+---------------+
+| 2017        | 17733000000.0 |
++-------------+---------------+
+
+
+Rest of Asia Pacific
+^^^^^^^^^^^^^^^^^^^^
+
++-------------+---------------+
+| Fiscal Year | Value         |
++=============+===============+
+| 2016        | 13654000000.0 |
++-------------+---------------+
+| 2017        | 15199000000.0 |
++-------------+---------------+
+
+
+Revenue by Regions
+~~~~~~~~~~~~~~~~~~
+
+Retrieves revenue breakdown by geographic regions over fiscal years. Returns a **dictionary** where each key is a region name, and the value is another dictionary containing two lists: ``fiscal_year`` and ``value``.
+
+.. code-block:: python
+
+    from stockdex import Ticker 
+
+    ticker = Ticker(ticker="AAPL")
+    result = ticker.finviz_revenue_by_regions()
+
+.. note::
+
+    Only first 2 entries are shown for each region for brevity. Full data can be obtained by running the code.
+
+The output is a dictionary where each key is a region name, and the value is another dictionary containing two lists: ``fiscal_year`` and ``value``. The ``fiscal_year`` list contains the fiscal years for which revenue data is available, and the ``value`` list contains the corresponding revenue figures.
+
+China
+^^^^^
+
++-------------+---------------+
+| Fiscal Year | Value         |
++=============+===============+
+| 2016        | 48492000000.0 |
++-------------+---------------+
+| 2017        | 44764000000.0 |
++-------------+---------------+
+| 2018        | 51942000000.0 |
++-------------+---------------+
+
+
+Other countries
+^^^^^^^^^^^^^^^
+
++-------------+---------------+
+| Fiscal Year | Value         |
++=============+===============+
+| 2016        | 91480000000.0 |
++-------------+---------------+
+| 2017        | 100131000000.0|
++-------------+---------------+
+
+
+
+United States
+^^^^^^^^^^^^^
+
++-------------+---------------+
+| Fiscal Year | Value         |
++=============+===============+
+| 2016        | 75667000000.0 |
++-------------+---------------+
+| 2017        | 84339000000.0 |
++-------------+---------------+
+
+
+
+Price Reaction to Earnings Report
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+... code-block:: python
+
+    from stockdex import Ticker 
+
+    ticker = Ticker(ticker="PLTR")
+    result = ticker.finviz_price_reaction_to_earnings_report()
+
+
+
+.. note::
+
+    The output is a dictionary.
