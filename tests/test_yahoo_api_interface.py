@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import pandas as pd
 import pytest
@@ -86,11 +86,42 @@ def test_yahoo_api_current_trading_period(ticker):
 @pytest.mark.parametrize(
     "ticker, frequency, format, period1, period2",
     [
-        ("AAPL", "quarterly", "fmt", datetime(2020, 1, 1), datetime.today()),
-        ("GOOGL", "quarterly", "fmt", datetime(2021, 1, 1), datetime.today()),
-        ("MSFT", "quarterly", "fmt", datetime(2023, 1, 1), datetime(2024, 1, 1)),
-        ("NVDA", "quarterly", "raw", datetime(2020, 1, 1), datetime.today()),
-        ("FMC", "quarterly", "raw", datetime(2021, 1, 1), datetime.today()),
+        # 2 years ago
+        (
+            "AAPL",
+            "quarterly",
+            "fmt",
+            datetime.today() - timedelta(days=365 * 1),
+            datetime.today(),
+        ),
+        (
+            "GOOGL",
+            "quarterly",
+            "fmt",
+            datetime.today() - timedelta(days=365 * 1),
+            datetime.today(),
+        ),
+        (
+            "MSFT",
+            "quarterly",
+            "fmt",
+            datetime.today() - timedelta(days=365 * 1),
+            datetime.today(),
+        ),
+        (
+            "NVDA",
+            "quarterly",
+            "raw",
+            datetime.today() - timedelta(days=365 * 1),
+            datetime.today(),
+        ),
+        (
+            "FMC",
+            "quarterly",
+            "raw",
+            datetime.today() - timedelta(days=365 * 1),
+            datetime.today(),
+        ),
     ],
 )
 def test_yahoo_api_income_statement(ticker, frequency, format, period1, period2):
@@ -107,11 +138,41 @@ def test_yahoo_api_income_statement(ticker, frequency, format, period1, period2)
 @pytest.mark.parametrize(
     "ticker, frequency, format, period1, period2",
     [
-        ("AAPL", "quarterly", "fmt", datetime(2020, 1, 1), datetime.today()),
-        ("GOOGL", "quarterly", "fmt", datetime(2021, 1, 1), datetime.today()),
-        ("MSFT", "quarterly", "fmt", datetime(2023, 1, 1), datetime(2024, 1, 1)),
-        ("NVDA", "quarterly", "raw", datetime(2020, 1, 1), datetime.today()),
-        ("FMC", "quarterly", "raw", datetime(2021, 1, 1), datetime.today()),
+        (
+            "AAPL",
+            "quarterly",
+            "fmt",
+            datetime.today() - timedelta(days=365 * 1),
+            datetime.today(),
+        ),
+        (
+            "GOOGL",
+            "quarterly",
+            "fmt",
+            datetime.today() - timedelta(days=365 * 1),
+            datetime.today(),
+        ),
+        (
+            "MSFT",
+            "quarterly",
+            "fmt",
+            datetime.today() - timedelta(days=365 * 1),
+            datetime.today(),
+        ),
+        (
+            "NVDA",
+            "quarterly",
+            "raw",
+            datetime.today() - timedelta(days=365 * 1),
+            datetime.today(),
+        ),
+        (
+            "FMC",
+            "quarterly",
+            "raw",
+            datetime.today() - timedelta(days=365 * 1),
+            datetime.today(),
+        ),
     ],
 )
 def test_yahoo_api_cash_flow(ticker, frequency, format, period1, period2):
@@ -128,11 +189,41 @@ def test_yahoo_api_cash_flow(ticker, frequency, format, period1, period2):
 @pytest.mark.parametrize(
     "ticker, frequency, format, period1, period2",
     [
-        ("AAPL", "quarterly", "fmt", datetime(2020, 1, 1), datetime.today()),
-        ("GOOGL", "quarterly", "fmt", datetime(2021, 1, 1), datetime.today()),
-        ("MSFT", "quarterly", "fmt", datetime(2023, 1, 1), datetime(2024, 1, 1)),
-        ("NVDA", "quarterly", "raw", datetime(2020, 1, 1), datetime.today()),
-        ("FMC", "quarterly", "raw", datetime(2021, 1, 1), datetime.today()),
+        (
+            "AAPL",
+            "quarterly",
+            "fmt",
+            datetime.today() - timedelta(days=365 * 1),
+            datetime.today(),
+        ),
+        (
+            "GOOGL",
+            "quarterly",
+            "fmt",
+            datetime.today() - timedelta(days=365 * 1),
+            datetime.today(),
+        ),
+        (
+            "MSFT",
+            "quarterly",
+            "fmt",
+            datetime.today() - timedelta(days=365 * 1),
+            datetime.today(),
+        ),
+        (
+            "NVDA",
+            "quarterly",
+            "raw",
+            datetime.today() - timedelta(days=365 * 1),
+            datetime.today(),
+        ),
+        (
+            "FMC",
+            "quarterly",
+            "raw",
+            datetime.today() - timedelta(days=365 * 1),
+            datetime.today(),
+        ),
     ],
 )
 def test_yahoo_api_balance_sheet(ticker, frequency, format, period1, period2):
@@ -149,11 +240,41 @@ def test_yahoo_api_balance_sheet(ticker, frequency, format, period1, period2):
 @pytest.mark.parametrize(
     "ticker, frequency, format, period1, period2",
     [
-        ("AAPL", "quarterly", "fmt", datetime(2020, 1, 1), datetime.today()),
-        ("GOOGL", "quarterly", "fmt", datetime(2021, 1, 1), datetime.today()),
-        ("MSFT", "quarterly", "fmt", datetime(2023, 1, 1), datetime(2024, 1, 1)),
-        ("NVDA", "quarterly", "raw", datetime(2020, 1, 1), datetime.today()),
-        ("FMC", "quarterly", "raw", datetime(2021, 1, 1), datetime.today()),
+        (
+            "AAPL",
+            "quarterly",
+            "fmt",
+            datetime.today() - timedelta(days=365 * 1),
+            datetime.today(),
+        ),
+        (
+            "GOOGL",
+            "quarterly",
+            "fmt",
+            datetime.today() - timedelta(days=365 * 1),
+            datetime.today(),
+        ),
+        (
+            "MSFT",
+            "quarterly",
+            "fmt",
+            datetime.today() - timedelta(days=365 * 1),
+            datetime.today(),
+        ),
+        (
+            "NVDA",
+            "quarterly",
+            "raw",
+            datetime.today() - timedelta(days=365 * 1),
+            datetime.today(),
+        ),
+        (
+            "FMC",
+            "quarterly",
+            "raw",
+            datetime.today() - timedelta(days=365 * 1),
+            datetime.today(),
+        ),
     ],
 )
 def test_yahoo_api_financials(ticker, frequency, format, period1, period2):
@@ -170,11 +291,41 @@ def test_yahoo_api_financials(ticker, frequency, format, period1, period2):
 @pytest.mark.parametrize(
     "ticker, frequency, group_by, period1, period2",
     [
-        ("AAPL", "quarterly", "field", datetime(2020, 1, 1), datetime.today()),
-        ("GOOGL", "quarterly", "timeframe", datetime(2021, 1, 1), datetime.today()),
-        ("MSFT", "annual", "field", datetime(2021, 1, 1), datetime(2024, 1, 1)),
-        ("NVDA", "quarterly", "field", datetime(2020, 1, 1), datetime.today()),
-        ("FMC", "quarterly", "field", datetime(2021, 1, 1), datetime.today()),
+        (
+            "AAPL",
+            "quarterly",
+            "field",
+            datetime.today() - timedelta(days=365 * 1),
+            datetime.today(),
+        ),
+        (
+            "GOOGL",
+            "quarterly",
+            "timeframe",
+            datetime.today() - timedelta(days=365 * 1),
+            datetime.today(),
+        ),
+        (
+            "MSFT",
+            "annual",
+            "field",
+            datetime.today() - timedelta(days=365 * 2),
+            datetime.today(),
+        ),
+        (
+            "NVDA",
+            "quarterly",
+            "field",
+            datetime.today() - timedelta(days=365 * 1),
+            datetime.today(),
+        ),
+        (
+            "FMC",
+            "quarterly",
+            "field",
+            datetime.today() - timedelta(days=365 * 1),
+            datetime.today(),
+        ),
     ],
 )
 def test_plot_yahoo_api_income_statement(ticker, frequency, group_by, period1, period2):
@@ -198,11 +349,41 @@ def test_plot_yahoo_api_income_statement_wrong_field():
 @pytest.mark.parametrize(
     "ticker, frequency, group_by, period1, period2",
     [
-        ("AAPL", "quarterly", "field", datetime(2020, 1, 1), datetime.today()),
-        ("GOOGL", "quarterly", "timeframe", datetime(2021, 1, 1), datetime.today()),
-        ("MSFT", "annual", "field", datetime(2021, 1, 1), datetime(2024, 1, 1)),
-        ("NVDA", "quarterly", "field", datetime(2020, 1, 1), datetime.today()),
-        ("FMC", "quarterly", "field", datetime(2021, 1, 1), datetime.today()),
+        (
+            "AAPL",
+            "quarterly",
+            "field",
+            datetime.today() - timedelta(days=365 * 1),
+            datetime.today(),
+        ),
+        (
+            "GOOGL",
+            "quarterly",
+            "timeframe",
+            datetime.today() - timedelta(days=365 * 1),
+            datetime.today(),
+        ),
+        (
+            "MSFT",
+            "annual",
+            "field",
+            datetime.today() - timedelta(days=365 * 2),
+            datetime.today(),
+        ),
+        (
+            "NVDA",
+            "quarterly",
+            "field",
+            datetime.today() - timedelta(days=365 * 1),
+            datetime.today(),
+        ),
+        (
+            "FMC",
+            "quarterly",
+            "field",
+            datetime.today() - timedelta(days=365 * 1),
+            datetime.today(),
+        ),
     ],
 )
 def test_plot_yahoo_api_cash_flow(ticker, frequency, group_by, period1, period2):
@@ -226,11 +407,41 @@ def test_plot_yahoo_api_cash_flow_wrong_field():
 @pytest.mark.parametrize(
     "ticker, frequency, group_by, period1, period2",
     [
-        ("AAPL", "quarterly", "field", datetime(2020, 1, 1), datetime.today()),
-        ("GOOGL", "quarterly", "timeframe", datetime(2021, 1, 1), datetime.today()),
-        ("MSFT", "annual", "field", datetime(2021, 1, 1), datetime(2024, 1, 1)),
-        ("NVDA", "quarterly", "field", datetime(2020, 1, 1), datetime.today()),
-        ("FMC", "quarterly", "field", datetime(2021, 1, 1), datetime.today()),
+        (
+            "AAPL",
+            "quarterly",
+            "field",
+            datetime.today() - timedelta(days=365 * 1),
+            datetime.today(),
+        ),
+        (
+            "GOOGL",
+            "quarterly",
+            "timeframe",
+            datetime.today() - timedelta(days=365 * 1),
+            datetime.today(),
+        ),
+        (
+            "MSFT",
+            "annual",
+            "field",
+            datetime.today() - timedelta(days=365 * 2),
+            datetime.today(),
+        ),
+        (
+            "NVDA",
+            "quarterly",
+            "field",
+            datetime.today() - timedelta(days=365 * 1),
+            datetime.today(),
+        ),
+        (
+            "FMC",
+            "quarterly",
+            "field",
+            datetime.today() - timedelta(days=365 * 1),
+            datetime.today(),
+        ),
     ],
 )
 def test_plot_yahoo_api_balance_sheet(ticker, frequency, group_by, period1, period2):
@@ -254,11 +465,41 @@ def test_plot_yahoo_api_balance_sheet_wrong_field():
 @pytest.mark.parametrize(
     "ticker, frequency, group_by, period1, period2",
     [
-        ("AAPL", "quarterly", "field", datetime(2020, 1, 1), datetime.today()),
-        ("GOOGL", "quarterly", "timeframe", datetime(2021, 1, 1), datetime.today()),
-        ("MSFT", "annual", "field", datetime(2021, 1, 1), datetime(2024, 1, 1)),
-        ("NVDA", "quarterly", "field", datetime(2020, 1, 1), datetime.today()),
-        ("FMC", "quarterly", "field", datetime(2021, 1, 1), datetime.today()),
+        (
+            "AAPL",
+            "quarterly",
+            "field",
+            datetime.today() - timedelta(days=365 * 1),
+            datetime.today(),
+        ),
+        (
+            "GOOGL",
+            "quarterly",
+            "timeframe",
+            datetime.today() - timedelta(days=365 * 1),
+            datetime.today(),
+        ),
+        (
+            "MSFT",
+            "annual",
+            "field",
+            datetime.today() - timedelta(days=365 * 2),
+            datetime.today(),
+        ),
+        (
+            "NVDA",
+            "quarterly",
+            "field",
+            datetime.today() - timedelta(days=365 * 1),
+            datetime.today(),
+        ),
+        (
+            "FMC",
+            "quarterly",
+            "field",
+            datetime.today() - timedelta(days=365 * 1),
+            datetime.today(),
+        ),
     ],
 )
 def test_plot_yahoo_api_financials(ticker, frequency, group_by, period1, period2):
