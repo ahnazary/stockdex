@@ -53,7 +53,13 @@ class DigrinInterface(TickerBase):
         data_df = pd.DataFrame()
         data = []
 
-        headers = [th.text for th in table.find_all("thead")[0].find_all("th")]
+        try:
+            headers = [th.text for th in table.find_all("thead")[0].find_all("th")]
+        except IndexError:
+            raise ValueError(
+                f"There are no dividends data for ticker: {self.ticker}. For details, check out {url}"  # noqa
+            )
+
         for tr in table.find_all("tbody")[0].find_all("tr"):
             data.append([td.text for td in tr.find_all("td")])
 
@@ -413,11 +419,9 @@ class DigrinInterface(TickerBase):
 
         data = self.digrin_price
         data["Date"] = pd.to_datetime(data["Date"])
-        data["Real Price"] = (
-            data["Real price"].str.replace("$", "").replace(",", "").astype(float)
-        )
-        data["Adjusted Price"] = (
-            data["Adjusted price"].str.replace("$", "").replace(",", "").astype(float)
+        data["Real Price"] = data["Real price"].apply(self._human_number_format_to_raw)
+        data["Adjusted Price"] = data["Adjusted price"].apply(
+            self._human_number_format_to_raw
         )
 
         # drop the original columns
@@ -515,8 +519,27 @@ class DigrinInterface(TickerBase):
     def _human_number_format_to_raw(self, entry: str) -> float:
         """
         Convert human readable format to raw format
-        If there is a suffix like trillion, billion, million, etc. in the data,
+
+        Handles various input formats:
+        - Numbers with commas: "1,077.60" -> 1077.60
+        - Numbers with suffixes: "1.5 B", "250 M", "5.2 K", "2 T"
+        - Zero/null indicators: "?", "N/A", "-", etc.
+        - Regular numbers: "123.45"
+
+        Args:
+            entry (str): Human-readable number string
+
+        Returns:
+            float: Raw numeric value
         """
+        # Handle empty or whitespace-only strings
+        if not entry or entry.strip() == "":
+            return 0.0
+
+        # Clean the entry
+        entry = entry.strip()
+
+        # Define entries to consider as zero
         entries_to_consider_zero = [
             "?",
             "N/A",
@@ -526,20 +549,100 @@ class DigrinInterface(TickerBase):
             "Nan",
             "_",
             "-",
-            "",
+            "—",  # em dash
+            "–",  # en dash
         ]
+
         if entry in entries_to_consider_zero:
-            return 0
-        elif "t" in entry.lower():
-            return float(entry.split(" ")[0]) * 1000000000000
-        elif "b" in entry.lower():
-            return float(entry.split(" ")[0]) * 1000000000
-        elif "m" in entry.lower():
-            return float(entry.split(" ")[0]) * 1000000
-        elif "k" in entry.lower():
-            return float(entry.split(" ")[0]) * 1000
-        else:
-            return float(entry)
+            return 0.0
+
+        # Remove currency symbols if present
+        entry = (
+            entry.replace("$", "")
+            .replace("€", "")
+            .replace("£", "")
+            .replace("¥", "")
+            .strip()
+        )
+
+        # Handle percentage signs
+        is_percentage = entry.endswith("%")
+        if is_percentage:
+            entry = entry[:-1].strip()
+
+        # Check for suffix multipliers (case insensitive)
+        entry_lower = entry.lower()
+        multiplier = 1.0
+
+        # Check for full word suffixes first
+        if "trillion" in entry_lower:
+            multiplier = 1_000_000_000_000
+            entry = entry_lower.replace("trillion", "").strip()
+        elif "billion" in entry_lower:
+            multiplier = 1_000_000_000
+            entry = entry_lower.replace("billion", "").strip()
+        elif "million" in entry_lower:
+            multiplier = 1_000_000
+            entry = entry_lower.replace("million", "").strip()
+        elif "thousand" in entry_lower:
+            multiplier = 1_000
+            entry = entry_lower.replace("thousand", "").strip()
+        elif (
+            "t" in entry_lower
+            and not entry_lower.replace(".", "").replace(",", "").isdigit()
+        ):
+            # Trillion - but make sure it's not just a number containing 't'
+            if entry_lower.endswith("t") or " t" in entry_lower:
+                multiplier = 1_000_000_000_000
+                entry = entry_lower.replace("t", "").strip()
+        elif (
+            "b" in entry_lower
+            and not entry_lower.replace(".", "").replace(",", "").isdigit()
+        ):
+            # Billion - but make sure it's not just a number containing 'b'
+            if entry_lower.endswith("b") or " b" in entry_lower:
+                multiplier = 1_000_000_000
+                entry = entry_lower.replace("b", "").strip()
+        elif (
+            "m" in entry_lower
+            and not entry_lower.replace(".", "").replace(",", "").isdigit()
+        ):
+            # Million - but make sure it's not just a number containing 'm'
+            if entry_lower.endswith("m") or " m" in entry_lower:
+                multiplier = 1_000_000
+                entry = entry_lower.replace("m", "").strip()
+        elif (
+            "k" in entry_lower
+            and not entry_lower.replace(".", "").replace(",", "").isdigit()
+        ):
+            # Thousand - but make sure it's not just a number containing 'k'
+            if entry_lower.endswith("k") or " k" in entry_lower:
+                multiplier = 1_000
+                entry = entry_lower.replace("k", "").strip()
+
+        # Remove commas (thousands separators)
+        entry = entry.replace(",", "")
+
+        # Handle negative numbers
+        is_negative = entry.startswith("-") or entry.startswith("(")
+        if entry.startswith("(") and entry.endswith(")"):
+            entry = entry[1:-1]  # Remove parentheses
+            is_negative = True
+        elif entry.startswith("-"):
+            entry = entry[1:]  # Remove minus sign, we'll apply it later
+
+        # Convert to float
+        try:
+            result = float(entry) * multiplier
+            if is_negative:
+                result = -result
+            if is_percentage:
+                result = result / 100.0
+            return result
+        except ValueError as e:
+            raise ValueError(
+                f"Could not convert '{entry}' to float. Original input: '{entry}'. Error: {e}"
+            )
 
     def _human_date_format_to_raw(self, entry: str) -> str:
         """

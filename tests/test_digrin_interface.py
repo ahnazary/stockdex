@@ -355,6 +355,7 @@ def test_digrin_upcoming_estimated_earnings(ticker):
     [
         ("AAPL"),
         ("CAT"),
+        ("TSLA"),
     ],
 )
 def test_plot_digrin_price(ticker):
@@ -364,10 +365,7 @@ def test_plot_digrin_price(ticker):
 
 
 @pytest.mark.skipif(skip_test, reason="Skipping in GH action as it is visual")
-@pytest.mark.parametrize(
-    "ticker",
-    [("AAPL"), ("BAC")],
-)
+@pytest.mark.parametrize("ticker", [("AAPL"), ("BAC")])
 def test_plot_digrin_dividend(ticker):
     ticker = Ticker(ticker=ticker)
     ticker.plot_digrin_dividend()
@@ -529,3 +527,100 @@ def test_human_date_format_to_raw_invalid_inputs(invalid_input):
     ticker = Ticker(ticker="AAPL")
     with pytest.raises((ValueError, KeyError, IndexError)):
         ticker._human_date_format_to_raw(invalid_input)
+
+
+@pytest.mark.parametrize(
+    "input_number, expected_output",
+    [
+        # Test comma-separated numbers
+        ("1,077.60", 1077.60),
+        ("12,345.67", 12345.67),
+        ("1,000", 1000.0),
+        ("10,000,000", 10000000.0),
+        ("5,432.10", 5432.10),
+        # Test regular numbers
+        ("123.45", 123.45),
+        ("1000", 1000.0),
+        ("0.5", 0.5),
+        ("100", 100.0),
+        # Test zero/null indicators
+        ("?", 0.0),
+        ("N/A", 0.0),
+        ("n/a", 0.0),
+        ("nan", 0.0),
+        ("NAN", 0.0),
+        ("Nan", 0.0),
+        ("_", 0.0),
+        ("-", 0.0),
+        ("—", 0.0),  # em dash
+        ("–", 0.0),  # en dash
+        ("", 0.0),
+        ("   ", 0.0),  # whitespace only
+        # Test numbers with suffixes
+        ("1.5 B", 1500000000.0),
+        ("250 M", 250000000.0),
+        ("5.2 K", 5200.0),
+        ("2 T", 2000000000000.0),
+        ("1.5B", 1500000000.0),  # No space
+        ("250M", 250000000.0),
+        ("5.2K", 5200.0),
+        ("2T", 2000000000000.0),
+        ("10.5 b", 10500000000.0),  # lowercase
+        ("15.3 m", 15300000.0),
+        ("7.8 k", 7800.0),
+        ("3.2 t", 3200000000000.0),
+        # Test currency symbols
+        ("$1,077.60", 1077.60),
+        ("€2,500.50", 2500.50),
+        ("£3,000", 3000.0),
+        ("¥5,000.25", 5000.25),
+        # Test negative numbers
+        ("-1,077.60", -1077.60),
+        ("(1,500.00)", -1500.0),  # Accounting format
+        ("-$2,500", -2500.0),
+        # Test percentages
+        ("15.5%", 0.155),
+        ("100%", 1.0),
+        ("0.5%", 0.005),
+        # Test edge cases with commas and suffixes
+        ("1,500.5 M", 1500500000.0),
+        ("$2,345.67 K", 2345670.0),
+        ("-1,000 B", -1000000000000.0),
+        # Test numbers that contain letters but aren't suffixes
+        ("12345", 12345.0),  # Contains no suffix letters
+        ("123.45", 123.45),  # Contains no suffix letters
+        ("365.0 billion", 365000000000.0),
+        ("331.5 million", 331500000.0),
+    ],
+)
+def test_human_number_format_to_raw(input_number, expected_output):
+    """Test the _human_number_format_to_raw function with various number formats"""
+    ticker = Ticker(ticker="AAPL")
+    result = ticker._human_number_format_to_raw(input_number)
+    # Use pytest.approx for floating point comparison
+    assert result == pytest.approx(expected_output, rel=1e-9)
+
+
+@pytest.mark.parametrize(
+    "invalid_input",
+    [
+        "abc",  # Non-numeric string
+        "12.34.56",  # Multiple decimal points
+        "text with numbers 123",  # Mixed text and numbers
+        "12.34 XYZ",  # Unknown suffix
+        "not a number at all",  # Completely non-numeric
+    ],
+)
+def test_human_number_format_to_raw_invalid_inputs(invalid_input):
+    """Test the _human_number_format_to_raw function with invalid inputs"""
+    ticker = Ticker(ticker="AAPL")
+    with pytest.raises(ValueError):
+        ticker._human_number_format_to_raw(invalid_input)
+
+
+def test_human_number_format_to_raw_original_failing_case():
+    """Test the specific case that was originally failing"""
+    ticker = Ticker(ticker="AAPL")
+    # This should now work instead of raising ValueError
+    result = ticker._human_number_format_to_raw("1,077.60")
+    assert result == pytest.approx(1077.60)
