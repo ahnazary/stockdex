@@ -42,13 +42,16 @@ pip install stockdex -U
 
 Check out full documentation [here](https://ahnazary.github.io/stockdex/) for more information about the package.
 
+## License
 
-# Contributing
+This project is licensed under the [MIT License](LICENSE).
+
+## Contributing
 
 Stockdex is an open-source project, and contributions of **any kind** are welcome and appreciated!  
 Whether you want to report a bug, suggest a new feature, improve documentation, or submit code — every contribution helps.
 
-## How to contribute
+### How to contribute
 
 - **Issues**  
   Found a bug or have an idea for an improvement? Please open an issue on GitHub and describe it clearly.
@@ -62,7 +65,7 @@ Whether you want to report a bug, suggest a new feature, improve documentation, 
 
 ## Guidelines
 
-There are no Guidelines :)
+There are no Guidelines as of now :)
 
 ---
 
