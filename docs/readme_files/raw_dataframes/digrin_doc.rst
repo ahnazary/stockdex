@@ -7,6 +7,8 @@ Below are some examples of the data that can be retrieved from Digrin through St
 
 .. important::
    In each result dataframe, only the first 5 rows of the DataFrame are shown at most to keep the documentation concise. The actual DataFrame returned by each function may contain more rows.
+   
+   Be aware that some digrin dataframes may require additional data cleaning. In certain cases digrin's API payload may send back additional hidden data (e.g., spaces or trailing characters) that will need to be       handled correctly. For example, digrin's Payout Ratio data the Date field has trailing spaces that will impact your ability to convert to a pandas datetime object.
 
 
 Dividend data
