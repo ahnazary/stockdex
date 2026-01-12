@@ -61,20 +61,30 @@ class MacrotrendsInterface(TickerBase):
         pd.DataFrame
             The table as a pandas DataFrame.
         """
-        table = self.find_parent_by_text(soup=soup, tag="div", text=text_to_look_for)
-
-        data = []
-        # get var originalData from the table
-        for script in table.find_all("script"):
-            if "originalData" in script.get_text():
-                original_data = script.get_text()
+        # Search for originalData in all script tags in the page
+        original_data = None
+        for script in soup.find_all("script"):
+            script_text = script.get_text()
+            if "originalData" in script_text:
+                original_data = script_text
                 break
+
+        if original_data is None:
+            raise ValueError(
+                f"Could not find originalData in the page for '{text_to_look_for}'"
+            )
 
         # get the data from the script
+        data = None
         for line in original_data.split("\n"):
-            if "originalData" in line:
+            if "originalData" in line and "=" in line:
                 data = line.split(" = ")[1]
                 break
+
+        if data is None:
+            raise ValueError(
+                f"Could not extract data from originalData for '{text_to_look_for}'"
+            )
 
         # convert the data to a pandas DataFrame
         data = data.replace(";", "")
