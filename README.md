@@ -1,6 +1,5 @@
 <!-- [![Publish Python Package to PyPI](https://github.com/ahnazary/stockdex/actions/workflows/publish-package.yaml/badge.svg)](https://github.com/ahnazary/stockdex/actions/workflows/publish-package.yaml) -->
 [![PyPI version](https://badge.fury.io/py/stockdex.svg)](https://badge.fury.io/py/stockdex)
-
 ![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)
 ![Code style: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)
 ![flake8](https://img.shields.io/badge/flake8-checked-blue)
@@ -10,6 +9,7 @@
   <img src="docs/images/stockdex_logo.png" alt="Stockdex Logo" width="300" height="300" style="width: 300px; height: 300px; border-radius: 50%; object-fit: cover;">
 </p> -->
 
+For full documentation, visit [here](https://ahnazary.github.io/stockdex/)
 
 # Stock Data Extractor (Stockdex)
 
@@ -38,9 +38,14 @@ Install the package using pip:
 pip install stockdex -U
 ```
 
-## Documentation
+do a simple test to verify the package is installed correctly:
 
-Check out full documentation [here](https://ahnazary.github.io/stockdex/) for more information about the package.
+```python
+from stockdex import Ticker
+
+ticker = Ticker(ticker="NVDA")
+result = ticker.yahoo_api_income_statement(frequency='quarterly')
+```
 
 ## License
 
