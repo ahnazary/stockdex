@@ -285,7 +285,7 @@ class FinvizInterface(TickerBase):
             x="fiscal_year",
             y="value",
             color="category",
-            title="Revenue by category",
+            title=f"Revenue by category for {self.ticker}",
             barmode="group",
             log_y=logarithmic,
         )

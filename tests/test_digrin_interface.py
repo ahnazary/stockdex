@@ -51,7 +51,7 @@ def test_digrin_payout_ratio(ticker):
     # Check if the response is as expected
     assert isinstance(digrin_payout_ratio, pd.DataFrame)
     assert digrin_payout_ratio.shape[0] > 1
-    assert digrin_payout_ratio.shape[1] == 2
+    assert digrin_payout_ratio.shape[1] == 3
 
 
 @pytest.mark.skipif(skip_test, reason="Skipping in GH action as it throws error 403")
@@ -340,13 +340,9 @@ def test_digrin_dgr10(ticker):
 )
 def test_digrin_upcoming_estimated_earnings(ticker):
     ticker = Ticker(ticker=ticker)
-    digrin_upcoming_estimated_earnings = ticker.digrin_upcoming_estimated_earnings
-
-    # Check if the response is as expected
-    assert isinstance(digrin_upcoming_estimated_earnings, pd.DataFrame)
-    assert digrin_upcoming_estimated_earnings.shape[0] >= 1
-    assert digrin_upcoming_estimated_earnings.shape[1] == 5
-    assert "Date" in digrin_upcoming_estimated_earnings.columns
+    # Digrin moved estimated EPS data behind a paywall, so expect NoDataError
+    with pytest.raises(NoDataError):
+        ticker.digrin_upcoming_estimated_earnings
 
 
 @pytest.mark.skipif(skip_test, reason="Skipping in GH action as it is visual")

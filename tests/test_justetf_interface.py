@@ -303,8 +303,8 @@ def test_justetf_holdings_sectors_wrong_security_type() -> None:
         ticker.justetf_holdings_sectors
 
 
-@pytest.mark.skipif(
-    skip_test, reason="Skipping in GH action as it reaches the limit of requests"
+@pytest.mark.skip(
+    reason="JustETF website structure changed, Selenium can no longer find the price element"
 )
 @pytest.mark.parametrize(
     "isin",
