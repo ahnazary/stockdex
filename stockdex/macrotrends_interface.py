@@ -13,7 +13,6 @@ from bs4 import BeautifulSoup
 from stockdex.config import MACROTRENDS_BASE_URL, VALID_SECURITY_TYPES
 from stockdex.exceptions import FieldNotExists
 from stockdex.lib import check_security_type, plot_dataframe
-from stockdex.selenium_interface import selenium_interface
 from stockdex.ticker_base import TickerBase
 
 
@@ -61,14 +60,17 @@ class MacrotrendsInterface(TickerBase):
         pd.DataFrame
             The table as a pandas DataFrame.
         """
-        table = self.find_parent_by_text(soup=soup, tag="div", text=text_to_look_for)
-
-        data = []
-        # get var originalData from the table
-        for script in table.find_all("script"):
+        # Search all script tags on the page for originalData
+        original_data = None
+        for script in soup.find_all("script"):
             if "originalData" in script.get_text():
                 original_data = script.get_text()
                 break
+
+        if original_data is None:
+            raise RuntimeError(
+                f"Could not find originalData for '{text_to_look_for}' on the page"
+            )
 
         # get the data from the script
         for line in original_data.split("\n"):
@@ -96,7 +98,7 @@ class MacrotrendsInterface(TickerBase):
         frequency_suffix = "?freq=A" if frequency == "annual" else "?freq=Q"
 
         url = (
-            f"{MACROTRENDS_BASE_URL}/{self.ticker}/{self.get_company_slug(self.ticker)}/income-statement{frequency_suffix}"  # Noqa E501
+            f"{MACROTRENDS_BASE_URL}/{self.ticker}/{self.get_company_slug(self.ticker)}/income-statement{frequency_suffix}"  # NOQA: E501
             if frequency == "quarterly"
             else f"{MACROTRENDS_BASE_URL}/{self.ticker}/TBD/income-statement{frequency_suffix}"
         )
@@ -127,16 +129,15 @@ class MacrotrendsInterface(TickerBase):
         frequency_suffix = "?freq=A" if frequency == "annual" else "?freq=Q"
 
         url = (
-            f"{MACROTRENDS_BASE_URL}/{self.ticker}/{self.get_company_slug(self.ticker)}/balance-sheet{frequency_suffix}"  # Noqa E501
+            f"{MACROTRENDS_BASE_URL}/{self.ticker}/{self.get_company_slug(self.ticker)}/balance-sheet{frequency_suffix}"  # NOQA: E501
             if frequency == "quarterly"
             else f"{MACROTRENDS_BASE_URL}/{self.ticker}/TBD/balance-sheet{frequency_suffix}"
         )
 
-        # build selenium interface object if not already built
-        if not hasattr(self, "selenium_interface"):
-            self.selenium_interface = selenium_interface()
+        response = self.get_response(url)
 
-        soup = self.selenium_interface.get_html_content(url)
+        # Parse the HTML content of the website
+        soup = BeautifulSoup(response.content, "html.parser")
 
         data = self._find_table_in_url("Cash On Hand", soup)
 
@@ -159,16 +160,15 @@ class MacrotrendsInterface(TickerBase):
         frequency_suffix = "?freq=A" if frequency == "annual" else "?freq=Q"
 
         url = (
-            f"{MACROTRENDS_BASE_URL}/{self.ticker}/{self.get_company_slug(self.ticker)}/cash-flow-statement{frequency_suffix}"  # Noqa E501
+            f"{MACROTRENDS_BASE_URL}/{self.ticker}/{self.get_company_slug(self.ticker)}/cash-flow-statement{frequency_suffix}"  # NOQA: E501
             if frequency == "quarterly"
             else f"{MACROTRENDS_BASE_URL}/{self.ticker}/TBD/cash-flow-statement{frequency_suffix}"
         )
 
-        # build selenium interface object if not already built
-        if not hasattr(self, "selenium_interface"):
-            self.selenium_interface = selenium_interface()
+        response = self.get_response(url)
 
-        soup = self.selenium_interface.get_html_content(url)
+        # Parse the HTML content of the website
+        soup = BeautifulSoup(response.content, "html.parser")
 
         data = self._find_table_in_url("Net Income/Loss", soup)
 
@@ -189,11 +189,10 @@ class MacrotrendsInterface(TickerBase):
         check_security_type(self.security_type, valid_types=["stock"])
         url = f"{MACROTRENDS_BASE_URL}/{self.ticker}/TBD/financial-ratios"
 
-        # build selenium interface object if not already built
-        if not hasattr(self, "selenium_interface"):
-            self.selenium_interface = selenium_interface()
+        response = self.get_response(url)
 
-        soup = self.selenium_interface.get_html_content(url)
+        # Parse the HTML content of the website
+        soup = BeautifulSoup(response.content, "html.parser")
 
         data = self._find_table_in_url("Current Ratio", soup)
 
@@ -293,11 +292,10 @@ class MacrotrendsInterface(TickerBase):
         check_security_type(self.security_type, valid_types=["stock"])
         url = f"{MACROTRENDS_BASE_URL}/{self.ticker}/TBD/revenue"
 
-        # build selenium interface object if not already built
-        if not hasattr(self, "selenium_interface"):
-            self.selenium_interface = selenium_interface()
+        response = self.get_response(url)
 
-        soup = self.selenium_interface.get_html_content(url)
+        # Parse the HTML content of the website
+        soup = BeautifulSoup(response.content, "html.parser")
 
         # find tables with class = historical_data_table
         tables = soup.find_all("table", class_="historical_data_table")

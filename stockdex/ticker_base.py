@@ -42,29 +42,50 @@ class TickerBase:
         except Exception as e:
             raise RuntimeError(f"Error fetching Yahoo crumb: {e}")
 
+    # Timestamp of last non-Yahoo request to throttle external API calls
+    _last_external_request_time: float = 0.0
+    _external_request_delay: float = 5.0  # seconds between non-Yahoo requests
+
     def get_response(self, url: str) -> requests.Response:
-        if self._yahoo_crumb is None:
-            self._yahoo_crumb = self._get_yahoo_crumb()
+        is_yahoo = "yahoo.com" in url
+
+        if is_yahoo:
+            if self._yahoo_crumb is None:
+                self._yahoo_crumb = self._get_yahoo_crumb()
+            params = {"crumb": self._yahoo_crumb}
+            headers = self.request_headers
+        else:
+            # Throttle non-Yahoo requests to avoid rate limiting
+            elapsed = time.time() - TickerBase._last_external_request_time
+            if elapsed < self._external_request_delay:
+                time.sleep(self._external_request_delay - elapsed)
+            params = {}
+            headers = {"User-Agent": get_user_agent()}
 
         response = self.session.get(
             url,
-            headers=self.request_headers,
+            headers=headers,
             timeout=RESPONSE_TIMEOUT,
-            params={"crumb": self._yahoo_crumb},
+            params=params,
         )
+
+        if not is_yahoo:
+            TickerBase._last_external_request_time = time.time()
 
         if response.status_code == 200:
             return response
 
-        if response.status_code == 429:
+        if response.status_code in (429, 403):
             for _ in range(5):
                 time.sleep(10)
                 response = self.session.get(
                     url,
-                    headers=self.request_headers,
+                    headers=headers,
                     timeout=RESPONSE_TIMEOUT,
-                    params={"crumb": self._yahoo_crumb},
+                    params=params,
                 )
+                if not is_yahoo:
+                    TickerBase._last_external_request_time = time.time()
                 if response.status_code == 200:
                     return response
 
