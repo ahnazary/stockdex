@@ -73,10 +73,16 @@ class MacrotrendsInterface(TickerBase):
             )
 
         # get the data from the script
+        data = None
         for line in original_data.split("\n"):
-            if "originalData" in line:
+            if "originalData" in line and "=" in line:
                 data = line.split(" = ")[1]
                 break
+
+        if data is None:
+            raise ValueError(
+                f"Could not extract data from originalData for '{text_to_look_for}'"
+            )
 
         # convert the data to a pandas DataFrame
         data = data.replace(";", "")
