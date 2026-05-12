@@ -263,6 +263,9 @@ def test_justetf_holdings_countries_wrong_security_type() -> None:
         ticker.justetf_holdings_countries
 
 
+@pytest.mark.skipif(
+    skip_test, reason="Skipping in GH action as it reaches the limit of requests"
+)
 @pytest.mark.parametrize(
     "isin",
     [
