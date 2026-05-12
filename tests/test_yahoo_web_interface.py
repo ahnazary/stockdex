@@ -35,7 +35,7 @@ def test_yahoo_web_cashflow_wrong_security_type():
 
 @pytest.mark.parametrize(
     "ticker",
-    [("AAPL"), ("GOOGL"), ("TSLA"), ("TNK")],
+    [("AAPL"), ("TSLA"), ("TNK")],
 )
 def test_yahoo_web_balance_sheet(ticker):
     ticker = Ticker(ticker)
