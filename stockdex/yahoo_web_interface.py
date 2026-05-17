@@ -2,7 +2,6 @@
 Module for fetching data from Yahoo Finance website
 """
 
-import json
 import re
 from datetime import datetime
 
@@ -73,17 +72,7 @@ class YahooWeb(TickerBase):
             return self._parse_financials_html(url)
 
         # First, get the page to extract available time periods from the HTML
-        response = self.get_response(url)
-        soup = BeautifulSoup(response.content, "html.parser")
-
-        table = self.find_parent_by_text(soup, "div", "Breakdown")
-        header_row = table.find("div", class_="tableHeader")
-        date_headers = [
-            col.get_text(strip=True)
-            for col in header_row.find_all("div", class_="column")
-        ]
-
-        # Calculate period range from the date headers
+        # Calculate period range
         period2 = int(datetime.now().timestamp())
         period1 = int(
             (datetime.now().replace(year=datetime.now().year - 5)).timestamp()
