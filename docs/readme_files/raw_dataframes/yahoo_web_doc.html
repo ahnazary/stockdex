@@ -257,9 +257,13 @@
 <p class="admonition-title">Important</p>
 <p>In each result dataframe, only the first 5 rows of the DataFrame are shown at most to keep the documentation concise. The actual DataFrame returned by each function may contain more rows.</p>
 </div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The financial statement methods (<code class="docutils literal notranslate"><span class="pre">yahoo_web_income_stmt</span></code>, <code class="docutils literal notranslate"><span class="pre">yahoo_web_balance_sheet</span></code>, <code class="docutils literal notranslate"><span class="pre">yahoo_web_cashflow</span></code>) now return <strong>all rows</strong> including the expandable/hidden rows that are only visible after clicking in the Yahoo Finance UI. This provides the same level of detail as the Yahoo API methods while also fetching the latest available data.</p>
+</div>
 <section id="income-statement">
 <h2>Income Statement<a class="headerlink" href="#income-statement" title="Link to this heading"></a></h2>
-<p>Retrieves the company’s income statement data including revenue, expenses, and profit metrics for multiple periods. Returns a <strong>DataFrame</strong>.</p>
+<p>Retrieves the company’s income statement data including revenue, expenses, and profit metrics for multiple periods. Includes all expandable/hidden rows for full granularity. Returns a <strong>DataFrame</strong>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
 <span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;NVDA&quot;</span><span class="p">)</span>
@@ -320,7 +324,7 @@
 </section>
 <section id="balance-sheet">
 <h2>Balance Sheet<a class="headerlink" href="#balance-sheet" title="Link to this heading"></a></h2>
-<p>Retrieves the company’s balance sheet data showing assets, liabilities, and equity for multiple reporting periods. Returns a <strong>DataFrame</strong>.</p>
+<p>Retrieves the company’s balance sheet data showing assets, liabilities, and equity for multiple reporting periods. Includes all expandable/hidden rows for full granularity. Returns a <strong>DataFrame</strong>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
 <span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;MSFT&quot;</span><span class="p">)</span>
@@ -375,7 +379,7 @@
 </section>
 <section id="cash-flow-statement">
 <h2>Cash Flow Statement<a class="headerlink" href="#cash-flow-statement" title="Link to this heading"></a></h2>
-<p>Retrieves the company’s cash flow statement data showing operating, investing, and financing cash flows for multiple periods. Returns a <strong>DataFrame</strong>.</p>
+<p>Retrieves the company’s cash flow statement data showing operating, investing, and financing cash flows for multiple periods. Includes all expandable/hidden rows for full granularity. Returns a <strong>DataFrame</strong>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
 <span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
