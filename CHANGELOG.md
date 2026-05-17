@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.6
+
+### Fixed
+
+- `yahoo_web_balance_sheet`, `yahoo_web_cashflow`, and `yahoo_web_income_stmt` now return **all rows** including expandable/hidden rows from Yahoo Finance by fetching data via the Yahoo timeseries API instead of only scraping the visible HTML rows.
+
 ## 1.0.8
 
 ### Added
