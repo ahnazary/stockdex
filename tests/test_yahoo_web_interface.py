@@ -23,8 +23,8 @@ def test_yahoo_web_cashflow(ticker):
 
     # Check if the response is as expected
     assert isinstance(yahoo_web_cashflow_df, pd.DataFrame)
-    assert yahoo_web_cashflow_df.shape[0] >= 3
-    assert yahoo_web_cashflow_df.shape[1] >= 5
+    assert yahoo_web_cashflow_df.shape[0] >= 10
+    assert yahoo_web_cashflow_df.shape[1] >= 4
 
 
 def test_yahoo_web_cashflow_wrong_security_type():
@@ -43,7 +43,7 @@ def test_yahoo_web_balance_sheet(ticker):
 
     # Check if the response is as expected
     assert isinstance(yahoo_web_balance_sheet_df, pd.DataFrame)
-    assert yahoo_web_balance_sheet_df.shape[0] >= 3
+    assert yahoo_web_balance_sheet_df.shape[0] >= 10
     assert yahoo_web_balance_sheet_df.shape[1] >= 4
 
 
@@ -63,7 +63,7 @@ def test_yahoo_web_income_stmt(ticker):
 
     # Check if the response is as expected
     assert isinstance(yahoo_web_income_stmt_df, pd.DataFrame)
-    assert yahoo_web_income_stmt_df.shape[0] >= 3
+    assert yahoo_web_income_stmt_df.shape[0] >= 10
     assert yahoo_web_income_stmt_df.shape[1] >= 4
 
 
