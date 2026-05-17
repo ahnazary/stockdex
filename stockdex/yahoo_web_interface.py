@@ -2,14 +2,30 @@
 Module for fetching data from Yahoo Finance website
 """
 
+import json
 import re
+from datetime import datetime
 
 import pandas as pd
 from bs4 import BeautifulSoup
 
-from stockdex.config import VALID_SECURITY_TYPES, YAHOO_WEB_BASE_URL
+from stockdex.config import (
+    BALANCE_SHEET_COLUMNS,
+    CASH_FLOW_COLUMNS,
+    FUNDAMENTALS_BASE_URL,
+    INCOME_STATEMENT_COLUMNS,
+    VALID_SECURITY_TYPES,
+    YAHOO_WEB_BASE_URL,
+)
 from stockdex.lib import check_security_type
 from stockdex.ticker_base import TickerBase
+
+# Map URL path suffixes to their corresponding config column lists
+_STATEMENT_TYPE_MAP = {
+    "balance-sheet": BALANCE_SHEET_COLUMNS,
+    "cash-flow": CASH_FLOW_COLUMNS,
+    "financials": INCOME_STATEMENT_COLUMNS,
+}
 
 
 class YahooWeb(TickerBase):
@@ -23,19 +39,109 @@ class YahooWeb(TickerBase):
         self.ticker = ticker
         self.security_type = security_type
 
-    def yahoo_web_financials_table(self, url: str) -> pd.DataFrame:
+    def yahoo_web_financials_table(
+        self, url: str, frequency: str = "annual"
+    ) -> pd.DataFrame:
         """
-        Get financials table from the Yahoo Finance website
+        Get financials table from the Yahoo Finance website.
+
+        This method fetches ALL financial rows including the expandable/hidden
+        rows that are only visible after clicking in the Yahoo Finance UI.
+        It does so by first scraping the page to get the available time periods,
+        then calling the Yahoo Finance timeseries API with the full list of
+        financial metrics for the given statement type.
 
         Args:
         ----------------
         url (str)
             The URL of the website to scrape
 
+        frequency (str)
+            The frequency of the data, either "annual" or "quarterly"
 
         Returns:
         ----------------
         pd.DataFrame: A pandas DataFrame including the financials table
+            with all rows (including expandable/hidden ones)
+        """
+        # Determine statement type from URL
+        url_path = url.rstrip("/").split("/")[-1]
+        columns = _STATEMENT_TYPE_MAP.get(url_path)
+
+        if columns is None:
+            # Fallback to HTML-only parsing for unknown statement types
+            return self._parse_financials_html(url)
+
+        # First, get the page to extract available time periods from the HTML
+        response = self.get_response(url)
+        soup = BeautifulSoup(response.content, "html.parser")
+
+        table = self.find_parent_by_text(soup, "div", "Breakdown")
+        header_row = table.find("div", class_="tableHeader")
+        date_headers = [
+            col.get_text(strip=True)
+            for col in header_row.find_all("div", class_="column")
+        ]
+
+        # Calculate period range from the date headers
+        period2 = int(datetime.now().timestamp())
+        period1 = int(
+            (datetime.now().replace(year=datetime.now().year - 5)).timestamp()
+        )
+
+        # Build the timeseries API URL with all columns for this statement type
+        prefixed_columns = [f"{frequency}{col}" for col in columns]
+        columns_str = ",".join(prefixed_columns)
+
+        api_url = (
+            f"{FUNDAMENTALS_BASE_URL}/{self.ticker}"
+            f"/?symbol={self.ticker}"
+            f"&type={columns_str}"
+            f"&period1={period1}&period2={period2}"
+        )
+
+        # Fetch the detailed data from the timeseries API
+        try:
+            api_response = self.get_response(api_url)
+            api_data = api_response.json()["timeseries"]["result"]
+
+            row = {}
+            for item in api_data:
+                col_name = item["meta"]["type"][0]
+                # Remove the frequency prefix for cleaner display
+                display_name = col_name.replace(frequency, "", 1)
+
+                if col_name not in item:
+                    continue
+
+                data = item[col_name]
+                dated_index = [i["asOfDate"] for i in data]
+                values = [i["reportedValue"].get("fmt", "") for i in data]
+                row[display_name] = pd.Series(values, index=dated_index)
+
+            if row:
+                df = pd.DataFrame(row).T
+                df.columns.name = None
+                df.index.name = "Breakdown"
+                return df
+        except Exception:
+            pass
+
+        # Fallback to HTML-only parsing if API call fails
+        return self._parse_financials_html(url)
+
+    def _parse_financials_html(self, url: str) -> pd.DataFrame:
+        """
+        Fallback method to parse the financials table from the HTML.
+        Only returns the visible (non-expanded) rows.
+
+        Args:
+        ----------------
+        url (str): The URL of the website to scrape
+
+        Returns:
+        ----------------
+        pd.DataFrame: A pandas DataFrame including the visible financials table
         """
         response = self.get_response(url)
         soup = BeautifulSoup(response.content, "html.parser")
