@@ -7,12 +7,14 @@ This section provides examples of available methods from Yahoo Finance (Website)
 .. important::
    In each result dataframe, only the first 5 rows of the DataFrame are shown at most to keep the documentation concise. The actual DataFrame returned by each function may contain more rows.
 
+.. note::
+   The financial statement methods (``yahoo_web_income_stmt``, ``yahoo_web_balance_sheet``, ``yahoo_web_cashflow``) now return **all rows** including the expandable/hidden rows that are only visible after clicking in the Yahoo Finance UI. This provides the same level of detail as the Yahoo API methods while also fetching the latest available data.
 
 
 Income Statement
 ----------------
 
-Retrieves the company's income statement data including revenue, expenses, and profit metrics for multiple periods. Returns a **DataFrame**.
+Retrieves the company's income statement data including revenue, expenses, and profit metrics for multiple periods. Includes all expandable/hidden rows for full granularity. Returns a **DataFrame**.
 
 .. code-block:: python
 
@@ -42,7 +44,7 @@ Retrieves the company's income statement data including revenue, expenses, and p
 Balance Sheet
 -----------------
 
-Retrieves the company's balance sheet data showing assets, liabilities, and equity for multiple reporting periods. Returns a **DataFrame**.
+Retrieves the company's balance sheet data showing assets, liabilities, and equity for multiple reporting periods. Includes all expandable/hidden rows for full granularity. Returns a **DataFrame**.
 
 .. code-block:: python
 
@@ -70,7 +72,7 @@ Retrieves the company's balance sheet data showing assets, liabilities, and equi
 Cash Flow Statement
 --------------------
 
-Retrieves the company's cash flow statement data showing operating, investing, and financing cash flows for multiple periods. Returns a **DataFrame**.
+Retrieves the company's cash flow statement data showing operating, investing, and financing cash flows for multiple periods. Includes all expandable/hidden rows for full granularity. Returns a **DataFrame**.
 
 .. code-block:: python
 
