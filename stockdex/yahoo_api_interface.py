@@ -368,7 +368,7 @@ class YahooAPI(TickerBase):
 
             row[column] = pd.Series(values, index=dated_index)
 
-        return pd.DataFrame(row, index=dated_index)
+        return pd.DataFrame(row)
 
     def plot_yahoo_api_income_statement(
         self,

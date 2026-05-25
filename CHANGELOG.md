@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.7
+
+### Fixed
+
+- Fixed `yahoo_api_financials` (and related income statement, balance sheet, cash flow methods) dropping recent years' data (2024, 2025) due to using the last column's date index when constructing the DataFrame.
+
 ## 1.2.6
 
 ### Fixed
