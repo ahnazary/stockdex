@@ -1,6 +1,9 @@
 name: Publish Python Package to PyPI
 
 on:
+  push:
+    tags:
+      - '*'
   release:
     types: [published, edited, deleted]
 
