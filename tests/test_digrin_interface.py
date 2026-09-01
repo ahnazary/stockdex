@@ -2,6 +2,7 @@
 Module to test the Digrin_Interface class
 """
 
+import os
 from types import SimpleNamespace
 
 import pandas as pd
@@ -27,6 +28,9 @@ CURRENT_PAGE_URLS = {
 def current_digrin_pages(cache_live_digrin_requests):
     """Download one current Digrin page per layout and reuse it this run."""
 
+    if os.getenv("SKIP_TEST"):
+        pytest.skip("Digrin blocks requests from this test environment")
+
     ticker = TickerBase()
     return {
         page_name: ticker.get_response(url).content
@@ -35,8 +39,13 @@ def current_digrin_pages(cache_live_digrin_requests):
 
 
 @pytest.fixture(autouse=True)
-def use_current_digrin_pages(monkeypatch, current_digrin_pages):
+def use_current_digrin_pages(monkeypatch, request):
     """Exercise all cases against the current session's downloaded pages."""
+
+    if not request.node.name.startswith(("test_digrin_", "test_plot_digrin_")):
+        return
+
+    current_digrin_pages = request.getfixturevalue("current_digrin_pages")
 
     def fixture_response(_self, url):
         if url.endswith("/payout_ratio"):
