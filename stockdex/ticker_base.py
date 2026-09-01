@@ -10,6 +10,7 @@ from bs4 import BeautifulSoup
 from curl_cffi import requests
 
 from stockdex.config import MACROTRENDS_BASE_URL, RESPONSE_TIMEOUT
+from stockdex.exceptions import RateLimitError
 from stockdex.lib import get_user_agent
 
 
@@ -75,7 +76,12 @@ class TickerBase:
         if response.status_code == 200:
             return response
 
-        if response.status_code in (429, 403):
+        # Do not retry a confirmed rate limit. Retrying a large test suite here
+        # amplifies the problem and hides the signal from the test runner.
+        if response.status_code == 429:
+            raise RateLimitError(url, response.headers.get("Retry-After"))
+
+        if response.status_code == 403:
             for _ in range(5):
                 time.sleep(10)
                 response = self.session.get(
