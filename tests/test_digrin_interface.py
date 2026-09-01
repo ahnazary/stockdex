@@ -12,7 +12,6 @@ from stockdex.exceptions import NoDataError
 from stockdex.ticker import Ticker
 from stockdex.ticker_base import TickerBase
 
-
 CURRENT_PAGE_URLS = {
     "detail": f"{DIGRIN_BASE_URL}/AAPL",
     "payout_ratio": f"{DIGRIN_BASE_URL}/AAPL/payout_ratio",

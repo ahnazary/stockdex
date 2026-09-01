@@ -5,7 +5,6 @@ import pytest
 
 from stockdex.ticker import Ticker
 
-
 pytestmark = [pytest.mark.integration, pytest.mark.live]
 
 
