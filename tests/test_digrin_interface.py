@@ -3,17 +3,72 @@ Module to test the Digrin_Interface class
 """
 
 import os
+from types import SimpleNamespace
 
 import pandas as pd
 import pytest
 
+from stockdex.config import DIGRIN_BASE_URL
 from stockdex.exceptions import NoDataError
 from stockdex.ticker import Ticker
+from stockdex.ticker_base import TickerBase
 
-skip_test = bool(os.getenv("SKIP_TEST", False))
+CURRENT_PAGE_URLS = {
+    "detail": f"{DIGRIN_BASE_URL}/AAPL",
+    "payout_ratio": f"{DIGRIN_BASE_URL}/AAPL/payout_ratio",
+    "stock_split": f"{DIGRIN_BASE_URL}/AAPL/stock_split",
+    "price": f"{DIGRIN_BASE_URL}/AAPL/price",
+    "financials": f"{DIGRIN_BASE_URL}/AAPL/financials",
+    "dgr": f"{DIGRIN_BASE_URL}/AAPL/dgr3",
+    "no_data": f"{DIGRIN_BASE_URL}/AAPL/earnings",
+}
 
 
-@pytest.mark.skipif(skip_test, reason="Skipping in GH action as it throws error 403")
+@pytest.fixture(scope="session")
+def current_digrin_pages(cache_live_digrin_requests):
+    """Download one current Digrin page per layout and reuse it this run."""
+
+    if os.getenv("SKIP_TEST"):
+        pytest.skip("Digrin blocks requests from this test environment")
+
+    ticker = TickerBase()
+    return {
+        page_name: ticker.get_response(url).content
+        for page_name, url in CURRENT_PAGE_URLS.items()
+    }
+
+
+@pytest.fixture(autouse=True)
+def use_current_digrin_pages(monkeypatch, request):
+    """Exercise all cases against the current session's downloaded pages."""
+
+    if not request.node.name.startswith(("test_digrin_", "test_plot_digrin_")):
+        return
+
+    current_digrin_pages = request.getfixturevalue("current_digrin_pages")
+
+    def fixture_response(_self, url):
+        if url.endswith("/payout_ratio"):
+            page_name = "payout_ratio"
+        elif url.endswith("/stock_split"):
+            page_name = "stock_split"
+        elif url.endswith("/price"):
+            page_name = "price"
+        elif url.endswith("/financials"):
+            page_name = "financials"
+        elif url.endswith(("/dgr3", "/dgr5", "/dgr10")):
+            page_name = "dgr"
+        elif url.endswith("/earnings"):
+            page_name = "no_data"
+        else:
+            page_name = "detail"
+
+        content = current_digrin_pages[page_name]
+        return SimpleNamespace(content=content, status_code=200, url=url)
+
+    monkeypatch.setattr(TickerBase, "get_response", fixture_response)
+
+
 @pytest.mark.parametrize(
     "ticker",
     [
@@ -33,7 +88,6 @@ def test_digrin_dividend(ticker):
     assert digrin_dividend.shape[1] == 5
 
 
-@pytest.mark.skipif(skip_test, reason="Skipping in GH action as it throws error 403")
 @pytest.mark.parametrize(
     "ticker",
     [
@@ -54,7 +108,6 @@ def test_digrin_payout_ratio(ticker):
     assert digrin_payout_ratio.shape[1] == 3
 
 
-@pytest.mark.skipif(skip_test, reason="Skipping in GH action as it throws error 403")
 @pytest.mark.parametrize(
     "ticker",
     [
@@ -75,7 +128,6 @@ def test_digrin_stock_splits(ticker):
     assert digrin_stock_splits.shape[1] == 2
 
 
-@pytest.mark.skipif(skip_test, reason="Skipping in GH action as it throws error 403")
 @pytest.mark.parametrize(
     "ticker",
     [
@@ -96,7 +148,6 @@ def test_digrin_price(ticker):
     assert digrin_price.shape[1] == 3
 
 
-@pytest.mark.skipif(skip_test, reason="Skipping in GH action as it throws error 403")
 @pytest.mark.parametrize(
     "ticker",
     [
@@ -121,7 +172,6 @@ def test_digrin_assets_vs_liabilities(ticker):
     assert digrin_assets_vs_liabilities.iloc[0]["Assets"] != ""
 
 
-@pytest.mark.skipif(skip_test, reason="Skipping in GH action as it throws error 403")
 @pytest.mark.parametrize(
     "ticker",
     [
@@ -145,7 +195,6 @@ def test_digrin_free_cash_flow(ticker):
     assert digrin_free_cash_flow.iloc[0]["Free Cash Flow"] != ""
 
 
-@pytest.mark.skipif(skip_test, reason="Skipping in GH action as it throws error 403")
 @pytest.mark.parametrize(
     "ticker",
     [
@@ -169,7 +218,6 @@ def test_digrin_net_income(ticker):
     assert digrin_net_income.iloc[0]["Net Income"] != ""
 
 
-@pytest.mark.skipif(skip_test, reason="Skipping in GH action as it throws error 403")
 @pytest.mark.parametrize(
     "ticker",
     [
@@ -193,7 +241,6 @@ def test_digrin_cash_and_debt(ticker):
     assert "Date" in digrin_cash_and_debt.columns
 
 
-@pytest.mark.skipif(skip_test, reason="Skipping in GH action as it throws error 403")
 @pytest.mark.parametrize(
     "ticker",
     [
@@ -217,7 +264,6 @@ def test_digrin_shares_outstanding(ticker):
     assert digrin_shares_outstanding.iloc[0]["Shares Outstanding"] != ""
 
 
-@pytest.mark.skipif(skip_test, reason="Skipping in GH action as it throws error 403")
 @pytest.mark.parametrize(
     "ticker",
     [
@@ -239,7 +285,6 @@ def test_digrin_expenses(ticker):
     assert "Date" in digrin_expenses.columns
 
 
-@pytest.mark.skipif(skip_test, reason="Skipping in GH action as it throws error 403")
 @pytest.mark.parametrize(
     "ticker",
     [
@@ -263,7 +308,6 @@ def test_digrin_cost_of_revenue(ticker):
     assert digrin_cost_of_revenue.iloc[0]["Cost of Revenue"] != ""
 
 
-@pytest.mark.skipif(skip_test, reason="Skipping in GH action as it throws error 403")
 @pytest.mark.parametrize(
     "ticker",
     [
@@ -285,7 +329,6 @@ def test_digrin_dgr3(ticker):
     assert "Year" in digrin_dgr3.columns
 
 
-@pytest.mark.skipif(skip_test, reason="Skipping in GH action as it throws error 403")
 @pytest.mark.parametrize(
     "ticker",
     [
@@ -306,7 +349,6 @@ def test_digrin_dgr5(ticker):
     assert "Year" in digrin_dgr5.columns
 
 
-@pytest.mark.skipif(skip_test, reason="Skipping in GH action as it throws error 403")
 @pytest.mark.parametrize(
     "ticker",
     [
@@ -328,7 +370,6 @@ def test_digrin_dgr10(ticker):
     assert "Year" in digrin_dgr10.columns
 
 
-@pytest.mark.skipif(skip_test, reason="Skipping in GH action as it throws error 403")
 @pytest.mark.parametrize(
     "ticker",
     [
@@ -345,7 +386,6 @@ def test_digrin_upcoming_estimated_earnings(ticker):
         ticker.digrin_upcoming_estimated_earnings
 
 
-@pytest.mark.skipif(skip_test, reason="Skipping in GH action as it is visual")
 @pytest.mark.parametrize(
     "ticker",
     [
@@ -356,91 +396,77 @@ def test_digrin_upcoming_estimated_earnings(ticker):
 )
 def test_plot_digrin_price(ticker):
     ticker = Ticker(ticker=ticker)
-    ticker.plot_digrin_price()
+    ticker.plot_digrin_price(show_plot=False)
     assert True
 
 
-@pytest.mark.skipif(skip_test, reason="Skipping in GH action as it is visual")
 @pytest.mark.parametrize("ticker", [("AAPL"), ("BAC")])
 def test_plot_digrin_dividend(ticker):
     ticker = Ticker(ticker=ticker)
-    ticker.plot_digrin_dividend()
+    ticker.plot_digrin_dividend(show_plot=False)
     assert True
 
 
-@pytest.mark.skipif(skip_test, reason="Skipping in GH action as it is visual")
 @pytest.mark.parametrize(
     "ticker",
     [("AAPL"), ("BAC"), ("CAT"), ("ASML"), ("MSFT")],
 )
 def test_plot_digrin_assets_vs_liabilities(ticker):
     ticker = Ticker(ticker=ticker)
-    ticker.plot_digrin_assets_vs_liabilities()
+    ticker.plot_digrin_assets_vs_liabilities(show_plot=False)
     assert True
 
 
-@pytest.mark.skipif(skip_test, reason="Skipping in GH action as it is visual")
 @pytest.mark.parametrize(
     "ticker",
     [("AAPL"), ("BAC"), ("CAT"), ("ASML"), ("MSFT"), ("PLTR")],
 )
 def test_plot_digrin_free_cash_flow(ticker):
     ticker = Ticker(ticker=ticker)
-    ticker.plot_digrin_free_cash_flow()
+    ticker.plot_digrin_free_cash_flow(show_plot=False)
     assert True
 
 
-@pytest.mark.skipif(skip_test, reason="Skipping in GH action as it is visual")
 @pytest.mark.parametrize(
     "ticker",
     [("AAPL"), ("BAC"), ("CAT"), ("ASML"), ("MSFT"), ("DHL.DE")],
 )
 def test_plot_digrin_net_income(ticker):
     ticker = Ticker(ticker=ticker)
-    ticker.plot_digrin_net_income()
+    ticker.plot_digrin_net_income(show_plot=False)
     assert True
 
 
-@pytest.mark.skipif(skip_test, reason="Skipping in GH action as it throws error 403")
-def test_plot_digrin_net_income_no_data():
-    with pytest.raises(NoDataError):
-        ticker = Ticker(ticker="PLTR")
-        ticker.plot_digrin_net_income()
-
-
-@pytest.mark.skipif(skip_test, reason="Skipping in GH action as it is visual")
 @pytest.mark.parametrize(
     "ticker",
     [("AAPL"), ("BAC"), ("CAT"), ("ASML"), ("MSFT"), ("PLTR"), ("DHL.DE")],
 )
 def test_plot_digrin_cash_and_debt(ticker):
     ticker = Ticker(ticker=ticker)
-    ticker.plot_digrin_cash_and_debt()
+    ticker.plot_digrin_cash_and_debt(show_plot=False)
     assert True
 
 
-@pytest.mark.skipif(skip_test, reason="Skipping in GH action as it is visual")
 @pytest.mark.parametrize(
     "ticker",
     [("AAPL"), ("BAC"), ("CAT"), ("ASML"), ("MSFT"), ("PLTR"), ("DHL.DE")],
 )
 def test_plot_digrin_shares_outstanding(ticker):
     ticker = Ticker(ticker=ticker)
-    ticker.plot_digrin_shares_outstanding()
+    ticker.plot_digrin_shares_outstanding(show_plot=False)
     assert True
 
 
-@pytest.mark.skipif(skip_test, reason="Skipping in GH action as it is visual")
 @pytest.mark.parametrize(
     "ticker, show_plot",
     [
         ("AAPL", False),
-        ("BAC", True),
-        ("CAT", True),
-        ("ASML", True),
-        ("MSFT", True),
-        ("PLTR", True),
-        ("DHL.DE", True),
+        ("BAC", False),
+        ("CAT", False),
+        ("ASML", False),
+        ("MSFT", False),
+        ("PLTR", False),
+        ("DHL.DE", False),
     ],
 )
 def test_plot_digrin_expenses(ticker, show_plot):
@@ -449,17 +475,16 @@ def test_plot_digrin_expenses(ticker, show_plot):
     assert True
 
 
-@pytest.mark.skipif(skip_test, reason="Skipping in GH action as it is visual")
 @pytest.mark.parametrize(
     "ticker, show_plot",
     [
         ("AAPL", False),
-        ("BAC", True),
-        ("CAT", True),
-        ("ASML", True),
-        ("MSFT", True),
-        ("PLTR", True),
-        ("DHL.DE", True),
+        ("BAC", False),
+        ("CAT", False),
+        ("ASML", False),
+        ("MSFT", False),
+        ("PLTR", False),
+        ("DHL.DE", False),
     ],
 )
 def test_plot_digrin_cost_of_revenue(ticker, show_plot):

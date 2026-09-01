@@ -2,6 +2,8 @@
 Module for custom exceptions
 """
 
+from typing import Optional
+
 from stockdex.config import VALID_DATA_SOURCES
 
 
@@ -21,6 +23,18 @@ class NoDataError(Exception):
 
     def __str__(self) -> str:
         return self.message
+
+
+class RateLimitError(RuntimeError):
+    """Raised when a remote data source responds with HTTP 429."""
+
+    def __init__(self, url: str, retry_after: Optional[str] = None) -> None:
+        self.url = url
+        self.retry_after = retry_after
+        message = f"Rate limited while fetching URL: {url}"
+        if retry_after:
+            message += f" (Retry-After: {retry_after})"
+        super().__init__(message)
 
 
 class WrongSecurityType(Exception):
