@@ -331,7 +331,11 @@ def test_yahoo_api_financials(ticker, frequency, format, period1, period2):
 def test_plot_yahoo_api_income_statement(ticker, frequency, group_by, period1, period2):
     ticker = Ticker(ticker)
     ticker.plot_yahoo_api_income_statement(
-        frequency=frequency, period1=period1, period2=period2, group_by=group_by
+        frequency=frequency,
+        period1=period1,
+        period2=period2,
+        group_by=group_by,
+        show_plot=False,
     )
 
 
@@ -389,7 +393,11 @@ def test_plot_yahoo_api_income_statement_wrong_field():
 def test_plot_yahoo_api_cash_flow(ticker, frequency, group_by, period1, period2):
     ticker = Ticker(ticker)
     ticker.plot_yahoo_api_cash_flow(
-        frequency=frequency, period1=period1, period2=period2, group_by=group_by
+        frequency=frequency,
+        period1=period1,
+        period2=period2,
+        group_by=group_by,
+        show_plot=False,
     )
 
 
@@ -447,7 +455,11 @@ def test_plot_yahoo_api_cash_flow_wrong_field():
 def test_plot_yahoo_api_balance_sheet(ticker, frequency, group_by, period1, period2):
     ticker = Ticker(ticker)
     ticker.plot_yahoo_api_balance_sheet(
-        frequency=frequency, period1=period1, period2=period2, group_by=group_by
+        frequency=frequency,
+        period1=period1,
+        period2=period2,
+        group_by=group_by,
+        show_plot=False,
     )
 
 
@@ -505,7 +517,11 @@ def test_plot_yahoo_api_balance_sheet_wrong_field():
 def test_plot_yahoo_api_financials(ticker, frequency, group_by, period1, period2):
     ticker = Ticker(ticker)
     ticker.plot_yahoo_api_financials(
-        frequency=frequency, period1=period1, period2=period2, group_by=group_by
+        frequency=frequency,
+        period1=period1,
+        period2=period2,
+        group_by=group_by,
+        show_plot=False,
     )
 
 
