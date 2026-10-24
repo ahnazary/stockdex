@@ -30,7 +30,10 @@ DEFAULT_METRICS = {
     ],
 }
 _PROVIDER_LOCK = threading.Lock()
-_SYMBOL = re.compile(r"[A-Z0-9]+(?:[.-][A-Z0-9]+)*", re.ASCII)
+# Optional "^" prefix for indices (^GSPC) and "=" for futures/FX (GC=F, EURUSD=X).
+_SYMBOL = re.compile(r"\^?[A-Z0-9]+(?:[.=-][A-Z0-9]+)*", re.ASCII)
+# Placeholder Yahoo parsers emit when a field is absent from the response.
+_UNAVAILABLE = "Data Not Available"
 _AMOUNT = re.compile(
     r"(?P<amount>[+-]?(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?)"
     r"\s+(?P<currency>[A-Z]{3})(?:\s*\([+-]?\d+(?:\.\d+)?%\))?"
@@ -121,7 +124,7 @@ class StockdexAdapter:
         ticker = ticker.upper()
         if not _SYMBOL.fullmatch(ticker):
             raise InputError(
-                "Use a stock symbol, e.g. AAPL, BRK-B or BMW.DE; not a URL."
+                "Use a ticker symbol, e.g. AAPL, BRK-B, BMW.DE, ^GSPC or GC=F; not a URL."
             )
         if (
             type(parameters["limit"]) is not int
@@ -195,6 +198,7 @@ class StockdexAdapter:
             "error": None,
         }
         try:
+            parameters = dict(parameters)
             symbol = self._validate(operation, ticker, parameters)
             result.update(ticker=symbol, parameters=parameters)
             # Nonblocking admission prevents an unbounded queue of waiting requests.
@@ -279,6 +283,9 @@ class StockdexAdapter:
             }
             if not required.issubset(frame.columns):
                 raise ValueError("Missing price columns")
+            # Yahoo returns no timestamps for symbols without bars in the range.
+            if frame["timestamp"].astype(str).eq(_UNAVAILABLE).all():
+                raise NoDataError()
             frame["timestamp"] = pd.to_datetime(
                 frame["timestamp"], utc=True, errors="coerce"
             )

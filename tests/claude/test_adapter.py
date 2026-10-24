@@ -49,6 +49,11 @@ def test_prices(adapter, provider):
         "AAPL?x=1",
         "AAPL/TEST",
         "ß",
+        "^",
+        "^^GSPC",
+        "GC==F",
+        "AAPL^",
+        "=X",
     ],
 )
 def test_reject_symbols_before_network(adapter, provider, symbol):
@@ -57,7 +62,9 @@ def test_reject_symbols_before_network(adapter, provider, symbol):
     assert provider.calls == []
 
 
-@pytest.mark.parametrize("symbol", ["BRK-B", "BMW.DE", "7203.T"])
+@pytest.mark.parametrize(
+    "symbol", ["BRK-B", "BMW.DE", "7203.T", "^GSPC", "GC=F", "EURUSD=X", "^n225"]
+)
 def test_exchange_symbols(adapter, symbol):
     assert adapter.get_prices(symbol)["ok"]
 
@@ -200,6 +207,18 @@ def test_empty_data(adapter, provider, monkeypatch):
     assert adapter.get_prices("AAPL")["error"]["code"] == "no_data"
 
 
+def test_unavailable_price_placeholder_is_no_data(adapter, provider, monkeypatch):
+    unavailable = "Data Not Available"
+    frame = pd.DataFrame(
+        {
+            column: [unavailable]
+            for column in ("timestamp", "open", "high", "low", "close", "volume")
+        }
+    ).assign(currency="USD")
+    monkeypatch.setattr(provider, "yahoo_api_price", lambda **kw: frame)
+    assert adapter.get_prices("AAPL")["error"]["code"] == "no_data"
+
+
 def test_byte_budget(adapter, provider, monkeypatch):
     original = provider.yahoo_api_price
 
@@ -213,3 +232,10 @@ def test_byte_budget(adapter, provider, monkeypatch):
     assert result["ok"] and result["truncated"]
     assert result["returned_rows"] == 1
     assert len(encode_json(result).encode()) <= 256 * 1024
+
+
+def test_caller_parameters_are_not_mutated(adapter):
+    parameters = {"range": "1mo", "limit": 5}
+    result = adapter._request("prices", "AAPL", parameters)
+    assert result["parameters"]["interval"] == "1d"
+    assert parameters == {"range": "1mo", "limit": 5}
