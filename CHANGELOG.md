@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.3.0
+
+### Added
+
+- Local read-only MCP server (`stockdex-mcp`, install with `pip install "stockdex[mcp]"`) with `get_prices`, `get_financial_statement` and `get_dividends` tools.
+- JSON command-line tool `stockdex-claude` for the same operations.
+- Claude Code plugin and marketplace (`/plugin marketplace add ahnazary/stockdex`).
+- Claude Desktop extension `stockdex.mcpb`, attached to GitHub releases.
+
+### Fixed
+
+- `digrin_dividend` raises a clear `ValueError` when Digrin's page layout changes, instead of an `AttributeError`. Rows that don't match the table header are skipped.
+- `pip install -e .` now works from a fresh clone without `__version__.py`.
+
+### Changed
+
+- Minimum Python version is now 3.9, matching the existing `pandas>=2.2.3` requirement.
+
 ## 1.2.7
 
 ### Fixed
