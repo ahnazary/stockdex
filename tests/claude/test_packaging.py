@@ -72,3 +72,10 @@ def test_file_reads_declare_utf8():
 def test_cli_entry_point(setup_kwargs):
     scripts = setup_kwargs["entry_points"]["console_scripts"]
     assert "stockdex-claude=stockdex.claude_cli:main" in scripts
+
+
+def test_mcp_is_optional(setup_kwargs):
+    scripts = setup_kwargs["entry_points"]["console_scripts"]
+    assert "stockdex-mcp=stockdex.claude_mcp:main" in scripts
+    assert setup_kwargs["extras_require"] == {"mcp": ["mcp>=2.3,<3"]}
+    assert not any(r.startswith("mcp") for r in setup_kwargs["install_requires"])

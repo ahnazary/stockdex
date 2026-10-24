@@ -19,9 +19,11 @@ setup(
     install_requires=(ROOT / "requirements.txt")
     .read_text(encoding="utf-8")
     .splitlines(),
+    extras_require={"mcp": ["mcp>=2.3,<3"]},
     entry_points={
         "console_scripts": [
             "stockdex-claude=stockdex.claude_cli:main",
+            "stockdex-mcp=stockdex.claude_mcp:main",
         ]
     },
     python_requires=">=3.9",
