@@ -1,0 +1,55 @@
+{
+  "manifest_version": "0.4",
+  "name": "stockdex",
+  "display_name": "Stockdex",
+  "version": "1.3.0",
+  "description": "Read-only stock prices, financial statements and dividends from Yahoo Finance and Digrin.",
+  "long_description": "Stockdex gives Claude three read-only tools: historical daily OHLCV prices, income/cash flow/balance sheet metrics from Yahoo Finance, and dividend history from Digrin. Data is fetched on your computer; no API key is required.",
+  "author": {
+    "name": "Amir Nazary",
+    "url": "https://github.com/ahnazary"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ahnazary/stockdex"
+  },
+  "homepage": "https://ahnazary.github.io/stockdex/",
+  "documentation": "https://ahnazary.github.io/stockdex/claude.html",
+  "support": "https://github.com/ahnazary/stockdex/issues",
+  "icon": "icon.png",
+  "server": {
+    "type": "uv",
+    "entry_point": "src/server.py",
+    "mcp_config": {
+      "command": "uv",
+      "args": ["run", "--directory", "${__dirname}", "src/server.py"]
+    }
+  },
+  "tools": [
+    {
+      "name": "get_prices",
+      "description": "Historical daily OHLCV bars from Yahoo Finance."
+    },
+    {
+      "name": "get_financial_statement",
+      "description": "Income statement, cash flow or balance sheet metrics from Yahoo Finance."
+    },
+    {
+      "name": "get_dividends",
+      "description": "Dividend history from Digrin."
+    }
+  ],
+  "tools_generated": false,
+  "keywords": ["stocks", "finance", "yahoo-finance", "dividends", "financial-statements"],
+  "license": "MIT",
+  "privacy_policies": [
+    "https://legal.yahoo.com/us/en/yahoo/privacy/index.html",
+    "https://www.digrin.com/privacy-policy"
+  ],
+  "compatibility": {
+    "platforms": ["darwin", "linux", "win32"],
+    "runtimes": {
+      "python": ">=3.10"
+    }
+  }
+}
