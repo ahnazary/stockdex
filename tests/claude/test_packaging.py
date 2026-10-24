@@ -67,3 +67,8 @@ def test_file_reads_declare_utf8():
     for call in reads:
         encodings = [k.value.value for k in call.keywords if k.arg == "encoding"]
         assert encodings == ["utf-8"], ast.unparse(call)
+
+
+def test_cli_entry_point(setup_kwargs):
+    scripts = setup_kwargs["entry_points"]["console_scripts"]
+    assert "stockdex-claude=stockdex.claude_cli:main" in scripts
