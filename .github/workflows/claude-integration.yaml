@@ -1,0 +1,47 @@
+name: claude-integration-tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ '**' ]
+    paths:
+      - stockdex/**
+      - tests/claude/**
+      - tests/fixtures/**
+      - tests/test_digrin_dividend_parser.py
+      - setup.py
+      - requirements*.txt
+      - .github/workflows/claude-integration.yaml
+  workflow_dispatch:
+
+jobs:
+  offline-tests:
+    name: offline tests (${{ matrix.os }}, py${{ matrix.python-version }})
+    runs-on: ${{ matrix.os }}
+    env:
+      # Windows defaults to cp1252; keep file and subprocess I/O UTF-8.
+      PYTHONUTF8: '1'
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest, windows-latest ]
+        python-version: [ '3.10', '3.12' ]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install package with the MCP extra
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e ".[mcp]" pytest
+
+    - name: Run offline integration tests
+      run: |
+        python -m pytest tests/claude tests/test_digrin_dividend_parser.py -p no:cacheprovider
