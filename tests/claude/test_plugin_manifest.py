@@ -16,6 +16,13 @@ def test_plugin_manifest():
     assert plugin["license"] == "MIT"
 
 
+def test_marketplace_lists_this_plugin():
+    plugin = load(".claude-plugin/plugin.json")
+    marketplace = load(".claude-plugin/marketplace.json")
+    entries = {entry["name"]: entry for entry in marketplace["plugins"]}
+    assert entries[plugin["name"]]["source"] == "./"
+
+
 def test_mcp_server_launches_published_entry_point():
     plugin = load(".claude-plugin/plugin.json")
     server = load(".mcp.json")["mcpServers"]["stockdex"]
