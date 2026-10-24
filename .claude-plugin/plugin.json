@@ -1,0 +1,21 @@
+{
+  "name": "stockdex",
+  "displayName": "Stockdex",
+  "version": "1.3.0",
+  "description": "Read-only stock data for Claude: historical daily prices and financial statements from Yahoo Finance, and dividend history from Digrin.",
+  "author": {
+    "name": "Amir Nazary",
+    "url": "https://github.com/ahnazary"
+  },
+  "homepage": "https://ahnazary.github.io/stockdex/",
+  "repository": "https://github.com/ahnazary/stockdex",
+  "license": "MIT",
+  "keywords": [
+    "stocks",
+    "finance",
+    "yahoo-finance",
+    "dividends",
+    "financial-statements",
+    "mcp"
+  ]
+}
