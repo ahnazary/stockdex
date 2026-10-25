@@ -10,7 +10,7 @@ import threading
 
 import pytest
 
-from stockdex.config import DIGRIN_BASE_URL
+from stockdex.config import DIGRIN_BASE_URL, MACROTRENDS_BASE_URL
 from stockdex.exceptions import RateLimitError
 from stockdex.ticker_base import TickerBase
 
@@ -40,13 +40,31 @@ def pytest_collection_modifyitems(config, items):
 
 @pytest.fixture(scope="session", autouse=True)
 def cache_live_digrin_requests():
-    """Cache Digrin responses and stop live requests after the first HTTP 429."""
+    """Cache Digrin responses and stop live requests after the first HTTP 429.
+
+    Macrotrends requests are not cached, but the first HTTP 403 (bot
+    protection) opens a circuit so later tests skip instead of each spending
+    about a minute in the 403 retry loop.
+    """
 
     original_get_response = TickerBase.get_response
     response_cache = {}
-    circuit = {"rate_limit": None}
+    circuit = {"rate_limit": None, "macrotrends_blocked": None}
 
     def cached_get_response(self, url):
+        if url.startswith(MACROTRENDS_BASE_URL):
+            if circuit["macrotrends_blocked"] is not None:
+                pytest.skip(
+                    f"Macrotrends blocked this test run: {circuit['macrotrends_blocked']}"
+                )
+            try:
+                return original_get_response(self, url)
+            except RuntimeError as error:
+                if "status 403" not in str(error):
+                    raise
+                circuit["macrotrends_blocked"] = error
+                pytest.skip(f"Macrotrends blocked this test run: {error}")
+
         if not url.startswith(DIGRIN_BASE_URL):
             return original_get_response(self, url)
 
