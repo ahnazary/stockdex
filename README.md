@@ -47,6 +47,22 @@ ticker = Ticker(ticker="NVDA")
 result = ticker.yahoo_api_income_statement(frequency='quarterly')
 ```
 
+## Use with Claude
+
+Stockdex ships a local, read-only MCP server so Claude can fetch prices, financial statements and dividends for you.
+
+- **Claude Desktop**: download `stockdex.mcpb` from the [latest release](https://github.com/ahnazary/stockdex/releases/latest) and double-click it.
+- **Claude Code**: install the plugin, which requires [uv](https://docs.astral.sh/uv/):
+
+  ```text
+  /plugin marketplace add ahnazary/stockdex
+  /plugin install stockdex@stockdex
+  ```
+
+- **Other MCP clients**: run `uvx --from "stockdex[mcp]" stockdex-mcp`.
+
+See [Use with Claude](https://ahnazary.github.io/stockdex/claude.html) for arguments, limits and output format.
+
 ## License
 
 This project is licensed under the [MIT License](LICENSE).

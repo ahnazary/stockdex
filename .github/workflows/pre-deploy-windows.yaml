@@ -4,10 +4,13 @@ on:
   push:
     branches: [ main ]
   pull_request:
-    branches: [ '*' ]
+    branches: [ '**' ]
     paths:
-      - src/**.py
-      - tests/**.py
+      - stockdex/**
+      - tests/**
+      - setup.py
+      - requirements*.txt
+      - .github/workflows/pre-deploy-*.yaml
   workflow_dispatch:
   
 jobs:
