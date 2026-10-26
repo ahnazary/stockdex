@@ -211,6 +211,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../plots_and_figures/building_dash_apps.html">Building dashboards with multiple plots</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../claude.html">Use with Claude</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
 </ul>
 
@@ -261,8 +262,8 @@
 <p>Retrieves detailed income statement data including revenue, expenses, and profit metrics. Pass frequency as “annual” or “quarterly”. Returns a <strong>DataFrame</strong>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">macrotrends_income_statement</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="s2">&quot;annual&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"AAPL"</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">macrotrends_income_statement</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="s2">"annual"</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><strong>Results</strong>:</p>
@@ -388,8 +389,8 @@
 <p>Retrieves balance sheet data showing assets, liabilities, and equity. Pass frequency as “annual” or “quarterly”. Returns a <strong>DataFrame</strong>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;CAT&quot;</span><span class="p">)</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">macrotrends_balance_sheet</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="s2">&quot;annual&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"CAT"</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">macrotrends_balance_sheet</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="s2">"annual"</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><strong>Results:</strong></p>
@@ -515,8 +516,8 @@
 <p>Retrieves cash flow statement data showing operating, investing, and financing cash flows. Returns a <strong>DataFrame</strong>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;TSLA&quot;</span><span class="p">)</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">macrotrends_cash_flow</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="s2">&quot;annual&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"TSLA"</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">macrotrends_cash_flow</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="s2">"annual"</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><strong>Results:</strong></p>
@@ -642,7 +643,7 @@
 <p>Retrieves key financial ratios including liquidity, leverage, and profitability metrics over multiple periods. Returns a <strong>DataFrame</strong>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;TSLA&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"TSLA"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">macrotrends_key_financial_ratios</span>
 </pre></div>
 </div>
@@ -769,7 +770,7 @@
 <p>Retrieves operating margin data showing the percentage of revenue remaining after operating expenses. Returns a <strong>DataFrame</strong>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;TSLA&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"TSLA"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">macrotrends_operating_margin</span>
 </pre></div>
 </div>
@@ -824,7 +825,7 @@
 <p>Retrieves gross margin data showing the percentage of revenue remaining after cost of goods sold. Returns a <strong>DataFrame</strong>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;MSFT&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"MSFT"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">macrotrends_gross_margin</span>
 </pre></div>
 </div>
@@ -873,7 +874,7 @@
 <p>Retrieves EBITDA margin data showing earnings before interest, taxes, depreciation, and amortization as a percentage of revenue. Returns a <strong>DataFrame</strong>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;UNH&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"UNH"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">macrotrends_ebitda_margin</span>
 </pre></div>
 </div>
@@ -922,7 +923,7 @@
 <p>Retrieves pre-tax margin data showing the percentage of revenue remaining before taxes. Returns a <strong>DataFrame</strong>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AMZN&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"AMZN"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">macrotrends_pre_tax_margin</span>
 </pre></div>
 </div>
@@ -971,7 +972,7 @@
 <p>Retrieves net margin data showing the percentage of revenue remaining as net income after all expenses. Returns a <strong>DataFrame</strong>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AMZN&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"AMZN"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">macrotrends_net_margin</span>
 </pre></div>
 </div>
@@ -1020,8 +1021,8 @@
 <p>Retrieves company revenue data over time. Pass frequency as “annual” or “quarterly”. Returns a <strong>DataFrame</strong>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AMZN&quot;</span><span class="p">)</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">macrotrends_revenue</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="s2">&quot;quarterly&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"AMZN"</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">macrotrends_revenue</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="s2">"quarterly"</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><strong>Results:</strong></p>

@@ -211,6 +211,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../plots_and_figures/building_dash_apps.html">Building dashboards with multiple plots</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../claude.html">Use with Claude</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
 </ul>
 
@@ -263,7 +264,7 @@ Below are examples of available methods from JustETF source.</p>
 <p>Gives general info about the ETF. This is the data shown in the overview tab on JustETF website.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">etf</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">isin</span><span class="o">=</span><span class="s2">&quot;IE00B4L5Y983&quot;</span><span class="p">,</span> <span class="n">security_type</span><span class="o">=</span><span class="s2">&quot;etf&quot;</span><span class="p">)</span>
+<span class="n">etf</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">isin</span><span class="o">=</span><span class="s2">"IE00B4L5Y983"</span><span class="p">,</span> <span class="n">security_type</span><span class="o">=</span><span class="s2">"etf"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">etf</span><span class="o">.</span><span class="n">justetf_general_info</span>
 </pre></div>
 </div>
@@ -298,7 +299,7 @@ Below are examples of available methods from JustETF source.</p>
 <p>Gives the WKN (Wertpapierkennnummer) of the ETF.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">etf</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">isin</span><span class="o">=</span><span class="s2">&quot;IE00B4L5Y983&quot;</span><span class="p">,</span> <span class="n">security_type</span><span class="o">=</span><span class="s2">&quot;etf&quot;</span><span class="p">)</span>
+<span class="n">etf</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">isin</span><span class="o">=</span><span class="s2">"IE00B4L5Y983"</span><span class="p">,</span> <span class="n">security_type</span><span class="o">=</span><span class="s2">"etf"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">etf</span><span class="o">.</span><span class="n">justetf_wkn</span>
 </pre></div>
 </div>
@@ -311,12 +312,12 @@ Below are examples of available methods from JustETF source.</p>
 <h2>Description<a class="headerlink" href="#description" title="Link to this heading"></a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">etf</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">isin</span><span class="o">=</span><span class="s2">&quot;IE00B4L5Y983&quot;</span><span class="p">,</span> <span class="n">security_type</span><span class="o">=</span><span class="s2">&quot;etf&quot;</span><span class="p">)</span>
+<span class="n">etf</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">isin</span><span class="o">=</span><span class="s2">"IE00B4L5Y983"</span><span class="p">,</span> <span class="n">security_type</span><span class="o">=</span><span class="s2">"etf"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">etf</span><span class="o">.</span><span class="n">justetf_description</span>
 </pre></div>
 </div>
 <p><strong>Results:</strong></p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>The iShares Core MSCI World UCITS ETF USD (Acc) seeks to track the MSCI World index. The MSCI World index tracks stocks from 23 developed countries worldwide.      The ETF&#39;s TER (total expense ratio) amounts to 0.20% p.a..   The iShares Core MSCI World UCITS ETF USD (Acc) is the largest ETF that tracks the MSCI World index.   The ETF replicates the performance of the underlying index by sampling technique (buying a selection of the most relevant index constituents).     The dividends in the ETF  are accumulated and reinvested in the ETF.            The iShares Core MSCI World UCITS ETF USD (Acc) is a very large ETF with 102,811m Euro assets under management.    The ETF was launched on 25 September 2009  and is domiciled in Ireland.
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>The iShares Core MSCI World UCITS ETF USD (Acc) seeks to track the MSCI World index. The MSCI World index tracks stocks from 23 developed countries worldwide.      The ETF's TER (total expense ratio) amounts to 0.20% p.a..   The iShares Core MSCI World UCITS ETF USD (Acc) is the largest ETF that tracks the MSCI World index.   The ETF replicates the performance of the underlying index by sampling technique (buying a selection of the most relevant index constituents).     The dividends in the ETF  are accumulated and reinvested in the ETF.            The iShares Core MSCI World UCITS ETF USD (Acc) is a very large ETF with 102,811m Euro assets under management.    The ETF was launched on 25 September 2009  and is domiciled in Ireland.
 </pre></div>
 </div>
 </section>
@@ -325,7 +326,7 @@ Below are examples of available methods from JustETF source.</p>
 <p>Show the companies who have the highest share in the ETF.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">etf</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">isin</span><span class="o">=</span><span class="s2">&quot;IE00B4L5Y983&quot;</span><span class="p">,</span> <span class="n">security_type</span><span class="o">=</span><span class="s2">&quot;etf&quot;</span><span class="p">)</span>
+<span class="n">etf</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">isin</span><span class="o">=</span><span class="s2">"IE00B4L5Y983"</span><span class="p">,</span> <span class="n">security_type</span><span class="o">=</span><span class="s2">"etf"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">etf</span><span class="o">.</span><span class="n">justetf_holdings_companies</span>
 </pre></div>
 </div>
@@ -362,7 +363,7 @@ Below are examples of available methods from JustETF source.</p>
 <p>Show the countries who have the highest share in the ETF.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">etf</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">isin</span><span class="o">=</span><span class="s2">&quot;IE00B4L5Y983&quot;</span><span class="p">,</span> <span class="n">security_type</span><span class="o">=</span><span class="s2">&quot;etf&quot;</span><span class="p">)</span>
+<span class="n">etf</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">isin</span><span class="o">=</span><span class="s2">"IE00B4L5Y983"</span><span class="p">,</span> <span class="n">security_type</span><span class="o">=</span><span class="s2">"etf"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">etf</span><span class="o">.</span><span class="n">justetf_holdings_sectors</span>
 </pre></div>
 </div>
@@ -399,7 +400,7 @@ Below are examples of available methods from JustETF source.</p>
 <p>Show the sectors who have the highest share in the ETF.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">etf</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">isin</span><span class="o">=</span><span class="s2">&quot;IE00B4L5Y983&quot;</span><span class="p">,</span> <span class="n">security_type</span><span class="o">=</span><span class="s2">&quot;etf&quot;</span><span class="p">)</span>
+<span class="n">etf</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">isin</span><span class="o">=</span><span class="s2">"IE00B4L5Y983"</span><span class="p">,</span> <span class="n">security_type</span><span class="o">=</span><span class="s2">"etf"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">etf</span><span class="o">.</span><span class="n">justetf_holdings_sectors</span>
 </pre></div>
 </div>
@@ -456,7 +457,7 @@ Below are examples of available methods from JustETF source.</p>
 </div></blockquote>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">etf</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">isin</span><span class="o">=</span><span class="s2">&quot;IE00B4L5Y983&quot;</span><span class="p">,</span> <span class="n">security_type</span><span class="o">=</span><span class="s2">&quot;etf&quot;</span><span class="p">)</span>
+<span class="n">etf</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">isin</span><span class="o">=</span><span class="s2">"IE00B4L5Y983"</span><span class="p">,</span> <span class="n">security_type</span><span class="o">=</span><span class="s2">"etf"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">etf</span><span class="o">.</span><span class="n">justetf_basics</span>
 </pre></div>
 </div>

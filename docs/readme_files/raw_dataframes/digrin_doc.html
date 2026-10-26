@@ -211,6 +211,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../plots_and_figures/building_dash_apps.html">Building dashboards with multiple plots</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../claude.html">Use with Claude</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
 </ul>
 
@@ -266,7 +267,7 @@
 <h2>Dividend data<a class="headerlink" href="#dividend-data" title="Link to this heading"></a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"AAPL"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">digrin_dividend</span>
 </pre></div>
 </div>
@@ -326,7 +327,7 @@
 <h2>Payout Ratio data<a class="headerlink" href="#payout-ratio-data" title="Link to this heading"></a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;MSFT&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"MSFT"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">digrin_payout_ratio</span>
 </pre></div>
 </div>
@@ -374,7 +375,7 @@
 <h2>Price<a class="headerlink" href="#price" title="Link to this heading"></a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;TSLA&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"TSLA"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">digrin_price</span>
 </pre></div>
 </div>
@@ -422,7 +423,7 @@
 <h2>Stock splits<a class="headerlink" href="#stock-splits" title="Link to this heading"></a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;TSLA&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"TSLA"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">digrin_stock_splits</span>
 </pre></div>
 </div>
@@ -452,7 +453,7 @@
 <h2>Assets vs Liabilities<a class="headerlink" href="#assets-vs-liabilities" title="Link to this heading"></a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;TSLA&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"TSLA"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">digrin_assets_vs_liabilities</span>
 </pre></div>
 </div>
@@ -495,7 +496,7 @@
 <h2>Free Cash Flow<a class="headerlink" href="#free-cash-flow" title="Link to this heading"></a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;TSLA&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"TSLA"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">digrin_free_cash_flow</span>
 </pre></div>
 </div>
@@ -538,7 +539,7 @@
 <h2>Net Income<a class="headerlink" href="#net-income" title="Link to this heading"></a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;GOOG&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"GOOG"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">digrin_net_income</span>
 </pre></div>
 </div>
@@ -576,7 +577,7 @@
 <h2>Cash and Debt<a class="headerlink" href="#cash-and-debt" title="Link to this heading"></a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;GOOG&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"GOOG"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">digrin_cash_and_debt</span>
 </pre></div>
 </div>
@@ -624,7 +625,7 @@
 <h2>Shares Outstanding<a class="headerlink" href="#shares-outstanding" title="Link to this heading"></a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;GOOG&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"GOOG"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">digrin_shares_outstanding</span>
 </pre></div>
 </div>
@@ -662,7 +663,7 @@
 <h2>Expenses<a class="headerlink" href="#expenses" title="Link to this heading"></a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;GOOG&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"GOOG"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">digrin_expenses</span>
 </pre></div>
 </div>
@@ -715,7 +716,7 @@
 <h2>Cost of Revenue<a class="headerlink" href="#cost-of-revenue" title="Link to this heading"></a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;GOOG&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"GOOG"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">digrin_cost_of_revenue</span>
 </pre></div>
 </div>
@@ -758,7 +759,7 @@
 <h2>Upcoming Estimated Earnings<a class="headerlink" href="#upcoming-estimated-earnings" title="Link to this heading"></a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;GOOG&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"GOOG"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">digrin_upcoming_estimated_earnings</span>
 </pre></div>
 </div>
@@ -796,7 +797,7 @@
 <h2>Dividend Growth Rate (3-Year Average)<a class="headerlink" href="#dividend-growth-rate-3-year-average" title="Link to this heading"></a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;NVDA&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"NVDA"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">digrin_dgr3</span>
 </pre></div>
 </div>
@@ -844,7 +845,7 @@
 <h2>Dividend Growth Rate (5-Year Average)<a class="headerlink" href="#dividend-growth-rate-5-year-average" title="Link to this heading"></a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"AAPL"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">digrin_dgr5</span>
 </pre></div>
 </div>
@@ -892,7 +893,7 @@
 <h2>Dividend Growth Rate (10-Year Average)<a class="headerlink" href="#dividend-growth-rate-10-year-average" title="Link to this heading"></a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;MSFT&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"MSFT"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">digrin_dgr10</span>
 </pre></div>
 </div>

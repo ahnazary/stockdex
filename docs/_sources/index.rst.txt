@@ -8,4 +8,5 @@
 
    data_sources
    plots_and_figures
+   claude
    contributing

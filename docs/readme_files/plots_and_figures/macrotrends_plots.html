@@ -211,6 +211,7 @@
 <li class="toctree-l2"><a class="reference internal" href="building_dash_apps.html">Building dashboards with multiple plots</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../claude.html">Use with Claude</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
 </ul>
 
@@ -277,7 +278,7 @@
 <p><strong>Results Example 1: annual frequency</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;GOOG&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"GOOG"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_macrotrends_income_statement</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -285,16 +286,16 @@
 <p><strong>Results Example 2: quarterly frequency</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;GOOG&quot;</span><span class="p">)</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_macrotrends_income_statement</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="s2">&quot;quarterly&quot;</span><span class="p">,</span> <span class="n">show_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"GOOG"</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_macrotrends_income_statement</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="s2">"quarterly"</span><span class="p">,</span> <span class="n">show_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="rounded reference internal image-reference" href="../../_images/plot_macrotrends_income_statement_GOOG_quarterly.png"><img alt="Income Statement Chart for GOOG stock" class="rounded align-center" src="../../_images/plot_macrotrends_income_statement_GOOG_quarterly.png" style="width: 80%;" /></a>
 <p><strong>Results Example 3: group by field</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;GOOG&quot;</span><span class="p">)</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_macrotrends_income_statement</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="s2">&quot;annual&quot;</span><span class="p">,</span> <span class="n">show_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">group_by</span><span class="o">=</span><span class="s2">&quot;field&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"GOOG"</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_macrotrends_income_statement</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="s2">"annual"</span><span class="p">,</span> <span class="n">show_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">group_by</span><span class="o">=</span><span class="s2">"field"</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="rounded reference internal image-reference" href="../../_images/plot_macrotrends_income_statement_GOOG_annual_field.png"><img alt="Income Statement Chart for GOOG stock" class="rounded align-center" src="../../_images/plot_macrotrends_income_statement_GOOG_annual_field.png" style="width: 80%;" /></a>
@@ -324,24 +325,24 @@
 <p><strong>Results Example 1: annual frequency</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;KO&quot;</span><span class="p">)</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_macrotrends_income_statement</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="s2">&quot;annual&quot;</span><span class="p">,</span> <span class="n">show_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"KO"</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_macrotrends_income_statement</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="s2">"annual"</span><span class="p">,</span> <span class="n">show_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="rounded reference internal image-reference" href="../../_images/plot_macrotrends_income_statement_KO.png"><img alt="Balance Sheet Chart for KO stock" class="rounded align-center" src="../../_images/plot_macrotrends_income_statement_KO.png" style="width: 80%;" /></a>
 <p><strong>Results Example 2: quarterly frequency</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AMZN&quot;</span><span class="p">)</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_macrotrends_balance_sheet</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="s2">&quot;quarterly&quot;</span><span class="p">,</span> <span class="n">show_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"AMZN"</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_macrotrends_balance_sheet</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="s2">"quarterly"</span><span class="p">,</span> <span class="n">show_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="rounded reference internal image-reference" href="../../_images/plot_macrotrends_balance_sheet_AMZN_quarterly.png"><img alt="Balance Sheet Chart for AMZN stock" class="rounded align-center" src="../../_images/plot_macrotrends_balance_sheet_AMZN_quarterly.png" style="width: 80%;" /></a>
 <p><strong>Results Example 3: group by field</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AMZN&quot;</span><span class="p">)</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_macrotrends_balance_sheet</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="s2">&quot;annual&quot;</span><span class="p">,</span> <span class="n">show_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">group_by</span><span class="o">=</span><span class="s2">&quot;field&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"AMZN"</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_macrotrends_balance_sheet</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="s2">"annual"</span><span class="p">,</span> <span class="n">show_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">group_by</span><span class="o">=</span><span class="s2">"field"</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="rounded reference internal image-reference" href="../../_images/plot_macrotrends_balance_sheet_AMZN_annual_field.png"><img alt="Balance Sheet Chart for AMZN stock" class="rounded align-center" src="../../_images/plot_macrotrends_balance_sheet_AMZN_annual_field.png" style="width: 80%;" /></a>
@@ -371,24 +372,24 @@
 <p><strong>Results Example 1: annual frequency</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;MSFT&quot;</span><span class="p">)</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_macrotrends_cash_flow</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="s2">&quot;annual&quot;</span><span class="p">,</span> <span class="n">show_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"MSFT"</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_macrotrends_cash_flow</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="s2">"annual"</span><span class="p">,</span> <span class="n">show_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="rounded reference internal image-reference" href="../../_images/plot_macrotrends_cash_flow_MSFT_annual.png"><img alt="Cash Flow Chart for MSFT stock" class="rounded align-center" src="../../_images/plot_macrotrends_cash_flow_MSFT_annual.png" style="width: 80%;" /></a>
 <p><strong>Results Example 2: quarterly frequency</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;MSFT&quot;</span><span class="p">)</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_macrotrends_cash_flow</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="s2">&quot;quarterly&quot;</span><span class="p">,</span> <span class="n">show_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"MSFT"</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_macrotrends_cash_flow</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="s2">"quarterly"</span><span class="p">,</span> <span class="n">show_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="rounded reference internal image-reference" href="../../_images/plot_macrotrends_cash_flow_MSFT_quarterly.png"><img alt="Cash Flow Chart for MSFT stock" class="rounded align-center" src="../../_images/plot_macrotrends_cash_flow_MSFT_quarterly.png" style="width: 80%;" /></a>
 <p><strong>Results Example 3: group by field</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;MSFT&quot;</span><span class="p">)</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_macrotrends_cash_flow</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="s2">&quot;annual&quot;</span><span class="p">,</span> <span class="n">show_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">group_by</span><span class="o">=</span><span class="s2">&quot;field&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"MSFT"</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_macrotrends_cash_flow</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="s2">"annual"</span><span class="p">,</span> <span class="n">show_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">group_by</span><span class="o">=</span><span class="s2">"field"</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="rounded reference internal image-reference" href="../../_images/plot_macrotrends_cash_flow_MSFT_annual_field.png"><img alt="Cash Flow Chart for MSFT stock" class="rounded align-center" src="../../_images/plot_macrotrends_cash_flow_MSFT_annual_field.png" style="width: 80%;" /></a>

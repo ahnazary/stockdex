@@ -211,6 +211,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../plots_and_figures/building_dash_apps.html">Building dashboards with multiple plots</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../claude.html">Use with Claude</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
 </ul>
 
@@ -298,8 +299,8 @@
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AMZN&quot;</span><span class="p">)</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_api_price</span><span class="p">(</span><span class="nb">range</span><span class="o">=</span><span class="s1">&#39;1y&#39;</span><span class="p">,</span> <span class="n">dataGranularity</span><span class="o">=</span><span class="s1">&#39;1d&#39;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"AMZN"</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_api_price</span><span class="p">(</span><span class="nb">range</span><span class="o">=</span><span class="s1">'1y'</span><span class="p">,</span> <span class="n">dataGranularity</span><span class="o">=</span><span class="s1">'1d'</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><strong>Results:</strong></p>
@@ -394,7 +395,7 @@
 <h2>Current Trading Period<a class="headerlink" href="#current-trading-period" title="Link to this heading"></a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AMZN&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"AMZN"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_api_current_trading_period</span>
 </pre></div>
 </div>
@@ -457,8 +458,8 @@
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;NVDA&quot;</span><span class="p">)</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_api_income_statement</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="s1">&#39;quarterly&#39;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"NVDA"</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_api_income_statement</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="s1">'quarterly'</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><strong>Results:</strong></p>
@@ -740,8 +741,8 @@
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;MSFT&quot;</span><span class="p">)</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">cash_flow</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_api_cash_flow</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;raw&#39;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"MSFT"</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">cash_flow</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_api_cash_flow</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s1">'raw'</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><strong>Results:</strong></p>
@@ -1084,7 +1085,7 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;MSFT&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"MSFT"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_api_balance_sheet</span><span class="p">(</span><span class="n">period1</span><span class="o">=</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2020</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -1527,7 +1528,7 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;GOOG&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"GOOG"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_api_financials</span><span class="p">(</span><span class="n">period1</span><span class="o">=</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2022</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">period2</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">today</span><span class="p">())</span>
 </pre></div>
 </div>

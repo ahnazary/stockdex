@@ -211,6 +211,7 @@
 <li class="toctree-l2"><a class="reference internal" href="building_dash_apps.html">Building dashboards with multiple plots</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../claude.html">Use with Claude</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
 </ul>
 
@@ -265,7 +266,7 @@
 <p><strong>Returns:</strong> Plotly line or bar chart object (<code class="docutils literal notranslate"><span class="pre">px.line</span></code> or <code class="docutils literal notranslate"><span class="pre">px.bar</span></code>).</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;PLTR&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"PLTR"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_digrin_shares_outstanding</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -284,7 +285,7 @@
 <p><strong>Returns:</strong> Plotly line or bar chart object (<code class="docutils literal notranslate"><span class="pre">px.line</span></code> or <code class="docutils literal notranslate"><span class="pre">px.bar</span></code>).</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"AAPL"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_digrin_price</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -303,7 +304,7 @@
 <p><strong>Returns:</strong> Plotly line or bar chart object (<code class="docutils literal notranslate"><span class="pre">px.line</span></code> or <code class="docutils literal notranslate"><span class="pre">px.bar</span></code>).</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"AAPL"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_digrin_dividend</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -322,7 +323,7 @@
 <p><strong>Returns:</strong> Plotly line or bar chart object (<code class="docutils literal notranslate"><span class="pre">px.line</span></code> or <code class="docutils literal notranslate"><span class="pre">px.bar</span></code>).</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"AAPL"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_digrin_assets_vs_liabilities</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -341,7 +342,7 @@
 <p><strong>Returns:</strong> Plotly line or bar chart object (<code class="docutils literal notranslate"><span class="pre">px.line</span></code> or <code class="docutils literal notranslate"><span class="pre">px.bar</span></code>).</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"AAPL"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_digrin_free_cash_flow</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -360,7 +361,7 @@
 <p><strong>Returns:</strong> Plotly line or bar chart object (<code class="docutils literal notranslate"><span class="pre">px.line</span></code> or <code class="docutils literal notranslate"><span class="pre">px.bar</span></code>).</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"AAPL"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_digrin_net_income</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -379,7 +380,7 @@
 <p><strong>Returns:</strong> Plotly line or bar chart object (<code class="docutils literal notranslate"><span class="pre">px.line</span></code> or <code class="docutils literal notranslate"><span class="pre">px.bar</span></code>).</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"AAPL"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_digrin_cash_and_debt</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -398,7 +399,7 @@
 <p><strong>Returns:</strong> Plotly line or bar chart object (<code class="docutils literal notranslate"><span class="pre">px.line</span></code> or <code class="docutils literal notranslate"><span class="pre">px.bar</span></code>).</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"AAPL"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_digrin_expenses</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -417,7 +418,7 @@
 <p><strong>Returns:</strong> Plotly line or bar chart object (<code class="docutils literal notranslate"><span class="pre">px.line</span></code> or <code class="docutils literal notranslate"><span class="pre">px.bar</span></code>).</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"AAPL"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_digrin_cost_of_revenue</span><span class="p">()</span>
 </pre></div>
 </div>

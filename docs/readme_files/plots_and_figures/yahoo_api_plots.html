@@ -211,6 +211,7 @@
 <li class="toctree-l2"><a class="reference internal" href="building_dash_apps.html">Building dashboards with multiple plots</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../claude.html">Use with Claude</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
 </ul>
 
@@ -282,40 +283,40 @@
 <p><strong>Results Example 1: annual frequency</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;MSFT&quot;</span><span class="p">)</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_yahoo_api_income_statement</span><span class="p">(</span><span class="n">group_by</span><span class="o">=</span><span class="s2">&quot;timestamp&quot;</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="s2">&quot;annual&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"MSFT"</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_yahoo_api_income_statement</span><span class="p">(</span><span class="n">group_by</span><span class="o">=</span><span class="s2">"timestamp"</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="s2">"annual"</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="rounded reference internal image-reference" href="../../_images/plot_yahoo_api_income_statement_MSFT_annual_timestamp.png"><img alt="Income Statement Chart for MSFT stock" class="rounded align-center" src="../../_images/plot_yahoo_api_income_statement_MSFT_annual_timestamp.png" style="width: 80%;" /></a>
 <p><strong>Results Example 2: quarterly frequency</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;MSFT&quot;</span><span class="p">)</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_yahoo_api_income_statement</span><span class="p">(</span><span class="n">group_by</span><span class="o">=</span><span class="s2">&quot;timestamp&quot;</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="s2">&quot;quarterly&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"MSFT"</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_yahoo_api_income_statement</span><span class="p">(</span><span class="n">group_by</span><span class="o">=</span><span class="s2">"timestamp"</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="s2">"quarterly"</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="rounded reference internal image-reference" href="../../_images/plot_yahoo_api_income_statement_MSFT_quarterly_timestamp.png"><img alt="Income Statement Chart for MSFT stock" class="rounded align-center" src="../../_images/plot_yahoo_api_income_statement_MSFT_quarterly_timestamp.png" style="width: 80%;" /></a>
 <p><strong>Results Example 3: group by field</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;MSFT&quot;</span><span class="p">)</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_yahoo_api_income_statement</span><span class="p">(</span><span class="n">group_by</span><span class="o">=</span><span class="s2">&quot;field&quot;</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="s2">&quot;quarterly&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"MSFT"</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_yahoo_api_income_statement</span><span class="p">(</span><span class="n">group_by</span><span class="o">=</span><span class="s2">"field"</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="s2">"quarterly"</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="rounded reference internal image-reference" href="../../_images/plot_yahoo_api_income_statement_MSFT_quarterly_field.png"><img alt="Income Statement Chart for MSFT stock" class="rounded align-center" src="../../_images/plot_yahoo_api_income_statement_MSFT_quarterly_field.png" style="width: 80%;" /></a>
 <p><strong>Results Example 4: custom fields</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;MSFT&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"MSFT"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_yahoo_api_income_statement</span><span class="p">(</span>
-    <span class="n">group_by</span><span class="o">=</span><span class="s2">&quot;field&quot;</span><span class="p">,</span>
-    <span class="n">frequency</span><span class="o">=</span><span class="s2">&quot;annual&quot;</span><span class="p">,</span>
+    <span class="n">group_by</span><span class="o">=</span><span class="s2">"field"</span><span class="p">,</span>
+    <span class="n">frequency</span><span class="o">=</span><span class="s2">"annual"</span><span class="p">,</span>
     <span class="n">fields_to_include</span><span class="o">=</span><span class="p">[</span>
-        <span class="s2">&quot;TotalRevenue&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;CostOfRevenue&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;GrossProfit&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;OperatingIncome&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;NetIncome&quot;</span><span class="p">,</span>
+        <span class="s2">"TotalRevenue"</span><span class="p">,</span>
+        <span class="s2">"CostOfRevenue"</span><span class="p">,</span>
+        <span class="s2">"GrossProfit"</span><span class="p">,</span>
+        <span class="s2">"OperatingIncome"</span><span class="p">,</span>
+        <span class="s2">"NetIncome"</span><span class="p">,</span>
     <span class="p">],</span>
 <span class="p">)</span>
 </pre></div>
@@ -348,38 +349,38 @@
 <p><strong>Results Example 1: annual frequency</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_yahoo_api_cash_flow</span><span class="p">(</span><span class="n">group_by</span><span class="o">=</span><span class="s2">&quot;timestamp&quot;</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="s2">&quot;annual&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"AAPL"</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_yahoo_api_cash_flow</span><span class="p">(</span><span class="n">group_by</span><span class="o">=</span><span class="s2">"timestamp"</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="s2">"annual"</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="rounded reference internal image-reference" href="../../_images/plot_yahoo_api_cash_flow_AAPL_annual_timestamp.png"><img alt="Cash Flow Chart for AAPL stock" class="rounded align-center" src="../../_images/plot_yahoo_api_cash_flow_AAPL_annual_timestamp.png" style="width: 80%;" /></a>
 <p><strong>Results Example 2: quarterly frequency</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_yahoo_api_cash_flow</span><span class="p">(</span><span class="n">group_by</span><span class="o">=</span><span class="s2">&quot;timestamp&quot;</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="s2">&quot;quarterly&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"AAPL"</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_yahoo_api_cash_flow</span><span class="p">(</span><span class="n">group_by</span><span class="o">=</span><span class="s2">"timestamp"</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="s2">"quarterly"</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="rounded reference internal image-reference" href="../../_images/plot_yahoo_api_cash_flow_AAPL_quarterly_timestamp.png"><img alt="Cash Flow Chart for AAPL stock" class="rounded align-center" src="../../_images/plot_yahoo_api_cash_flow_AAPL_quarterly_timestamp.png" style="width: 80%;" /></a>
 <p><strong>Results Example 3: group by field</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_yahoo_api_cash_flow</span><span class="p">(</span><span class="n">group_by</span><span class="o">=</span><span class="s2">&quot;field&quot;</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="s2">&quot;quarterly&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"AAPL"</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_yahoo_api_cash_flow</span><span class="p">(</span><span class="n">group_by</span><span class="o">=</span><span class="s2">"field"</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="s2">"quarterly"</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="rounded reference internal image-reference" href="../../_images/plot_yahoo_api_cash_flow_AAPL_quarterly_field.png"><img alt="Cash Flow Chart for AAPL stock" class="rounded align-center" src="../../_images/plot_yahoo_api_cash_flow_AAPL_quarterly_field.png" style="width: 80%;" /></a>
 <p><strong>Results Example 4: custom fields</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"AAPL"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_yahoo_api_cash_flow</span><span class="p">(</span>
-    <span class="n">group_by</span><span class="o">=</span><span class="s2">&quot;field&quot;</span><span class="p">,</span>
-    <span class="n">frequency</span><span class="o">=</span><span class="s2">&quot;annual&quot;</span><span class="p">,</span>
+    <span class="n">group_by</span><span class="o">=</span><span class="s2">"field"</span><span class="p">,</span>
+    <span class="n">frequency</span><span class="o">=</span><span class="s2">"annual"</span><span class="p">,</span>
     <span class="n">fields_to_include</span><span class="o">=</span><span class="p">[</span>
-        <span class="s2">&quot;OperatingCashFlow&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;DepreciationAndAmortization&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;EndCashPosition&quot;</span><span class="p">,</span>
+        <span class="s2">"OperatingCashFlow"</span><span class="p">,</span>
+        <span class="s2">"DepreciationAndAmortization"</span><span class="p">,</span>
+        <span class="s2">"EndCashPosition"</span><span class="p">,</span>
     <span class="p">],</span>
 <span class="p">)</span>
 </pre></div>
@@ -412,40 +413,40 @@
 <p><strong>Results Example 1: annual frequency</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AMD&quot;</span><span class="p">)</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_yahoo_api_balance_sheet</span><span class="p">(</span><span class="n">group_by</span><span class="o">=</span><span class="s2">&quot;timestamp&quot;</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="s2">&quot;annual&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"AMD"</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_yahoo_api_balance_sheet</span><span class="p">(</span><span class="n">group_by</span><span class="o">=</span><span class="s2">"timestamp"</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="s2">"annual"</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="rounded reference internal image-reference" href="../../_images/plot_yahoo_api_balance_sheet_AMD_annual_timestamp.png"><img alt="Balance Sheet Chart for AMD stock" class="rounded align-center" src="../../_images/plot_yahoo_api_balance_sheet_AMD_annual_timestamp.png" style="width: 80%;" /></a>
 <p><strong>Results Example 2: quarterly frequency</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AMD&quot;</span><span class="p">)</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_yahoo_api_balance_sheet</span><span class="p">(</span><span class="n">group_by</span><span class="o">=</span><span class="s2">&quot;timestamp&quot;</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="s2">&quot;quarterly&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"AMD"</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_yahoo_api_balance_sheet</span><span class="p">(</span><span class="n">group_by</span><span class="o">=</span><span class="s2">"timestamp"</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="s2">"quarterly"</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="rounded reference internal image-reference" href="../../_images/plot_yahoo_api_balance_sheet_AMD_quarterly_timestamp.png"><img alt="Balance Sheet Chart for AMD stock" class="rounded align-center" src="../../_images/plot_yahoo_api_balance_sheet_AMD_quarterly_timestamp.png" style="width: 80%;" /></a>
 <p><strong>Results Example 3: group by field</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AMD&quot;</span><span class="p">)</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_yahoo_api_balance_sheet</span><span class="p">(</span><span class="n">group_by</span><span class="o">=</span><span class="s2">&quot;field&quot;</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="s2">&quot;quarterly&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"AMD"</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_yahoo_api_balance_sheet</span><span class="p">(</span><span class="n">group_by</span><span class="o">=</span><span class="s2">"field"</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="s2">"quarterly"</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="rounded reference internal image-reference" href="../../_images/plot_yahoo_api_balance_sheet_AMD_quarterly_field.png"><img alt="Balance Sheet Chart for AMD stock" class="rounded align-center" src="../../_images/plot_yahoo_api_balance_sheet_AMD_quarterly_field.png" style="width: 80%;" /></a>
 <p><strong>Results Example 4: custom fields</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;AAPL&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"AAPL"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_yahoo_api_balance_sheet</span><span class="p">(</span>
-    <span class="n">group_by</span><span class="o">=</span><span class="s2">&quot;field&quot;</span><span class="p">,</span>
-    <span class="n">frequency</span><span class="o">=</span><span class="s2">&quot;annual&quot;</span><span class="p">,</span>
+    <span class="n">group_by</span><span class="o">=</span><span class="s2">"field"</span><span class="p">,</span>
+    <span class="n">frequency</span><span class="o">=</span><span class="s2">"annual"</span><span class="p">,</span>
     <span class="n">fields_to_include</span><span class="o">=</span><span class="p">[</span>
-        <span class="s2">&quot;TotalAssets&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Payables&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;CurrentDebt&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Inventory&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Leases&quot;</span>
+        <span class="s2">"TotalAssets"</span><span class="p">,</span>
+        <span class="s2">"Payables"</span><span class="p">,</span>
+        <span class="s2">"CurrentDebt"</span><span class="p">,</span>
+        <span class="s2">"Inventory"</span><span class="p">,</span>
+        <span class="s2">"Leases"</span>
     <span class="p">],</span>
 <span class="p">)</span>
 </pre></div>
@@ -481,40 +482,40 @@
 <p><strong>Results Example 1: annual frequency</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;TSLA&quot;</span><span class="p">)</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_yahoo_api_financials</span><span class="p">(</span><span class="n">group_by</span><span class="o">=</span><span class="s2">&quot;timestamp&quot;</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="s2">&quot;annual&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"TSLA"</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_yahoo_api_financials</span><span class="p">(</span><span class="n">group_by</span><span class="o">=</span><span class="s2">"timestamp"</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="s2">"annual"</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="rounded reference internal image-reference" href="../../_images/plot_yahoo_api_financials_TSLA_annual_timestamp.png"><img alt="Financials Chart for TSLA stock" class="rounded align-center" src="../../_images/plot_yahoo_api_financials_TSLA_annual_timestamp.png" style="width: 80%;" /></a>
 <p><strong>Results Example 2: quarterly frequency</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;TSLA&quot;</span><span class="p">)</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_yahoo_api_financials</span><span class="p">(</span><span class="n">group_by</span><span class="o">=</span><span class="s2">&quot;timestamp&quot;</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="s2">&quot;quarterly&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"TSLA"</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_yahoo_api_financials</span><span class="p">(</span><span class="n">group_by</span><span class="o">=</span><span class="s2">"timestamp"</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="s2">"quarterly"</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="rounded reference internal image-reference" href="../../_images/plot_yahoo_api_financials_TSLA_quarterly_timestamp.png"><img alt="Financials Chart for TSLA stock" class="rounded align-center" src="../../_images/plot_yahoo_api_financials_TSLA_quarterly_timestamp.png" style="width: 80%;" /></a>
 <p><strong>Results Example 3: group by field</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;TSLA&quot;</span><span class="p">)</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_yahoo_api_financials</span><span class="p">(</span><span class="n">group_by</span><span class="o">=</span><span class="s2">&quot;field&quot;</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="s2">&quot;quarterly&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"TSLA"</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_yahoo_api_financials</span><span class="p">(</span><span class="n">group_by</span><span class="o">=</span><span class="s2">"field"</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="s2">"quarterly"</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="rounded reference internal image-reference" href="../../_images/plot_yahoo_api_financials_TSLA_quarterly_field.png"><img alt="Financials Chart for TSLA stock" class="rounded align-center" src="../../_images/plot_yahoo_api_financials_TSLA_quarterly_field.png" style="width: 80%;" /></a>
 <p><strong>Results Example 4: custom fields</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
-<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">&quot;TSLA&quot;</span><span class="p">)</span>
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"TSLA"</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">plot_yahoo_api_financials</span><span class="p">(</span>
-    <span class="n">group_by</span><span class="o">=</span><span class="s2">&quot;field&quot;</span><span class="p">,</span>
-    <span class="n">frequency</span><span class="o">=</span><span class="s2">&quot;annual&quot;</span><span class="p">,</span>
+    <span class="n">group_by</span><span class="o">=</span><span class="s2">"field"</span><span class="p">,</span>
+    <span class="n">frequency</span><span class="o">=</span><span class="s2">"annual"</span><span class="p">,</span>
     <span class="n">fields_to_include</span><span class="o">=</span><span class="p">[</span>
-        <span class="s2">&quot;TotalRevenue&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;CostOfRevenue&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;GrossProfit&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;OperatingIncome&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;NetIncome&quot;</span><span class="p">,</span>
+        <span class="s2">"TotalRevenue"</span><span class="p">,</span>
+        <span class="s2">"CostOfRevenue"</span><span class="p">,</span>
+        <span class="s2">"GrossProfit"</span><span class="p">,</span>
+        <span class="s2">"OperatingIncome"</span><span class="p">,</span>
+        <span class="s2">"NetIncome"</span><span class="p">,</span>
     <span class="p">],</span>
 <span class="p">)</span>
 </pre></div>
