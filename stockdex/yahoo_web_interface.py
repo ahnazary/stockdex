@@ -16,6 +16,7 @@ from stockdex.config import (
     VALID_SECURITY_TYPES,
     YAHOO_WEB_BASE_URL,
 )
+from stockdex.exceptions import NoDataError
 from stockdex.lib import check_security_type
 from stockdex.ticker_base import TickerBase
 
@@ -514,12 +515,20 @@ class YahooWeb(TickerBase):
         soup = BeautifulSoup(response.content, "html.parser")
 
         # find element with test Valuation Measures
-        parent_section = self.find_parent_by_text(
-            soup, "h3", "Valuation Measures"
-        ).parent.parent
+        heading = self.find_parent_by_text(soup, "h3", "Valuation Measures")
+        # Yahoo serves a consent/blocked page to some hosts without the section.
+        if heading is None or heading.parent is None or heading.parent.parent is None:
+            raise NoDataError(
+                f"Valuation measures section not found on Yahoo for {self.ticker}"
+            )
+        parent_section = heading.parent.parent
 
         # looking for "table svelte-104jbnt"
         table = parent_section.find("table")
+        if table is None or table.find("thead") is None or table.find("tbody") is None:
+            raise NoDataError(
+                f"Valuation measures table not found on Yahoo for {self.ticker}"
+            )
 
         data_df = pd.DataFrame()
 

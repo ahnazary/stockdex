@@ -2,6 +2,7 @@
 Module to extract data from Digrin website
 """
 
+import logging
 from typing import Union
 
 import pandas as pd
@@ -12,6 +13,8 @@ from stockdex.config import DIGRIN_BASE_URL, VALID_SECURITY_TYPES
 from stockdex.exceptions import NoDataError
 from stockdex.lib import plot_dataframe
 from stockdex.ticker_base import TickerBase
+
+logger = logging.getLogger(__name__)
 
 
 class DigrinInterface(TickerBase):
@@ -45,23 +48,32 @@ class DigrinInterface(TickerBase):
         # Parse the HTML content of the website
         soup = BeautifulSoup(response.content, "html.parser")
 
-        try:
-            table = self.find_parent_by_text(soup, "table", "Ex-dividend date")
-        except IndexError:
-            raise Exception(f"There is no dividend data for the ticker {self.ticker}")
-
-        data_df = pd.DataFrame()
+        table = self.find_parent_by_text(soup, "table", "Ex-dividend date")
+        # An absent table may be a provider layout/access change, not zero dividends.
+        if table is None:
+            raise ValueError("Digrin dividend table is missing")
+        head, body = table.find("thead"), table.find("tbody")
+        if head is None or body is None:
+            raise ValueError("Digrin dividend table structure is invalid")
+        headers = [th.get_text(" ", strip=True) for th in head.find_all("th")]
+        required = {"Ex-dividend date", "Payable date", "Dividend amount (change)"}
+        if not required.issubset(headers) or len(set(headers)) != len(headers):
+            raise ValueError("Digrin dividend table headers are invalid")
         data = []
-
-        try:
-            headers = [th.text for th in table.find_all("thead")[0].find_all("th")]
-        except IndexError:
-            raise ValueError(
-                f"There are no dividends data for ticker: {self.ticker}. For details, check out {url}"  # noqa
+        rows = body.find_all("tr")
+        for tr in rows:
+            cells = [td.get_text(" ", strip=True) for td in tr.find_all("td")]
+            if len(cells) != len(headers):
+                # e.g. colspan notes or announcement rows; not a dividend entry
+                continue
+            data.append(cells)
+        skipped = len(rows) - len(data)
+        if rows and not data:
+            raise ValueError("Digrin dividend row structure is invalid")
+        if skipped:
+            logger.warning(
+                "Skipped %d Digrin dividend row(s) with unexpected structure", skipped
             )
-
-        for tr in table.find_all("tbody")[0].find_all("tr"):
-            data.append([td.text for td in tr.find_all("td")])
 
         data_df = pd.DataFrame(data, columns=headers).replace("\n", "", regex=True)
         return data_df
