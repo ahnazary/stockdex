@@ -1,0 +1,19 @@
+{
+  "name": "stockdex",
+  "owner": {
+    "name": "Amir Nazary",
+    "url": "https://github.com/ahnazary"
+  },
+  "metadata": {
+    "description": "Claude Code plugins for the Stockdex financial data package."
+  },
+  "plugins": [
+    {
+      "name": "stockdex",
+      "source": "./",
+      "description": "Read-only stock prices, financial statements and dividends via a local MCP server.",
+      "category": "finance",
+      "tags": ["stocks", "finance", "mcp"]
+    }
+  ]
+}

@@ -1,19 +1,20 @@
 name: Publish Python Package to PyPI
 
+# Publish once per version tag (e.g. 1.2.8). Creating a GitHub release
+# also pushes its tag, so listening to release events as well caused
+# duplicate uploads, and edited/deleted releases re-ran the publish.
 on:
   push:
     tags:
-      - '*'
-  release:
-    types: [published, edited, deleted]
+      - '[0-9]+.[0-9]+.[0-9]+*'
 
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v5
       with:
         python-version: '3.11'
     - name: Install dependencies
@@ -21,7 +22,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install setuptools wheel twine
     - name: Extract tag name and set version
-      run: echo "VERSION=\"${GITHUB_REF#refs/tags/}\"" > __version__.py
+      run: echo "VERSION=\"${GITHUB_REF_NAME}\"" > __version__.py
     - name: Build and publish to PyPI
       env:
         TWINE_USERNAME: __token__

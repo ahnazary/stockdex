@@ -34,14 +34,18 @@ class TickerBase:
                 timeout=10,
                 allow_redirects=True,
             )
-            crumb = response.text.strip()
-            if response.status_code == 429 or "Too Many Requests" in crumb:
-                raise RuntimeError("Rate limited while getting crumb")
-            if crumb == "" or "<html>" in crumb:
-                raise RuntimeError("Invalid crumb received")
-            return crumb
-        except Exception as e:
-            raise RuntimeError(f"Error fetching Yahoo crumb: {e}")
+        except requests.exceptions.RequestException:
+            # Keep transport failures typed so callers can tell them apart.
+            raise
+        crumb = response.text.strip()
+        if response.status_code == 429 or "Too Many Requests" in crumb:
+            raise RateLimitError(
+                "https://query1.finance.yahoo.com/v1/test/getcrumb",
+                response.headers.get("Retry-After"),
+            )
+        if crumb == "" or "<html>" in crumb:
+            raise RuntimeError("Invalid crumb received")
+        return crumb
 
     # Timestamp of last non-Yahoo request to throttle external API calls
     _last_external_request_time: float = 0.0

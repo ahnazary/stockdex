@@ -1,0 +1,54 @@
+name: Build Claude Desktop extension
+
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+*'
+  pull_request:
+    branches: [ '*' ]
+    paths:
+      - mcpb/**
+      - .claude-plugin/**
+      - .github/workflows/mcpb-release.yaml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  pack:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Check bundle version matches tag
+      if: startsWith(github.ref, 'refs/tags/')
+      run: |
+        manifest_version=$(jq -r .version mcpb/manifest.json)
+        if [ "$manifest_version" != "$GITHUB_REF_NAME" ]; then
+          echo "mcpb/manifest.json version $manifest_version != tag $GITHUB_REF_NAME"
+          exit 1
+        fi
+
+    - name: Validate and pack
+      run: |
+        npx -y @anthropic-ai/mcpb@2 validate mcpb/manifest.json
+        npx -y @anthropic-ai/mcpb@2 pack mcpb stockdex.mcpb
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: stockdex-mcpb
+        path: stockdex.mcpb
+
+    - name: Attach to GitHub release
+      if: startsWith(github.ref, 'refs/tags/')
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1 \
+          || gh release create "$GITHUB_REF_NAME" --verify-tag --generate-notes
+        gh release upload "$GITHUB_REF_NAME" stockdex.mcpb --clobber

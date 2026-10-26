@@ -13,3 +13,4 @@ dist/
 *.egg-info
 __version__.py
 reddit.txt
+*.mcpb
