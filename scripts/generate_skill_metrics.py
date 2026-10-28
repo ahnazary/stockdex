@@ -1,4 +1,4 @@
-"""Regenerate skills/stockdex/reference/metrics.md from stockdex.config.
+"""Regenerate plugins/stockdex/skills/stockdex/reference/metrics.md from stockdex.config.
 
 Usage: python scripts/generate_skill_metrics.py
 """
@@ -8,7 +8,9 @@ from pathlib import Path
 from stockdex import config
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "skills" / "stockdex" / "reference" / "metrics.md"
+TARGET = (
+    ROOT / "plugins" / "stockdex" / "skills" / "stockdex" / "reference" / "metrics.md"
+)
 SECTIONS = (
     ("income_statement", "INCOME_STATEMENT_COLUMNS"),
     ("cash_flow", "CASH_FLOW_COLUMNS"),

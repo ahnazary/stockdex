@@ -9,6 +9,7 @@ on:
     paths:
       - mcpb/**
       - .claude-plugin/**
+      - plugins/**
       - .github/workflows/mcpb-release.yaml
   workflow_dispatch:
 

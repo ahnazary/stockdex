@@ -10,7 +10,7 @@
   "plugins": [
     {
       "name": "stockdex",
-      "source": "./",
+      "source": "./plugins/stockdex",
       "description": "Read-only stock prices, financial statements and dividends via a local MCP server.",
       "category": "finance",
       "tags": ["stocks", "finance", "mcp"]

@@ -4,7 +4,7 @@ import importlib.util
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-SKILL = ROOT / "skills" / "stockdex"
+SKILL = ROOT / "plugins" / "stockdex" / "skills" / "stockdex"
 
 
 def load_generator():
