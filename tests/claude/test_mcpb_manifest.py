@@ -29,10 +29,12 @@ def test_uv_server_points_at_entry_point():
 
 def test_versions_are_in_sync():
     version = manifest()["version"]
-    plugin = json.loads((ROOT / ".claude-plugin" / "plugin.json").read_text())
+    plugin = json.loads(
+        (ROOT / "plugins" / "stockdex" / ".claude-plugin" / "plugin.json").read_text()
+    )
     assert plugin["version"] == version
     assert ast.literal_eval(pyproject_value("version")) == version
-    assert f'"stockdex[mcp]>={version}"' in (BUNDLE / "pyproject.toml").read_text()
+    assert f'"stockdex[mcp]=={version}"' in (BUNDLE / "pyproject.toml").read_text()
 
 
 def test_declared_tools_match_server():

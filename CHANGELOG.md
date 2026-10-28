@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.3.1
+
+### Changed
+
+- MCP tools now declare a `title` and full annotations (`readOnlyHint`, `destructiveHint`, `idempotentHint`, `openWorldHint`), and their descriptions state exactly what each tool returns and where the data comes from. This follows Anthropic's Software Directory Policy.
+- The Claude Code plugin moved to `plugins/stockdex/`, with its own README and LICENSE, and pins `stockdex[mcp]==1.3.1` exactly. The install commands stay the same.
+- The Claude Desktop extension pins `stockdex[mcp]==1.3.1` and adds a privacy disclosure and example prompts to its description.
+
 ## 1.3.0
 
 ### Added
