@@ -33,6 +33,8 @@
 ### Changed
 
 - Macrotrends looks up the company name through the Yahoo Finance API instead of scraping the Yahoo website.
+- Docs: new landing page with install tabs and data-source cards, an API reference generated from the docstrings, a changelog page, a Finviz plots page, and the missing `justetf_price`, `justetf_holdings_countries`, `plot_dataframe` and `plot_finviz_*` entries. The justETF page URL is now `justetf_doc.html` (was `jsutetf_doc.html`).
+- Docs are rebuilt and published on every merge to `main`, and checked on pull requests that touch them. Sphinx warnings now fail the build.
 
 ## 1.4.0
 

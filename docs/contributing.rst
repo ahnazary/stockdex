@@ -1,27 +1,46 @@
 Contributing
 ============
 
-Stockdex is an open-source project, and contributions of any kind are welcome and appreciated!  
-Whether you want to report a bug, suggest a new feature, improve documentation, or submit code, every contribution helps.
+Stockdex is open source, and contributions of any kind are welcome: bug
+reports, ideas, documentation and code.
 
 How to contribute
-~~~~~~~~~~~~~~~~~~
+-----------------
 
-- **Issues**:  
-  Found a bug or have an idea for an improvement? Please open an issue on GitHub and describe it clearly.
+- **Issues**: found a bug or have an idea? Open an
+  `issue <https://github.com/ahnazary/stockdex/issues>`_ and describe it.
+- **Discussions**: not sure about an idea yet? Start a thread in the
+  repository's *Discussions* tab.
+- **Pull requests**: fork the repository and open a PR with a short
+  description of the change and any related issues.
 
-- **Discussions**:  
-  If you’re unsure about an idea or want feedback before coding, start a discussion on the repository’s *Discussions* tab.
+Development setup
+-----------------
 
-- **Pull Requests (PRs)**:  
-  If you’d like to fix something directly, fork the repository and open a PR.  
-  Please include a short description of the change and reference any related issues.
+.. code-block:: bash
 
-Guidelines
-~~~~~~~~~~
+   git clone https://github.com/ahnazary/stockdex.git
+   cd stockdex
+   pip install -r requirements.txt -r requirements_tests.txt
+   pytest -q
 
-There are no Guidelines :)
+Live tests that call external websites are skipped by default; run them
+with ``pytest --run-live``.
 
-|
-|
-.. centered:: ❤️ Thank you in advance for your contribution ❤️
+Code style
+----------
+
+The code is formatted with ``black`` and ``isort --profile black`` and
+checked with ``ruff``.
+
+Building the docs
+-----------------
+
+.. code-block:: bash
+
+   pip install -r requirements.txt -r requirements_sphinx.txt
+   sphinx-build -b html docs docs/build
+
+The docs are rebuilt and published on every merge to ``main``.
+
+.. centered:: Thank you for contributing!
