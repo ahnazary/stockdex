@@ -19,8 +19,8 @@ data for you. It provides 16 read-only tools:
 * ``get_dividends``: dividend history (Digrin by default, Yahoo Finance as an alternative or fallback)
 * ``get_splits``: stock split history
 * ``get_options_chain``: calls and puts for one expiration date
-* ``get_fund_holdings``: eTF and fund top holdings, sector weights and asset allocation
-* ``get_fund_profile``: eTF and fund fees, category and performance vs category
+* ``get_fund_holdings``: ETF and fund top holdings, sector weights and asset allocation
+* ``get_fund_profile``: ETF and fund fees, category and performance vs category
 
 All data comes from Yahoo Finance, except dividends, which come from
 Digrin by default.
