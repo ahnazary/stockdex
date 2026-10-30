@@ -2,9 +2,9 @@
   "manifest_version": "0.4",
   "name": "stockdex",
   "display_name": "Stockdex",
-  "version": "1.4.0",
-  "description": "Read-only stock prices, financial statements and dividends from Yahoo Finance and Digrin.",
-  "long_description": "Stockdex gives Claude 16 read-only tools for public market data from Yahoo Finance and Digrin: price history and live quotes, financial statements, valuation ratios, company profiles, analyst estimates and earnings dates, holders and insider trades, SEC filings, dividends and splits, options chains, and ETF and fund holdings. No account or API key is needed.\n\n**Privacy:** Stockdex runs on your computer. It sends only ticker symbols, search text and request parameters (such as date range, dataset or metric names) to Yahoo Finance and Digrin, and returns their responses to Claude. It does not collect, store or transmit personal data or conversation content, and it does not use telemetry.\n\n**Example prompts**\n- \"How has Microsoft's stock price moved over the last 6 months?\"\n- \"Show Apple's annual revenue, net income and EPS for the last five years.\"\n- \"What dividends has Coca-Cola (KO) paid recently?\"\n- \"Who are the largest holders of Tesla, and have insiders been selling?\"\n\nStockdex is not investment advice. Data comes from third-party providers and may be delayed, incomplete or rate-limited.",
+  "version": "1.5.0",
+  "description": "Read-only stock prices, financial statements, margins, dividends, insider trades and earnings data from Yahoo Finance, Macrotrends, Digrin and Finviz.",
+  "long_description": "Stockdex gives Claude 21 read-only tools for public market data from Yahoo Finance, Macrotrends, Digrin and Finviz: price history and live quotes, financial statements (5 years from Yahoo Finance or about 15 from Macrotrends), margin history and financial ratios, valuation ratios, company profiles, analyst estimates and earnings dates, earnings surprises and price reactions, revenue by segment and region, holders and insider trades, SEC filings, dividends with payout ratio and growth, splits, options chains, and ETF and fund holdings. No account or API key is needed.\n\n**Privacy:** Stockdex runs on your computer. It sends only ticker symbols, search text and request parameters (such as date range, dataset or metric names) to Yahoo Finance, Macrotrends, Digrin and Finviz, and returns their responses to Claude. It does not collect, store or transmit personal data or conversation content, and it does not use telemetry.\n\n**Example prompts**\n- \"How has Microsoft's stock price moved over the last 6 months?\"\n- \"Show Apple's revenue and net income for the last 15 years.\"\n- \"How has NVIDIA's operating margin changed since 2015?\"\n- \"What is Coca-Cola's payout ratio, and how fast is its dividend growing?\"\n- \"How did Tesla's stock react to its last four earnings reports?\"\n- \"Where does Apple's revenue come from by region?\"\n\nStockdex is not investment advice. Data comes from third-party providers and may be delayed, incomplete, rate-limited or blocked.",
   "author": {
     "name": "Amir Nazary",
     "url": "https://github.com/ahnazary"
@@ -121,13 +121,17 @@
     "stocks",
     "finance",
     "yahoo-finance",
+    "macrotrends",
+    "finviz",
     "dividends",
     "financial-statements"
   ],
   "license": "MIT",
   "privacy_policies": [
     "https://legal.yahoo.com/us/en/yahoo/privacy/index.html",
-    "https://www.digrin.com/privacy-policy"
+    "https://www.macrotrends.net/privacy-policy",
+    "https://www.digrin.com/privacy-policy",
+    "https://finviz.com/privacy.ashx"
   ],
   "compatibility": {
     "platforms": [

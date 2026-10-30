@@ -1,9 +1,19 @@
 # Changelog
 
-## Unreleased
+## 1.5.0
 
 ### Added
 
+- MCP tools for Claude (5 new, 21 in total):
+  - `get_margins_and_ratios` (Macrotrends): gross, operating, EBITDA, pre-tax and net margin history and key financial ratios.
+  - `get_dividend_metrics` (Digrin and Finviz): payout ratio, dividend growth projections, and annual dividend, yield and payout including estimates.
+  - `get_revenue_breakdown` (Finviz): annual revenue by segment, region or product.
+  - `get_insider_trades` (Finviz): recent insider buys and sales with price, shares and value.
+  - `get_earnings_reaction` (Finviz): price moves around earnings reports vs the S&P 500, EPS and revenue surprises, and estimate revisions.
+- `get_financial_statement` accepts `source="macrotrends"` for about 15 years of statements. The default is still Yahoo Finance.
+- MCP error codes `provider_blocked` (the website refused the request) and `layout_changed` (a scraped page changed).
+- `ProviderBlockedError` and `LayoutChangedError` exceptions, raised by the scraped sources.
+- `TickerBase.forbidden_retries` and `forbidden_retry_delay` to tune the HTTP 403 retry loop.
 - `yahoo_api_company_name`: the company's full name from the Yahoo Finance API.
 
 ### Deprecated
@@ -24,6 +34,13 @@
   | `yahoo_web_earnings_history` | `yahoo_api_earnings_history()` |
   | `yahoo_web_full_name` | `yahoo_api_company_name()` |
 
+### Fixed
+
+- Macrotrends parses its embedded data with `json.loads` instead of `eval`, so page content is never executed.
+- Finviz methods return empty DataFrames instead of raising `IndexError` when a list is empty, e.g. `finviz_dividends_annual_data` for some tickers.
+- `finviz_overall_dividend` no longer removes the dividend lists from the cached page data, so `finviz_dividends_date_data` works after it.
+- An HTTP 429 during the 403 retry loop is raised as `RateLimitError`.
+
 ### Removed
 
 - The `stockdex.yahoo_web_interface` module and the `YahooWeb` class.
@@ -33,6 +50,7 @@
 ### Changed
 
 - Macrotrends looks up the company name through the Yahoo Finance API instead of scraping the Yahoo website.
+- The Claude skill, plugin README, docs and Desktop extension describe the new tools and sources. justETF stays out of the MCP server because it needs a Chrome browser.
 - Docs: new landing page with install tabs and data-source cards, an API reference generated from the docstrings, a changelog page, a Finviz plots page, and the missing `justetf_price`, `justetf_holdings_countries`, `plot_dataframe` and `plot_finviz_*` entries. The justETF page URL is now `justetf_doc.html` (was `jsutetf_doc.html`).
 - Docs are rebuilt and published on every merge to `main`, and checked on pull requests that touch them. Sphinx warnings now fail the build.
 

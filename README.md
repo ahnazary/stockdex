@@ -49,7 +49,7 @@ result = ticker.yahoo_api_income_statement(frequency='quarterly')
 
 ## Use with Claude
 
-Stockdex ships a local, read-only MCP server so Claude can fetch prices, financial statements and dividends for you.
+Stockdex ships a local, read-only MCP server with 21 tools so Claude can fetch prices, financial statements, margins, dividends, insider trades, earnings reactions and more for you.
 
 - **Claude Desktop**: download `stockdex.mcpb` from the [latest release](https://github.com/ahnazary/stockdex/releases/latest) and double-click it.
 - **Claude Code**: install the plugin, which requires [uv](https://docs.astral.sh/uv/):

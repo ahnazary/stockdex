@@ -1,12 +1,16 @@
 ---
 name: stockdex
-description: Fetch public market data with the Stockdex MCP tools - price history, live quotes, financial statements, valuation ratios, company profiles, analyst estimates, earnings dates, holders and insiders, SEC filings, dividends, splits, options chains and ETF/fund holdings. Use when the user asks about a stock, ETF, index or fund by name or ticker.
+description: Fetch public market data with the Stockdex MCP tools - price history, live quotes, financial statements (up to 15 years), margins and ratios, valuation, company profiles, revenue by segment and region, analyst estimates, earnings dates, surprises and price reactions, holders and insider trades, SEC filings, dividends with payout and growth, splits, options chains and ETF/fund holdings. Use when the user asks about a stock, ETF, index or fund by name or ticker.
 ---
 
 # Stockdex
 
 Use the `stockdex` MCP tools for read-only financial data. They fetch from
-Yahoo Finance (most data) and Digrin (dividends by default) on the user's machine.
+Yahoo Finance (most data), Macrotrends (long statement history, margins and
+ratios), Digrin (dividends, payout and growth) and Finviz (revenue breakdowns,
+insider trades, earnings reactions, annual dividends) on the user's machine.
+Macrotrends sometimes blocks automated requests (`provider_blocked`); fall back
+to the Yahoo Finance source for statements when that happens.
 
 ## Pick a tool
 
