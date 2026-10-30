@@ -116,7 +116,8 @@ def test_macrotrends_statement_parses_json(monkeypatch):
     assert list(frame.index) == ["Revenue", "Net Income"]
     assert list(frame.columns) == ["2025-09-30", "2024-09-30"]
     assert frame.loc["Revenue", "2025-09-30"] == "416161"
-    assert frame.loc["Net Income", "2024-09-30"] is None
+    # Missing cells are None or NaN depending on the pandas version
+    assert pd.isna(frame.loc["Net Income", "2024-09-30"])
 
 
 def test_macrotrends_never_evaluates_page_code(monkeypatch):
