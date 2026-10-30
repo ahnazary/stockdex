@@ -74,6 +74,17 @@ def test_rejects_unknown_dataset(adapter, provider):
     )
 
 
+@pytest.mark.parametrize(
+    "dataset, source",
+    [("annual", "finviz"), ("summary", "finviz"), ("payout_ratio", "digrin")],
+)
+def test_invalid_input_keeps_dataset_source(adapter, provider, dataset, source):
+    result = adapter.get_dividend_metrics("KO", dataset=dataset, limit=0)
+    assert result["error"]["code"] == "invalid_input"
+    assert result["source"] == source
+    assert not provider.calls
+
+
 def test_changed_payout_periods_are_layout_changed(adapter, provider, monkeypatch):
     frame = pd.DataFrame(
         {"Date": ["Q3 2026"], "Payout ratio": ["1%"], "PE ratio": ["2"]}

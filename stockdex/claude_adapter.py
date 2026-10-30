@@ -331,6 +331,10 @@ class StockdexAdapter:
         """The provider a request asks for, before its parameters are validated"""
         if operation == "financial_statement":
             return {"macrotrends": "macrotrends"}.get(parameters.get("source"), default)
+        if operation == "dividend_metrics":
+            dataset = parameters.get("dataset")
+            if isinstance(dataset, str) and dataset in DIVIDEND_METRICS:
+                return DIVIDEND_METRICS[dataset][0]
         return default
 
     def _validate(self, operation, ticker, parameters):
