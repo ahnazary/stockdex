@@ -34,8 +34,17 @@ def test_stdio_tools(tmp_path):
                         assert tool.annotations.read_only_hint is True
                         assert tool.annotations.destructive_hint is False
                         limit_schema = tool.input_schema["properties"]["limit"]
-                        assert limit_schema["minimum"] == 1
-                        assert limit_schema["maximum"] in (25, 500)
+                        # Optional limits are anyOf[int-with-bounds, null].
+                        bounded = next(
+                            (
+                                s
+                                for s in limit_schema.get("anyOf", [])
+                                if "minimum" in s
+                            ),
+                            limit_schema,
+                        )
+                        assert bounded["minimum"] == 1
+                        assert bounded["maximum"] in (25, 500)
                     for name in (
                         "get_prices",
                         "get_financial_statement",

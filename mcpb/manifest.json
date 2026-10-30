@@ -41,6 +41,18 @@
     {
       "name": "search_ticker",
       "description": "Find Yahoo Finance ticker symbols for a company name or partial ticker."
+    },
+    {
+      "name": "get_company_profile",
+      "description": "Company profile, key executives and related tickers from Yahoo Finance."
+    },
+    {
+      "name": "get_key_statistics",
+      "description": "Market cap, P/E, beta, 52-week range, margins and analyst price targets from Yahoo Finance."
+    },
+    {
+      "name": "get_valuation_history",
+      "description": "Market cap, enterprise value and valuation ratios over time from Yahoo Finance."
     }
   ],
   "tools_generated": false,

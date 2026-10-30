@@ -120,6 +120,53 @@ def create_server(adapter=None):
         """Find Yahoo Finance ticker symbols for a company name or partial ticker, e.g. "Bayerische Motoren" -> BMW.DE. Returns symbol, name, type (EQUITY, ETF, INDEX, ...), exchange, sector and industry, best match first. Use it before other tools when the user names a company instead of a symbol."""
         return await invoke(adapter.search, query=query, limit=limit)
 
+    @server.tool(
+        title="Get company profile",
+        annotations=tool_annotations("Get company profile"),
+    )
+    async def get_company_profile(
+        ticker: str,
+        dataset: Literal["profile", "officers", "similar_symbols"] = "profile",
+        limit: Optional[RowLimit] = None,
+    ) -> CallToolResult:
+        """Get company information for one ticker from Yahoo Finance. dataset="profile" (default): address, website, sector, industry, employee count, business summary and governance risk scores. "officers": key executives with title, age and total pay. "similar_symbols": related tickers with a relevance score."""
+        return await invoke(
+            adapter.get_dataset, ticker=ticker, dataset=dataset, limit=limit
+        )
+
+    @server.tool(
+        title="Get key statistics",
+        annotations=tool_annotations("Get key statistics"),
+    )
+    async def get_key_statistics(
+        ticker: str,
+        dataset: Literal[
+            "summary", "key_statistics", "financial_data", "market_price"
+        ] = "summary",
+        limit: Optional[RowLimit] = None,
+    ) -> CallToolResult:
+        """Get the current snapshot of one ticker from Yahoo Finance. dataset="summary" (default): day and 52-week ranges, volume, market cap, beta, trailing and forward P/E, dividend rate and yield. "key_statistics": enterprise value, PEG, price/book, shares outstanding and float, short interest, ownership, last split. "financial_data": analyst price targets and recommendation, revenue, margins, cash flow, debt and ROE. "market_price": regular, pre- and post-market price and market state. Values are raw numbers; fractions such as yields and margins are not percentages."""
+        return await invoke(
+            adapter.get_dataset, ticker=ticker, dataset=dataset, limit=limit
+        )
+
+    @server.tool(
+        title="Get valuation history",
+        annotations=tool_annotations("Get valuation history"),
+    )
+    async def get_valuation_history(
+        ticker: str,
+        frequency: Literal["annual", "quarterly", "trailing"] = "quarterly",
+        limit: RowLimit = 20,
+    ) -> CallToolResult:
+        """Get valuation measures over time for one ticker from Yahoo Finance, newest first: MarketCap, EnterpriseValue, PeRatio, ForwardPeRatio, PegRatio, PsRatio, PbRatio, EnterprisesValueRevenueRatio and EnterprisesValueEBITDARatio. frequency="annual", "quarterly" (default) or "trailing" (recent trailing-twelve-month snapshots)."""
+        return await invoke(
+            adapter.get_valuation_history,
+            ticker=ticker,
+            frequency=frequency,
+            limit=limit,
+        )
+
     return server
 
 

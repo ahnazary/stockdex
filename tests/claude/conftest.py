@@ -14,6 +14,9 @@ EXPECTED_TOOLS = {
     "get_financial_statement",
     "get_dividends",
     "search_ticker",
+    "get_company_profile",
+    "get_key_statistics",
+    "get_valuation_history",
 }
 
 
@@ -70,6 +73,23 @@ class FakeTicker:
                 "exchange": ["GER", "PNK"],
             }
         ).head(limit)
+
+    def yahoo_api_profile(self):
+        return pd.DataFrame(
+            {self.ticker: ["Cupertino", "Technology"]}, index=["city", "sector"]
+        )
+
+    def yahoo_api_summary_detail(self):
+        return pd.DataFrame({self.ticker: [5.09e12, 1.07]}, index=["marketCap", "beta"])
+
+    def yahoo_api_valuation_measures(self, frequency="quarterly", format="raw"):
+        return pd.DataFrame(
+            {
+                f"{frequency}MarketCap": [3.2e12, 3.5e12],
+                f"{frequency}PeRatio": [33.1, 35.0],
+            },
+            index=["2026-03-31", "2026-06-30"],
+        )
 
     @property
     def digrin_dividend(self):

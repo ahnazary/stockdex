@@ -20,6 +20,7 @@ MAX_BYTES = 256 * 1024
 MAX_ROWS = 500
 PRICE_RANGES = ("1mo", "3mo", "6mo", "1y")
 STATEMENTS = ("income_statement", "cash_flow", "balance_sheet")
+VALUATION_FREQUENCIES = ("annual", "quarterly", "trailing")
 DEFAULT_METRICS = {
     "income_statement": ["TotalRevenue", "NetIncome", "BasicEPS"],
     "cash_flow": ["OperatingCashFlow", "FreeCashFlow", "CapitalExpenditure"],
@@ -151,6 +152,12 @@ class StockdexAdapter:
     def get_dividends(self, ticker, limit=20):
         return self._request("dividends", ticker, {"limit": limit})
 
+    def get_valuation_history(self, ticker, frequency="quarterly", limit=20):
+        """Market cap, enterprise value and valuation ratios over time."""
+        return self._request(
+            "valuation", ticker, {"frequency": frequency, "limit": limit}
+        )
+
     def search(self, query, limit=10):
         """Find Yahoo Finance symbols for a company name or partial ticker."""
         return self._request("search", None, {"query": query, "limit": limit})
@@ -191,6 +198,9 @@ class StockdexAdapter:
             or not 1 <= parameters["limit"] <= MAX_ROWS
         ):
             raise InputError("limit must be an integer from 1 to 500.")
+        if operation == "valuation":
+            if parameters["frequency"] not in VALUATION_FREQUENCIES:
+                raise InputError("frequency must be annual, quarterly or trailing.")
         if operation == "prices":
             if parameters["range"] not in PRICE_RANGES:
                 raise InputError("range must be 1mo, 3mo, 6mo or 1y.")
@@ -425,6 +435,23 @@ class StockdexAdapter:
             return frame.sort_values("date", ascending=False, kind="stable")
         if operation == "dataset":
             return self._dataset(provider, parameters["dataset"])
+        if operation == "valuation":
+            frame = provider.yahoo_api_valuation_measures(
+                frequency=parameters["frequency"], format="raw"
+            )
+            if frame.empty:
+                return frame
+            prefix = parameters["frequency"]
+            frame = frame.rename(
+                columns=lambda c: c[len(prefix) :] if c.startswith(prefix) else c
+            )
+            frame = frame.apply(pd.to_numeric, errors="coerce")
+            frame.insert(0, "date", pd.to_datetime(frame.index).strftime("%Y-%m-%d"))
+            warnings.append(
+                "Raw provider values. Market cap and enterprise value are in the "
+                "trading currency; ratios are unitless."
+            )
+            return frame.sort_values("date", ascending=False).reset_index(drop=True)
         return self._dividends(provider.digrin_dividend, warnings)
 
     def _search(self, parameters):
