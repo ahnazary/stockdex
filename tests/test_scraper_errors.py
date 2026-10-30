@@ -182,6 +182,28 @@ def test_macrotrends_margin_missing(monkeypatch):
         ticker.macrotrends_operating_margin
 
 
+def test_macrotrends_margin_rows_changed_width(monkeypatch):
+    html = margin_page().replace("<td>31.97%</td>", "<td>31.97%</td><td>x</td>")
+    ticker = serve(monkeypatch, Ticker("AAPL"), html)
+    with pytest.raises(LayoutChangedError, match="no longer match its 4 columns"):
+        ticker.macrotrends_operating_margin
+
+
+def test_macrotrends_margin_only_spacers_is_empty(monkeypatch):
+    html = margin_page().replace(
+        "<tr><td>2025-09-30</td><td>$416.16B</td><td>$133.05B</td><td>31.97%</td></tr>",
+        "",
+    )
+    assert serve(monkeypatch, Ticker("AAPL"), html).macrotrends_operating_margin.empty
+
+
+def test_macrotrends_cache_is_per_instance(monkeypatch):
+    first = serve(monkeypatch, Ticker("AAPL"), margin_page())
+    assert first.macrotrends_operating_margin is first.macrotrends_operating_margin
+    second = serve(monkeypatch, Ticker("AAPL"), margin_page())
+    assert second.macrotrends_operating_margin is not first.macrotrends_operating_margin
+
+
 def test_macrotrends_revenue_missing_table(monkeypatch):
     ticker = serve(monkeypatch, Ticker("AAPL"), "<html></html>")
     with pytest.raises(LayoutChangedError, match="annual revenue"):
@@ -223,6 +245,26 @@ def test_finviz_route_data_not_json(monkeypatch):
 def test_finviz_empty_lists_are_empty_frames(monkeypatch, method):
     ticker = serve(monkeypatch, Ticker("AAPL"), route_page({}))
     assert getattr(ticker, method)().empty
+
+
+@pytest.mark.parametrize("value", [{}, False, None, "x", [1, 2]])
+def test_finviz_malformed_lists_are_layout_changes(monkeypatch, value):
+    ticker = serve(monkeypatch, Ticker("AAPL"), route_page({"earningsData": value}))
+    with pytest.raises(LayoutChangedError, match="list of records"):
+        ticker.finviz_earnings_data()
+
+
+def test_finviz_raw_data_cached_per_instance(monkeypatch):
+    calls = []
+    ticker = serve(monkeypatch, Ticker("AAPL"), route_page({"earningsData": []}))
+    original = ticker.get_response
+    monkeypatch.setattr(
+        ticker, "get_response", lambda url: calls.append(url) or original(url)
+    )
+    ticker.finviz_earnings_data()
+    ticker.finviz_earnings_annual_data()
+    assert len(calls) == 1
+    assert "_cache__finviz_earnings_reaction_raw_data" in vars(ticker)
 
 
 def test_finviz_dividends_annual_empty(monkeypatch):
@@ -288,6 +330,20 @@ def test_digrin_table_parses(monkeypatch):
     assert frame.to_dict(orient="records") == [
         {"Date": "2026Q3 ", "Payout ratio": "13.55%", "PE ratio": "34.78"}
     ]
+
+
+def test_digrin_rows_changed_width_is_layout_change(monkeypatch):
+    html = """<table><thead><tr><th>Date</th><th>Payout ratio</th></tr></thead>
+    <tbody><tr><td>2026Q3</td><td>13.55%</td><td>new</td></tr></tbody></table>"""
+    ticker = serve(monkeypatch, Ticker("AAPL"), html)
+    with pytest.raises(LayoutChangedError, match="no longer match its 2 columns"):
+        ticker.digrin_payout_ratio
+
+
+def test_digrin_empty_body_is_empty_frame(monkeypatch):
+    html = """<table><thead><tr><th>Date</th><th>Payout ratio</th></tr></thead>
+    <tbody></tbody></table>"""
+    assert serve(monkeypatch, Ticker("AAPL"), html).digrin_payout_ratio.empty
 
 
 def test_layout_changed_is_a_value_error():

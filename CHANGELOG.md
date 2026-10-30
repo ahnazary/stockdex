@@ -29,6 +29,7 @@
 ### Fixed
 
 - The default `period1` and `period2` of the Yahoo Finance API statement, valuation and plot methods are worked out on each call. Before, they were fixed when stockdex was imported, so a long-running process kept requesting the same date window.
+- Macrotrends and Finviz cache downloaded pages per `Ticker` instead of in a class-wide `lru_cache`, so long-running processes no longer keep every ticker and its pages in memory.
 
 ### Removed
 
