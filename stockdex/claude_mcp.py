@@ -232,6 +232,36 @@ def create_server(adapter=None):
             adapter.get_dataset, ticker=ticker, dataset=dataset, limit=limit
         )
 
+    @server.tool(
+        title="Get ETF or fund holdings",
+        annotations=tool_annotations("Get ETF or fund holdings"),
+    )
+    async def get_fund_holdings(
+        ticker: str,
+        dataset: Literal[
+            "fund_top_holdings", "fund_sectors", "fund_asset_allocation"
+        ] = "fund_top_holdings",
+        limit: Optional[RowLimit] = None,
+    ) -> CallToolResult:
+        """Get the composition of one ETF or mutual fund from Yahoo Finance. dataset="fund_top_holdings" (default): top holdings with symbol, name and fraction of the fund. "fund_sectors": weight per sector, largest first. "fund_asset_allocation": stock, bond, cash and other positions. Weights are fractions (0.08 = 8%). Returns no_data for individual stocks."""
+        return await invoke(
+            adapter.get_dataset, ticker=ticker, dataset=dataset, limit=limit
+        )
+
+    @server.tool(
+        title="Get ETF or fund profile",
+        annotations=tool_annotations("Get ETF or fund profile"),
+    )
+    async def get_fund_profile(
+        ticker: str,
+        dataset: Literal["fund_profile", "fund_performance"] = "fund_profile",
+        limit: Optional[RowLimit] = None,
+    ) -> CallToolResult:
+        """Get details of one ETF or mutual fund from Yahoo Finance. dataset="fund_profile" (default): fund family, category, legal type, expense ratio, turnover and net assets, with category averages suffixed _category. "fund_performance": trailing (YTD to 10 years) and calendar-year total returns for the fund vs its category, as fractions. Returns no_data for individual stocks."""
+        return await invoke(
+            adapter.get_dataset, ticker=ticker, dataset=dataset, limit=limit
+        )
+
     return server
 
 

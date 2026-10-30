@@ -21,6 +21,8 @@ EXPECTED_TOOLS = {
     "get_earnings_calendar",
     "get_holders",
     "get_sec_filings",
+    "get_fund_holdings",
+    "get_fund_profile",
 }
 
 
@@ -116,6 +118,17 @@ class FakeTicker:
                 "type": ["8-K"],
                 "exhibits": [[{"type": "8-K", "url": "https://example.com/x"}]],
             }
+        )
+
+    def yahoo_api_fund_top_holdings(self):
+        return pd.DataFrame(
+            {"symbol": ["NVDA", "AAPL"], "holdingPercent": [0.0836, 0.0735]}
+        )
+
+    def yahoo_api_fund_performance(self):
+        return pd.DataFrame(
+            {"fund": [0.1268, 0.1772], "category": [0.0514, 0.1554]},
+            index=["ytd", "2025"],
         )
 
     @property

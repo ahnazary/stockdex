@@ -69,6 +69,14 @@
     {
       "name": "get_sec_filings",
       "description": "Recent SEC filings with form type, title and links from Yahoo Finance."
+    },
+    {
+      "name": "get_fund_holdings",
+      "description": "Top holdings, sector weights and asset allocation of ETFs and mutual funds from Yahoo Finance."
+    },
+    {
+      "name": "get_fund_profile",
+      "description": "Fund family, category, expense ratio and performance vs category for ETFs and mutual funds from Yahoo Finance."
     }
   ],
   "tools_generated": false,
