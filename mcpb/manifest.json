@@ -4,7 +4,7 @@
   "display_name": "Stockdex",
   "version": "1.4.0",
   "description": "Read-only stock prices, financial statements and dividends from Yahoo Finance and Digrin.",
-  "long_description": "Stockdex gives Claude three read-only tools for public market data: daily price history (open, high, low, close, volume) and income statement, cash flow and balance sheet figures from Yahoo Finance, and dividend history from Digrin. No account or API key is needed.\n\n**Privacy:** Stockdex runs on your computer. It sends only the ticker symbol and request parameters (such as date range or metric names) to Yahoo Finance and Digrin, and returns their responses to Claude. It does not collect, store or transmit personal data or conversation content, and it does not use telemetry.\n\n**Example prompts**\n- \"How has Microsoft's stock price moved over the last 6 months?\"\n- \"Show Apple's annual revenue, net income and EPS for the last five years.\"\n- \"What dividends has Coca-Cola (KO) paid recently?\"\n\nStockdex is not investment advice. Data comes from third-party providers and may be delayed, incomplete or rate-limited.",
+  "long_description": "Stockdex gives Claude 16 read-only tools for public market data from Yahoo Finance and Digrin: price history and live quotes, financial statements, valuation ratios, company profiles, analyst estimates and earnings dates, holders and insider trades, SEC filings, dividends and splits, options chains, and ETF and fund holdings. No account or API key is needed.\n\n**Privacy:** Stockdex runs on your computer. It sends only ticker symbols, search text and request parameters (such as date range, dataset or metric names) to Yahoo Finance and Digrin, and returns their responses to Claude. It does not collect, store or transmit personal data or conversation content, and it does not use telemetry.\n\n**Example prompts**\n- \"How has Microsoft's stock price moved over the last 6 months?\"\n- \"Show Apple's annual revenue, net income and EPS for the last five years.\"\n- \"What dividends has Coca-Cola (KO) paid recently?\"\n- \"Who are the largest holders of Tesla, and have insiders been selling?\"\n\nStockdex is not investment advice. Data comes from third-party providers and may be delayed, incomplete or rate-limited.",
   "author": {
     "name": "Amir Nazary",
     "url": "https://github.com/ahnazary"
@@ -36,7 +36,59 @@
     },
     {
       "name": "get_dividends",
-      "description": "Dividend history (ex-dividend date, payable date, amount, currency) for one ticker from Digrin."
+      "description": "Dividend history from Digrin, or Yahoo Finance as an alternative or fallback."
+    },
+    {
+      "name": "search_ticker",
+      "description": "Find Yahoo Finance ticker symbols for a company name or partial ticker."
+    },
+    {
+      "name": "get_company_profile",
+      "description": "Company profile, key executives and related tickers from Yahoo Finance."
+    },
+    {
+      "name": "get_key_statistics",
+      "description": "Market cap, P/E, beta, 52-week range, margins and analyst price targets from Yahoo Finance."
+    },
+    {
+      "name": "get_valuation_history",
+      "description": "Market cap, enterprise value and valuation ratios over time from Yahoo Finance."
+    },
+    {
+      "name": "get_analyst_estimates",
+      "description": "Analyst EPS and revenue estimates, recommendations, rating changes and earnings surprises from Yahoo Finance."
+    },
+    {
+      "name": "get_earnings_calendar",
+      "description": "Next earnings date and estimates, ex-dividend and dividend payment dates from Yahoo Finance."
+    },
+    {
+      "name": "get_holders",
+      "description": "Institutional and fund holders, ownership breakdown and insider transactions from Yahoo Finance."
+    },
+    {
+      "name": "get_sec_filings",
+      "description": "Recent SEC filings with form type, title and links from Yahoo Finance."
+    },
+    {
+      "name": "get_fund_holdings",
+      "description": "Top holdings, sector weights and asset allocation of ETFs and mutual funds from Yahoo Finance."
+    },
+    {
+      "name": "get_fund_profile",
+      "description": "Fund family, category, expense ratio and performance vs category for ETFs and mutual funds from Yahoo Finance."
+    },
+    {
+      "name": "get_splits",
+      "description": "Stock split history from Yahoo Finance."
+    },
+    {
+      "name": "get_options_chain",
+      "description": "Options chain for one expiration date from Yahoo Finance."
+    },
+    {
+      "name": "get_quotes",
+      "description": "Current quotes for up to 20 symbols from Yahoo Finance."
     }
   ],
   "tools_generated": false,

@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- MCP tools for Claude (13 new, 16 in total): `search_ticker`, `get_quotes`, `get_key_statistics`, `get_valuation_history`, `get_company_profile`, `get_analyst_estimates`, `get_earnings_calendar`, `get_holders`, `get_sec_filings`, `get_splits`, `get_options_chain`, `get_fund_holdings` and `get_fund_profile`, built on the Yahoo Finance API methods added in 1.4.0.
+- `get_dividends` accepts `source="yahoo"` or `source="auto"` (Digrin with Yahoo Finance fallback). The default is still Digrin.
+
+### Changed
+
+- The Claude skill, plugin README, docs and Desktop extension description cover the new tools.
+
 ## 1.4.0
 
 ### Added
