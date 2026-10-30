@@ -8,6 +8,7 @@ import math
 import re
 import threading
 from datetime import date, datetime, timezone
+from decimal import Decimal
 
 import numpy as np
 import pandas as pd
@@ -25,6 +26,7 @@ MAX_BYTES = 256 * 1024
 MAX_ROWS = 500
 PRICE_RANGES = ("1mo", "3mo", "6mo", "1y")
 STATEMENTS = ("income_statement", "cash_flow", "balance_sheet")
+STATEMENT_SOURCES = ("yahoo", "macrotrends")
 VALUATION_FREQUENCIES = ("annual", "quarterly", "trailing")
 DIVIDEND_SOURCES = ("digrin", "yahoo", "auto")
 OPTION_TYPES = ("calls", "puts", "both")
@@ -38,8 +40,30 @@ DEFAULT_METRICS = {
         "StockholdersEquity",
     ],
 }
+# Macrotrends row names differ from Yahoo's; these defaults match the
+# statement pages and the Stockdex plot defaults.
+MACROTRENDS_DEFAULT_METRICS = {
+    "income_statement": ["Revenue", "Net Income", "EPS - Earnings Per Share"],
+    "cash_flow": [
+        "Cash Flow From Operating Activities",
+        "Net Change In Property, Plant, And Equipment",
+        "Common Stock Dividends Paid",
+    ],
+    "balance_sheet": ["Total Assets", "Total Liabilities", "Share Holder Equity"],
+}
+_MACROTRENDS_METRIC = re.compile(r"[\w .,&'/()%+-]{1,80}")
+# Macrotrends margin and ratio pages exposed by get_margins_and_ratios.
+# "margin" pages are TTM tables with a Date column; "ratios" is field x date.
+MACROTRENDS_DATASETS = {
+    "gross_margin": "macrotrends_gross_margin",
+    "operating_margin": "macrotrends_operating_margin",
+    "ebitda_margin": "macrotrends_ebitda_margin",
+    "pre_tax_margin": "macrotrends_pre_tax_margin",
+    "net_margin": "macrotrends_net_margin",
+    "key_ratios": "macrotrends_key_financial_ratios",
+}
 _PROVIDER_LOCK = threading.Lock()
-_SOURCES = {"dividends": "digrin"}
+_SOURCES = {"dividends": "digrin", "margins": "macrotrends"}
 # The MCP should answer quickly; give bot-protected sites one short retry
 # instead of the library default of five ten-second waits.
 FORBIDDEN_RETRIES = 1
@@ -130,6 +154,48 @@ def _years_before(value, years):
         return value.replace(year=value.year - years, day=28)
 
 
+_MONEY = re.compile(r"(?P<sign>-)?\$?(?P<number>-?[\d,]*\.?\d+)(?P<unit>[KMBT])?")
+_UNITS = {None: 0, "K": 3, "M": 6, "B": 9, "T": 12}
+
+
+def _money(value):
+    """'$416.16B' -> 416160000000.0, '-$1.2M' -> -1200000.0, '' -> None."""
+    if value is None or (isinstance(value, float) and math.isnan(value)):
+        return None
+    if isinstance(value, (int, float)):
+        return float(value)
+    text = str(value).strip().replace(" ", "")
+    match = _MONEY.fullmatch(text)
+    if not match:
+        return None
+    # Decimal keeps "$133.05B" exact (133050000000.0, not ...0.00002).
+    number = float(
+        Decimal(match["number"].replace(",", "")).scaleb(_UNITS[match["unit"]])
+    )
+    return -number if match["sign"] else number
+
+
+def _percent(value):
+    """'31.97%' -> 31.97, '' -> None."""
+    if value is None or (isinstance(value, float) and math.isnan(value)):
+        return None
+    if isinstance(value, (int, float)):
+        return float(value)
+    text = str(value).strip().rstrip("%").replace(",", "")
+    try:
+        return float(text)
+    except ValueError:
+        return None
+
+
+def _macrotrends_number(column):
+    """Statement and ratio cells are numeric strings or empty; '' -> null."""
+    return pd.to_numeric(
+        column.map(lambda v: None if v in ("", None) else str(v).replace(",", "")),
+        errors="coerce",
+    )
+
+
 class StockdexAdapter:
     def __init__(self, ticker_factory=Ticker, clock=None):
         self._ticker_factory = ticker_factory
@@ -155,7 +221,16 @@ class StockdexAdapter:
         end_date=None,
         metrics=None,
         limit=20,
+        source="yahoo",
     ):
+        """
+        Income statement, cash flow or balance sheet.
+
+        ``source="yahoo"`` (default) covers up to five years and uses Yahoo
+        metric names such as ``TotalRevenue``. ``source="macrotrends"`` covers
+        up to about 15 years and uses Macrotrends row names such as
+        ``Revenue``; values are in millions of the reporting currency.
+        """
         return self._request(
             "financial_statement",
             ticker,
@@ -166,8 +241,13 @@ class StockdexAdapter:
                 "end_date": end_date,
                 "metrics": metrics,
                 "limit": limit,
+                "source": source,
             },
         )
+
+    def get_margins_and_ratios(self, ticker, dataset="operating_margin", limit=20):
+        """Margins over time and key financial ratios from Macrotrends."""
+        return self._request("margins", ticker, {"dataset": dataset, "limit": limit})
 
     def get_dividends(self, ticker, limit=20, source="digrin"):
         """
@@ -235,6 +315,10 @@ class StockdexAdapter:
             if parameters["limit"] is None:
                 kind = YAHOO_DATASETS[parameters["dataset"]][1]
                 parameters["limit"] = MAX_ROWS if kind == "record" else 20
+        if operation == "margins" and parameters["dataset"] not in MACROTRENDS_DATASETS:
+            raise InputError(
+                "dataset must be one of: " + ", ".join(MACROTRENDS_DATASETS)
+            )
         if (
             type(parameters["limit"]) is not int
             or not 1 <= parameters["limit"] <= MAX_ROWS
@@ -262,6 +346,12 @@ class StockdexAdapter:
                 raise InputError("Unsupported financial statement.")
             if parameters["frequency"] not in ("annual", "quarterly"):
                 raise InputError("frequency must be annual or quarterly.")
+            source = parameters.setdefault("source", "yahoo")
+            if source not in STATEMENT_SOURCES:
+                raise InputError("source must be yahoo or macrotrends.")
+            if source == "macrotrends":
+                self._validate_macrotrends_statement(parameters)
+                return ticker
             today = self._clock().date()
             end = (
                 _date(parameters["end_date"])
@@ -368,6 +458,10 @@ class StockdexAdapter:
             parameters = dict(parameters)
             symbol = self._validate(operation, ticker, parameters)
             result.update(ticker=symbol, parameters=parameters)
+            if operation == "financial_statement":
+                result["source"] = {"macrotrends": "macrotrends"}.get(
+                    parameters["source"], "yahoo_api"
+                )
             # Nonblocking admission prevents an unbounded queue of waiting requests.
             if not _PROVIDER_LOCK.acquire(blocking=False):
                 result["error"] = {
@@ -388,8 +482,8 @@ class StockdexAdapter:
             finally:
                 _PROVIDER_LOCK.release()
             result["retrieved_at"] = self._clock().isoformat()
-            if operation == "dividends":
-                result["source"] = frame.attrs.get("source", "digrin")
+            if operation in ("dividends", "financial_statement"):
+                result["source"] = frame.attrs.get("source", result["source"])
             if frame.empty:
                 raise NoDataError()
             if not frame.columns.is_unique:
@@ -486,6 +580,8 @@ class StockdexAdapter:
             )
             return frame.sort_values("timestamp", ascending=False, kind="stable")
         if operation == "financial_statement":
+            if parameters.get("source") == "macrotrends":
+                return self._macrotrends_statement(provider, parameters, warnings)
             methods = {
                 "income_statement": provider.yahoo_api_income_statement,
                 "cash_flow": provider.yahoo_api_cash_flow,
@@ -528,6 +624,8 @@ class StockdexAdapter:
             return frame.sort_values("date", ascending=False, kind="stable")
         if operation == "dataset":
             return self._dataset(provider, parameters["dataset"])
+        if operation == "margins":
+            return self._margins(provider, parameters["dataset"], warnings)
         if operation == "splits":
             return self._events(provider.yahoo_api_splits(), "split_date")
         if operation == "options":
@@ -696,3 +794,115 @@ class StockdexAdapter:
         return pd.DataFrame(rows).sort_values(
             "ex_dividend_date", ascending=False, na_position="last", kind="stable"
         )
+
+    def _validate_macrotrends_statement(self, parameters):
+        today = self._clock().date()
+        for key in ("start_date", "end_date"):
+            if parameters[key] is not None:
+                parameters[key] = _date(parameters[key]).isoformat()
+        end = parameters["end_date"]
+        if end is not None and end > today.isoformat():
+            raise InputError("end_date must not be in the future.")
+        start = parameters["start_date"]
+        if start is not None and end is not None and not start < end:
+            raise InputError("start_date must be before end_date.")
+        metrics = parameters["metrics"]
+        if metrics is None:
+            metrics = MACROTRENDS_DEFAULT_METRICS[parameters["statement"]][:]
+        if (
+            not isinstance(metrics, list)
+            or not 1 <= len(metrics) <= 20
+            or any(
+                not isinstance(m, str) or not _MACROTRENDS_METRIC.fullmatch(m)
+                for m in metrics
+            )
+        ):
+            raise InputError(
+                "Select 1–20 Macrotrends row names, e.g. Revenue or Net Income."
+            )
+        if len(set(metrics)) != len(metrics):
+            raise InputError("Metric names must be unique.")
+        parameters["metrics"] = metrics
+
+    @staticmethod
+    def _macrotrends_statement(provider, parameters, warnings):
+        methods = {
+            "income_statement": provider.macrotrends_income_statement,
+            "cash_flow": provider.macrotrends_cash_flow,
+            "balance_sheet": provider.macrotrends_balance_sheet,
+        }
+        frame = methods[parameters["statement"]](frequency=parameters["frequency"])
+        if frame.empty:
+            return frame
+        # Field x period -> one row per period, matching the Yahoo layout.
+        by_name = {str(name).strip().casefold(): name for name in frame.index}
+        wanted = parameters["metrics"]
+        found = [by_name.get(m.casefold()) for m in wanted]
+        missing = [m for m, f in zip(wanted, found) if f is None]
+        if len(missing) == len(wanted):
+            raise NoDataError()
+        if missing:
+            warnings.append(
+                "Unavailable metrics returned as null: "
+                + ", ".join(missing)
+                + ". Available rows: "
+                + ", ".join(str(n) for n in frame.index[:40])
+            )
+        rows = frame.reindex([f for f in found if f is not None]).T
+        rows.columns = [m for m, f in zip(wanted, found) if f is not None]
+        rows = rows.reindex(columns=wanted)
+        rows = rows.apply(_macrotrends_number)
+        dates = pd.to_datetime(rows.index, errors="coerce")
+        if dates.isna().all():
+            raise LayoutChangedError("Macrotrends", "statement periods are not dates")
+        rows = rows[~dates.isna()]
+        rows.insert(0, "date", dates[~dates.isna()].strftime("%Y-%m-%d"))
+        if parameters["start_date"]:
+            rows = rows[rows["date"] >= parameters["start_date"]]
+        if parameters["end_date"]:
+            rows = rows[rows["date"] < parameters["end_date"]]
+        warnings.append(
+            "Macrotrends values are in millions of the reporting currency, except "
+            "per-share figures and ratios. End date is exclusive."
+        )
+        rows = rows.sort_values("date", ascending=False, kind="stable")
+        rows = rows.reset_index(drop=True)
+        rows.attrs["source"] = "macrotrends"
+        return rows
+
+    @staticmethod
+    def _margins(provider, dataset, warnings):
+        frame = getattr(provider, MACROTRENDS_DATASETS[dataset])
+        if frame.empty:
+            return frame
+        if dataset == "key_ratios":
+            # Field x date -> one row per date, ratios as numbers.
+            frame = frame.T.apply(_macrotrends_number)
+            dates = pd.to_datetime(frame.index, errors="coerce")
+            frame = frame[~dates.isna()]
+            frame.insert(0, "date", dates[~dates.isna()].strftime("%Y-%m-%d"))
+            warnings.append(
+                "Ratios are unitless except margins and returns, which are percentages "
+                "(31.9 means 31.9%)."
+            )
+            return frame.sort_values("date", ascending=False).reset_index(drop=True)
+        if "Date" not in frame.columns:
+            raise LayoutChangedError(
+                "Macrotrends", f"{dataset} table has no Date column"
+            )
+        dates = pd.to_datetime(frame["Date"], errors="coerce")
+        frame = frame[~dates.isna()].reset_index(drop=True)
+        out = pd.DataFrame({"date": dates.dropna().dt.strftime("%Y-%m-%d").values})
+        for column in frame.columns:
+            if column == "Date":
+                continue
+            name = re.sub(r"[^0-9a-z]+", "_", column.lower()).strip("_")
+            if column.endswith("Margin"):
+                out[name + "_pct"] = frame[column].map(_percent)
+            else:
+                out[name] = frame[column].map(_money)
+        warnings.append(
+            "Trailing-twelve-month values from Macrotrends. Amounts are in the "
+            "reporting currency; *_pct columns are percentages (31.9 means 31.9%)."
+        )
+        return out.sort_values("date", ascending=False).reset_index(drop=True)

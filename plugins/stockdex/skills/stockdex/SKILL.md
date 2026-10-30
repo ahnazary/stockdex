@@ -15,7 +15,7 @@ Yahoo Finance (most data) and Digrin (dividends by default) on the user's machin
 | Company name, no ticker | `search_ticker` | `query`, `limit` 1–25 |
 | Current price, compare several | `get_quotes` | `symbols`: 1–20 tickers |
 | Price history | `get_prices` | `range`: `1mo` (default), `3mo`, `6mo`, `1y` |
-| Revenue, earnings, cash flow, balance sheet | `get_financial_statement` | `statement`, `frequency`, `start_date`/`end_date` (≤5 years), `metrics` |
+| Revenue, earnings, cash flow, balance sheet | `get_financial_statement` | `statement`, `frequency`, `start_date`/`end_date`, `metrics`, `source`: `yahoo` (default, ≤5 years) or `macrotrends` (~15 years) |
 | Market cap, P/E, beta, margins, price targets | `get_key_statistics` | `dataset`: `summary` (default), `key_statistics`, `financial_data`, `market_price` |
 | P/E, EV/EBITDA, market cap over time | `get_valuation_history` | `frequency`: `annual`, `quarterly` (default), `trailing` |
 | What the company does, executives, peers | `get_company_profile` | `dataset`: `profile` (default), `officers`, `similar_symbols` |
@@ -46,6 +46,14 @@ Defaults:
 For anything else, look up the exact name in
 [reference/metrics.md](reference/metrics.md). Pass names unprefixed; output
 columns are prefixed, such as `annualTotalRevenue`.
+
+With `source="macrotrends"` use Macrotrends row names instead, e.g.
+`Revenue`, `Gross Profit`, `Operating Income`, `Net Income`,
+`EPS - Earnings Per Share`, `Total Assets`, `Long Term Debt`,
+`Share Holder Equity`, `Cash Flow From Operating Activities`. Matching is
+case-insensitive; an unknown name comes back null with a warning listing the
+available rows. Values are in millions. Use it when the user asks for more
+than five years of history.
 
 ## Reading results
 

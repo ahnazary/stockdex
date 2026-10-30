@@ -22,7 +22,12 @@
     "entry_point": "src/server.py",
     "mcp_config": {
       "command": "uv",
-      "args": ["run", "--directory", "${__dirname}", "src/server.py"]
+      "args": [
+        "run",
+        "--directory",
+        "${__dirname}",
+        "src/server.py"
+      ]
     }
   },
   "tools": [
@@ -32,7 +37,7 @@
     },
     {
       "name": "get_financial_statement",
-      "description": "Annual or quarterly income statement, cash flow or balance sheet figures for one ticker from Yahoo Finance."
+      "description": "Annual or quarterly income statement, cash flow or balance sheet figures for one ticker from Yahoo Finance (5 years) or Macrotrends (about 15 years)."
     },
     {
       "name": "get_dividends",
@@ -89,14 +94,31 @@
     {
       "name": "get_quotes",
       "description": "Current quotes for up to 20 symbols from Yahoo Finance."
+    },
+    {
+      "name": "get_margins_and_ratios",
+      "description": "Gross, operating, EBITDA, pre-tax and net margin history and key financial ratios from Macrotrends."
     }
   ],
   "tools_generated": false,
-  "keywords": ["stocks", "finance", "yahoo-finance", "dividends", "financial-statements"],
+  "keywords": [
+    "stocks",
+    "finance",
+    "yahoo-finance",
+    "dividends",
+    "financial-statements"
+  ],
   "license": "MIT",
-  "privacy_policies": ["https://legal.yahoo.com/us/en/yahoo/privacy/index.html", "https://www.digrin.com/privacy-policy"],
+  "privacy_policies": [
+    "https://legal.yahoo.com/us/en/yahoo/privacy/index.html",
+    "https://www.digrin.com/privacy-policy"
+  ],
   "compatibility": {
-    "platforms": ["darwin", "linux", "win32"],
+    "platforms": [
+      "darwin",
+      "linux",
+      "win32"
+    ],
     "runtimes": {
       "python": ">=3.10"
     }

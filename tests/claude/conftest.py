@@ -26,6 +26,7 @@ EXPECTED_TOOLS = {
     "get_splits",
     "get_options_chain",
     "get_quotes",
+    "get_margins_and_ratios",
 }
 
 
@@ -178,6 +179,46 @@ class FakeTicker:
                 "Payable date": ["-", "2026-01-10"],
                 "Dividend amount (change)": ["—", "0.2600 USD (4%)"],
             }
+        )
+
+    def macrotrends_income_statement(self, frequency="annual"):
+        self.calls.append({"macrotrends": "income_statement", "frequency": frequency})
+        return pd.DataFrame(
+            {
+                "2025-09-30": ["416161", "112010", "7.46"],
+                "2024-09-30": ["391035", "93736", ""],
+                "2023-09-30": ["383285", "96995", "6.13"],
+            },
+            index=pd.Index(
+                ["Revenue", "Net Income", "EPS - Earnings Per Share"],
+                name="field_name",
+            ),
+        )
+
+    macrotrends_cash_flow = macrotrends_income_statement
+    macrotrends_balance_sheet = macrotrends_income_statement
+
+    @property
+    def macrotrends_operating_margin(self):
+        return pd.DataFrame(
+            {
+                "Date": ["", "2025-09-30", "2025-06-30"],
+                "TTM Revenue": ["", "$416.16B", "$408.62B"],
+                "TTM Operating Income": ["", "$133.05B", "$130.21B"],
+                "Operating Margin": ["", "31.97%", "31.87%"],
+            }
+        )
+
+    macrotrends_gross_margin = macrotrends_operating_margin
+    macrotrends_ebitda_margin = macrotrends_operating_margin
+    macrotrends_pre_tax_margin = macrotrends_operating_margin
+    macrotrends_net_margin = macrotrends_operating_margin
+
+    @property
+    def macrotrends_key_financial_ratios(self):
+        return pd.DataFrame(
+            {"2025-09-30": ["0.8933", "1.3436"], "2024-09-30": ["0.8673", ""]},
+            index=pd.Index(["Current Ratio", "Debt/Equity Ratio"], name="field_name"),
         )
 
 

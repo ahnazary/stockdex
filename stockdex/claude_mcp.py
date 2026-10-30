@@ -88,8 +88,9 @@ def create_server(adapter=None):
         end_date: Optional[str] = None,
         metrics: Optional[list[str]] = None,
         limit: RowLimit = 20,
+        source: Literal["yahoo", "macrotrends"] = "yahoo",
     ) -> CallToolResult:
-        """Get income statement, cash flow or balance sheet figures for one ticker from Yahoo Finance, annual or quarterly, over a window of up to 5 years (end date exclusive). Pass up to 20 metric names such as TotalRevenue; defaults cover revenue, net income, EPS, cash flow, assets, liabilities and equity. Values are raw numbers whose currency and units may be unknown."""
+        """Get income statement, cash flow or balance sheet figures for one ticker, annual or quarterly, newest first. source="yahoo" (default): Yahoo Finance, up to 5 years (end date exclusive), metric names such as TotalRevenue; currency and units may be unknown. source="macrotrends": Macrotrends, about 15 years, row names such as Revenue or Net Income, values in millions. Up to 20 metrics; defaults cover revenue, net income, EPS, cash flow, assets, liabilities and equity."""
         return await invoke(
             adapter.get_financial_statement,
             ticker=ticker,
@@ -99,6 +100,7 @@ def create_server(adapter=None):
             end_date=end_date,
             metrics=metrics,
             limit=limit,
+            source=source,
         )
 
     @server.tool(
@@ -304,6 +306,27 @@ def create_server(adapter=None):
     ) -> CallToolResult:
         """Get current quotes for up to 20 ticker symbols in one call from Yahoo Finance: name, type, currency, market state, price, change, volume, market cap, 52-week range, trailing and forward P/E and dividend yield. Use it to compare several securities at once. Quotes may be delayed."""
         return await invoke(adapter.get_quotes, symbols=symbols)
+
+    @server.tool(
+        title="Get margins and ratios",
+        annotations=tool_annotations("Get margins and ratios"),
+    )
+    async def get_margins_and_ratios(
+        ticker: str,
+        dataset: Literal[
+            "gross_margin",
+            "operating_margin",
+            "ebitda_margin",
+            "pre_tax_margin",
+            "net_margin",
+            "key_ratios",
+        ] = "operating_margin",
+        limit: RowLimit = 20,
+    ) -> CallToolResult:
+        """Get profitability history for one stock from Macrotrends, newest first. Margin datasets return quarterly trailing-twelve-month revenue, the matching profit figure and the margin as a percentage (31.9 = 31.9%), going back about 15 years. "key_ratios": annual current ratio, debt/equity, margins, ROE, ROA, ROI and other ratios. Macrotrends sometimes blocks automated requests; then the error code is provider_blocked."""
+        return await invoke(
+            adapter.get_margins_and_ratios, ticker=ticker, dataset=dataset, limit=limit
+        )
 
     return server
 
