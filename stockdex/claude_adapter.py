@@ -326,6 +326,13 @@ class StockdexAdapter:
         """
         return self._request("dataset", ticker, {"dataset": dataset, "limit": limit})
 
+    @staticmethod
+    def _requested_source(operation, parameters, default):
+        """The provider a request asks for, before its parameters are validated"""
+        if operation == "financial_statement":
+            return {"macrotrends": "macrotrends"}.get(parameters.get("source"), default)
+        return default
+
     def _validate(self, operation, ticker, parameters):
         if operation == "search":
             return self._validate_search(parameters)
@@ -496,6 +503,10 @@ class StockdexAdapter:
         }
         try:
             parameters = dict(parameters)
+            # Report the requested provider even when validation rejects the call
+            result["source"] = self._requested_source(
+                operation, parameters, result["source"]
+            )
             symbol = self._validate(operation, ticker, parameters)
             result.update(ticker=symbol, parameters=parameters)
             if operation == "financial_statement":
@@ -883,8 +894,6 @@ class StockdexAdapter:
         wanted = parameters["metrics"]
         found = [by_name.get(m.casefold()) for m in wanted]
         missing = [m for m, f in zip(wanted, found) if f is None]
-        if len(missing) == len(wanted):
-            raise NoDataError()
         if missing:
             warnings.append(
                 "Unavailable metrics returned as null: "
@@ -892,6 +901,8 @@ class StockdexAdapter:
                 + ". Available rows: "
                 + ", ".join(str(n) for n in frame.index[:40])
             )
+        if len(missing) == len(wanted):
+            raise NoDataError()
         rows = frame.reindex([f for f in found if f is not None]).T
         rows.columns = [m for m, f in zip(wanted, found) if f is not None]
         rows = rows.reindex(columns=wanted)

@@ -19,7 +19,10 @@ permissions:
   contents: write
 
 concurrency:
-  group: docs-${{ github.ref }}
+  # Every deploy (main, release, manual) writes to the same gh-pages folder, so
+  # they share one group and run one at a time. Pull requests only build, so
+  # each PR has its own group and newer pushes cancel older runs.
+  group: ${{ github.event_name == 'pull_request' && format('docs-pr-{0}', github.ref) || 'docs-deploy' }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:

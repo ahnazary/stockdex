@@ -149,13 +149,15 @@ class DigrinInterface(TickerBase):
             raise LayoutChangedError("Digrin", f"'{keyword}' table structure changed")
 
         headers = [th.text for th in head.find_all("th")]
-        data = [
-            cells
-            for cells in (
-                [td.text for td in tr.find_all("td")] for tr in body.find_all("tr")
+        rows = [[td.text for td in tr.find_all("td")] for tr in body.find_all("tr")]
+        data = [cells for cells in rows if len(cells) == len(headers)]
+        # Skip the odd note or spacer row, but a body whose rows all have a
+        # different width means the table changed
+        if not data and any(len(cells) > 1 for cells in rows):
+            raise LayoutChangedError(
+                "Digrin",
+                f"'{keyword}' table rows no longer match its {len(headers)} columns",
             )
-            if len(cells) == len(headers)
-        ]
 
         return pd.DataFrame(data, columns=headers).replace("\n", "", regex=True)
 

@@ -199,21 +199,58 @@ class FakeTicker:
     macrotrends_cash_flow = macrotrends_income_statement
     macrotrends_balance_sheet = macrotrends_income_statement
 
-    @property
-    def macrotrends_operating_margin(self):
+    @staticmethod
+    def _margin_frame(profit, margin, values):
+        """A Macrotrends margin table with the dataset's own headers"""
+        (revenue1, profit1, pct1), (revenue2, profit2, pct2) = values
         return pd.DataFrame(
             {
                 "Date": ["", "2025-09-30", "2025-06-30"],
-                "TTM Revenue": ["", "$416.16B", "$408.62B"],
-                "TTM Operating Income": ["", "$133.05B", "$130.21B"],
-                "Operating Margin": ["", "31.97%", "31.87%"],
+                "TTM Revenue": ["", revenue1, revenue2],
+                profit: ["", profit1, profit2],
+                margin: ["", pct1, pct2],
             }
         )
 
-    macrotrends_gross_margin = macrotrends_operating_margin
-    macrotrends_ebitda_margin = macrotrends_operating_margin
-    macrotrends_pre_tax_margin = macrotrends_operating_margin
-    macrotrends_net_margin = macrotrends_operating_margin
+    @property
+    def macrotrends_gross_margin(self):
+        return self._margin_frame(
+            "TTM Gross Profit",
+            "Gross Margin",
+            [("$416.16B", "$195.20B", "46.91%"), ("$408.62B", "$190.74B", "46.68%")],
+        )
+
+    @property
+    def macrotrends_operating_margin(self):
+        return self._margin_frame(
+            "TTM Operating Income",
+            "Operating Margin",
+            [("$416.16B", "$133.05B", "31.97%"), ("$408.62B", "$130.21B", "31.87%")],
+        )
+
+    @property
+    def macrotrends_ebitda_margin(self):
+        return self._margin_frame(
+            "TTM EBITDA",
+            "EBITDA Margin",
+            [("$416.16B", "$144.75B", "34.78%"), ("$408.62B", "$141.70B", "34.68%")],
+        )
+
+    @property
+    def macrotrends_pre_tax_margin(self):
+        return self._margin_frame(
+            "TTM Pre-Tax Income",
+            "Pre-Tax Margin",
+            [("$416.16B", "$132.73B", "31.89%"), ("$408.62B", "$129.98B", "31.81%")],
+        )
+
+    @property
+    def macrotrends_net_margin(self):
+        return self._margin_frame(
+            "TTM Net Income",
+            "Net Margin",
+            [("$416.16B", "$112.01B", "26.92%"), ("$408.62B", "$99.28B", "24.30%")],
+        )
 
     @property
     def macrotrends_key_financial_ratios(self):
