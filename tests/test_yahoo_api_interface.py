@@ -167,6 +167,34 @@ def test_yahoo_api_analyst_tables(method, column):
 
 
 @pytest.mark.parametrize(
+    "method, column",
+    [
+        ("yahoo_api_institutional_holders", "organization"),
+        ("yahoo_api_fund_holders", "organization"),
+        ("yahoo_api_insider_holders", "name"),
+        ("yahoo_api_insider_transactions", "filerName"),
+        ("yahoo_api_sec_filings", "type"),
+    ],
+)
+def test_yahoo_api_ownership_tables(method, column):
+    frame = getattr(Ticker("AAPL"), method)()
+    assert len(frame) > 0
+    assert column in frame.columns
+
+
+@pytest.mark.parametrize(
+    "method, field",
+    [
+        ("yahoo_api_major_holders", "institutionsPercentHeld"),
+        ("yahoo_api_insider_purchase_activity", "period"),
+    ],
+)
+def test_yahoo_api_ownership_records(method, field):
+    frame = getattr(Ticker("AAPL"), method)()
+    assert field in frame.index
+
+
+@pytest.mark.parametrize(
     "ticker, frequency, format, period1, period2",
     [
         # 2 years ago

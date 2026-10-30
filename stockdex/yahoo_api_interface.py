@@ -869,6 +869,100 @@ class YahooAPI(TickerBase):
             frame = frame.reset_index(drop=True)
         return frame
 
+    def yahoo_api_institutional_holders(self) -> pd.DataFrame:
+        """
+        Get the top institutional holders from Yahoo Finance
+
+        Returns:
+        ----------------
+        pd.DataFrame: One row per institution with ``organization``,
+        ``reportDate`` (UTC timestamp), ``pctHeld``, ``position`` (shares),
+        ``value`` and ``pctChange``
+        """
+        return self._quote_summary_table("institutionOwnership", "ownershipList")
+
+    def yahoo_api_fund_holders(self) -> pd.DataFrame:
+        """
+        Get the top mutual fund holders from Yahoo Finance
+
+        Returns:
+        ----------------
+        pd.DataFrame: One row per fund with ``organization``, ``reportDate``
+        (UTC timestamp), ``pctHeld``, ``position`` (shares), ``value`` and
+        ``pctChange``
+        """
+        return self._quote_summary_table("fundOwnership", "ownershipList")
+
+    def yahoo_api_major_holders(self) -> pd.DataFrame:
+        """
+        Get the ownership breakdown from Yahoo Finance
+
+        Returns:
+        ----------------
+        pd.DataFrame: One row per field: ``insidersPercentHeld``,
+        ``institutionsPercentHeld``, ``institutionsFloatPercentHeld`` and
+        ``institutionsCount``
+        """
+        return self._quote_summary_record("majorHoldersBreakdown")
+
+    def yahoo_api_insider_holders(self) -> pd.DataFrame:
+        """
+        Get insiders and their direct holdings from Yahoo Finance
+
+        Returns:
+        ----------------
+        pd.DataFrame: One row per insider with ``name``, ``relation``,
+        ``transactionDescription``, ``latestTransDate``, ``positionDirect``
+        and ``positionDirectDate``
+        """
+        return self._quote_summary_table("insiderHolders", "holders")
+
+    def yahoo_api_insider_transactions(self) -> pd.DataFrame:
+        """
+        Get recent insider transactions from Yahoo Finance
+
+        Returns:
+        ----------------
+        pd.DataFrame: One row per transaction, newest first, with
+        ``filerName``, ``filerRelation``, ``transactionText``, ``startDate``
+        (UTC timestamp), ``shares``, ``value`` and ``ownership`` ("D" direct,
+        "I" indirect)
+        """
+        frame = self._quote_summary_table("insiderTransactions", "transactions")
+        if not frame.empty and "startDate" in frame:
+            frame = frame.sort_values("startDate", ascending=False)
+            frame = frame.reset_index(drop=True)
+        return frame
+
+    def yahoo_api_insider_purchase_activity(self) -> pd.DataFrame:
+        """
+        Get the net insider buying and selling summary from Yahoo Finance
+
+        Returns:
+        ----------------
+        pd.DataFrame: One row per field for the reporting ``period`` (e.g.
+        "6m"): buy, sell and net transaction counts and shares, percent of
+        insider shares, total insider shares held and net institutional
+        shares bought
+        """
+        return self._quote_summary_record("netSharePurchaseActivity")
+
+    def yahoo_api_sec_filings(self) -> pd.DataFrame:
+        """
+        Get recent SEC filings from Yahoo Finance (US-listed companies)
+
+        Returns:
+        ----------------
+        pd.DataFrame: One row per filing, newest first, with ``date``,
+        ``type`` (e.g. "10-K", "8-K"), ``title`` and ``edgarUrl``. The
+        ``exhibits`` column holds the filing's exhibit links.
+        """
+        frame = self._quote_summary_table("secFilings", "filings")
+        if not frame.empty and "epochDate" in frame:
+            frame = frame.sort_values("epochDate", ascending=False)
+            frame = frame.reset_index(drop=True)
+        return frame
+
     def plot_yahoo_api_income_statement(
         self,
         frequency: Literal["annual", "quarterly"] = "annual",
