@@ -1,7 +1,7 @@
 Yahoo Finance (API)
 ===================
 
-Following functions will extract data from Yahoo Finance API. The data includes price, income statement, cash flow, balance sheet, and financials.
+Following functions will extract data from Yahoo Finance API. The data includes price, corporate actions, financial statements, valuation measures, company profile, analyst estimates, ownership, SEC filings, ETF and fund data, options and search.
 
 .. important::
    In each result dataframe, only the first 5 rows of the DataFrame are shown at most to keep the documentation concise. The actual DataFrame returned by each function may contain more rows.
@@ -264,3 +264,176 @@ Get the financials for the stock
 +--------------+-----------------------------------------------------------+------------------------------+-----------------------+----------------------------+-------------------------------------------+--------------------------+----------------------------------+-------------------------------------------+-------------------------------------------+----------------------------+--------------------------------------+----------------------------+--------------------------------+------------------+---------------------------------------+------------------------------------------------+-----------------------------------+------------------------------------------+---------------------------+-----------------------------+----------------------------+--------------------+------------------------------+----------------+----------------------------------------------+--------------------------------+-------------------------+--------------------------------------+--------------------------------+-----------------------------------+-----------------------------+-----------------------------------------------------+--------------------------------------+------------------------+-------------------------------------------+---------------------------------------+------------------------+---------------------------+----------------------------------+----------------------+-----------------------------------------+----------------------+-------------------------+------------------------+--------------------+---------------------------+---------------------------------------------------------------+---------------------+
 | 2024-12-31   | 100.12B                                                   | 3.21B                        | 203.71B               | 91.32B                     | 1.14B                                     | 4.48B                    | 49.33B                           | 42.00B                                    | 14.19B                                    | 98.38B                     | 27.81B                               | 133.32B                    | 2.26B                          | 135.39B          | 268.00M                               | 4.21B                                          | 146.31B                           | 112.39B                                  | 112.39B                   | 4.21B                       | 350.02B                    | 188.00M            | 12.32B                       | 120.08B        | 2.07B                                        | 12.45B                         | 237.63B                 | -188.00M                             | -188.00M                       | 340.14M                           | 2.07B                       | 100.12B                                             | 4.48B                                | 19.70B                 | 100.12B                                   | 100.12B                               | 119.81B                | 268.00M                   | 15.31B                           | 8.04                 | 100.12B                                 | 14.19B               | 146.31B                 | 350.02B                | 8.13               | 0.16                      | 100.12B                                                       | 100.12B             |
 +--------------+-----------------------------------------------------------+------------------------------+-----------------------+----------------------------+-------------------------------------------+--------------------------+----------------------------------+-------------------------------------------+-------------------------------------------+----------------------------+--------------------------------------+----------------------------+--------------------------------+------------------+---------------------------------------+------------------------------------------------+-----------------------------------+------------------------------------------+---------------------------+-----------------------------+----------------------------+--------------------+------------------------------+----------------+----------------------------------------------+--------------------------------+-------------------------+--------------------------------------+--------------------------------+-----------------------------------+-----------------------------+-----------------------------------------------------+--------------------------------------+------------------------+-------------------------------------------+---------------------------------------+------------------------+---------------------------+----------------------------------+----------------------+-----------------------------------------+----------------------+-------------------------+------------------------+--------------------+---------------------------+---------------------------------------------------------------+---------------------+
+
+Dividends, Splits and Capital Gains
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Corporate actions from the Yahoo chart endpoint. Each returns one row per
+event, indexed by the event date (UTC), oldest first, and an empty
+DataFrame if there are none.
+
+- ``yahoo_api_dividends``: ``amount`` and ``currency`` per ex-dividend date
+- ``yahoo_api_splits``: ``numerator``, ``denominator`` and ``splitRatio`` (e.g. ``4:1``)
+- ``yahoo_api_capital_gains``: distributions for ETFs and mutual funds
+
+**Parameters:**
+
+- ``range``: ``1y``, ``2y``, ``5y``, ``10y``, ``ytd`` or ``max`` (default)
+
+.. code-block:: python
+
+    from stockdex import Ticker
+
+    ticker = Ticker(ticker="KO")
+    dividends = ticker.yahoo_api_dividends(range="5y")
+    splits = Ticker(ticker="AAPL").yahoo_api_splits()
+
+
+Valuation Measures
+~~~~~~~~~~~~~~~~~~
+
+Market cap, enterprise value, trailing and forward P/E, PEG, price/sales,
+price/book, EV/revenue and EV/EBITDA over time, indexed by as-of date.
+Column names carry the frequency prefix, e.g. ``quarterlyPeRatio``.
+
+**Parameters:**
+
+- ``frequency``: ``annual``, ``quarterly`` (default) or ``trailing`` (recent trailing-twelve-month snapshots)
+- ``format``: ``fmt`` (default, e.g. ``3.5T``) or ``raw`` (numbers)
+- ``period1`` / ``period2``: start and end dates (default: the last five years)
+
+.. code-block:: python
+
+    from stockdex import Ticker
+
+    ticker = Ticker(ticker="AAPL")
+    valuation = ticker.yahoo_api_valuation_measures(frequency="quarterly", format="raw")
+
+
+Quote Summary
+~~~~~~~~~~~~~
+
+``yahoo_api_quote_summary`` returns one or more raw modules from Yahoo's
+quoteSummary endpoint as a dictionary. The methods below are built on it.
+Valid module names are listed in ``stockdex.config.QUOTE_SUMMARY_MODULES``.
+Modules that do not apply to a security are left out, and an unknown symbol
+raises ``NoDataError``.
+
+**Parameters:**
+
+- ``modules``: one module name or a list, e.g. ``["price", "financialData"]``
+- ``format``: ``raw`` (default, numbers and epoch timestamps) or ``fmt`` (display strings)
+
+.. code-block:: python
+
+    from stockdex import Ticker
+
+    ticker = Ticker(ticker="AAPL")
+    data = ticker.yahoo_api_quote_summary(["price", "financialData"])
+    data["financialData"]["targetMeanPrice"]
+
+
+Company and Market Data
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Single-record methods return one column named after the ticker, with one
+row per field. Known date fields are converted to UTC timestamps.
+
+- ``yahoo_api_profile``: address, website, sector, industry, employees, business summary, governance risk scores
+- ``yahoo_api_officers``: key executives with title, age and total pay (one row per person)
+- ``yahoo_api_market_price``: regular, pre- and post-market price and change, market state, currency
+- ``yahoo_api_summary_detail``: day and 52-week ranges, volume, market cap, beta, P/E, dividend rate and yield
+- ``yahoo_api_key_statistics``: enterprise value, forward P/E, PEG, shares outstanding and float, short interest
+- ``yahoo_api_financial_data``: analyst price targets and recommendation, revenue, margins, cash flow, debt, ROE
+- ``yahoo_api_calendar_events``: next earnings date(s), EPS and revenue estimates, ex-dividend and payment dates
+
+``yahoo_api_market_price``, ``yahoo_api_summary_detail``,
+``yahoo_api_key_statistics`` and ``yahoo_api_financial_data`` accept
+``format="fmt"`` for display strings.
+
+.. code-block:: python
+
+    from stockdex import Ticker
+
+    ticker = Ticker(ticker="AAPL")
+    profile = ticker.yahoo_api_profile()
+    targets = ticker.yahoo_api_financial_data().loc[
+        ["targetLowPrice", "targetMeanPrice", "targetHighPrice"]
+    ]
+
+
+Analyst Estimates and Earnings
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- ``yahoo_api_earnings_history``: reported vs estimated EPS and surprise for the last four quarters
+- ``yahoo_api_earnings_trend``: EPS and revenue estimates, EPS trend and revisions for the current and next quarter and year, with flattened columns such as ``earningsEstimate_avg``
+- ``yahoo_api_recommendation_trend``: strong buy to strong sell counts per month
+- ``yahoo_api_upgrades_downgrades``: analyst rating changes and price target moves, newest first
+
+.. code-block:: python
+
+    from stockdex import Ticker
+
+    ticker = Ticker(ticker="MSFT")
+    trend = ticker.yahoo_api_earnings_trend()
+    ratings = ticker.yahoo_api_upgrades_downgrades().head(10)
+
+
+Ownership, Insiders and Filings
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- ``yahoo_api_institutional_holders`` and ``yahoo_api_fund_holders``: top holders with percent held, shares, value and change
+- ``yahoo_api_major_holders``: insider and institutional ownership percentages
+- ``yahoo_api_insider_holders``: insiders and their direct positions
+- ``yahoo_api_insider_transactions``: recent insider buys, sales and grants, newest first
+- ``yahoo_api_insider_purchase_activity``: net insider buying vs selling over the reporting period
+- ``yahoo_api_sec_filings``: recent SEC filings with type, title and links (US-listed companies)
+
+.. code-block:: python
+
+    from stockdex import Ticker
+
+    ticker = Ticker(ticker="NVDA")
+    holders = ticker.yahoo_api_institutional_holders()
+    filings = ticker.yahoo_api_sec_filings()
+
+
+ETF and Mutual Fund Data
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+These return empty DataFrames for individual stocks.
+
+- ``yahoo_api_fund_top_holdings``: top holdings with fraction of the fund
+- ``yahoo_api_fund_sector_weightings``: weight per sector, largest first
+- ``yahoo_api_fund_asset_allocation``: stock, bond, cash and other positions
+- ``yahoo_api_fund_profile``: fund family, category, expense ratio, turnover and net assets, with category averages
+- ``yahoo_api_fund_performance``: trailing and calendar-year total returns, fund vs category
+
+.. code-block:: python
+
+    from stockdex import Ticker
+
+    etf = Ticker(ticker="SPY", security_type="etf")
+    holdings = etf.yahoo_api_fund_top_holdings()
+    performance = etf.yahoo_api_fund_performance()
+
+
+Options, Quotes, Search and Similar Symbols
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- ``yahoo_api_option_expirations``: listed option expiration dates (UTC)
+- ``yahoo_api_options_chain``: calls and puts for one expiration. Parameters: ``expiration`` (default nearest) and ``option_type`` (``calls``, ``puts`` or ``both``)
+- ``yahoo_api_quotes``: current quotes for many symbols in one request (static method)
+- ``yahoo_api_search``: find symbols by company name or partial ticker (static method). Parameters: ``query`` and ``limit`` (1–50)
+- ``yahoo_api_similar_symbols``: related symbols with a relevance score
+
+.. code-block:: python
+
+    from stockdex import Ticker
+
+    ticker = Ticker(ticker="AAPL")
+    expirations = ticker.yahoo_api_option_expirations()
+    chain = ticker.yahoo_api_options_chain(expirations[0], option_type="calls")
+
+    quotes = Ticker.yahoo_api_quotes(["AAPL", "MSFT", "NVDA"])
+    matches = Ticker.yahoo_api_search("bayerische motoren", limit=5)

@@ -490,3 +490,59 @@ FINANCIALS_COLUMNS = [
     "ExciseTaxes",
     "OperatingRevenue",
 ]
+
+# Valuation measures served by the fundamentals timeseries endpoint.
+# Prefix with "annual", "quarterly" or "trailing" when requesting.
+VALUATION_COLUMNS = [
+    "MarketCap",
+    "EnterpriseValue",
+    "PeRatio",
+    "ForwardPeRatio",
+    "PegRatio",
+    "PsRatio",
+    "PbRatio",
+    "EnterprisesValueRevenueRatio",
+    "EnterprisesValueEBITDARatio",
+]
+
+# Yahoo quoteSummary endpoint and the modules stockdex can request from it.
+QUOTE_SUMMARY_URL = "https://query2.finance.yahoo.com/v10/finance/quoteSummary"
+QUOTE_SUMMARY_MODULES = [
+    "assetProfile",
+    "summaryProfile",
+    "summaryDetail",
+    "price",
+    "quoteType",
+    "defaultKeyStatistics",
+    "financialData",
+    "calendarEvents",
+    "earnings",
+    "earningsHistory",
+    "earningsTrend",
+    "recommendationTrend",
+    "upgradeDowngradeHistory",
+    "institutionOwnership",
+    "fundOwnership",
+    "majorHoldersBreakdown",
+    "majorDirectHolders",
+    "insiderHolders",
+    "insiderTransactions",
+    "netSharePurchaseActivity",
+    "secFilings",
+    "esgScores",
+    "industryTrend",
+    "sectorTrend",
+    "indexTrend",
+    # ETF and mutual fund modules
+    "topHoldings",
+    "fundProfile",
+    "fundPerformance",
+]
+
+# Other Yahoo Finance endpoints.
+OPTIONS_URL = "https://query2.finance.yahoo.com/v7/finance/options"
+QUOTE_URL = "https://query1.finance.yahoo.com/v7/finance/quote"
+SEARCH_URL = "https://query2.finance.yahoo.com/v1/finance/search"
+RECOMMENDATIONS_URL = (
+    "https://query2.finance.yahoo.com/v6/finance/recommendationsbysymbol"
+)

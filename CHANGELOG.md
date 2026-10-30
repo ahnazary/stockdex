@@ -1,5 +1,18 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Yahoo Finance API: `yahoo_api_dividends`, `yahoo_api_splits` and `yahoo_api_capital_gains` from the chart endpoint's corporate-action events.
+- Yahoo Finance API: `yahoo_api_valuation_measures` with market cap, enterprise value, P/E, forward P/E, PEG, P/S, P/B and EV ratios over time (annual, quarterly or trailing).
+- Yahoo Finance API: `yahoo_api_quote_summary(modules)` to fetch any quoteSummary module, plus methods built on it:
+  - company and market data: `yahoo_api_profile`, `yahoo_api_officers`, `yahoo_api_market_price`, `yahoo_api_summary_detail`, `yahoo_api_key_statistics`, `yahoo_api_financial_data`, `yahoo_api_calendar_events`
+  - analyst and earnings: `yahoo_api_earnings_history`, `yahoo_api_earnings_trend`, `yahoo_api_recommendation_trend`, `yahoo_api_upgrades_downgrades`
+  - ownership and filings: `yahoo_api_institutional_holders`, `yahoo_api_fund_holders`, `yahoo_api_major_holders`, `yahoo_api_insider_holders`, `yahoo_api_insider_transactions`, `yahoo_api_insider_purchase_activity`, `yahoo_api_sec_filings`
+  - ETFs and mutual funds: `yahoo_api_fund_top_holdings`, `yahoo_api_fund_sector_weightings`, `yahoo_api_fund_asset_allocation`, `yahoo_api_fund_profile`, `yahoo_api_fund_performance`
+- Yahoo Finance API: `yahoo_api_option_expirations`, `yahoo_api_options_chain`, `yahoo_api_quotes` (many symbols in one request), `yahoo_api_search` and `yahoo_api_similar_symbols`.
+
 ## 1.3.1
 
 ### Changed
