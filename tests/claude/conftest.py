@@ -27,6 +27,7 @@ EXPECTED_TOOLS = {
     "get_options_chain",
     "get_quotes",
     "get_margins_and_ratios",
+    "get_dividend_metrics",
 }
 
 
@@ -219,6 +220,53 @@ class FakeTicker:
         return pd.DataFrame(
             {"2025-09-30": ["0.8933", "1.3436"], "2024-09-30": ["0.8673", ""]},
             index=pd.Index(["Current Ratio", "Debt/Equity Ratio"], name="field_name"),
+        )
+
+    @property
+    def digrin_payout_ratio(self):
+        return pd.DataFrame(
+            {
+                "Date": ["2026Q2 ", "2026Q3 "],
+                "Payout ratio": ["51.55%", "56.87%"],
+                "PE ratio": ["20.42", "23.02"],
+            }
+        )
+
+    @property
+    def digrin_dgr5(self):
+        return pd.DataFrame(
+            {
+                "Year": ["2028 ", "2027 "],
+                "Dividend": ["2.270USD ", "2.162USD "],
+                "Estimated Yield on Cost": ["2.40%", "2.29%"],
+            }
+        )
+
+    digrin_dgr3 = digrin_dgr5
+    digrin_dgr10 = digrin_dgr5
+
+    def finviz_dividends_annual_data(self):
+        return pd.DataFrame(
+            {
+                "Ticker": ["KO", "KO"],
+                "FiscalPeriod": ["2025FY", "2026FY"],
+                "Amount": [2.04, 2.12],
+                "Yield": [2.87, float("nan")],
+                "Payout": [67.3, float("nan")],
+                "Estimate": [False, True],
+            }
+        )
+
+    def finviz_overall_dividend(self):
+        return pd.DataFrame(
+            [
+                {
+                    "lastClose": 94.559,
+                    "dividendExDate": "2026-12-01T00:00:00",
+                    "dividendEstimate": 2.198,
+                    "dividendTTM": 2.1,
+                }
+            ]
         )
 
 

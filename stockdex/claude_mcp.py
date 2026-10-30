@@ -328,6 +328,27 @@ def create_server(adapter=None):
             adapter.get_margins_and_ratios, ticker=ticker, dataset=dataset, limit=limit
         )
 
+    @server.tool(
+        title="Get dividend metrics",
+        annotations=tool_annotations("Get dividend metrics"),
+    )
+    async def get_dividend_metrics(
+        ticker: str,
+        dataset: Literal[
+            "payout_ratio",
+            "growth_3y",
+            "growth_5y",
+            "growth_10y",
+            "annual",
+            "summary",
+        ] = "payout_ratio",
+        limit: RowLimit = 20,
+    ) -> CallToolResult:
+        """Get dividend sustainability and growth metrics for one stock. From Digrin: "payout_ratio" (default) gives quarterly payout ratio (% of earnings) and P/E; "growth_3y", "growth_5y" and "growth_10y" project future dividends at the 3/5/10-year average growth rate (projections, not history). From Finviz: "annual" gives dividend per share, yield and payout per fiscal year including analyst estimates; "summary" gives trailing and next-12-month dividend and the next ex-dividend date. Use get_dividends for individual payments."""
+        return await invoke(
+            adapter.get_dividend_metrics, ticker=ticker, dataset=dataset, limit=limit
+        )
+
     return server
 
 

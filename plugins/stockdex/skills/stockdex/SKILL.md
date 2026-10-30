@@ -24,6 +24,7 @@ Yahoo Finance (most data) and Digrin (dividends by default) on the user's machin
 | Who owns it, insider trades | `get_holders` | `dataset`: `institutional_holders` (default), `fund_holders`, `ownership_breakdown`, `insiders`, `insider_transactions`, `insider_activity` |
 | 10-K, 10-Q, 8-K | `get_sec_filings` | `ticker` (US listings) |
 | Dividends | `get_dividends` | `source`: `digrin` (default), `yahoo`, `auto` |
+| Payout ratio, dividend growth, yield per year | `get_dividend_metrics` | `dataset`: `payout_ratio` (default), `growth_3y`, `growth_5y`, `growth_10y` (Digrin projections), `annual`, `summary` (Finviz) |
 | Stock splits | `get_splits` | `ticker` |
 | Options | `get_options_chain` | `expiration` `YYYY-MM-DD` (default nearest), `option_type`: `calls`, `puts`, `both` |
 | ETF/fund holdings, sectors, allocation | `get_fund_holdings` | `dataset`: `fund_top_holdings` (default), `fund_sectors`, `fund_asset_allocation` |

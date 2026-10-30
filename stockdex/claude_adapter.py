@@ -64,6 +64,19 @@ MACROTRENDS_DATASETS = {
 }
 _PROVIDER_LOCK = threading.Lock()
 _SOURCES = {"dividends": "digrin", "margins": "macrotrends"}
+# Dividend metrics: dataset -> (source, method). Digrin projections are
+# estimates of future dividends at a fixed growth rate, not history.
+DIVIDEND_METRICS = {
+    "payout_ratio": ("digrin", "digrin_payout_ratio"),
+    "growth_3y": ("digrin", "digrin_dgr3"),
+    "growth_5y": ("digrin", "digrin_dgr5"),
+    "growth_10y": ("digrin", "digrin_dgr10"),
+    "annual": ("finviz", "finviz_dividends_annual_data"),
+    "summary": ("finviz", "finviz_overall_dividend"),
+}
+_QUARTER = re.compile(r"(?P<year>\d{4})Q(?P<quarter>[1-4])")
+_FISCAL_YEAR = re.compile(r"(?P<year>\d{4})FY")
+_CURRENCY_AMOUNT = re.compile(r"(?P<amount>-?[\d,]*\.?\d+)\s*(?P<currency>[A-Z]{3})")
 # The MCP should answer quickly; give bot-protected sites one short retry
 # instead of the library default of five ten-second waits.
 FORBIDDEN_RETRIES = 1
@@ -196,6 +209,14 @@ def _macrotrends_number(column):
     )
 
 
+def _fiscal_year(value):
+    """'2025FY' -> 2025; anything else means the layout changed."""
+    match = _FISCAL_YEAR.fullmatch(str(value).strip())
+    if not match:
+        raise LayoutChangedError("Finviz", "fiscal period format changed")
+    return int(match["year"])
+
+
 class StockdexAdapter:
     def __init__(self, ticker_factory=Ticker, clock=None):
         self._ticker_factory = ticker_factory
@@ -248,6 +269,20 @@ class StockdexAdapter:
     def get_margins_and_ratios(self, ticker, dataset="operating_margin", limit=20):
         """Margins over time and key financial ratios from Macrotrends."""
         return self._request("margins", ticker, {"dataset": dataset, "limit": limit})
+
+    def get_dividend_metrics(self, ticker, dataset="payout_ratio", limit=20):
+        """
+        Dividend payout, growth and annual history.
+
+        Digrin: ``payout_ratio`` (quarterly payout and P/E) and
+        ``growth_3y``/``growth_5y``/``growth_10y`` (dividends projected at the
+        3/5/10-year average growth rate). Finviz: ``annual`` (amount, yield
+        and payout per fiscal year, including analyst estimates) and
+        ``summary`` (TTM dividend, next estimate and ex-date).
+        """
+        return self._request(
+            "dividend_metrics", ticker, {"dataset": dataset, "limit": limit}
+        )
 
     def get_dividends(self, ticker, limit=20, source="digrin"):
         """
@@ -319,6 +354,11 @@ class StockdexAdapter:
             raise InputError(
                 "dataset must be one of: " + ", ".join(MACROTRENDS_DATASETS)
             )
+        if (
+            operation == "dividend_metrics"
+            and parameters["dataset"] not in DIVIDEND_METRICS
+        ):
+            raise InputError("dataset must be one of: " + ", ".join(DIVIDEND_METRICS))
         if (
             type(parameters["limit"]) is not int
             or not 1 <= parameters["limit"] <= MAX_ROWS
@@ -462,6 +502,8 @@ class StockdexAdapter:
                 result["source"] = {"macrotrends": "macrotrends"}.get(
                     parameters["source"], "yahoo_api"
                 )
+            if operation == "dividend_metrics":
+                result["source"] = DIVIDEND_METRICS[parameters["dataset"]][0]
             # Nonblocking admission prevents an unbounded queue of waiting requests.
             if not _PROVIDER_LOCK.acquire(blocking=False):
                 result["error"] = {
@@ -626,6 +668,8 @@ class StockdexAdapter:
             return self._dataset(provider, parameters["dataset"])
         if operation == "margins":
             return self._margins(provider, parameters["dataset"], warnings)
+        if operation == "dividend_metrics":
+            return self._dividend_metrics(provider, parameters["dataset"], warnings)
         if operation == "splits":
             return self._events(provider.yahoo_api_splits(), "split_date")
         if operation == "options":
@@ -869,6 +913,90 @@ class StockdexAdapter:
         rows = rows.reset_index(drop=True)
         rows.attrs["source"] = "macrotrends"
         return rows
+
+    @staticmethod
+    def _dividend_metrics(provider, dataset, warnings):
+        method = DIVIDEND_METRICS[dataset][1]
+        attribute = getattr(provider, method)
+        frame = attribute() if callable(attribute) else attribute
+        if frame.empty:
+            return frame
+        frame = frame.rename(columns=lambda c: str(c).strip())
+        if dataset == "payout_ratio":
+            out = pd.DataFrame(
+                {
+                    "quarter": frame["Date"].map(lambda v: str(v).strip()),
+                    "payout_ratio_pct": frame["Payout ratio"].map(_percent),
+                    "pe_ratio": frame["PE ratio"].map(_percent),
+                }
+            )
+            if not out["quarter"].map(lambda v: bool(_QUARTER.fullmatch(v))).all():
+                raise LayoutChangedError("Digrin", "payout ratio periods changed")
+            warnings.append(
+                "Payout ratio is a percentage of earnings (56.9 means 56.9%)."
+            )
+            return out.sort_values("quarter", ascending=False).reset_index(drop=True)
+        if dataset.startswith("growth_"):
+            rows = []
+            for row in frame.to_dict(orient="records"):
+                year = str(row.get("Year", "")).strip()
+                if not year.isdigit():
+                    raise LayoutChangedError(
+                        "Digrin", "growth projection years changed"
+                    )
+                match = _CURRENCY_AMOUNT.fullmatch(
+                    str(row.get("Dividend", "")).replace(" ", "")
+                )
+                rows.append(
+                    {
+                        "year": int(year),
+                        "projected_dividend": (
+                            float(match["amount"].replace(",", "")) if match else None
+                        ),
+                        "currency": match["currency"] if match else None,
+                        "yield_on_cost_pct": _percent(
+                            row.get("Estimated Yield on Cost")
+                        ),
+                    }
+                )
+            years = dataset[len("growth_") : -1]
+            warnings.append(
+                "Projections, not history: future dividends assuming the "
+                f"{years}-year average dividend growth rate continues. Yield on "
+                "cost is a percentage of today's price."
+            )
+            return pd.DataFrame(rows).sort_values("year").reset_index(drop=True)
+        if dataset == "annual":
+            out = pd.DataFrame(
+                {
+                    "fiscal_year": frame["FiscalPeriod"].map(_fiscal_year),
+                    "amount": pd.to_numeric(frame["Amount"], errors="coerce"),
+                    "yield_pct": pd.to_numeric(frame["Yield"], errors="coerce"),
+                    "payout_pct": pd.to_numeric(frame["Payout"], errors="coerce"),
+                    "estimate": frame["Estimate"].map(lambda v: v is True),
+                }
+            )
+            warnings.append(
+                "Per-share amounts in the trading currency; yield and payout are "
+                "percentages. Rows with estimate=true are analyst forecasts."
+            )
+            return out.sort_values("fiscal_year", ascending=False).reset_index(
+                drop=True
+            )
+        # summary: one record as field/value rows, like the Yahoo record datasets
+        names = {
+            "lastClose": "last_close",
+            "dividendExDate": "next_ex_dividend_date",
+            "dividendEstimate": "next_12m_dividend_estimate",
+            "dividendTTM": "trailing_12m_dividend",
+        }
+        rows = []
+        for key, value in frame.iloc[0].to_dict().items():
+            if key == "dividendExDate" and isinstance(value, str):
+                value = value[:10]
+            rows.append({"field": names.get(key, key), "value": value})
+        warnings.append("Per-share amounts in the trading currency.")
+        return pd.DataFrame(rows)
 
     @staticmethod
     def _margins(provider, dataset, warnings):

@@ -98,6 +98,10 @@
     {
       "name": "get_margins_and_ratios",
       "description": "Gross, operating, EBITDA, pre-tax and net margin history and key financial ratios from Macrotrends."
+    },
+    {
+      "name": "get_dividend_metrics",
+      "description": "Dividend payout ratio and growth projections from Digrin, and annual dividend, yield and payout history from Finviz."
     }
   ],
   "tools_generated": false,
