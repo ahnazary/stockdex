@@ -1,12 +1,14 @@
 """Offline tests for the deprecated yahoo_web_* aliases and their replacements."""
 
 import warnings
+from datetime import datetime, timedelta
 
 import pandas as pd
 import pytest
 
 from stockdex import Ticker
-from stockdex.yahoo_web_deprecated import REPLACEMENTS
+from stockdex.exceptions import WrongSecurityType
+from stockdex.yahoo_web_deprecated import REPLACEMENTS, VALID_TYPES
 
 FRAME = pd.DataFrame({"x": [1]})
 
@@ -71,10 +73,18 @@ def ticker(monkeypatch):
     return ticker
 
 
+def _access(ticker, name):
+    """Read a deprecated attribute, calling the one that is a method"""
+    value = getattr(ticker, name)
+    if name == "yahoo_web_financials_table":
+        return value("https://finance.yahoo.com/quote/AAPL/financials")
+    return value
+
+
 @pytest.mark.parametrize("name", sorted(REPLACEMENTS))
 def test_every_alias_warns_and_names_replacement(ticker, name):
     with pytest.warns(DeprecationWarning, match="removed in stockdex 2.0") as record:
-        getattr(ticker, name)
+        _access(ticker, name)
     message = str(record[0].message)
     assert name in message
     assert REPLACEMENTS[name].split("(")[0] in message
@@ -97,10 +107,6 @@ def test_warning_points_at_caller(ticker):
         ("yahoo_web_major_holders", "yahoo_api_major_holders"),
         ("yahoo_web_top_institutional_holders", "yahoo_api_institutional_holders"),
         ("yahoo_web_top_mutual_fund_holders", "yahoo_api_fund_holders"),
-        ("yahoo_web_summary", "yahoo_api_summary_detail"),
-        ("yahoo_web_valuation_measures", "yahoo_api_valuation_measures"),
-        ("yahoo_web_financial_highlights", "yahoo_api_financial_data"),
-        ("yahoo_web_trading_information", "yahoo_api_key_statistics"),
         ("yahoo_web_earnings_history", "yahoo_api_earnings_history"),
     ],
 )
@@ -186,3 +192,165 @@ def test_macrotrends_full_name_uses_api(monkeypatch):
 def test_scraper_module_removed():
     with pytest.raises(ModuleNotFoundError):
         __import__("stockdex.yahoo_web_interface")
+
+
+def _record(**values):
+    return pd.DataFrame({"AAPL": list(values.values())}, index=list(values))
+
+
+def test_summary_combines_price_and_detail(ticker, monkeypatch):
+    monkeypatch.setattr(
+        ticker,
+        "yahoo_api_market_price",
+        lambda: _record(regularMarketPrice=200.0, marketState="REGULAR", marketCap=1),
+    )
+    monkeypatch.setattr(
+        ticker,
+        "yahoo_api_summary_detail",
+        lambda: _record(previousClose=199.0, marketCap=2),
+    )
+    with pytest.warns(DeprecationWarning):
+        frame = ticker.yahoo_web_summary
+    assert list(frame.index) == [
+        "regularMarketPrice",
+        "marketState",
+        "marketCap",
+        "previousClose",
+    ]
+    assert frame.loc["marketCap", "AAPL"] == 1
+
+
+def test_financial_highlights_include_dates(ticker, monkeypatch):
+    monkeypatch.setattr(
+        ticker, "yahoo_api_financial_data", lambda: _record(totalRevenue=10)
+    )
+    monkeypatch.setattr(
+        ticker,
+        "yahoo_api_key_statistics",
+        lambda: _record(lastFiscalYearEnd="2025-09-27", mostRecentQuarter="q", beta=1),
+    )
+    with pytest.warns(DeprecationWarning):
+        frame = ticker.yahoo_web_financial_highlights
+    assert list(frame.index) == [
+        "totalRevenue",
+        "lastFiscalYearEnd",
+        "mostRecentQuarter",
+    ]
+
+
+def test_trading_information_includes_52_week_range(ticker, monkeypatch):
+    monkeypatch.setattr(
+        ticker, "yahoo_api_key_statistics", lambda: _record(sharesOutstanding=5)
+    )
+    monkeypatch.setattr(
+        ticker,
+        "yahoo_api_summary_detail",
+        lambda: _record(fiftyTwoWeekHigh=250, fiftyTwoWeekLow=150, open=1),
+    )
+    with pytest.warns(DeprecationWarning):
+        frame = ticker.yahoo_web_trading_information
+    assert list(frame.index) == [
+        "sharesOutstanding",
+        "fiftyTwoWeekHigh",
+        "fiftyTwoWeekLow",
+    ]
+
+
+def test_valuation_measures_add_current_row(ticker, monkeypatch):
+    def valuation(frequency="quarterly"):
+        if frequency == "trailing":
+            return pd.DataFrame(
+                {"trailingPeRatio": [30.0, 31.0]}, index=["2026-10-01", "2026-10-29"]
+            )
+        return pd.DataFrame({"quarterlyPeRatio": [28.0]}, index=["2026-06-30"])
+
+    monkeypatch.setattr(ticker, "yahoo_api_valuation_measures", valuation)
+    with pytest.warns(DeprecationWarning):
+        frame = ticker.yahoo_web_valuation_measures
+    assert list(frame.index) == ["2026-06-30", "Current"]
+    assert frame.loc["Current", "quarterlyPeRatio"] == 31.0
+
+
+def test_valuation_measures_without_trailing_data(ticker, monkeypatch):
+    history = pd.DataFrame({"quarterlyPeRatio": [28.0]}, index=["2026-06-30"])
+    monkeypatch.setattr(
+        ticker,
+        "yahoo_api_valuation_measures",
+        lambda frequency="quarterly": (
+            pd.DataFrame() if frequency == "trailing" else history
+        ),
+    )
+    with pytest.warns(DeprecationWarning):
+        assert ticker.yahoo_web_valuation_measures is history
+
+
+@pytest.mark.parametrize(
+    "url, target",
+    [
+        ("https://finance.yahoo.com/quote/AAPL/financials", "income_statement"),
+        ("https://finance.yahoo.com/quote/AAPL/balance-sheet/", "balance_sheet"),
+        ("https://finance.yahoo.com/quote/AAPL/cash-flow?p=AAPL", "cash_flow"),
+    ],
+)
+def test_financials_table_dispatches_by_url(ticker, url, target):
+    with pytest.warns(DeprecationWarning):
+        assert ticker.yahoo_web_financials_table(url, "quarterly") is FRAME
+    assert ticker.calls[-1] == (
+        f"yahoo_api_{target}",
+        (),
+        {"frequency": "quarterly"},
+    )
+
+
+@pytest.mark.parametrize(
+    "url, frequency",
+    [
+        ("https://finance.yahoo.com/quote/AAPL/profile", "annual"),
+        ("https://finance.yahoo.com/quote/AAPL/financials", "monthly"),
+    ],
+)
+def test_financials_table_rejects_unsupported(ticker, url, frequency):
+    with pytest.warns(DeprecationWarning), pytest.raises(ValueError):
+        ticker.yahoo_web_financials_table(url, frequency)
+
+
+@pytest.mark.parametrize("name", sorted(VALID_TYPES))
+def test_security_type_checks_kept(ticker, name):
+    ticker.security_type = "fund"
+    with pytest.warns(DeprecationWarning), pytest.raises(WrongSecurityType):
+        getattr(ticker, name)
+
+
+def test_options_allowed_for_etfs(ticker):
+    ticker.security_type = "etf"
+    with pytest.warns(DeprecationWarning):
+        ticker.yahoo_web_calls
+    with pytest.warns(DeprecationWarning), pytest.raises(WrongSecurityType):
+        ticker.yahoo_web_income_stmt
+
+
+def test_description_has_no_type_check(ticker):
+    ticker.security_type = "etf"
+    with pytest.warns(DeprecationWarning):
+        assert ticker.yahoo_web_description == "Apple designs phones."
+
+
+def test_statement_dates_resolved_per_call(monkeypatch):
+    ticker = Ticker("AAPL")
+    urls = []
+
+    class Response:
+        def json(self):
+            return {"timeseries": {"result": []}}
+
+    monkeypatch.setattr(
+        ticker, "get_response", lambda url: urls.append(url) or Response()
+    )
+    before = datetime.today()
+    ticker.yahoo_api_income_statement()
+    params = dict(p.split("=") for p in urls[-1].split("?", 1)[1].split("&"))
+    # build_url reads naive datetimes as UTC, so read them back the same way
+    period2 = pd.Timestamp(int(params["period2"]), unit="s").to_pydatetime()
+    period1 = pd.Timestamp(int(params["period1"]), unit="s").to_pydatetime()
+    assert abs(period2 - before) < timedelta(minutes=1)
+    assert 365 * 5 - 2 <= (period2 - period1).days <= 365 * 5 + 2
