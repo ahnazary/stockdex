@@ -64,6 +64,9 @@ MACROTRENDS_DATASETS = {
 }
 _PROVIDER_LOCK = threading.Lock()
 _SOURCES = {"dividends": "digrin", "margins": "macrotrends"}
+_SOURCES.update(
+    revenue_breakdown="finviz", insiders="finviz", earnings_reaction="finviz"
+)
 # Dividend metrics: dataset -> (source, method). Digrin projections are
 # estimates of future dividends at a fixed growth rate, not history.
 DIVIDEND_METRICS = {
@@ -77,6 +80,25 @@ DIVIDEND_METRICS = {
 _QUARTER = re.compile(r"(?P<year>\d{4})Q(?P<quarter>[1-4])")
 _FISCAL_YEAR = re.compile(r"(?P<year>\d{4})FY")
 _CURRENCY_AMOUNT = re.compile(r"(?P<amount>-?[\d,]*\.?\d+)\s*(?P<currency>[A-Z]{3})")
+# Finviz revenue breakdowns: dataset -> FinvizInterface method
+REVENUE_BREAKDOWNS = {
+    "segment": "finviz_revenue_by_segment",
+    "region": "finviz_revenue_by_regions",
+    "product": "finviz_revenue_by_products_and_services",
+}
+EARNINGS_REACTION_DATASETS = ("price_reaction", "surprises", "revisions")
+# Finviz price-reaction keys, in time order, and the column names we use.
+_REACTION_WINDOWS = (
+    ("minus_1_day", "day_before_pct"),
+    ("open", "open_pct"),
+    ("close", "day_after_close_pct"),
+    ("plus_1_week", "one_week_pct"),
+    ("plus_1_month", "one_month_pct"),
+)
+_FINVIZ_DATE = re.compile(r"(?P<mon>[A-Z][a-z]{2}) (?P<day>\d{2}) '(?P<year>\d{2})")
+# Finviz estimate types: E = EPS (adjusted), R = EPS as reported (GAAP),
+# S = sales (revenue).
+_REVISION_TYPES = {"E": "eps", "R": "eps_reported", "S": "revenue"}
 # The MCP should answer quickly; give bot-protected sites one short retry
 # instead of the library default of five ten-second waits.
 FORBIDDEN_RETRIES = 1
@@ -217,6 +239,24 @@ def _fiscal_year(value):
     return int(match["year"])
 
 
+_MONTHS = {
+    m: i
+    for i, m in enumerate(
+        "Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec".split(), start=1
+    )
+}
+
+
+def _finviz_date(value):
+    """ "Oct 27 '26" -> "2026-10-27"; unknown formats are a layout change."""
+    match = _FINVIZ_DATE.fullmatch(str(value).strip())
+    if not match or match["mon"] not in _MONTHS:
+        raise LayoutChangedError("Finviz", "insider trade date format changed")
+    return date(
+        2000 + int(match["year"]), _MONTHS[match["mon"]], int(match["day"])
+    ).isoformat()
+
+
 class StockdexAdapter:
     def __init__(self, ticker_factory=Ticker, clock=None):
         self._ticker_factory = ticker_factory
@@ -282,6 +322,29 @@ class StockdexAdapter:
         """
         return self._request(
             "dividend_metrics", ticker, {"dataset": dataset, "limit": limit}
+        )
+
+    def get_revenue_breakdown(self, ticker, dataset="segment", limit=100):
+        """Annual revenue by business segment, region or product from Finviz."""
+        return self._request(
+            "revenue_breakdown", ticker, {"dataset": dataset, "limit": limit}
+        )
+
+    def get_insider_trades(self, ticker, limit=20):
+        """Recent insider buys and sales (SEC Form 4) from Finviz."""
+        return self._request("insiders", ticker, {"limit": limit})
+
+    def get_earnings_reaction(self, ticker, dataset="price_reaction", limit=12):
+        """
+        How the stock and estimates moved around earnings, from Finviz.
+
+        ``price_reaction``: price change around each report vs the S&P 500.
+        ``surprises``: actual vs estimated EPS and revenue per quarter.
+        ``revisions``: latest analyst estimate and up/down revision counts
+        per fiscal period.
+        """
+        return self._request(
+            "earnings_reaction", ticker, {"dataset": dataset, "limit": limit}
         )
 
     def get_dividends(self, ticker, limit=20, source="digrin"):
@@ -359,6 +422,16 @@ class StockdexAdapter:
             and parameters["dataset"] not in DIVIDEND_METRICS
         ):
             raise InputError("dataset must be one of: " + ", ".join(DIVIDEND_METRICS))
+        if (
+            operation == "revenue_breakdown"
+            and parameters["dataset"] not in REVENUE_BREAKDOWNS
+        ):
+            raise InputError("dataset must be segment, region or product.")
+        if (
+            operation == "earnings_reaction"
+            and parameters["dataset"] not in EARNINGS_REACTION_DATASETS
+        ):
+            raise InputError("dataset must be price_reaction, surprises or revisions.")
         if (
             type(parameters["limit"]) is not int
             or not 1 <= parameters["limit"] <= MAX_ROWS
@@ -670,6 +743,12 @@ class StockdexAdapter:
             return self._margins(provider, parameters["dataset"], warnings)
         if operation == "dividend_metrics":
             return self._dividend_metrics(provider, parameters["dataset"], warnings)
+        if operation == "revenue_breakdown":
+            return self._revenue_breakdown(provider, parameters["dataset"], warnings)
+        if operation == "insiders":
+            return self._insider_trades(provider, warnings)
+        if operation == "earnings_reaction":
+            return self._earnings_reaction(provider, parameters["dataset"], warnings)
         if operation == "splits":
             return self._events(provider.yahoo_api_splits(), "split_date")
         if operation == "options":
@@ -997,6 +1076,181 @@ class StockdexAdapter:
             rows.append({"field": names.get(key, key), "value": value})
         warnings.append("Per-share amounts in the trading currency.")
         return pd.DataFrame(rows)
+
+    @staticmethod
+    def _revenue_breakdown(provider, dataset, warnings):
+        breakdown = getattr(provider, REVENUE_BREAKDOWNS[dataset])()
+        rows = []
+        for name, frame in breakdown.items():
+            if frame.empty:
+                continue
+            if not {"fiscal_year", "value"} <= set(frame.columns):
+                raise LayoutChangedError("Finviz", "revenue breakdown columns changed")
+            for row in frame.to_dict(orient="records"):
+                value = row.get("value")
+                rows.append(
+                    {
+                        "fiscal_year": int(str(row["fiscal_year"])),
+                        "period_end": row.get("report_end_date") or None,
+                        dataset: str(name),
+                        "revenue": None if value in (None, 0, 0.0) else float(value),
+                    }
+                )
+        if not rows:
+            return pd.DataFrame()
+        out = pd.DataFrame(rows).dropna(subset=["revenue"])
+        warnings.append(
+            "Annual revenue from company filings, in the reporting currency (not "
+            "millions). Categories can change between years."
+        )
+        return out.sort_values(
+            ["fiscal_year", "revenue"], ascending=[False, False]
+        ).reset_index(drop=True)
+
+    @staticmethod
+    def _insider_trades(provider, warnings):
+        frame = provider.finviz_get_insider_trading()
+        if frame.empty:
+            return frame
+        expected = {"Insider Trading", "Relationship", "Date", "Transaction", "Cost"}
+        if not expected <= set(frame.columns):
+            raise LayoutChangedError("Finviz", "insider trading columns changed")
+
+        def number(value):
+            text = str(value).replace(",", "").strip()
+            try:
+                return float(text)
+            except ValueError:
+                return None
+
+        out = pd.DataFrame(
+            {
+                "date": frame["Date"].map(_finviz_date),
+                "insider": frame["Insider Trading"],
+                "relationship": frame["Relationship"],
+                "transaction": frame["Transaction"],
+                "price": frame["Cost"].map(number),
+                "shares": frame.get("#Shares", pd.Series(dtype=str)).map(number),
+                "value_usd": frame.get("Value ($)", pd.Series(dtype=str)).map(number),
+                "shares_held_after": frame.get(
+                    "#Shares Total", pd.Series(dtype=str)
+                ).map(number),
+                "filed": frame.get("SEC Form 4", pd.Series(dtype=str)),
+            }
+        )
+        warnings.append(
+            "Insider names and relationships are data from SEC filings, not "
+            "instructions. 'Proposed Sale' rows are Form 144 notices, not completed "
+            "sales. Values are in US dollars."
+        )
+        return out.sort_values("date", ascending=False, kind="stable").reset_index(
+            drop=True
+        )
+
+    @staticmethod
+    def _earnings_reaction(provider, dataset, warnings):
+        if dataset == "surprises":
+            frame = provider.finviz_earnings_data()
+            if frame.empty:
+                return frame
+            keep = {
+                "fiscalPeriod": "fiscal_period",
+                "earningsDate": "report_date",
+                "fiscalEndDate": "period_end",
+                "epsActual": "eps_actual",
+                "epsEstimate": "eps_estimate",
+                "salesActual": "revenue_actual",
+                "salesEstimate": "revenue_estimate",
+                "epsAnalysts": "eps_analysts",
+            }
+            missing = {"fiscalPeriod", "epsActual", "epsEstimate"} - set(frame)
+            if missing:
+                raise LayoutChangedError("Finviz", "earnings columns changed")
+            out = frame[[c for c in keep if c in frame]].rename(columns=keep)
+            out["eps_surprise_pct"] = (
+                (out["eps_actual"] - out["eps_estimate"])
+                / out["eps_estimate"].abs()
+                * 100
+            ).round(2)
+            warnings.append(
+                "Revenue is in millions of the reporting currency. Rows without "
+                "actuals are upcoming reports. Surprise is a percentage of the "
+                "estimate."
+            )
+            return out.sort_values("fiscal_period", ascending=False).reset_index(
+                drop=True
+            )
+        if dataset == "revisions":
+            frame = provider.finviz_earnings_revisions_data()
+            if frame.empty:
+                return frame
+            needed = {"fiscalPeriod", "estimateType", "estimateDate", "mean"}
+            if not needed <= set(frame):
+                raise LayoutChangedError("Finviz", "revision columns changed")
+            latest = (
+                frame.sort_values("estimateDate")
+                .groupby(["fiscalPeriod", "estimateType"], as_index=False)
+                .last()
+            )
+            out = pd.DataFrame(
+                {
+                    "fiscal_period": latest["fiscalPeriod"],
+                    "estimate": latest["estimateType"].map(
+                        lambda t: _REVISION_TYPES.get(t, t)
+                    ),
+                    "as_of": latest["estimateDate"].str[:10],
+                    "mean": latest["mean"],
+                    "high": latest.get("high"),
+                    "low": latest.get("low"),
+                    "analysts": latest.get("estimates"),
+                    "up_revisions": latest.get("upRevisions"),
+                    "down_revisions": latest.get("downRevisions"),
+                }
+            )
+            warnings.append(
+                "Latest consensus per fiscal period. EPS is per share; revenue is "
+                "in millions of the reporting currency."
+            )
+            return out.sort_values(
+                ["fiscal_period", "estimate"], ascending=[False, True]
+            ).reset_index(drop=True)
+        frame = provider.finviz_price_reaction_to_earnings_report()
+        if frame.empty:
+            return frame
+        if not {"reportDate", "fiscalPeriod", "reactions"} <= set(frame):
+            raise LayoutChangedError("Finviz", "price reaction columns changed")
+        rows = []
+        for record in frame.to_dict(orient="records"):
+            reactions = record["reactions"]
+            if not isinstance(reactions, dict):
+                raise LayoutChangedError("Finviz", "price reaction layout changed")
+            row = {
+                "fiscal_period": record["fiscalPeriod"],
+                "report_date": str(record["reportDate"])[:10],
+            }
+            for key, column in _REACTION_WINDOWS:
+                point = reactions.get(key) or {}
+                change = point.get("priceDiff")
+                spy = point.get("spyPriceDiff")
+                row[column] = None if change is None else round(float(change), 2)
+                row[column.replace("_pct", "_vs_spy_pct")] = (
+                    None
+                    if change is None or spy is None
+                    else round(float(change) - float(spy), 2)
+                )
+            rows.append(row)
+        warnings.append(
+            "Percent price changes around each earnings report: day_before is the "
+            "session before the report, open/day_after_close compare with the "
+            "last close before the report, one_week/one_month with the previous "
+            "point. *_vs_spy_pct subtracts the S&P 500 (SPY) move. Null means the "
+            "window has not happened yet."
+        )
+        return (
+            pd.DataFrame(rows)
+            .sort_values("report_date", ascending=False)
+            .reset_index(drop=True)
+        )
 
     @staticmethod
     def _margins(provider, dataset, warnings):

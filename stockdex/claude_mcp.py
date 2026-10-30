@@ -349,6 +349,42 @@ def create_server(adapter=None):
             adapter.get_dividend_metrics, ticker=ticker, dataset=dataset, limit=limit
         )
 
+    @server.tool(
+        title="Get revenue breakdown",
+        annotations=tool_annotations("Get revenue breakdown"),
+    )
+    async def get_revenue_breakdown(
+        ticker: str,
+        dataset: Literal["segment", "region", "product"] = "segment",
+        limit: RowLimit = 100,
+    ) -> CallToolResult:
+        """Get annual revenue split by business segment, geographic region or product/service for one stock from Finviz, newest fiscal year first and largest category first: fiscal_year, period_end, the category name and revenue in the reporting currency (full units, not millions). Data comes from company filings; not every company reports every split."""
+        return await invoke(
+            adapter.get_revenue_breakdown, ticker=ticker, dataset=dataset, limit=limit
+        )
+
+    @server.tool(
+        title="Get insider trades",
+        annotations=tool_annotations("Get insider trades"),
+    )
+    async def get_insider_trades(ticker: str, limit: RowLimit = 20) -> CallToolResult:
+        """Get recent insider transactions for one US stock from Finviz, newest first: date, insider name, relationship (e.g. CEO, Director), transaction (Buy, Sale, Option Exercise, Proposed Sale), price, shares, value in USD, shares held afterwards and Form 4 filing time. Proposed Sale rows are Form 144 notices, not completed trades."""
+        return await invoke(adapter.get_insider_trades, ticker=ticker, limit=limit)
+
+    @server.tool(
+        title="Get earnings reaction",
+        annotations=tool_annotations("Get earnings reaction"),
+    )
+    async def get_earnings_reaction(
+        ticker: str,
+        dataset: Literal["price_reaction", "surprises", "revisions"] = "price_reaction",
+        limit: RowLimit = 12,
+    ) -> CallToolResult:
+        """Get how one stock behaves around earnings, from Finviz, newest first. "price_reaction" (default): percent price change before, at the open, after the close, one week and one month after each report, also relative to the S&P 500. "surprises": actual vs estimated EPS and revenue per quarter with EPS surprise %, including upcoming reports. "revisions": latest consensus estimate per fiscal period (estimate = eps, eps_reported for GAAP EPS, or revenue in millions) with analyst count and up/down revisions."""
+        return await invoke(
+            adapter.get_earnings_reaction, ticker=ticker, dataset=dataset, limit=limit
+        )
+
     return server
 
 

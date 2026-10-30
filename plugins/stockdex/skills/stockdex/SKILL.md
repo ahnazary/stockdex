@@ -22,6 +22,9 @@ Yahoo Finance (most data) and Digrin (dividends by default) on the user's machin
 | Analyst estimates, ratings, EPS surprises | `get_analyst_estimates` | `dataset`: `estimates` (default), `recommendations`, `upgrades_downgrades`, `earnings_history` |
 | Next earnings or dividend date | `get_earnings_calendar` | `ticker` |
 | Who owns it, insider trades | `get_holders` | `dataset`: `institutional_holders` (default), `fund_holders`, `ownership_breakdown`, `insiders`, `insider_transactions`, `insider_activity` |
+| Latest insider buys and sales with price and value | `get_insider_trades` | `ticker` (Finviz, US listings) |
+| Revenue by segment, region or product | `get_revenue_breakdown` | `dataset`: `segment` (default), `region`, `product` |
+| Stock move after earnings, EPS surprises, estimate revisions | `get_earnings_reaction` | `dataset`: `price_reaction` (default), `surprises`, `revisions` |
 | 10-K, 10-Q, 8-K | `get_sec_filings` | `ticker` (US listings) |
 | Dividends | `get_dividends` | `source`: `digrin` (default), `yahoo`, `auto` |
 | Payout ratio, dividend growth, yield per year | `get_dividend_metrics` | `dataset`: `payout_ratio` (default), `growth_3y`, `growth_5y`, `growth_10y` (Digrin projections), `annual`, `summary` (Finviz) |

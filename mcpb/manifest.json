@@ -102,6 +102,18 @@
     {
       "name": "get_dividend_metrics",
       "description": "Dividend payout ratio and growth projections from Digrin, and annual dividend, yield and payout history from Finviz."
+    },
+    {
+      "name": "get_revenue_breakdown",
+      "description": "Annual revenue by business segment, region or product from Finviz."
+    },
+    {
+      "name": "get_insider_trades",
+      "description": "Recent insider buys and sales with price, shares and value from Finviz."
+    },
+    {
+      "name": "get_earnings_reaction",
+      "description": "Price reaction to earnings, EPS and revenue surprises, and estimate revisions from Finviz."
     }
   ],
   "tools_generated": false,

@@ -28,6 +28,9 @@ EXPECTED_TOOLS = {
     "get_quotes",
     "get_margins_and_ratios",
     "get_dividend_metrics",
+    "get_revenue_breakdown",
+    "get_insider_trades",
+    "get_earnings_reaction",
 }
 
 
@@ -267,6 +270,93 @@ class FakeTicker:
                     "dividendTTM": 2.1,
                 }
             ]
+        )
+
+    def finviz_revenue_by_segment(self):
+        rows = lambda values: pd.DataFrame(  # noqa: E731
+            {
+                "fiscal_year": ["2024", "2025"],
+                "report_end_date": ["2024-09-28", "2025-09-27"],
+                "source_filing_url": ["https://www.sec.gov/x", ""],
+                "value": values,
+            }
+        )
+        return {
+            "Americas": rows([167045000000.0, 178353000000.0]),
+            "Europe": rows([101328000000.0, 0.0]),
+        }
+
+    finviz_revenue_by_regions = finviz_revenue_by_segment
+    finviz_revenue_by_products_and_services = finviz_revenue_by_segment
+
+    def finviz_get_insider_trading(self):
+        return pd.DataFrame(
+            {
+                "Insider Trading": ["Borders Ben", "Newstead Jennifer"],
+                "Relationship": ["Principal Accounting Officer", "SVP, GC"],
+                "Date": ["Oct 20 '26", "Oct 27 '26"],
+                "Transaction": ["Sale", "Proposed Sale"],
+                "Cost": ["339.62", "343.36"],
+                "#Shares": ["2,399", "2,399"],
+                "Value ($)": ["814,748", "823,721"],
+                "#Shares Total": ["34,795", ""],
+                "SEC Form 4": ["Oct 22 06:32 PM", "Oct 29 06:30 PM"],
+            }
+        )
+
+    def finviz_earnings_data(self):
+        return pd.DataFrame(
+            {
+                "ticker": ["AAPL", "AAPL"],
+                "fiscalPeriod": ["2026Q3", "2026Q4"],
+                "earningsDate": ["2026-07-30T16:30:00", "2026-11-02T16:30:00"],
+                "fiscalEndDate": ["2026-06-30", "2026-09-30"],
+                "epsActual": [2.02, float("nan")],
+                "epsEstimate": [1.8919, 1.9897],
+                "salesActual": [109417.0, float("nan")],
+                "salesEstimate": [109038.8999, 113388.4769],
+                "epsAnalysts": [32.0, 28.0],
+            }
+        )
+
+    def finviz_earnings_revisions_data(self):
+        return pd.DataFrame(
+            {
+                "fiscalPeriod": ["2026Q4", "2026Q4", "2026Q4"],
+                "estimateType": ["E", "E", "S"],
+                "estimateDate": [
+                    "2026-10-26T00:00:00",
+                    "2026-10-30T00:00:00",
+                    "2026-10-30T00:00:00",
+                ],
+                "estimates": [28, 28, 26],
+                "upRevisions": [2, 3, 1],
+                "downRevisions": [0, 0, 2],
+                "mean": [1.98, 1.9897, 113401.2137],
+                "high": [2.1, 2.1, 117628.0],
+                "low": [1.9, 1.9, 112525.022],
+            }
+        )
+
+    def finviz_price_reaction_to_earnings_report(self):
+        def point(diff, spy):
+            return {"priceDiff": diff, "spyPriceDiff": spy}
+
+        return pd.DataFrame(
+            {
+                "fiscalPeriod": ["2026Q3", "2026Q4"],
+                "reportDate": ["2026-07-30T16:30:00", "2026-11-02T16:30:00"],
+                "reactions": [
+                    {
+                        "minus_1_day": point(-1.4075012, 1.6765823),
+                        "open": point(-8.583511, 0.40312958),
+                        "close": point(-7.3538666, 0.71997833),
+                        "plus_1_week": point(2.1, 1.0),
+                        "plus_1_month": point(None, None),
+                    },
+                    {"minus_1_day": point(None, None)},
+                ],
+            }
         )
 
 
