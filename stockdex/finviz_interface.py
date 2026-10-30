@@ -1,5 +1,4 @@
 import json
-from functools import lru_cache
 
 import pandas as pd
 import plotly.express as px
@@ -7,13 +6,12 @@ from bs4 import BeautifulSoup
 
 from stockdex.config import FINVIZ_BASE_URL, VALID_SECURITY_TYPES
 from stockdex.exceptions import LayoutChangedError
+from stockdex.lib import instance_cache
 from stockdex.ticker_base import TickerBase
 
 
 def _records_frame(records) -> pd.DataFrame:
     """A list of dicts as a DataFrame; an empty list gives an empty frame."""
-    if not records:
-        return pd.DataFrame()
     if not isinstance(records, list) or not all(isinstance(r, dict) for r in records):
         raise LayoutChangedError("Finviz", "expected a list of records")
     return pd.DataFrame(records)
@@ -83,21 +81,21 @@ class FinvizInterface(TickerBase):
             raise LayoutChangedError("Finviz", f"unexpected {view} data layout")
         return data
 
-    @lru_cache(maxsize=None)
+    @instance_cache
     def _finviz_earnings_reaction_raw_data(self) -> dict:
         """
         Return and caches the raw earnings reaction data.
         """
         return self._finviz_route_data("ea")
 
-    @lru_cache
+    @instance_cache
     def _finviz_dividend_payout_history_raw_data(self) -> dict:
         """
         Return and caches the raw dividend payout history data.
         """
         return self._finviz_route_data("dv")
 
-    @lru_cache
+    @instance_cache
     def _finviz_revenue_raw_data(self) -> dict:
         """
         Return and caches the raw revenue data.

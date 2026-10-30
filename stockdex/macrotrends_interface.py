@@ -4,7 +4,6 @@ Module for interfacing with the Macrotrends website.
 
 import json
 import re
-from functools import lru_cache
 from io import StringIO
 from typing import Literal, Union
 
@@ -14,7 +13,7 @@ from bs4 import BeautifulSoup
 
 from stockdex.config import MACROTRENDS_BASE_URL, VALID_SECURITY_TYPES
 from stockdex.exceptions import FieldNotExists, LayoutChangedError
-from stockdex.lib import check_security_type, plot_dataframe
+from stockdex.lib import check_security_type, instance_cache, plot_dataframe
 from stockdex.ticker_base import TickerBase
 
 _ORIGINAL_DATA = re.compile(r"originalData\s*=\s*(\[.*?\])\s*;", re.DOTALL)
@@ -37,7 +36,7 @@ class MacrotrendsInterface(TickerBase):
         self.security_type = security_type
 
     @property
-    @lru_cache(maxsize=None)
+    @instance_cache
     def full_name(self) -> str:
         """
         Retrieve the full name of the security as a URL slug, e.g. "apple-inc"
@@ -113,7 +112,7 @@ class MacrotrendsInterface(TickerBase):
         data = data.set_index("field_name")
         return data.drop(columns=["popup_icon"], errors="ignore")
 
-    @lru_cache(maxsize=None)
+    @instance_cache
     def macrotrends_income_statement(
         self, frequency: Literal["quarterly", "annual"] = "annual"
     ) -> pd.DataFrame:
@@ -131,7 +130,7 @@ class MacrotrendsInterface(TickerBase):
 
         return self._statement_frame(url, "Revenue")
 
-    @lru_cache(maxsize=None)
+    @instance_cache
     def macrotrends_balance_sheet(
         self, frequency: Literal["quarterly", "annual"] = "annual"
     ) -> pd.DataFrame:
@@ -149,7 +148,7 @@ class MacrotrendsInterface(TickerBase):
 
         return self._statement_frame(url, "Cash On Hand")
 
-    @lru_cache(maxsize=None)
+    @instance_cache
     def macrotrends_cash_flow(
         self, frequency: Literal["quarterly", "annual"] = "annual"
     ) -> pd.DataFrame:
@@ -168,7 +167,7 @@ class MacrotrendsInterface(TickerBase):
         return self._statement_frame(url, "Net Income/Loss")
 
     @property
-    @lru_cache(maxsize=None)
+    @instance_cache
     def macrotrends_key_financial_ratios(self) -> pd.DataFrame:
         """
         Retrieve the key financial ratios for the given ticker.
@@ -196,15 +195,23 @@ class MacrotrendsInterface(TickerBase):
             )
 
         headers = [row.text for row in heads[1].find_all("tr")[0].find_all("th")]
-        data = [
+        rows = [
             [cell.text for cell in row.find_all("td")]
             for row in table.find_all("tr")[1:]
         ]
-        data = [row for row in data if len(row) == len(headers)]
+        data = [row for row in rows if len(row) == len(headers)]
+        # Spacer rows are a single colspan cell; anything wider that never
+        # matches the headers means the table changed
+        if not data and any(len(row) > 1 for row in rows):
+            raise LayoutChangedError(
+                "Macrotrends",
+                f"'{text_to_look_for}' rows no longer match its "
+                f"{len(headers)} columns",
+            )
         return pd.DataFrame(data, columns=headers)
 
     @property
-    @lru_cache(maxsize=None)
+    @instance_cache
     def macrotrends_operating_margin(self) -> pd.DataFrame:
         """
         Retrieve the operating margin for the given ticker.
@@ -215,7 +222,7 @@ class MacrotrendsInterface(TickerBase):
         return self._find_margins_table(url, "TTM Operating Income")
 
     @property
-    @lru_cache(maxsize=None)
+    @instance_cache
     def macrotrends_gross_margin(self) -> pd.DataFrame:
         """
         Retrieve the gross margin for the given ticker.
@@ -226,7 +233,7 @@ class MacrotrendsInterface(TickerBase):
         return self._find_margins_table(url, "Gross Margin")
 
     @property
-    @lru_cache(maxsize=None)
+    @instance_cache
     def macrotrends_ebitda_margin(self) -> pd.DataFrame:
         """
         Retrieve the EBITDA margin for the given ticker.
@@ -237,7 +244,7 @@ class MacrotrendsInterface(TickerBase):
         return self._find_margins_table(url, "TTM EBITDA")
 
     @property
-    @lru_cache(maxsize=None)
+    @instance_cache
     def macrotrends_pre_tax_margin(self) -> pd.DataFrame:
         """
         Retrieve the pre-tax margin for the given ticker.
@@ -248,7 +255,7 @@ class MacrotrendsInterface(TickerBase):
         return self._find_margins_table(url, "TTM Pre-Tax Income")
 
     @property
-    @lru_cache(maxsize=None)
+    @instance_cache
     def macrotrends_net_margin(self) -> pd.DataFrame:
         """
         Retrieve the net profit margin for the given ticker.
@@ -258,7 +265,7 @@ class MacrotrendsInterface(TickerBase):
 
         return self._find_margins_table(url, "TTM Net Income")
 
-    @lru_cache(maxsize=None)
+    @instance_cache
     def macrotrends_revenue(
         self, frequency: Literal["annual", "quarterly"] = "annual"
     ) -> pd.DataFrame:
@@ -281,7 +288,7 @@ class MacrotrendsInterface(TickerBase):
 
         return pd.read_html(StringIO(str(tables[position])))[0]
 
-    @lru_cache(maxsize=None)
+    @instance_cache
     def plot_macrotrends_income_statement(
         self,
         fields_to_include: list = ["Revenue", "Income After Taxes"],

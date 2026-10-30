@@ -1,3 +1,4 @@
+from functools import wraps
 from typing import List, Union
 
 import dash
@@ -6,6 +7,28 @@ import plotly.express as px
 from dash import dcc, html
 
 from stockdex.exceptions import WrongSecurityType
+
+
+def instance_cache(method):
+    """
+    Cache a method's results on the instance, keyed by its arguments
+
+    Unlike ``functools.lru_cache`` on a method, the cache lives in the
+    instance and is freed with it, so a long-running process (such as the MCP
+    server, which makes a new ticker per request) does not keep every ticker
+    and its downloaded pages alive. Can be stacked under ``@property``.
+    """
+    attribute = f"_cache_{method.__name__}"
+
+    @wraps(method)
+    def wrapper(self, *args, **kwargs):
+        cache = self.__dict__.setdefault(attribute, {})
+        key = (args, tuple(sorted(kwargs.items())))
+        if key not in cache:
+            cache[key] = method(self, *args, **kwargs)
+        return cache[key]
+
+    return wrapper
 
 
 def get_user_agent():

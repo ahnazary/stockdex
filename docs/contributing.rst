@@ -24,8 +24,15 @@ Development setup
    pip install -r requirements.txt -r requirements_tests.txt
    pytest -q
 
-Live tests that call external websites are skipped by default; run them
-with ``pytest --run-live``.
+Tests marked ``live`` are skipped by default; run them with
+``pytest --run-live``. Some older tests are not marked yet and still call
+external websites (for example the Finviz, Digrin and Macrotrends interface
+tests), so ``pytest -q`` needs a network connection and can hit rate limits.
+For an offline run, use the fixture-based suites:
+
+.. code-block:: bash
+
+   pytest -q tests/claude tests/test_yahoo_web_deprecated.py
 
 Code style
 ----------
