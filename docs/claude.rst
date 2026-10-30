@@ -12,7 +12,7 @@ data for you. It provides 16 read-only tools:
 * ``get_key_statistics``: market cap, P/E, beta, 52-week range, margins and analyst price targets
 * ``get_valuation_history``: market cap, enterprise value and valuation ratios over time
 * ``get_company_profile``: business summary, sector, executives and related tickers
-* ``get_analyst_estimates``: ePS and revenue estimates, recommendations, rating changes and EPS surprises
+* ``get_analyst_estimates``: EPS and revenue estimates, recommendations, rating changes and EPS surprises
 * ``get_earnings_calendar``: next earnings date, estimates and dividend dates
 * ``get_holders``: institutional and fund holders, ownership breakdown and insider transactions
 * ``get_sec_filings``: recent SEC filings with links
