@@ -10,7 +10,7 @@ from bs4 import BeautifulSoup
 from plotly import express as px
 
 from stockdex.config import DIGRIN_BASE_URL, VALID_SECURITY_TYPES
-from stockdex.exceptions import NoDataError
+from stockdex.exceptions import LayoutChangedError, NoDataError
 from stockdex.lib import plot_dataframe
 from stockdex.ticker_base import TickerBase
 
@@ -51,14 +51,14 @@ class DigrinInterface(TickerBase):
         table = self.find_parent_by_text(soup, "table", "Ex-dividend date")
         # An absent table may be a provider layout/access change, not zero dividends.
         if table is None:
-            raise ValueError("Digrin dividend table is missing")
+            raise LayoutChangedError("Digrin", "dividend table is missing")
         head, body = table.find("thead"), table.find("tbody")
         if head is None or body is None:
-            raise ValueError("Digrin dividend table structure is invalid")
+            raise LayoutChangedError("Digrin", "dividend table structure is invalid")
         headers = [th.get_text(" ", strip=True) for th in head.find_all("th")]
         required = {"Ex-dividend date", "Payable date", "Dividend amount (change)"}
         if not required.issubset(headers) or len(set(headers)) != len(headers):
-            raise ValueError("Digrin dividend table headers are invalid")
+            raise LayoutChangedError("Digrin", "dividend table headers are invalid")
         data = []
         rows = body.find_all("tr")
         for tr in rows:
@@ -69,7 +69,7 @@ class DigrinInterface(TickerBase):
             data.append(cells)
         skipped = len(rows) - len(data)
         if rows and not data:
-            raise ValueError("Digrin dividend row structure is invalid")
+            raise LayoutChangedError("Digrin", "dividend row structure is invalid")
         if skipped:
             logger.warning(
                 "Skipped %d Digrin dividend row(s) with unexpected structure", skipped
@@ -87,30 +87,9 @@ class DigrinInterface(TickerBase):
         pd.DataFrame: A pandas DataFrame including the payout ratio
         visible in the digrin website for the ticker
         """
-
-        # URL of the website to scrape
-        url = f"{DIGRIN_BASE_URL}/{self.ticker}/payout_ratio"
-        response = self.get_response(url)
-
-        # Parse the HTML content of the website
-        soup = BeautifulSoup(response.content, "html.parser")
-
-        try:
-            table = self.find_parent_by_text(soup, "table", "Payout ratio")
-        except IndexError:
-            raise Exception(
-                f"There is no payout ratio data for the ticker {self.ticker}"
-            )
-
-        data_df = pd.DataFrame()
-        data = []
-
-        headers = [th.text for th in table.find_all("thead")[0].find_all("th")]
-        for tr in table.find_all("tbody")[0].find_all("tr"):
-            data.append([td.text for td in tr.find_all("td")])
-
-        data_df = pd.DataFrame(data, columns=headers).replace("\n", "", regex=True)
-        return data_df
+        return self._get_table_from_url(
+            "Payout ratio", f"{DIGRIN_BASE_URL}/{self.ticker}/payout_ratio"
+        )
 
     @property
     def digrin_price(self) -> pd.DataFrame:
@@ -121,28 +100,9 @@ class DigrinInterface(TickerBase):
         pd.DataFrame: A pandas DataFrame including the price
         visible in the digrin website for the ticker
         """
-
-        # URL of the website to scrape
-        url = f"{DIGRIN_BASE_URL}/{self.ticker}/price"
-        response = self.get_response(url)
-
-        # Parse the HTML content of the website
-        soup = BeautifulSoup(response.content, "html.parser")
-
-        try:
-            table = self.find_parent_by_text(soup, "table", "Adjusted price")
-        except IndexError:
-            raise Exception(f"There is no price data for the ticker {self.ticker}")
-
-        data_df = pd.DataFrame()
-        data = []
-
-        headers = [th.text for th in table.find_all("thead")[0].find_all("th")]
-        for tr in table.find_all("tbody")[0].find_all("tr"):
-            data.append([td.text for td in tr.find_all("td")])
-
-        data_df = pd.DataFrame(data, columns=headers).replace("\n", "", regex=True)
-        return data_df
+        return self._get_table_from_url(
+            "Adjusted price", f"{DIGRIN_BASE_URL}/{self.ticker}/price"
+        )
 
     @property
     def digrin_stock_splits(self) -> pd.DataFrame:
@@ -153,71 +113,53 @@ class DigrinInterface(TickerBase):
         pd.DataFrame: A pandas DataFrame including the stock splits
         visible in the digrin website for the ticker
         """
-
-        # URL of the website to scrape
-        url = f"{DIGRIN_BASE_URL}/{self.ticker}/stock_split"
-        response = self.get_response(url)
-
-        # Parse the HTML content of the website
-        soup = BeautifulSoup(response.content, "html.parser")
-
-        try:
-            table = self.find_parent_by_text(soup, "table", "Split Ratio")
-        except IndexError:
-            raise Exception(
-                f"There is no stock split data for the ticker {self.ticker}"
-            )
-
-        data_df = pd.DataFrame()
-        data = []
-
-        headers = [th.text for th in table.find_all("thead")[0].find_all("th")]
-        for tr in table.find_all("tbody")[0].find_all("tr"):
-            data.append([td.text for td in tr.find_all("td")])
-
-        data_df = pd.DataFrame(data, columns=headers).replace("\n", "", regex=True)
-        return data_df
+        return self._get_table_from_url(
+            "Split Ratio", f"{DIGRIN_BASE_URL}/{self.ticker}/stock_split"
+        )
 
     def _get_table_from_url(self, keyword: str, url: str) -> pd.DataFrame:
         """
-        Get the table from the financials page for the ticker
+        Get the table that contains ``keyword`` from a Digrin page
 
         Args:
         keyword (str): The keyword to search for in the table
+        url (str): The page to read
 
         Returns:
         pd.DataFrame: A pandas DataFrame including the table
         visible in the digrin website for the ticker
-        """
 
-        # URL of the website to scrape
-        url = url
+        Raises:
+        NoDataError: The page has no such table for this ticker
+        LayoutChangedError: The table exists but its structure changed
+        """
         response = self.get_response(url)
 
         # Parse the HTML content of the website
         soup = BeautifulSoup(response.content, "html.parser")
 
-        try:
-            table = self.find_parent_by_text(soup, "table", keyword)
-        except IndexError:
-            raise NoDataError(
-                f"There is no {keyword} data for the ticker {self.ticker}"
-            )
-
+        table = self.find_parent_by_text(soup, "table", keyword)
         if table is None:
             raise NoDataError(
                 f"There is no {keyword} data for the ticker {self.ticker}"
             )
 
-        data_df = pd.DataFrame()
-        data = []
+        head, body = table.find("thead"), table.find("tbody")
+        if head is None or body is None:
+            raise LayoutChangedError("Digrin", f"'{keyword}' table structure changed")
 
-        headers = [th.text for th in table.find_all("thead")[0].find_all("th")]
-        for tr in table.find_all("tbody")[0].find_all("tr"):
-            data.append([td.text for td in tr.find_all("td")])
+        headers = [th.text for th in head.find_all("th")]
+        rows = [[td.text for td in tr.find_all("td")] for tr in body.find_all("tr")]
+        data = [cells for cells in rows if len(cells) == len(headers)]
+        # Skip the odd note or spacer row, but a body whose rows all have a
+        # different width means the table changed
+        if not data and any(len(cells) > 1 for cells in rows):
+            raise LayoutChangedError(
+                "Digrin",
+                f"'{keyword}' table rows no longer match its {len(headers)} columns",
+            )
 
-        data_df = pd.DataFrame(data, columns=headers).replace("\n", "", regex=True)
-        return data_df
+        return pd.DataFrame(data, columns=headers).replace("\n", "", regex=True)
 
     @property
     def digrin_assets_vs_liabilities(self) -> pd.DataFrame:

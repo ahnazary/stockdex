@@ -4,7 +4,7 @@ The main Ticker class inherits from this class
 """
 
 from datetime import datetime
-from typing import Literal, Union
+from typing import Literal, Optional, Union
 from urllib.parse import quote as requests_quote
 
 import pandas as pd
@@ -30,8 +30,18 @@ class YahooAPI(TickerBase):
         self.security_type = security_type
         self.data_source = data_source
 
+    # Kept for backwards compatibility. The date arguments default to None and
+    # are resolved on each call, see build_url.
     today = datetime.today()
     five_years_ago = today.replace(year=today.year - 5)
+
+    @staticmethod
+    def _years_before(moment: datetime, years: int) -> datetime:
+        """The same date ``years`` earlier (29 February becomes 28 February)"""
+        try:
+            return moment.replace(year=moment.year - years)
+        except ValueError:
+            return moment.replace(year=moment.year - years, day=28)
 
     def yahoo_api_price(
         self,
@@ -157,8 +167,8 @@ class YahooAPI(TickerBase):
         self,
         frequency: Literal["annual", "quarterly"] = "annual",
         format: Literal["fmt", "raw"] = "fmt",
-        period1: datetime = five_years_ago,
-        period2: datetime = today,
+        period1: Optional[datetime] = None,
+        period2: Optional[datetime] = None,
     ) -> pd.DataFrame:
         """
         Get the income statement for the stock
@@ -193,8 +203,8 @@ class YahooAPI(TickerBase):
         self,
         frequency: Literal["annual", "quarterly"] = "annual",
         format: Literal["fmt", "raw"] = "fmt",
-        period1: datetime = five_years_ago,
-        period2: datetime = today,
+        period1: Optional[datetime] = None,
+        period2: Optional[datetime] = None,
     ) -> pd.DataFrame:
         """
         Get the cash flow statement for the stock
@@ -229,8 +239,8 @@ class YahooAPI(TickerBase):
         self,
         frequency: Literal["annual", "quarterly"] = "annual",
         format: Literal["fmt", "raw"] = "fmt",
-        period1: datetime = five_years_ago,
-        period2: datetime = today,
+        period1: Optional[datetime] = None,
+        period2: Optional[datetime] = None,
     ) -> pd.DataFrame:
         """
         Get the balance sheet for the stock
@@ -265,8 +275,8 @@ class YahooAPI(TickerBase):
         self,
         frequency: Literal["annual", "quarterly"] = "annual",
         format: Literal["fmt", "raw"] = "fmt",
-        period1: datetime = five_years_ago,
-        period2: datetime = today,
+        period1: Optional[datetime] = None,
+        period2: Optional[datetime] = None,
     ) -> pd.DataFrame:
         """
         Get the financials for the stock
@@ -301,8 +311,8 @@ class YahooAPI(TickerBase):
         self,
         frequency: Literal["annual", "quarterly", "trailing"] = "quarterly",
         format: Literal["fmt", "raw"] = "fmt",
-        period1: datetime = five_years_ago,
-        period2: datetime = today,
+        period1: Optional[datetime] = None,
+        period2: Optional[datetime] = None,
     ) -> pd.DataFrame:
         """
         Get valuation measures over time for the stock
@@ -341,8 +351,8 @@ class YahooAPI(TickerBase):
     def build_url(
         self,
         frequency: str,
-        period1: datetime,
-        period2: datetime,
+        period1: Optional[datetime],
+        period2: Optional[datetime],
         desired_entity: str,
     ) -> str:
         """
@@ -367,6 +377,13 @@ class YahooAPI(TickerBase):
         ----------------
         str: The URL to retrieve the data from
         """
+        # Defaults are worked out on every call, so a long-running process
+        # does not keep using the date window from when the module was imported
+        if period2 is None:
+            period2 = datetime.today()
+        if period1 is None:
+            period1 = self._years_before(period2, 5)
+
         # convert period1 and period2 to timestamps
         period1 = int(pd.Timestamp(period1).timestamp())
         period2 = int(pd.Timestamp(period2).timestamp())
@@ -713,6 +730,23 @@ class YahooAPI(TickerBase):
         pd.DataFrame: One row per field
         """
         return self._quote_summary_record("price", format)
+
+    def yahoo_api_company_name(self) -> str:
+        """
+        Get the company's full name from Yahoo Finance
+
+        Returns:
+        ----------------
+        str: The long name, e.g. "Apple Inc.", falling back to the short name
+        and then the ticker
+        """
+        price = self.yahoo_api_market_price()
+        for field in ("longName", "shortName"):
+            if field in price.index:
+                value = price.loc[field].iloc[0]
+                if isinstance(value, str) and value.strip():
+                    return value.strip()
+        return self.ticker
 
     def yahoo_api_summary_detail(
         self, format: Literal["fmt", "raw"] = "raw"
@@ -1272,8 +1306,8 @@ class YahooAPI(TickerBase):
     def plot_yahoo_api_income_statement(
         self,
         frequency: Literal["annual", "quarterly"] = "annual",
-        period1: datetime = five_years_ago,
-        period2: datetime = today,
+        period1: Optional[datetime] = None,
+        period2: Optional[datetime] = None,
         group_by: Literal["timeframe", "field"] = "timeframe",
         fields_to_include: list = [
             "TotalRevenue",
@@ -1341,8 +1375,8 @@ class YahooAPI(TickerBase):
     def plot_yahoo_api_cash_flow(
         self,
         frequency: Literal["annual", "quarterly"] = "annual",
-        period1: datetime = five_years_ago,
-        period2: datetime = today,
+        period1: Optional[datetime] = None,
+        period2: Optional[datetime] = None,
         group_by: Literal["timeframe", "field"] = "timeframe",
         fields_to_include: list = [
             "OperatingCashFlow",
@@ -1407,8 +1441,8 @@ class YahooAPI(TickerBase):
     def plot_yahoo_api_balance_sheet(
         self,
         frequency: Literal["annual", "quarterly"] = "annual",
-        period1: datetime = five_years_ago,
-        period2: datetime = today,
+        period1: Optional[datetime] = None,
+        period2: Optional[datetime] = None,
         group_by: Literal["timeframe", "field"] = "timeframe",
         fields_to_include: list = [
             "TotalAssets",
@@ -1473,8 +1507,8 @@ class YahooAPI(TickerBase):
     def plot_yahoo_api_financials(
         self,
         frequency: Literal["annual", "quarterly"] = "annual",
-        period1: datetime = five_years_ago,
-        period2: datetime = today,
+        period1: Optional[datetime] = None,
+        period2: Optional[datetime] = None,
         group_by: Literal["timeframe", "field"] = "timeframe",
         fields_to_include: list = [
             "TotalRevenue",

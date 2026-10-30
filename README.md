@@ -9,7 +9,7 @@
   <img src="docs/images/stockdex_logo.png" alt="Stockdex logo with three ascending candlesticks" width="300" height="300">
 </p>
 
-For full documentation, visit [here](https://ahnazary.github.io/stockdex/)
+Full documentation: [ahnazary.github.io/stockdex](https://ahnazary.github.io/stockdex/)
 
 # Stock Data Extractor (Stockdex)
 
@@ -26,7 +26,7 @@ Stockdex is a Python package that provides a simple interface to get financial d
 
 - **Numerous data categories**: `Stockdex` provides financials criteria including financial statements, earnings, dividends, stock splits, list of key executives, major shareholders and more.
 
-- <span style="font-size: 17px; font-weight: bold; animation: rainbow 1.8s infinite; background: linear-gradient(90deg, orange, green, blue, indigo, violet); background-size: 1300%; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">**plotting capabilities (new feature)**</span>: `Stockdex` provides plotting financial data using bar, line, and sankey plots. Multiple plots can be combined in dash app.
+- **Plotting**: `Stockdex` plots financial data as bar, line and Sankey charts, and multiple plots can be combined in a Dash app.
 
 <br />
 
@@ -38,7 +38,7 @@ Install the package using pip:
 pip install stockdex -U
 ```
 
-do a simple test to verify the package is installed correctly:
+A quick check that the package works:
 
 ```python
 from stockdex import Ticker
@@ -49,7 +49,7 @@ result = ticker.yahoo_api_income_statement(frequency='quarterly')
 
 ## Use with Claude
 
-Stockdex ships a local, read-only MCP server so Claude can fetch prices, financial statements and dividends for you.
+Stockdex ships a local, read-only MCP server with 21 tools so Claude can fetch prices, financial statements, margins, dividends, insider trades, earnings reactions and more for you.
 
 - **Claude Desktop**: download `stockdex.mcpb` from the [latest release](https://github.com/ahnazary/stockdex/releases/latest) and double-click it.
 - **Claude Code**: install the plugin, which requires [uv](https://docs.astral.sh/uv/):

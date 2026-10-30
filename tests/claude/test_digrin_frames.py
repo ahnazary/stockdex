@@ -38,6 +38,6 @@ def test_empty_table_is_no_data(monkeypatch):
         (FIXTURES / "dividends_malformed.html").read_text(),
     ],
 )
-def test_changed_layout_is_schema_error(monkeypatch, html):
+def test_changed_layout_is_reported(monkeypatch, html):
     result = adapter_for(monkeypatch, html).get_dividends("AAPL")
-    assert result["error"]["code"] == "provider_schema_error"
+    assert result["error"]["code"] == "layout_changed"

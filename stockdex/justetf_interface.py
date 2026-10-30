@@ -271,16 +271,10 @@ class JustETF(TickerBase):
     def justetf_price(self) -> pd.DataFrame:
         """
         Get the basic pricing information of the ETF
-        return data frame with columns:
-            - price
-            - currency
-            - date
-            - time
-            - exchange
-            - daily_change
-            - daily_change_percent
-            - buy|sell
-            - spread
+
+        The returned frame has the columns ``price``, ``currency``, ``date``,
+        ``time``, ``exchange``, ``daily_change``, ``daily_change_percent``,
+        ``buy|sell`` and ``spread``.
 
         Returns:
         ----------------

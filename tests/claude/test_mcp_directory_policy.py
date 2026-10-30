@@ -35,4 +35,7 @@ def test_tool_names_and_descriptions(tools):
         assert len(tool.name) <= 64
         assert 40 <= len(tool.description) <= 600, tool.name
         # Each description names its data source.
-        assert "Yahoo Finance" in tool.description or "Digrin" in tool.description
+        assert any(
+            source in tool.description
+            for source in ("Yahoo Finance", "Digrin", "Macrotrends", "Finviz")
+        ), tool.name

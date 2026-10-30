@@ -23,7 +23,7 @@ Creates an interactive line chart showing the number of shares outstanding over 
 **Results:**
 
 .. image:: ../../images/digrin_plots/plot_digrin_shares_outstanding_PLTR.png
-   :alt: Sankey chart for PLTR stock
+   :alt: Shares outstanding chart for PLTR
    :align: center
    :width: 80%
    :class: rounded

@@ -1,38 +1,61 @@
-name: Build sphinx docs and deploy to GitHub Pages
+name: Docs
 
 on:
+  push:
+    branches: [main]
+  pull_request:
+    paths:
+      - "docs/**"
+      - "stockdex/**"
+      - "CHANGELOG.md"
+      - "requirements.txt"
+      - "requirements_sphinx.txt"
+      - ".github/workflows/sphinx.yaml"
   release:
-    types: [published, edited, deleted]
-  # manually trigger a workflow
+    types: [published]
   workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  # Every deploy (main, release, manual) writes to the same gh-pages folder, so
+  # they share one group and run one at a time. Pull requests only build, so
+  # each PR has its own group and newer pushes cancel older runs.
+  group: ${{ github.event_name == 'pull_request' && format('docs-pr-{0}', github.ref) || 'docs-deploy' }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-      
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.11'
+      - uses: actions/checkout@v4
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install -r requirements_sphinx.txt
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements_sphinx.txt
 
-    - name: Build Sphinx documentation
-      run: |
-        cd docs
-        sphinx-build . build  
-        touch build/.nojekyll
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt -r requirements_sphinx.txt
 
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./docs/build/
-        publish_branch: gh-pages
-        destination_dir: docs
+      - name: Build Sphinx documentation
+        run: |
+          sphinx-build -b html -W --keep-going docs docs/build
+          touch docs/build/.nojekyll
+
+      # Pull requests only check that the docs build; merges to main deploy.
+      - name: Deploy to GitHub Pages
+        if: github.event_name != 'pull_request'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/build/
+          publish_branch: gh-pages
+          destination_dir: docs

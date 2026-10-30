@@ -1,12 +1,20 @@
 import json
-from functools import lru_cache
 
 import pandas as pd
 import plotly.express as px
 from bs4 import BeautifulSoup
 
 from stockdex.config import FINVIZ_BASE_URL, VALID_SECURITY_TYPES
+from stockdex.exceptions import LayoutChangedError
+from stockdex.lib import instance_cache
 from stockdex.ticker_base import TickerBase
+
+
+def _records_frame(records) -> pd.DataFrame:
+    """A list of dicts as a DataFrame; an empty list gives an empty frame."""
+    if not isinstance(records, list) or not all(isinstance(r, dict) for r in records):
+        raise LayoutChangedError("Finviz", "expected a list of records")
+    return pd.DataFrame(records)
 
 
 class FinvizInterface(TickerBase):
@@ -36,7 +44,7 @@ class FinvizInterface(TickerBase):
         )
 
         if table is None:
-            raise RuntimeError("Insider trading data not found")
+            raise LayoutChangedError("Finviz", "insider trading table not found")
 
         columns = table.find_all("th")
         column_names = [col.get_text(strip=True) for col in columns]
@@ -53,57 +61,46 @@ class FinvizInterface(TickerBase):
 
         return pd.DataFrame(data, columns=column_names)
 
-    @lru_cache(maxsize=None)
+    def _finviz_route_data(self, view: str) -> dict:
+        """The JSON data block Finviz embeds in a quote sub-page"""
+        url = f"{FINVIZ_BASE_URL}{self.ticker}&ty={view}&p=d"
+        response = self.get_response(url)
+
+        soup = BeautifulSoup(response.text, "html.parser")
+
+        raw_data = soup.find("script", {"id": "route-init-data"})
+        if raw_data is None or not raw_data.string:
+            raise LayoutChangedError("Finviz", f"no route-init-data on the {view} page")
+        try:
+            data = json.loads(raw_data.string)
+        except json.JSONDecodeError as error:
+            raise LayoutChangedError(
+                "Finviz", f"route-init-data on the {view} page is not JSON"
+            ) from error
+        if not isinstance(data, dict):
+            raise LayoutChangedError("Finviz", f"unexpected {view} data layout")
+        return data
+
+    @instance_cache
     def _finviz_earnings_reaction_raw_data(self) -> dict:
         """
         Return and caches the raw earnings reaction data.
         """
+        return self._finviz_route_data("ea")
 
-        url = f"{FINVIZ_BASE_URL}{self.ticker}&ty=ea&p=d"
-        response = self.get_response(url)
-
-        soup = BeautifulSoup(response.text, "html.parser")
-
-        raw_data = soup.find("script", {"id": "route-init-data"})
-        raw_data_json = json.loads(raw_data.string)
-
-        return raw_data_json
-
-    @lru_cache
+    @instance_cache
     def _finviz_dividend_payout_history_raw_data(self) -> dict:
         """
         Return and caches the raw dividend payout history data.
         """
+        return self._finviz_route_data("dv")
 
-        url = f"{FINVIZ_BASE_URL}{self.ticker}&ty=dv&p=d"
-        response = self.get_response(url)
-
-        soup = BeautifulSoup(response.text, "html.parser")
-
-        raw_data = soup.find("script", {"id": "route-init-data"})
-        raw_data_json = json.loads(raw_data.string)
-
-        return raw_data_json
-
-    @lru_cache
+    @instance_cache
     def _finviz_revenue_raw_data(self) -> dict:
         """
         Return and caches the raw revenue data.
-        Fetch price reaction to earnings data for the specified ticker
-
-        :return: DataFrame containing price reaction data
         """
-
-        url = f"{FINVIZ_BASE_URL}{self.ticker}&ty=rv&p=d"
-
-        response = self.get_response(url)
-
-        soup = BeautifulSoup(response.text, "html.parser")
-
-        raw_data = soup.find("script", {"id": "route-init-data"})
-        raw_data_json = json.loads(raw_data.string)
-
-        return raw_data_json
+        return self._finviz_route_data("rv")
 
     def finviz_earnings_revisions_data(self) -> pd.DataFrame:
         """
@@ -114,11 +111,9 @@ class FinvizInterface(TickerBase):
 
         raw_data = self._finviz_earnings_reaction_raw_data()
 
-        earnings_revisions_data = raw_data.get("earningsRevisionsData", [])
-        df = pd.DataFrame(
-            earnings_revisions_data, columns=earnings_revisions_data[0].keys()
-        )
-        df["ticker"] = self.ticker
+        df = _records_frame(raw_data.get("earningsRevisionsData", []))
+        if not df.empty:
+            df["ticker"] = self.ticker
 
         return df
 
@@ -131,9 +126,9 @@ class FinvizInterface(TickerBase):
 
         raw_data = self._finviz_earnings_reaction_raw_data()
 
-        earnings_annual_data = raw_data.get("earningsAnnualData", [])
-        df = pd.DataFrame(earnings_annual_data, columns=earnings_annual_data[0].keys())
-        df["ticker"] = self.ticker
+        df = _records_frame(raw_data.get("earningsAnnualData", []))
+        if not df.empty:
+            df["ticker"] = self.ticker
 
         return df
 
@@ -146,9 +141,9 @@ class FinvizInterface(TickerBase):
 
         raw_data = self._finviz_earnings_reaction_raw_data()
 
-        earnings_data = raw_data.get("earningsData", [])
-        df = pd.DataFrame(earnings_data, columns=earnings_data[0].keys())
-        df["ticker"] = self.ticker
+        df = _records_frame(raw_data.get("earningsData", []))
+        if not df.empty:
+            df["ticker"] = self.ticker
 
         return df
 
@@ -159,7 +154,7 @@ class FinvizInterface(TickerBase):
         :return: DataFrame containing overall dividend data
         """
 
-        raw_data = self._finviz_dividend_payout_history_raw_data()
+        raw_data = dict(self._finviz_dividend_payout_history_raw_data())
 
         raw_data.pop("dividendsData", None)
         raw_data.pop("dividendsAnnualData", None)
@@ -177,11 +172,8 @@ class FinvizInterface(TickerBase):
 
         raw_data = self._finviz_dividend_payout_history_raw_data()
 
-        dividend_date_data = raw_data.get("dividendsData", [])
-
-        if dividend_date_data:
-            df = pd.DataFrame(dividend_date_data, columns=dividend_date_data[0].keys())
-        else:
+        df = _records_frame(raw_data.get("dividendsData", []))
+        if df.empty:
             df = pd.DataFrame(columns=["Ticker", "Exdate", "Ordinary", "Special"])
 
         return df
@@ -195,10 +187,19 @@ class FinvizInterface(TickerBase):
 
         raw_data = self._finviz_dividend_payout_history_raw_data()
 
-        dividend_annual_data = raw_data.get("dividendsAnnualData", [])
-        df = pd.DataFrame(dividend_annual_data, columns=dividend_annual_data[0].keys())
+        return _records_frame(raw_data.get("dividendsAnnualData", []))
 
-        return df
+    def _finviz_revenue_breakdown(self, key: str) -> dict:
+        raw_data = self._finviz_revenue_raw_data()
+
+        revenue_data_raw = raw_data.get(key)
+        if revenue_data_raw is None:
+            return {}
+        revenue_data = revenue_data_raw.get("revenues") or {}
+        if not isinstance(revenue_data, dict):
+            raise LayoutChangedError("Finviz", f"unexpected {key} revenue layout")
+
+        return {name: pd.DataFrame(rows) for name, rows in revenue_data.items()}
 
     def finviz_revenue_by_products_and_services(self) -> dict:
         """
@@ -206,20 +207,7 @@ class FinvizInterface(TickerBase):
 
         :return: a dict of dataframes for each service or product
         """
-
-        raw_data = self._finviz_revenue_raw_data()
-
-        revenue_data_raw = raw_data.get("products_and_services")
-        if revenue_data_raw is None:
-            return {}
-        revenue_data = revenue_data_raw.get("revenues", [])
-
-        result = {}
-        for key, service_or_product in revenue_data.items():
-            df = pd.DataFrame(service_or_product)
-            result[key] = df
-
-        return result
+        return self._finviz_revenue_breakdown("products_and_services")
 
     def finviz_revenue_by_segment(self) -> dict:
         """
@@ -227,20 +215,7 @@ class FinvizInterface(TickerBase):
 
         :return: a dict of dataframes for each segment
         """
-
-        raw_data = self._finviz_revenue_raw_data()
-
-        revenue_data_raw = raw_data.get("segment")
-        if revenue_data_raw is None:
-            return {}
-        revenue_data = revenue_data_raw.get("revenues", [])
-
-        result = {}
-        for key, segment in revenue_data.items():
-            df = pd.DataFrame(segment)
-            result[key] = df
-
-        return result
+        return self._finviz_revenue_breakdown("segment")
 
     def finviz_revenue_by_regions(self) -> dict:
         """
@@ -248,20 +223,7 @@ class FinvizInterface(TickerBase):
 
         :return: a dict of dataframes for each region
         """
-
-        raw_data = self._finviz_revenue_raw_data()
-
-        revenue_data_raw = raw_data.get("regions")
-        if revenue_data_raw is None:
-            return {}
-        revenue_data = revenue_data_raw.get("revenues", [])
-
-        result = {}
-        for key, region in revenue_data.items():
-            df = pd.DataFrame(region)
-            result[key] = df
-
-        return result
+        return self._finviz_revenue_breakdown("regions")
 
     def finviz_price_reaction_to_earnings_report(self) -> pd.DataFrame:
         """
@@ -271,10 +233,7 @@ class FinvizInterface(TickerBase):
         """
         raw_data = self._finviz_earnings_reaction_raw_data()
 
-        price_reaction_data = raw_data.get("priceReactionData", [])
-        df = pd.DataFrame(price_reaction_data, columns=price_reaction_data[0].keys())
-
-        return df
+        return _records_frame(raw_data.get("priceReactionData", []))
 
     def _plot_finviz_revenue_data(self, data: dict, logarithmic: False) -> px.bar:
         for key, df in data.items():

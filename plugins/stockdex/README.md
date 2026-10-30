@@ -2,7 +2,7 @@
 
 Read-only public stock market data for Claude, powered by the
 [Stockdex](https://github.com/ahnazary/stockdex) Python package. The plugin adds
-a local MCP server with 16 read-only tools and a skill that tells Claude
+a local MCP server with 21 read-only tools and a skill that tells Claude
 when to use them.
 
 | Tool | What it returns | Source |
@@ -10,15 +10,20 @@ when to use them.
 | `search_ticker` | Find ticker symbols for a company name | Yahoo Finance |
 | `get_quotes` | Current quotes for up to 20 symbols | Yahoo Finance |
 | `get_prices` | Daily open, high, low, close and volume, up to 1 year | Yahoo Finance |
-| `get_financial_statement` | Annual or quarterly income statement, cash flow or balance sheet, up to 5 years | Yahoo Finance |
+| `get_financial_statement` | Annual or quarterly income statement, cash flow or balance sheet: up to 5 years from Yahoo Finance or about 15 from Macrotrends | Yahoo Finance / Macrotrends |
+| `get_margins_and_ratios` | Gross, operating, EBITDA, pre-tax and net margin history, and key financial ratios | Macrotrends |
 | `get_key_statistics` | Market cap, P/E, beta, 52-week range, margins and analyst price targets | Yahoo Finance |
 | `get_valuation_history` | Market cap, enterprise value and valuation ratios over time | Yahoo Finance |
 | `get_company_profile` | Business summary, sector, executives and related tickers | Yahoo Finance |
+| `get_revenue_breakdown` | Annual revenue by business segment, region or product | Finviz |
 | `get_analyst_estimates` | EPS and revenue estimates, recommendations, rating changes and EPS surprises | Yahoo Finance |
+| `get_earnings_reaction` | Price moves around earnings reports, EPS and revenue surprises, and estimate revisions | Finviz |
 | `get_earnings_calendar` | Next earnings date, estimates and dividend dates | Yahoo Finance |
 | `get_holders` | Institutional and fund holders, ownership breakdown and insider transactions | Yahoo Finance |
+| `get_insider_trades` | Recent insider buys and sales with price, shares and value | Finviz |
 | `get_sec_filings` | Recent SEC filings with links | Yahoo Finance |
 | `get_dividends` | Dividend history (Digrin by default, Yahoo Finance as an alternative or fallback) | Digrin / Yahoo Finance |
+| `get_dividend_metrics` | Payout ratio and dividend growth projections, and annual dividend, yield and payout | Digrin / Finviz |
 | `get_splits` | Stock split history | Yahoo Finance |
 | `get_options_chain` | Calls and puts for one expiration date | Yahoo Finance |
 | `get_fund_holdings` | ETF and fund top holdings, sector weights and asset allocation | Yahoo Finance |
@@ -38,7 +43,10 @@ Requires [uv](https://docs.astral.sh/uv/). In Claude Code:
 - "How has Microsoft's stock price moved over the last 6 months?"
 - "Show Apple's annual revenue, net income and EPS for the last five years."
 - "Compare NVIDIA's quarterly free cash flow over the last two years."
-- "What dividends has Coca-Cola (KO) paid recently?"
+- "How has Apple's operating margin changed over the last 15 years?"
+- "Where does Apple's revenue come from by region?"
+- "How did Tesla's stock react to its last four earnings reports?"
+- "What dividends has Coca-Cola (KO) paid recently, and what is its payout ratio?"
 - "Who are the largest institutional holders of Tesla, and have insiders been selling?"
 - "What do analysts expect for Apple's next quarter, and when does it report?"
 - "Compare the expense ratio and top holdings of SPY and VOO."
@@ -46,26 +54,34 @@ Requires [uv](https://docs.astral.sh/uv/). In Claude Code:
 ## What the plugin runs, sends and stores
 
 - **Runs:** the MCP server starts locally with
-  `uvx --from "stockdex[mcp]==1.4.0" stockdex-mcp`, which installs the pinned
+  `uvx --from "stockdex[mcp]==1.5.0" stockdex-mcp`, which installs the pinned
   Stockdex release from PyPI.
 - **Sends:** only ticker symbols, search text and request parameters (date
   range, statement type, metric names, dataset, row limit) to Yahoo Finance
-  (`finance.yahoo.com`, `query1.finance.yahoo.com`, `fc.yahoo.com`) and Digrin
-  (`www.digrin.com`). No account, API key, personal data or conversation
-  content is sent.
+  (`finance.yahoo.com`, `query1.finance.yahoo.com`, `fc.yahoo.com`),
+  Macrotrends (`www.macrotrends.net`), Digrin (`www.digrin.com`) and Finviz
+  (`finviz.com`). No account, API key, personal data or conversation content
+  is sent.
 - **Stores:** nothing. There is no telemetry, logging of requests, or local
   cache beyond the process lifetime.
 
 Provider privacy policies:
 [Yahoo](https://legal.yahoo.com/us/en/yahoo/privacy/index.html),
-[Digrin](https://www.digrin.com/privacy-policy).
+[Macrotrends](https://www.macrotrends.net/privacy-policy),
+[Digrin](https://www.digrin.com/privacy-policy),
+[Finviz](https://finviz.com/privacy.ashx).
 
 ## Troubleshooting
 
 - **Tools don't appear:** check that `uvx` is on your `PATH` (`which uvx`) and
   restart Claude Code.
-- **`rate_limited` or `provider_error`:** the provider throttled or blocked the
-  request. Wait a few minutes before trying again.
+- **`rate_limited` or `provider_error`:** the provider throttled the request.
+  Wait a few minutes before trying again.
+- **`provider_blocked`:** the website refused the request, usually because of
+  bot protection. Macrotrends does this from some networks. Use the Yahoo
+  Finance source instead, or try again later.
+- **`layout_changed`:** a scraped website (Macrotrends, Digrin or Finviz)
+  changed its pages. Please report it as an issue.
 - **`no_data`:** the provider returned nothing for that ticker or period. This
   does not mean the value is zero.
 

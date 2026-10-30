@@ -2,7 +2,7 @@
   "mcpServers": {
     "stockdex": {
       "command": "uvx",
-      "args": ["--from", "stockdex[mcp]==1.4.0", "stockdex-mcp"]
+      "args": ["--from", "stockdex[mcp]==1.5.0", "stockdex-mcp"]
     }
   }
 }

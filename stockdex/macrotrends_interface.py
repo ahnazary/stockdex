@@ -2,8 +2,9 @@
 Module for interfacing with the Macrotrends website.
 """
 
+import json
 import re
-from functools import lru_cache
+from io import StringIO
 from typing import Literal, Union
 
 import pandas as pd
@@ -11,9 +12,12 @@ import plotly.express as px
 from bs4 import BeautifulSoup
 
 from stockdex.config import MACROTRENDS_BASE_URL, VALID_SECURITY_TYPES
-from stockdex.exceptions import FieldNotExists
-from stockdex.lib import check_security_type, plot_dataframe
+from stockdex.exceptions import FieldNotExists, LayoutChangedError
+from stockdex.lib import check_security_type, instance_cache, plot_dataframe
 from stockdex.ticker_base import TickerBase
+
+_ORIGINAL_DATA = re.compile(r"originalData\s*=\s*(\[.*?\])\s*;", re.DOTALL)
+_FIELD_NAME = re.compile(r">([^<]*)<")
 
 
 class MacrotrendsInterface(TickerBase):
@@ -32,68 +36,83 @@ class MacrotrendsInterface(TickerBase):
         self.security_type = security_type
 
     @property
-    @lru_cache(maxsize=None)
+    @instance_cache
     def full_name(self) -> str:
         """
-        Retrieve the full name of the security.
+        Retrieve the full name of the security as a URL slug, e.g. "apple-inc"
         """
-        full_name = self.yahoo_web_full_name
-        full_name = full_name.replace(" ", "-").lower()
+        name = self.yahoo_api_company_name()
+        name = re.sub(r"[^\w\s-]", "", name).strip()
 
-        return full_name
+        return re.sub(r"\s+", "-", name).lower()
 
     def _find_table_in_url(
         self, text_to_look_for: str, soup: BeautifulSoup
     ) -> pd.DataFrame:
         """
-        Retrieve the table with the given id from the given URL.
+        Read the ``originalData`` table embedded in a Macrotrends page
 
         Args:
         ----------
-        url: str
-            The URL to retrieve the table from.
         text_to_look_for: str
-            The text to look for in the table.
+            A field name the table must contain, e.g. "Revenue".
+        soup: BeautifulSoup
+            The parsed page.
 
         Returns:
         ----------
         pd.DataFrame
-            The table as a pandas DataFrame.
+            One row per field with a ``field_name`` column and one column per
+            period.
+
+        Raises:
+        ----------
+        LayoutChangedError
+            If the page has no parsable ``originalData`` block.
         """
-        # Search all script tags on the page for originalData
-        original_data = None
+        match = None
         for script in soup.find_all("script"):
-            if "originalData" in script.get_text():
-                original_data = script.get_text()
+            match = _ORIGINAL_DATA.search(script.get_text())
+            if match:
                 break
 
-        if original_data is None:
-            raise RuntimeError(
-                f"Could not find originalData for '{text_to_look_for}' on the page"
+        if match is None:
+            raise LayoutChangedError(
+                "Macrotrends", f"no originalData table for '{text_to_look_for}'"
             )
 
-        # get the data from the script
-        data = None
-        for line in original_data.split("\n"):
-            if "originalData" in line and "=" in line:
-                data = line.split(" = ")[1]
-                break
+        # The block is a JSON array literal; never evaluate it as code.
+        try:
+            rows = json.loads(match.group(1))
+        except json.JSONDecodeError as error:
+            raise LayoutChangedError(
+                "Macrotrends", f"originalData for '{text_to_look_for}' is not JSON"
+            ) from error
 
-        if data is None:
-            raise ValueError(
-                f"Could not extract data from originalData for '{text_to_look_for}'"
+        if not isinstance(rows, list) or not all(isinstance(r, dict) for r in rows):
+            raise LayoutChangedError(
+                "Macrotrends", f"originalData for '{text_to_look_for}' is not a table"
             )
-
-        # convert the data to a pandas DataFrame
-        data = data.replace(";", "")
-        data = data.replace("null", "None")
-        data = data.replace("\\/", "/")
-        data = eval(data)
-        data = pd.DataFrame(data)
-
+        data = pd.DataFrame(rows)
+        if "field_name" not in data:
+            raise LayoutChangedError("Macrotrends", "table has no field_name column")
         return data
 
-    @lru_cache(maxsize=None)
+    def _statement_frame(self, url: str, text_to_look_for: str) -> pd.DataFrame:
+        """Fetch one Macrotrends statement page as a field x period frame"""
+        response = self.get_response(url)
+        soup = BeautifulSoup(response.content, "html.parser")
+        data = self._find_table_in_url(text_to_look_for, soup)
+
+        def field(value):
+            found = _FIELD_NAME.search(str(value))
+            return found.group(1).strip() if found else str(value).strip()
+
+        data["field_name"] = data["field_name"].apply(field)
+        data = data.set_index("field_name")
+        return data.drop(columns=["popup_icon"], errors="ignore")
+
+    @instance_cache
     def macrotrends_income_statement(
         self, frequency: Literal["quarterly", "annual"] = "annual"
     ) -> pd.DataFrame:
@@ -109,22 +128,9 @@ class MacrotrendsInterface(TickerBase):
             else f"{MACROTRENDS_BASE_URL}/{self.ticker}/TBD/income-statement{frequency_suffix}"
         )
 
-        response = self.get_response(url)
+        return self._statement_frame(url, "Revenue")
 
-        # Parse the HTML content of the website
-        soup = BeautifulSoup(response.content, "html.parser")
-
-        data = self._find_table_in_url("Revenue", soup)
-
-        data["field_name"] = data["field_name"].apply(
-            lambda x: re.search(">(.*)<", x).group(1)
-        )
-        data = data.set_index("field_name")
-        data.drop(columns=["popup_icon"], inplace=True)
-
-        return data
-
-    @lru_cache(maxsize=None)
+    @instance_cache
     def macrotrends_balance_sheet(
         self, frequency: Literal["quarterly", "annual"] = "annual"
     ) -> pd.DataFrame:
@@ -140,24 +146,11 @@ class MacrotrendsInterface(TickerBase):
             else f"{MACROTRENDS_BASE_URL}/{self.ticker}/TBD/balance-sheet{frequency_suffix}"
         )
 
-        response = self.get_response(url)
+        return self._statement_frame(url, "Cash On Hand")
 
-        # Parse the HTML content of the website
-        soup = BeautifulSoup(response.content, "html.parser")
-
-        data = self._find_table_in_url("Cash On Hand", soup)
-
-        data["field_name"] = data["field_name"].apply(
-            lambda x: re.search(">(.*)<", x).group(1)
-        )
-        data = data.set_index("field_name")
-        data.drop(columns=["popup_icon"], inplace=True)
-
-        return data
-
-    @lru_cache(maxsize=None)
+    @instance_cache
     def macrotrends_cash_flow(
-        self, frequency: Literal["quarterly", "annual"]
+        self, frequency: Literal["quarterly", "annual"] = "annual"
     ) -> pd.DataFrame:
         """
         Retrieve the cash flow statement for the given ticker.
@@ -171,23 +164,10 @@ class MacrotrendsInterface(TickerBase):
             else f"{MACROTRENDS_BASE_URL}/{self.ticker}/TBD/cash-flow-statement{frequency_suffix}"
         )
 
-        response = self.get_response(url)
-
-        # Parse the HTML content of the website
-        soup = BeautifulSoup(response.content, "html.parser")
-
-        data = self._find_table_in_url("Net Income/Loss", soup)
-
-        data["field_name"] = data["field_name"].apply(
-            lambda x: re.search(">(.*)<", x).group(1)
-        )
-        data = data.set_index("field_name")
-        data.drop(columns=["popup_icon"], inplace=True)
-
-        return data
+        return self._statement_frame(url, "Net Income/Loss")
 
     @property
-    @lru_cache(maxsize=None)
+    @instance_cache
     def macrotrends_key_financial_ratios(self) -> pd.DataFrame:
         """
         Retrieve the key financial ratios for the given ticker.
@@ -195,20 +175,7 @@ class MacrotrendsInterface(TickerBase):
         check_security_type(self.security_type, valid_types=["stock"])
         url = f"{MACROTRENDS_BASE_URL}/{self.ticker}/TBD/financial-ratios"
 
-        response = self.get_response(url)
-
-        # Parse the HTML content of the website
-        soup = BeautifulSoup(response.content, "html.parser")
-
-        data = self._find_table_in_url("Current Ratio", soup)
-
-        data["field_name"] = data["field_name"].apply(
-            lambda x: re.search(">(.*)<", x).group(1)
-        )
-        data = data.set_index("field_name")
-        data.drop(columns=["popup_icon"], inplace=True)
-
-        return data
+        return self._statement_frame(url, "Current Ratio")
 
     def _find_margins_table(self, url: str, text_to_look_for: str):
         response = self.get_response(url)
@@ -216,25 +183,35 @@ class MacrotrendsInterface(TickerBase):
         # Parse the HTML content of the website
         soup = BeautifulSoup(response.content, "html.parser")
 
-        data = []
-        headers = []
-
         table = self.find_parent_by_text(soup=soup, tag="table", text=text_to_look_for)
+        if table is None:
+            raise LayoutChangedError(
+                "Macrotrends", f"no table with '{text_to_look_for}'"
+            )
+        heads = table.find_all("thead")
+        if len(heads) < 2 or not heads[1].find("tr"):
+            raise LayoutChangedError(
+                "Macrotrends", f"'{text_to_look_for}' table has no header row"
+            )
 
-        headers = [
-            row.text
-            for row in table.find_all("thead")[1].find_all("tr")[0].find_all("th")
-        ]
-        data = [
+        headers = [row.text for row in heads[1].find_all("tr")[0].find_all("th")]
+        rows = [
             [cell.text for cell in row.find_all("td")]
             for row in table.find_all("tr")[1:]
         ]
-        data = pd.DataFrame(data, columns=headers)
-
-        return data
+        data = [row for row in rows if len(row) == len(headers)]
+        # Spacer rows are a single colspan cell; anything wider that never
+        # matches the headers means the table changed
+        if not data and any(len(row) > 1 for row in rows):
+            raise LayoutChangedError(
+                "Macrotrends",
+                f"'{text_to_look_for}' rows no longer match its "
+                f"{len(headers)} columns",
+            )
+        return pd.DataFrame(data, columns=headers)
 
     @property
-    @lru_cache(maxsize=None)
+    @instance_cache
     def macrotrends_operating_margin(self) -> pd.DataFrame:
         """
         Retrieve the operating margin for the given ticker.
@@ -245,7 +222,7 @@ class MacrotrendsInterface(TickerBase):
         return self._find_margins_table(url, "TTM Operating Income")
 
     @property
-    @lru_cache(maxsize=None)
+    @instance_cache
     def macrotrends_gross_margin(self) -> pd.DataFrame:
         """
         Retrieve the gross margin for the given ticker.
@@ -256,7 +233,7 @@ class MacrotrendsInterface(TickerBase):
         return self._find_margins_table(url, "Gross Margin")
 
     @property
-    @lru_cache(maxsize=None)
+    @instance_cache
     def macrotrends_ebitda_margin(self) -> pd.DataFrame:
         """
         Retrieve the EBITDA margin for the given ticker.
@@ -267,7 +244,7 @@ class MacrotrendsInterface(TickerBase):
         return self._find_margins_table(url, "TTM EBITDA")
 
     @property
-    @lru_cache(maxsize=None)
+    @instance_cache
     def macrotrends_pre_tax_margin(self) -> pd.DataFrame:
         """
         Retrieve the pre-tax margin for the given ticker.
@@ -278,7 +255,7 @@ class MacrotrendsInterface(TickerBase):
         return self._find_margins_table(url, "TTM Pre-Tax Income")
 
     @property
-    @lru_cache(maxsize=None)
+    @instance_cache
     def macrotrends_net_margin(self) -> pd.DataFrame:
         """
         Retrieve the net profit margin for the given ticker.
@@ -288,7 +265,7 @@ class MacrotrendsInterface(TickerBase):
 
         return self._find_margins_table(url, "TTM Net Income")
 
-    @lru_cache(maxsize=None)
+    @instance_cache
     def macrotrends_revenue(
         self, frequency: Literal["annual", "quarterly"] = "annual"
     ) -> pd.DataFrame:
@@ -305,15 +282,13 @@ class MacrotrendsInterface(TickerBase):
 
         # find tables with class = historical_data_table
         tables = soup.find_all("table", class_="historical_data_table")
+        position = 0 if frequency == "annual" else 1
+        if len(tables) <= position:
+            raise LayoutChangedError("Macrotrends", f"no {frequency} revenue table")
 
-        if frequency == "annual":
-            df = pd.read_html(str(tables[0]))[0]
-        elif frequency == "quarterly":
-            df = pd.read_html(str(tables[1]))[0]
+        return pd.read_html(StringIO(str(tables[position])))[0]
 
-        return df
-
-    @lru_cache(maxsize=None)
+    @instance_cache
     def plot_macrotrends_income_statement(
         self,
         fields_to_include: list = ["Revenue", "Income After Taxes"],

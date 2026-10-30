@@ -8,18 +8,25 @@ import math
 import re
 import threading
 from datetime import date, datetime, timezone
+from decimal import Decimal
 
 import numpy as np
 import pandas as pd
 from curl_cffi.requests.exceptions import RequestException
 
 from stockdex import Ticker, config
-from stockdex.exceptions import NoDataError, RateLimitError
+from stockdex.exceptions import (
+    LayoutChangedError,
+    NoDataError,
+    ProviderBlockedError,
+    RateLimitError,
+)
 
 MAX_BYTES = 256 * 1024
 MAX_ROWS = 500
 PRICE_RANGES = ("1mo", "3mo", "6mo", "1y")
 STATEMENTS = ("income_statement", "cash_flow", "balance_sheet")
+STATEMENT_SOURCES = ("yahoo", "macrotrends")
 VALUATION_FREQUENCIES = ("annual", "quarterly", "trailing")
 DIVIDEND_SOURCES = ("digrin", "yahoo", "auto")
 OPTION_TYPES = ("calls", "puts", "both")
@@ -33,8 +40,69 @@ DEFAULT_METRICS = {
         "StockholdersEquity",
     ],
 }
+# Macrotrends row names differ from Yahoo's; these defaults match the
+# statement pages and the Stockdex plot defaults.
+MACROTRENDS_DEFAULT_METRICS = {
+    "income_statement": ["Revenue", "Net Income", "EPS - Earnings Per Share"],
+    "cash_flow": [
+        "Cash Flow From Operating Activities",
+        "Net Change In Property, Plant, And Equipment",
+        "Common Stock Dividends Paid",
+    ],
+    "balance_sheet": ["Total Assets", "Total Liabilities", "Share Holder Equity"],
+}
+_MACROTRENDS_METRIC = re.compile(r"[\w .,&'/()%+-]{1,80}")
+# Macrotrends margin and ratio pages exposed by get_margins_and_ratios.
+# "margin" pages are TTM tables with a Date column; "ratios" is field x date.
+MACROTRENDS_DATASETS = {
+    "gross_margin": "macrotrends_gross_margin",
+    "operating_margin": "macrotrends_operating_margin",
+    "ebitda_margin": "macrotrends_ebitda_margin",
+    "pre_tax_margin": "macrotrends_pre_tax_margin",
+    "net_margin": "macrotrends_net_margin",
+    "key_ratios": "macrotrends_key_financial_ratios",
+}
 _PROVIDER_LOCK = threading.Lock()
-_SOURCES = {"dividends": "digrin"}
+_SOURCES = {"dividends": "digrin", "margins": "macrotrends"}
+_SOURCES.update(
+    revenue_breakdown="finviz", insiders="finviz", earnings_reaction="finviz"
+)
+# Dividend metrics: dataset -> (source, method). Digrin projections are
+# estimates of future dividends at a fixed growth rate, not history.
+DIVIDEND_METRICS = {
+    "payout_ratio": ("digrin", "digrin_payout_ratio"),
+    "growth_3y": ("digrin", "digrin_dgr3"),
+    "growth_5y": ("digrin", "digrin_dgr5"),
+    "growth_10y": ("digrin", "digrin_dgr10"),
+    "annual": ("finviz", "finviz_dividends_annual_data"),
+    "summary": ("finviz", "finviz_overall_dividend"),
+}
+_QUARTER = re.compile(r"(?P<year>\d{4})Q(?P<quarter>[1-4])")
+_FISCAL_YEAR = re.compile(r"(?P<year>\d{4})FY")
+_CURRENCY_AMOUNT = re.compile(r"(?P<amount>-?[\d,]*\.?\d+)\s*(?P<currency>[A-Z]{3})")
+# Finviz revenue breakdowns: dataset -> FinvizInterface method
+REVENUE_BREAKDOWNS = {
+    "segment": "finviz_revenue_by_segment",
+    "region": "finviz_revenue_by_regions",
+    "product": "finviz_revenue_by_products_and_services",
+}
+EARNINGS_REACTION_DATASETS = ("price_reaction", "surprises", "revisions")
+# Finviz price-reaction keys, in time order, and the column names we use.
+_REACTION_WINDOWS = (
+    ("minus_1_day", "day_before_pct"),
+    ("open", "open_pct"),
+    ("close", "day_after_close_pct"),
+    ("plus_1_week", "one_week_pct"),
+    ("plus_1_month", "one_month_pct"),
+)
+_FINVIZ_DATE = re.compile(r"(?P<mon>[A-Z][a-z]{2}) (?P<day>\d{2}) '(?P<year>\d{2})")
+# Finviz estimate types: E = EPS (adjusted), R = EPS as reported (GAAP),
+# S = sales (revenue).
+_REVISION_TYPES = {"E": "eps", "R": "eps_reported", "S": "revenue"}
+# The MCP should answer quickly; give bot-protected sites one short retry
+# instead of the library default of five ten-second waits.
+FORBIDDEN_RETRIES = 1
+FORBIDDEN_RETRY_DELAY = 2.0
 # Optional "^" prefix for indices (^GSPC) and "=" for futures/FX (GC=F, EURUSD=X).
 _SYMBOL = re.compile(r"\^?[A-Z0-9]+(?:[.=-][A-Z0-9]+)*", re.ASCII)
 # Placeholder Yahoo parsers emit when a field is absent from the response.
@@ -121,10 +189,86 @@ def _years_before(value, years):
         return value.replace(year=value.year - years, day=28)
 
 
+_MONEY = re.compile(r"(?P<sign>-)?\$?(?P<number>-?[\d,]*\.?\d+)(?P<unit>[KMBT])?")
+_UNITS = {None: 0, "K": 3, "M": 6, "B": 9, "T": 12}
+
+
+def _money(value):
+    """'$416.16B' -> 416160000000.0, '-$1.2M' -> -1200000.0, '' -> None."""
+    if value is None or (isinstance(value, float) and math.isnan(value)):
+        return None
+    if isinstance(value, (int, float)):
+        return float(value)
+    text = str(value).strip().replace(" ", "")
+    match = _MONEY.fullmatch(text)
+    if not match:
+        return None
+    # Decimal keeps "$133.05B" exact (133050000000.0, not ...0.00002).
+    number = float(
+        Decimal(match["number"].replace(",", "")).scaleb(_UNITS[match["unit"]])
+    )
+    return -number if match["sign"] else number
+
+
+def _percent(value):
+    """'31.97%' -> 31.97, '' -> None."""
+    if value is None or (isinstance(value, float) and math.isnan(value)):
+        return None
+    if isinstance(value, (int, float)):
+        return float(value)
+    text = str(value).strip().rstrip("%").replace(",", "")
+    try:
+        return float(text)
+    except ValueError:
+        return None
+
+
+def _macrotrends_number(column):
+    """Statement and ratio cells are numeric strings or empty; '' -> null."""
+    return pd.to_numeric(
+        column.map(lambda v: None if v in ("", None) else str(v).replace(",", "")),
+        errors="coerce",
+    )
+
+
+def _fiscal_year(value):
+    """'2025FY' -> 2025; anything else means the layout changed."""
+    match = _FISCAL_YEAR.fullmatch(str(value).strip())
+    if not match:
+        raise LayoutChangedError("Finviz", "fiscal period format changed")
+    return int(match["year"])
+
+
+_MONTHS = {
+    m: i
+    for i, m in enumerate(
+        "Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec".split(), start=1
+    )
+}
+
+
+def _finviz_date(value):
+    """ "Oct 27 '26" -> "2026-10-27"; unknown formats are a layout change."""
+    match = _FINVIZ_DATE.fullmatch(str(value).strip())
+    if not match or match["mon"] not in _MONTHS:
+        raise LayoutChangedError("Finviz", "insider trade date format changed")
+    return date(
+        2000 + int(match["year"]), _MONTHS[match["mon"]], int(match["day"])
+    ).isoformat()
+
+
 class StockdexAdapter:
     def __init__(self, ticker_factory=Ticker, clock=None):
         self._ticker_factory = ticker_factory
         self._clock = clock or (lambda: datetime.now(timezone.utc))
+
+    def _provider(self, symbol):
+        provider = self._ticker_factory(ticker=symbol)
+        # Instance attributes only; library users keep the class defaults.
+        if hasattr(provider, "forbidden_retries"):
+            provider.forbidden_retries = FORBIDDEN_RETRIES
+            provider.forbidden_retry_delay = FORBIDDEN_RETRY_DELAY
+        return provider
 
     def get_prices(self, ticker, range="1mo", limit=20):
         return self._request("prices", ticker, {"range": range, "limit": limit})
@@ -138,7 +282,16 @@ class StockdexAdapter:
         end_date=None,
         metrics=None,
         limit=20,
+        source="yahoo",
     ):
+        """
+        Income statement, cash flow or balance sheet.
+
+        ``source="yahoo"`` (default) covers up to five years and uses Yahoo
+        metric names such as ``TotalRevenue``. ``source="macrotrends"`` covers
+        up to about 15 years and uses Macrotrends row names such as
+        ``Revenue``; values are in millions of the reporting currency.
+        """
         return self._request(
             "financial_statement",
             ticker,
@@ -149,7 +302,49 @@ class StockdexAdapter:
                 "end_date": end_date,
                 "metrics": metrics,
                 "limit": limit,
+                "source": source,
             },
+        )
+
+    def get_margins_and_ratios(self, ticker, dataset="operating_margin", limit=20):
+        """Margins over time and key financial ratios from Macrotrends."""
+        return self._request("margins", ticker, {"dataset": dataset, "limit": limit})
+
+    def get_dividend_metrics(self, ticker, dataset="payout_ratio", limit=20):
+        """
+        Dividend payout, growth and annual history.
+
+        Digrin: ``payout_ratio`` (quarterly payout and P/E) and
+        ``growth_3y``/``growth_5y``/``growth_10y`` (dividends projected at the
+        3/5/10-year average growth rate). Finviz: ``annual`` (amount, yield
+        and payout per fiscal year, including analyst estimates) and
+        ``summary`` (TTM dividend, next estimate and ex-date).
+        """
+        return self._request(
+            "dividend_metrics", ticker, {"dataset": dataset, "limit": limit}
+        )
+
+    def get_revenue_breakdown(self, ticker, dataset="segment", limit=100):
+        """Annual revenue by business segment, region or product from Finviz."""
+        return self._request(
+            "revenue_breakdown", ticker, {"dataset": dataset, "limit": limit}
+        )
+
+    def get_insider_trades(self, ticker, limit=20):
+        """Recent insider buys and sales (SEC Form 4) from Finviz."""
+        return self._request("insiders", ticker, {"limit": limit})
+
+    def get_earnings_reaction(self, ticker, dataset="price_reaction", limit=12):
+        """
+        How the stock and estimates moved around earnings, from Finviz.
+
+        ``price_reaction``: price change around each report vs the S&P 500.
+        ``surprises``: actual vs estimated EPS and revenue per quarter.
+        ``revisions``: latest analyst estimate and up/down revision counts
+        per fiscal period.
+        """
+        return self._request(
+            "earnings_reaction", ticker, {"dataset": dataset, "limit": limit}
         )
 
     def get_dividends(self, ticker, limit=20, source="digrin"):
@@ -194,6 +389,17 @@ class StockdexAdapter:
         """
         return self._request("dataset", ticker, {"dataset": dataset, "limit": limit})
 
+    @staticmethod
+    def _requested_source(operation, parameters, default):
+        """The provider a request asks for, before its parameters are validated"""
+        if operation == "financial_statement":
+            return {"macrotrends": "macrotrends"}.get(parameters.get("source"), default)
+        if operation == "dividend_metrics":
+            dataset = parameters.get("dataset")
+            if isinstance(dataset, str) and dataset in DIVIDEND_METRICS:
+                return DIVIDEND_METRICS[dataset][0]
+        return default
+
     def _validate(self, operation, ticker, parameters):
         if operation == "search":
             return self._validate_search(parameters)
@@ -218,6 +424,25 @@ class StockdexAdapter:
             if parameters["limit"] is None:
                 kind = YAHOO_DATASETS[parameters["dataset"]][1]
                 parameters["limit"] = MAX_ROWS if kind == "record" else 20
+        if operation == "margins" and parameters["dataset"] not in MACROTRENDS_DATASETS:
+            raise InputError(
+                "dataset must be one of: " + ", ".join(MACROTRENDS_DATASETS)
+            )
+        if (
+            operation == "dividend_metrics"
+            and parameters["dataset"] not in DIVIDEND_METRICS
+        ):
+            raise InputError("dataset must be one of: " + ", ".join(DIVIDEND_METRICS))
+        if (
+            operation == "revenue_breakdown"
+            and parameters["dataset"] not in REVENUE_BREAKDOWNS
+        ):
+            raise InputError("dataset must be segment, region or product.")
+        if (
+            operation == "earnings_reaction"
+            and parameters["dataset"] not in EARNINGS_REACTION_DATASETS
+        ):
+            raise InputError("dataset must be price_reaction, surprises or revisions.")
         if (
             type(parameters["limit"]) is not int
             or not 1 <= parameters["limit"] <= MAX_ROWS
@@ -245,6 +470,12 @@ class StockdexAdapter:
                 raise InputError("Unsupported financial statement.")
             if parameters["frequency"] not in ("annual", "quarterly"):
                 raise InputError("frequency must be annual or quarterly.")
+            source = parameters.setdefault("source", "yahoo")
+            if source not in STATEMENT_SOURCES:
+                raise InputError("source must be yahoo or macrotrends.")
+            if source == "macrotrends":
+                self._validate_macrotrends_statement(parameters)
+                return ticker
             today = self._clock().date()
             end = (
                 _date(parameters["end_date"])
@@ -349,8 +580,18 @@ class StockdexAdapter:
         }
         try:
             parameters = dict(parameters)
+            # Report the requested provider even when validation rejects the call
+            result["source"] = self._requested_source(
+                operation, parameters, result["source"]
+            )
             symbol = self._validate(operation, ticker, parameters)
             result.update(ticker=symbol, parameters=parameters)
+            if operation == "financial_statement":
+                result["source"] = {"macrotrends": "macrotrends"}.get(
+                    parameters["source"], "yahoo_api"
+                )
+            if operation == "dividend_metrics":
+                result["source"] = DIVIDEND_METRICS[parameters["dataset"]][0]
             # Nonblocking admission prevents an unbounded queue of waiting requests.
             if not _PROVIDER_LOCK.acquire(blocking=False):
                 result["error"] = {
@@ -364,15 +605,15 @@ class StockdexAdapter:
                 elif operation == "quotes":
                     frame = self._quotes(parameters)
                 else:
-                    provider = self._ticker_factory(ticker=symbol)
+                    provider = self._provider(symbol)
                     frame = self._fetch(
                         provider, operation, parameters, result["warnings"]
                     )
             finally:
                 _PROVIDER_LOCK.release()
             result["retrieved_at"] = self._clock().isoformat()
-            if operation == "dividends":
-                result["source"] = frame.attrs.get("source", "digrin")
+            if operation in ("dividends", "financial_statement"):
+                result["source"] = frame.attrs.get("source", result["source"])
             if frame.empty:
                 raise NoDataError()
             if not frame.columns.is_unique:
@@ -399,6 +640,18 @@ class StockdexAdapter:
             code, message = (
                 "rate_limited",
                 "Provider rate limit reached. Wait before trying again; do not retry in a loop.",
+            )
+        except ProviderBlockedError:
+            code, message = (
+                "provider_blocked",
+                "The website refused the request, usually because of bot protection. "
+                "Try another source or try again later; do not retry in a loop.",
+            )
+        except LayoutChangedError:
+            code, message = (
+                "layout_changed",
+                "The website's page layout changed and Stockdex could not read it. "
+                "This does not mean the value is zero; try another source.",
             )
         except NoDataError:
             code, message = (
@@ -457,6 +710,8 @@ class StockdexAdapter:
             )
             return frame.sort_values("timestamp", ascending=False, kind="stable")
         if operation == "financial_statement":
+            if parameters.get("source") == "macrotrends":
+                return self._macrotrends_statement(provider, parameters, warnings)
             methods = {
                 "income_statement": provider.yahoo_api_income_statement,
                 "cash_flow": provider.yahoo_api_cash_flow,
@@ -499,6 +754,16 @@ class StockdexAdapter:
             return frame.sort_values("date", ascending=False, kind="stable")
         if operation == "dataset":
             return self._dataset(provider, parameters["dataset"])
+        if operation == "margins":
+            return self._margins(provider, parameters["dataset"], warnings)
+        if operation == "dividend_metrics":
+            return self._dividend_metrics(provider, parameters["dataset"], warnings)
+        if operation == "revenue_breakdown":
+            return self._revenue_breakdown(provider, parameters["dataset"], warnings)
+        if operation == "insiders":
+            return self._insider_trades(provider, warnings)
+        if operation == "earnings_reaction":
+            return self._earnings_reaction(provider, parameters["dataset"], warnings)
         if operation == "splits":
             return self._events(provider.yahoo_api_splits(), "split_date")
         if operation == "options":
@@ -667,3 +932,394 @@ class StockdexAdapter:
         return pd.DataFrame(rows).sort_values(
             "ex_dividend_date", ascending=False, na_position="last", kind="stable"
         )
+
+    def _validate_macrotrends_statement(self, parameters):
+        today = self._clock().date()
+        for key in ("start_date", "end_date"):
+            if parameters[key] is not None:
+                parameters[key] = _date(parameters[key]).isoformat()
+        end = parameters["end_date"]
+        if end is not None and end > today.isoformat():
+            raise InputError("end_date must not be in the future.")
+        start = parameters["start_date"]
+        if start is not None and end is not None and not start < end:
+            raise InputError("start_date must be before end_date.")
+        metrics = parameters["metrics"]
+        if metrics is None:
+            metrics = MACROTRENDS_DEFAULT_METRICS[parameters["statement"]][:]
+        if (
+            not isinstance(metrics, list)
+            or not 1 <= len(metrics) <= 20
+            or any(
+                not isinstance(m, str) or not _MACROTRENDS_METRIC.fullmatch(m)
+                for m in metrics
+            )
+        ):
+            raise InputError(
+                "Select 1–20 Macrotrends row names, e.g. Revenue or Net Income."
+            )
+        if len(set(metrics)) != len(metrics):
+            raise InputError("Metric names must be unique.")
+        parameters["metrics"] = metrics
+
+    @staticmethod
+    def _macrotrends_statement(provider, parameters, warnings):
+        methods = {
+            "income_statement": provider.macrotrends_income_statement,
+            "cash_flow": provider.macrotrends_cash_flow,
+            "balance_sheet": provider.macrotrends_balance_sheet,
+        }
+        frame = methods[parameters["statement"]](frequency=parameters["frequency"])
+        if frame.empty:
+            return frame
+        # Field x period -> one row per period, matching the Yahoo layout.
+        by_name = {str(name).strip().casefold(): name for name in frame.index}
+        wanted = parameters["metrics"]
+        found = [by_name.get(m.casefold()) for m in wanted]
+        missing = [m for m, f in zip(wanted, found) if f is None]
+        if missing:
+            warnings.append(
+                "Unavailable metrics returned as null: "
+                + ", ".join(missing)
+                + ". Available rows: "
+                + ", ".join(str(n) for n in frame.index[:40])
+            )
+        if len(missing) == len(wanted):
+            raise NoDataError()
+        rows = frame.reindex([f for f in found if f is not None]).T
+        rows.columns = [m for m, f in zip(wanted, found) if f is not None]
+        rows = rows.reindex(columns=wanted)
+        rows = rows.apply(_macrotrends_number)
+        dates = pd.to_datetime(rows.index, errors="coerce")
+        if dates.isna().all():
+            raise LayoutChangedError("Macrotrends", "statement periods are not dates")
+        rows = rows[~dates.isna()]
+        rows.insert(0, "date", dates[~dates.isna()].strftime("%Y-%m-%d"))
+        if parameters["start_date"]:
+            rows = rows[rows["date"] >= parameters["start_date"]]
+        if parameters["end_date"]:
+            rows = rows[rows["date"] < parameters["end_date"]]
+        warnings.append(
+            "Macrotrends values are in millions of the reporting currency, except "
+            "per-share figures and ratios. End date is exclusive."
+        )
+        rows = rows.sort_values("date", ascending=False, kind="stable")
+        rows = rows.reset_index(drop=True)
+        rows.attrs["source"] = "macrotrends"
+        return rows
+
+    @staticmethod
+    def _dividend_metrics(provider, dataset, warnings):
+        method = DIVIDEND_METRICS[dataset][1]
+        attribute = getattr(provider, method)
+        frame = attribute() if callable(attribute) else attribute
+        if frame.empty:
+            return frame
+        frame = frame.rename(columns=lambda c: str(c).strip())
+        if dataset == "payout_ratio":
+            out = pd.DataFrame(
+                {
+                    "quarter": frame["Date"].map(lambda v: str(v).strip()),
+                    "payout_ratio_pct": frame["Payout ratio"].map(_percent),
+                    "pe_ratio": frame["PE ratio"].map(_percent),
+                }
+            )
+            if not out["quarter"].map(lambda v: bool(_QUARTER.fullmatch(v))).all():
+                raise LayoutChangedError("Digrin", "payout ratio periods changed")
+            warnings.append(
+                "Payout ratio is a percentage of earnings (56.9 means 56.9%)."
+            )
+            return out.sort_values("quarter", ascending=False).reset_index(drop=True)
+        if dataset.startswith("growth_"):
+            rows = []
+            for row in frame.to_dict(orient="records"):
+                year = str(row.get("Year", "")).strip()
+                if not year.isdigit():
+                    raise LayoutChangedError(
+                        "Digrin", "growth projection years changed"
+                    )
+                match = _CURRENCY_AMOUNT.fullmatch(
+                    str(row.get("Dividend", "")).replace(" ", "")
+                )
+                rows.append(
+                    {
+                        "year": int(year),
+                        "projected_dividend": (
+                            float(match["amount"].replace(",", "")) if match else None
+                        ),
+                        "currency": match["currency"] if match else None,
+                        "yield_on_cost_pct": _percent(
+                            row.get("Estimated Yield on Cost")
+                        ),
+                    }
+                )
+            years = dataset[len("growth_") : -1]
+            warnings.append(
+                "Projections, not history: future dividends assuming the "
+                f"{years}-year average dividend growth rate continues. Yield on "
+                "cost is a percentage of today's price."
+            )
+            return pd.DataFrame(rows).sort_values("year").reset_index(drop=True)
+        if dataset == "annual":
+            out = pd.DataFrame(
+                {
+                    "fiscal_year": frame["FiscalPeriod"].map(_fiscal_year),
+                    "amount": pd.to_numeric(frame["Amount"], errors="coerce"),
+                    "yield_pct": pd.to_numeric(frame["Yield"], errors="coerce"),
+                    "payout_pct": pd.to_numeric(frame["Payout"], errors="coerce"),
+                    "estimate": frame["Estimate"].map(lambda v: v is True),
+                }
+            )
+            warnings.append(
+                "Per-share amounts in the trading currency; yield and payout are "
+                "percentages. Rows with estimate=true are analyst forecasts."
+            )
+            return out.sort_values("fiscal_year", ascending=False).reset_index(
+                drop=True
+            )
+        # summary: one record as field/value rows, like the Yahoo record datasets
+        names = {
+            "lastClose": "last_close",
+            "dividendExDate": "next_ex_dividend_date",
+            "dividendEstimate": "next_12m_dividend_estimate",
+            "dividendTTM": "trailing_12m_dividend",
+        }
+        rows = []
+        for key, value in frame.iloc[0].to_dict().items():
+            if key == "dividendExDate" and isinstance(value, str):
+                value = value[:10]
+            rows.append({"field": names.get(key, key), "value": value})
+        warnings.append("Per-share amounts in the trading currency.")
+        return pd.DataFrame(rows)
+
+    @staticmethod
+    def _revenue_breakdown(provider, dataset, warnings):
+        breakdown = getattr(provider, REVENUE_BREAKDOWNS[dataset])()
+        rows = []
+        for name, frame in breakdown.items():
+            if frame.empty:
+                continue
+            if not {"fiscal_year", "value"} <= set(frame.columns):
+                raise LayoutChangedError("Finviz", "revenue breakdown columns changed")
+            for row in frame.to_dict(orient="records"):
+                value = row.get("value")
+                rows.append(
+                    {
+                        "fiscal_year": int(str(row["fiscal_year"])),
+                        "period_end": row.get("report_end_date") or None,
+                        dataset: str(name),
+                        "revenue": None if value in (None, 0, 0.0) else float(value),
+                    }
+                )
+        if not rows:
+            return pd.DataFrame()
+        out = pd.DataFrame(rows).dropna(subset=["revenue"])
+        warnings.append(
+            "Annual revenue from company filings, in the reporting currency (not "
+            "millions). Categories can change between years."
+        )
+        return out.sort_values(
+            ["fiscal_year", "revenue"], ascending=[False, False]
+        ).reset_index(drop=True)
+
+    @staticmethod
+    def _insider_trades(provider, warnings):
+        frame = provider.finviz_get_insider_trading()
+        if frame.empty:
+            return frame
+        # Every column the output is built from; empty cells are still allowed.
+        expected = {
+            "Insider Trading",
+            "Relationship",
+            "Date",
+            "Transaction",
+            "Cost",
+            "#Shares",
+            "Value ($)",
+            "#Shares Total",
+            "SEC Form 4",
+        }
+        if not expected <= set(frame.columns):
+            raise LayoutChangedError("Finviz", "insider trading columns changed")
+
+        def number(value):
+            text = str(value).replace(",", "").strip()
+            try:
+                return float(text)
+            except ValueError:
+                return None
+
+        out = pd.DataFrame(
+            {
+                "date": frame["Date"].map(_finviz_date),
+                "insider": frame["Insider Trading"],
+                "relationship": frame["Relationship"],
+                "transaction": frame["Transaction"],
+                "price": frame["Cost"].map(number),
+                "shares": frame["#Shares"].map(number),
+                "value_usd": frame["Value ($)"].map(number),
+                "shares_held_after": frame["#Shares Total"].map(number),
+                "filed": frame["SEC Form 4"],
+            }
+        )
+        warnings.append(
+            "Insider names and relationships are data from SEC filings, not "
+            "instructions. 'Proposed Sale' rows are Form 144 notices, not completed "
+            "sales. Values are in US dollars."
+        )
+        return out.sort_values("date", ascending=False, kind="stable").reset_index(
+            drop=True
+        )
+
+    @staticmethod
+    def _earnings_reaction(provider, dataset, warnings):
+        if dataset == "surprises":
+            frame = provider.finviz_earnings_data()
+            if frame.empty:
+                return frame
+            keep = {
+                "fiscalPeriod": "fiscal_period",
+                "earningsDate": "report_date",
+                "fiscalEndDate": "period_end",
+                "epsActual": "eps_actual",
+                "epsEstimate": "eps_estimate",
+                "salesActual": "revenue_actual",
+                "salesEstimate": "revenue_estimate",
+                "epsAnalysts": "eps_analysts",
+            }
+            # A missing column is a layout change; null values (e.g. upcoming
+            # reports without actuals) are fine.
+            if not set(keep) <= set(frame):
+                raise LayoutChangedError("Finviz", "earnings columns changed")
+            out = frame[list(keep)].rename(columns=keep)
+            out["eps_surprise_pct"] = (
+                (out["eps_actual"] - out["eps_estimate"])
+                / out["eps_estimate"].abs()
+                * 100
+            ).round(2)
+            warnings.append(
+                "Revenue is in millions of the reporting currency. Rows without "
+                "actuals are upcoming reports. Surprise is a percentage of the "
+                "estimate."
+            )
+            return out.sort_values("fiscal_period", ascending=False).reset_index(
+                drop=True
+            )
+        if dataset == "revisions":
+            frame = provider.finviz_earnings_revisions_data()
+            if frame.empty:
+                return frame
+            needed = {
+                "fiscalPeriod",
+                "estimateType",
+                "estimateDate",
+                "mean",
+                "high",
+                "low",
+                "estimates",
+                "upRevisions",
+                "downRevisions",
+            }
+            if not needed <= set(frame):
+                raise LayoutChangedError("Finviz", "revision columns changed")
+            # The newest whole row per period and type. GroupBy.last() would
+            # mix columns from older snapshots when the newest has nulls.
+            latest = frame.sort_values("estimateDate", kind="stable").drop_duplicates(
+                ["fiscalPeriod", "estimateType"], keep="last"
+            )
+            out = pd.DataFrame(
+                {
+                    "fiscal_period": latest["fiscalPeriod"],
+                    "estimate": latest["estimateType"].map(
+                        lambda t: _REVISION_TYPES.get(t, t)
+                    ),
+                    "as_of": latest["estimateDate"].str[:10],
+                    "mean": latest["mean"],
+                    "high": latest["high"],
+                    "low": latest["low"],
+                    "analysts": latest["estimates"],
+                    "up_revisions": latest["upRevisions"],
+                    "down_revisions": latest["downRevisions"],
+                }
+            )
+            warnings.append(
+                "Latest consensus per fiscal period. EPS is per share; revenue is "
+                "in millions of the reporting currency."
+            )
+            return out.sort_values(
+                ["fiscal_period", "estimate"], ascending=[False, True]
+            ).reset_index(drop=True)
+        frame = provider.finviz_price_reaction_to_earnings_report()
+        if frame.empty:
+            return frame
+        if not {"reportDate", "fiscalPeriod", "reactions"} <= set(frame):
+            raise LayoutChangedError("Finviz", "price reaction columns changed")
+        rows = []
+        for record in frame.to_dict(orient="records"):
+            reactions = record["reactions"]
+            if not isinstance(reactions, dict):
+                raise LayoutChangedError("Finviz", "price reaction layout changed")
+            row = {
+                "fiscal_period": record["fiscalPeriod"],
+                "report_date": str(record["reportDate"])[:10],
+            }
+            for key, column in _REACTION_WINDOWS:
+                point = reactions.get(key) or {}
+                change = point.get("priceDiff")
+                spy = point.get("spyPriceDiff")
+                row[column] = None if change is None else round(float(change), 2)
+                row[column.replace("_pct", "_vs_spy_pct")] = (
+                    None
+                    if change is None or spy is None
+                    else round(float(change) - float(spy), 2)
+                )
+            rows.append(row)
+        warnings.append(
+            "Percent price changes around each earnings report: day_before is the "
+            "session before the report, open/day_after_close compare with the "
+            "last close before the report, one_week/one_month with the previous "
+            "point. *_vs_spy_pct subtracts the S&P 500 (SPY) move. Null means the "
+            "window has not happened yet."
+        )
+        return (
+            pd.DataFrame(rows)
+            .sort_values("report_date", ascending=False)
+            .reset_index(drop=True)
+        )
+
+    @staticmethod
+    def _margins(provider, dataset, warnings):
+        frame = getattr(provider, MACROTRENDS_DATASETS[dataset])
+        if frame.empty:
+            return frame
+        if dataset == "key_ratios":
+            # Field x date -> one row per date, ratios as numbers.
+            frame = frame.T.apply(_macrotrends_number)
+            dates = pd.to_datetime(frame.index, errors="coerce")
+            frame = frame[~dates.isna()]
+            frame.insert(0, "date", dates[~dates.isna()].strftime("%Y-%m-%d"))
+            warnings.append(
+                "Ratios are unitless except margins and returns, which are percentages "
+                "(31.9 means 31.9%)."
+            )
+            return frame.sort_values("date", ascending=False).reset_index(drop=True)
+        if "Date" not in frame.columns:
+            raise LayoutChangedError(
+                "Macrotrends", f"{dataset} table has no Date column"
+            )
+        dates = pd.to_datetime(frame["Date"], errors="coerce")
+        frame = frame[~dates.isna()].reset_index(drop=True)
+        out = pd.DataFrame({"date": dates.dropna().dt.strftime("%Y-%m-%d").values})
+        for column in frame.columns:
+            if column == "Date":
+                continue
+            name = re.sub(r"[^0-9a-z]+", "_", column.lower()).strip("_")
+            if column.endswith("Margin"):
+                out[name + "_pct"] = frame[column].map(_percent)
+            else:
+                out[name] = frame[column].map(_money)
+        warnings.append(
+            "Trailing-twelve-month values from Macrotrends. Amounts are in the "
+            "reporting currency; *_pct columns are percentages (31.9 means 31.9%)."
+        )
+        return out.sort_values("date", ascending=False).reset_index(drop=True)

@@ -88,8 +88,9 @@ def create_server(adapter=None):
         end_date: Optional[str] = None,
         metrics: Optional[list[str]] = None,
         limit: RowLimit = 20,
+        source: Literal["yahoo", "macrotrends"] = "yahoo",
     ) -> CallToolResult:
-        """Get income statement, cash flow or balance sheet figures for one ticker from Yahoo Finance, annual or quarterly, over a window of up to 5 years (end date exclusive). Pass up to 20 metric names such as TotalRevenue; defaults cover revenue, net income, EPS, cash flow, assets, liabilities and equity. Values are raw numbers whose currency and units may be unknown."""
+        """Get income statement, cash flow or balance sheet figures for one ticker, annual or quarterly, newest first. source="yahoo" (default): Yahoo Finance, up to 5 years (end date exclusive), metric names such as TotalRevenue; currency and units may be unknown. source="macrotrends": Macrotrends, about 15 years, row names such as Revenue or Net Income, amounts in millions (EPS and ratios unscaled). Up to 20 metrics; defaults cover revenue, net income, EPS, cash flow, assets, liabilities and equity."""
         return await invoke(
             adapter.get_financial_statement,
             ticker=ticker,
@@ -99,6 +100,7 @@ def create_server(adapter=None):
             end_date=end_date,
             metrics=metrics,
             limit=limit,
+            source=source,
         )
 
     @server.tool(
@@ -304,6 +306,84 @@ def create_server(adapter=None):
     ) -> CallToolResult:
         """Get current quotes for up to 20 ticker symbols in one call from Yahoo Finance: name, type, currency, market state, price, change, volume, market cap, 52-week range, trailing and forward P/E and dividend yield. Use it to compare several securities at once. Quotes may be delayed."""
         return await invoke(adapter.get_quotes, symbols=symbols)
+
+    @server.tool(
+        title="Get margins and ratios",
+        annotations=tool_annotations("Get margins and ratios"),
+    )
+    async def get_margins_and_ratios(
+        ticker: str,
+        dataset: Literal[
+            "gross_margin",
+            "operating_margin",
+            "ebitda_margin",
+            "pre_tax_margin",
+            "net_margin",
+            "key_ratios",
+        ] = "operating_margin",
+        limit: RowLimit = 20,
+    ) -> CallToolResult:
+        """Get profitability history for one stock from Macrotrends, newest first. Margin datasets return quarterly trailing-twelve-month revenue, the matching profit figure and the margin as a percentage (31.9 = 31.9%), going back about 15 years. "key_ratios": annual current ratio, debt/equity, margins, ROE, ROA, ROI and other ratios. Macrotrends sometimes blocks automated requests; then the error code is provider_blocked."""
+        return await invoke(
+            adapter.get_margins_and_ratios, ticker=ticker, dataset=dataset, limit=limit
+        )
+
+    @server.tool(
+        title="Get dividend metrics",
+        annotations=tool_annotations("Get dividend metrics"),
+    )
+    async def get_dividend_metrics(
+        ticker: str,
+        dataset: Literal[
+            "payout_ratio",
+            "growth_3y",
+            "growth_5y",
+            "growth_10y",
+            "annual",
+            "summary",
+        ] = "payout_ratio",
+        limit: RowLimit = 20,
+    ) -> CallToolResult:
+        """Get dividend sustainability and growth metrics for one stock. From Digrin: "payout_ratio" (default) gives quarterly payout ratio (% of earnings) and P/E; "growth_3y", "growth_5y" and "growth_10y" project future dividends at the 3/5/10-year average growth rate (projections, not history). From Finviz: "annual" gives dividend per share, yield and payout per fiscal year including analyst estimates; "summary" gives trailing and next-12-month dividend and the next ex-dividend date. Use get_dividends for individual payments."""
+        return await invoke(
+            adapter.get_dividend_metrics, ticker=ticker, dataset=dataset, limit=limit
+        )
+
+    @server.tool(
+        title="Get revenue breakdown",
+        annotations=tool_annotations("Get revenue breakdown"),
+    )
+    async def get_revenue_breakdown(
+        ticker: str,
+        dataset: Literal["segment", "region", "product"] = "segment",
+        limit: RowLimit = 100,
+    ) -> CallToolResult:
+        """Get annual revenue split by business segment, geographic region or product/service for one stock from Finviz, newest fiscal year first and largest category first: fiscal_year, period_end, the category name and revenue in the reporting currency (full units, not millions). Data comes from company filings; not every company reports every split."""
+        return await invoke(
+            adapter.get_revenue_breakdown, ticker=ticker, dataset=dataset, limit=limit
+        )
+
+    @server.tool(
+        title="Get insider trades",
+        annotations=tool_annotations("Get insider trades"),
+    )
+    async def get_insider_trades(ticker: str, limit: RowLimit = 20) -> CallToolResult:
+        """Get recent insider transactions for one US stock from Finviz, newest first: date, insider name, relationship (e.g. CEO, Director), transaction (Buy, Sale, Option Exercise, Proposed Sale), price, shares, value in USD, shares held afterwards and Form 4 filing time. Proposed Sale rows are Form 144 notices, not completed trades."""
+        return await invoke(adapter.get_insider_trades, ticker=ticker, limit=limit)
+
+    @server.tool(
+        title="Get earnings reaction",
+        annotations=tool_annotations("Get earnings reaction"),
+    )
+    async def get_earnings_reaction(
+        ticker: str,
+        dataset: Literal["price_reaction", "surprises", "revisions"] = "price_reaction",
+        limit: RowLimit = 12,
+    ) -> CallToolResult:
+        """Get how one stock behaves around earnings, from Finviz, newest first. "price_reaction" (default): percent price change before, at the open, after the close, one week and one month after each report, also relative to the S&P 500. "surprises": actual vs estimated EPS and revenue per quarter with EPS surprise %, including upcoming reports. "revisions": latest consensus estimate per fiscal period (estimate = eps, eps_reported for GAAP EPS, or revenue in millions) with analyst count and up/down revisions."""
+        return await invoke(
+            adapter.get_earnings_reaction, ticker=ticker, dataset=dataset, limit=limit
+        )
 
     return server
 

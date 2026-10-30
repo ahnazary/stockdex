@@ -26,6 +26,11 @@ EXPECTED_TOOLS = {
     "get_splits",
     "get_options_chain",
     "get_quotes",
+    "get_margins_and_ratios",
+    "get_dividend_metrics",
+    "get_revenue_breakdown",
+    "get_insider_trades",
+    "get_earnings_reaction",
 }
 
 
@@ -177,6 +182,217 @@ class FakeTicker:
                 "Ex-dividend date": ["2025-01-02", "2026-01-02"],
                 "Payable date": ["-", "2026-01-10"],
                 "Dividend amount (change)": ["—", "0.2600 USD (4%)"],
+            }
+        )
+
+    def macrotrends_income_statement(self, frequency="annual"):
+        self.calls.append({"macrotrends": "income_statement", "frequency": frequency})
+        return pd.DataFrame(
+            {
+                "2025-09-30": ["416161", "112010", "7.46"],
+                "2024-09-30": ["391035", "93736", ""],
+                "2023-09-30": ["383285", "96995", "6.13"],
+            },
+            index=pd.Index(
+                ["Revenue", "Net Income", "EPS - Earnings Per Share"],
+                name="field_name",
+            ),
+        )
+
+    macrotrends_cash_flow = macrotrends_income_statement
+    macrotrends_balance_sheet = macrotrends_income_statement
+
+    @staticmethod
+    def _margin_frame(profit, margin, values):
+        """A Macrotrends margin table with the dataset's own headers"""
+        (revenue1, profit1, pct1), (revenue2, profit2, pct2) = values
+        return pd.DataFrame(
+            {
+                "Date": ["", "2025-09-30", "2025-06-30"],
+                "TTM Revenue": ["", revenue1, revenue2],
+                profit: ["", profit1, profit2],
+                margin: ["", pct1, pct2],
+            }
+        )
+
+    @property
+    def macrotrends_gross_margin(self):
+        return self._margin_frame(
+            "TTM Gross Profit",
+            "Gross Margin",
+            [("$416.16B", "$195.20B", "46.91%"), ("$408.62B", "$190.74B", "46.68%")],
+        )
+
+    @property
+    def macrotrends_operating_margin(self):
+        return self._margin_frame(
+            "TTM Operating Income",
+            "Operating Margin",
+            [("$416.16B", "$133.05B", "31.97%"), ("$408.62B", "$130.21B", "31.87%")],
+        )
+
+    @property
+    def macrotrends_ebitda_margin(self):
+        return self._margin_frame(
+            "TTM EBITDA",
+            "EBITDA Margin",
+            [("$416.16B", "$144.75B", "34.78%"), ("$408.62B", "$141.70B", "34.68%")],
+        )
+
+    @property
+    def macrotrends_pre_tax_margin(self):
+        return self._margin_frame(
+            "TTM Pre-Tax Income",
+            "Pre-Tax Margin",
+            [("$416.16B", "$132.73B", "31.89%"), ("$408.62B", "$129.98B", "31.81%")],
+        )
+
+    @property
+    def macrotrends_net_margin(self):
+        return self._margin_frame(
+            "TTM Net Income",
+            "Net Margin",
+            [("$416.16B", "$112.01B", "26.92%"), ("$408.62B", "$99.28B", "24.30%")],
+        )
+
+    @property
+    def macrotrends_key_financial_ratios(self):
+        return pd.DataFrame(
+            {"2025-09-30": ["0.8933", "1.3436"], "2024-09-30": ["0.8673", ""]},
+            index=pd.Index(["Current Ratio", "Debt/Equity Ratio"], name="field_name"),
+        )
+
+    @property
+    def digrin_payout_ratio(self):
+        return pd.DataFrame(
+            {
+                "Date": ["2026Q2 ", "2026Q3 "],
+                "Payout ratio": ["51.55%", "56.87%"],
+                "PE ratio": ["20.42", "23.02"],
+            }
+        )
+
+    @property
+    def digrin_dgr5(self):
+        return pd.DataFrame(
+            {
+                "Year": ["2028 ", "2027 "],
+                "Dividend": ["2.270USD ", "2.162USD "],
+                "Estimated Yield on Cost": ["2.40%", "2.29%"],
+            }
+        )
+
+    digrin_dgr3 = digrin_dgr5
+    digrin_dgr10 = digrin_dgr5
+
+    def finviz_dividends_annual_data(self):
+        return pd.DataFrame(
+            {
+                "Ticker": ["KO", "KO"],
+                "FiscalPeriod": ["2025FY", "2026FY"],
+                "Amount": [2.04, 2.12],
+                "Yield": [2.87, float("nan")],
+                "Payout": [67.3, float("nan")],
+                "Estimate": [False, True],
+            }
+        )
+
+    def finviz_overall_dividend(self):
+        return pd.DataFrame(
+            [
+                {
+                    "lastClose": 94.559,
+                    "dividendExDate": "2026-12-01T00:00:00",
+                    "dividendEstimate": 2.198,
+                    "dividendTTM": 2.1,
+                }
+            ]
+        )
+
+    def finviz_revenue_by_segment(self):
+        rows = lambda values: pd.DataFrame(  # noqa: E731
+            {
+                "fiscal_year": ["2024", "2025"],
+                "report_end_date": ["2024-09-28", "2025-09-27"],
+                "source_filing_url": ["https://www.sec.gov/x", ""],
+                "value": values,
+            }
+        )
+        return {
+            "Americas": rows([167045000000.0, 178353000000.0]),
+            "Europe": rows([101328000000.0, 0.0]),
+        }
+
+    finviz_revenue_by_regions = finviz_revenue_by_segment
+    finviz_revenue_by_products_and_services = finviz_revenue_by_segment
+
+    def finviz_get_insider_trading(self):
+        return pd.DataFrame(
+            {
+                "Insider Trading": ["Borders Ben", "Newstead Jennifer"],
+                "Relationship": ["Principal Accounting Officer", "SVP, GC"],
+                "Date": ["Oct 20 '26", "Oct 27 '26"],
+                "Transaction": ["Sale", "Proposed Sale"],
+                "Cost": ["339.62", "343.36"],
+                "#Shares": ["2,399", "2,399"],
+                "Value ($)": ["814,748", "823,721"],
+                "#Shares Total": ["34,795", ""],
+                "SEC Form 4": ["Oct 22 06:32 PM", "Oct 29 06:30 PM"],
+            }
+        )
+
+    def finviz_earnings_data(self):
+        return pd.DataFrame(
+            {
+                "ticker": ["AAPL", "AAPL"],
+                "fiscalPeriod": ["2026Q3", "2026Q4"],
+                "earningsDate": ["2026-07-30T16:30:00", "2026-11-02T16:30:00"],
+                "fiscalEndDate": ["2026-06-30", "2026-09-30"],
+                "epsActual": [2.02, float("nan")],
+                "epsEstimate": [1.8919, 1.9897],
+                "salesActual": [109417.0, float("nan")],
+                "salesEstimate": [109038.8999, 113388.4769],
+                "epsAnalysts": [32.0, 28.0],
+            }
+        )
+
+    def finviz_earnings_revisions_data(self):
+        return pd.DataFrame(
+            {
+                "fiscalPeriod": ["2026Q4", "2026Q4", "2026Q4"],
+                "estimateType": ["E", "E", "S"],
+                "estimateDate": [
+                    "2026-10-26T00:00:00",
+                    "2026-10-30T00:00:00",
+                    "2026-10-30T00:00:00",
+                ],
+                "estimates": [28, 28, 26],
+                "upRevisions": [2, 3, 1],
+                "downRevisions": [0, 0, 2],
+                "mean": [1.98, 1.9897, 113401.2137],
+                "high": [2.1, 2.1, 117628.0],
+                "low": [1.9, 1.9, 112525.022],
+            }
+        )
+
+    def finviz_price_reaction_to_earnings_report(self):
+        def point(diff, spy):
+            return {"priceDiff": diff, "spyPriceDiff": spy}
+
+        return pd.DataFrame(
+            {
+                "fiscalPeriod": ["2026Q3", "2026Q4"],
+                "reportDate": ["2026-07-30T16:30:00", "2026-11-02T16:30:00"],
+                "reactions": [
+                    {
+                        "minus_1_day": point(-1.4075012, 1.6765823),
+                        "open": point(-8.583511, 0.40312958),
+                        "close": point(-7.3538666, 0.71997833),
+                        "plus_1_week": point(2.1, 1.0),
+                        "plus_1_month": point(None, None),
+                    },
+                    {"minus_1_day": point(None, None)},
+                ],
             }
         )
 

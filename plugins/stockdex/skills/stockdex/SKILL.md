@@ -1,12 +1,16 @@
 ---
 name: stockdex
-description: Fetch public market data with the Stockdex MCP tools - price history, live quotes, financial statements, valuation ratios, company profiles, analyst estimates, earnings dates, holders and insiders, SEC filings, dividends, splits, options chains and ETF/fund holdings. Use when the user asks about a stock, ETF, index or fund by name or ticker.
+description: Fetch public market data with the Stockdex MCP tools - price history, live quotes, financial statements (up to 15 years), margins and ratios, valuation, company profiles, revenue by segment and region, analyst estimates, earnings dates, surprises and price reactions, holders and insider trades, SEC filings, dividends with payout and growth, splits, options chains and ETF/fund holdings. Use when the user asks about a stock, ETF, index or fund by name or ticker.
 ---
 
 # Stockdex
 
 Use the `stockdex` MCP tools for read-only financial data. They fetch from
-Yahoo Finance (most data) and Digrin (dividends by default) on the user's machine.
+Yahoo Finance (most data), Macrotrends (long statement history, margins and
+ratios), Digrin (dividends, payout and growth) and Finviz (revenue breakdowns,
+insider trades, earnings reactions, annual dividends) on the user's machine.
+Macrotrends sometimes blocks automated requests (`provider_blocked`); fall back
+to the Yahoo Finance source for statements when that happens.
 
 ## Pick a tool
 
@@ -15,15 +19,19 @@ Yahoo Finance (most data) and Digrin (dividends by default) on the user's machin
 | Company name, no ticker | `search_ticker` | `query`, `limit` 1–25 |
 | Current price, compare several | `get_quotes` | `symbols`: 1–20 tickers |
 | Price history | `get_prices` | `range`: `1mo` (default), `3mo`, `6mo`, `1y` |
-| Revenue, earnings, cash flow, balance sheet | `get_financial_statement` | `statement`, `frequency`, `start_date`/`end_date` (≤5 years), `metrics` |
+| Revenue, earnings, cash flow, balance sheet | `get_financial_statement` | `statement`, `frequency`, `start_date`/`end_date`, `metrics`, `source`: `yahoo` (default, ≤5 years) or `macrotrends` (~15 years) |
 | Market cap, P/E, beta, margins, price targets | `get_key_statistics` | `dataset`: `summary` (default), `key_statistics`, `financial_data`, `market_price` |
 | P/E, EV/EBITDA, market cap over time | `get_valuation_history` | `frequency`: `annual`, `quarterly` (default), `trailing` |
 | What the company does, executives, peers | `get_company_profile` | `dataset`: `profile` (default), `officers`, `similar_symbols` |
 | Analyst estimates, ratings, EPS surprises | `get_analyst_estimates` | `dataset`: `estimates` (default), `recommendations`, `upgrades_downgrades`, `earnings_history` |
 | Next earnings or dividend date | `get_earnings_calendar` | `ticker` |
 | Who owns it, insider trades | `get_holders` | `dataset`: `institutional_holders` (default), `fund_holders`, `ownership_breakdown`, `insiders`, `insider_transactions`, `insider_activity` |
+| Latest insider buys and sales with price and value | `get_insider_trades` | `ticker` (Finviz, US listings) |
+| Revenue by segment, region or product | `get_revenue_breakdown` | `dataset`: `segment` (default), `region`, `product` |
+| Stock move after earnings, EPS surprises, estimate revisions | `get_earnings_reaction` | `dataset`: `price_reaction` (default), `surprises`, `revisions` |
 | 10-K, 10-Q, 8-K | `get_sec_filings` | `ticker` (US listings) |
 | Dividends | `get_dividends` | `source`: `digrin` (default), `yahoo`, `auto` |
+| Payout ratio, dividend growth, yield per year | `get_dividend_metrics` | `dataset`: `payout_ratio` (default), `growth_3y`, `growth_5y`, `growth_10y` (Digrin projections), `annual`, `summary` (Finviz) |
 | Stock splits | `get_splits` | `ticker` |
 | Options | `get_options_chain` | `expiration` `YYYY-MM-DD` (default nearest), `option_type`: `calls`, `puts`, `both` |
 | ETF/fund holdings, sectors, allocation | `get_fund_holdings` | `dataset`: `fund_top_holdings` (default), `fund_sectors`, `fund_asset_allocation` |
@@ -47,14 +55,25 @@ For anything else, look up the exact name in
 [reference/metrics.md](reference/metrics.md). Pass names unprefixed; output
 columns are prefixed, such as `annualTotalRevenue`.
 
+With `source="macrotrends"` use Macrotrends row names instead, e.g.
+`Revenue`, `Gross Profit`, `Operating Income`, `Net Income`,
+`EPS - Earnings Per Share`, `Total Assets`, `Long Term Debt`,
+`Share Holder Equity`, `Cash Flow From Operating Activities`. Matching is
+case-insensitive; an unknown name comes back null with a warning listing the
+available rows. Amounts are in millions of the reporting currency, but
+per-share figures (EPS) and ratios are not scaled. There is no five-year
+window limit and output columns are not prefixed. Use it when the user asks
+for more than five years of history.
+
 ## Reading results
 
 Every result is a JSON envelope. Check `ok` first.
 
 - Cite `source`, the observation dates and `retrieved_at`. Mention `truncated`
   and any `warnings`.
-- Statement values have **unknown currency and units**. Don't assume USD or
-  millions. Prices, quotes, dividends and options carry `currency`.
+- Yahoo Finance statement values have **unknown currency and units**. Don't
+  assume USD or millions. Prices, quotes, dividends and options carry
+  `currency`.
 - Fractions are not percentages: a yield, margin, holding or return of `0.031`
   means 3.1%.
 - `null` means missing, never zero. `no_data` doesn't prove zero dividends or
@@ -62,6 +81,9 @@ Every result is a JSON envelope. Check `ok` first.
 - On errors (`invalid_input`, `busy`, `rate_limited`, `network_error`,
   `no_data`, `provider_schema_error`, `provider_error`), explain the error and
   stop. Don't retry in a loop, and don't make up replacement figures.
+- `provider_blocked` (the website refused the request) and `layout_changed`
+  (a scraped page changed) are about the website, not the company. If the
+  tool has a `source` argument, you may try another source once.
 
 ## Ground rules
 

@@ -1,8 +1,8 @@
 {
   "name": "stockdex",
   "displayName": "Stockdex",
-  "version": "1.4.0",
-  "description": "Read-only stock data for Claude: historical daily prices and financial statements from Yahoo Finance, and dividend history from Digrin.",
+  "version": "1.5.0",
+  "description": "Read-only stock data for Claude: prices, quotes, financial statements, margins and ratios, valuation, analyst estimates, earnings reactions, revenue breakdowns, holders and insider trades, SEC filings, dividends, splits, options and funds from Yahoo Finance, Macrotrends, Digrin and Finviz.",
   "author": {
     "name": "Amir Nazary",
     "url": "https://github.com/ahnazary"
@@ -14,6 +14,8 @@
     "stocks",
     "finance",
     "yahoo-finance",
+    "macrotrends",
+    "finviz",
     "dividends",
     "financial-statements",
     "mcp"
