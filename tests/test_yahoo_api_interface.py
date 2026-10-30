@@ -83,6 +83,27 @@ def test_yahoo_api_current_trading_period(ticker):
         assert column in yahoo_api_current_trading_period.index.tolist()
 
 
+@pytest.mark.parametrize("ticker", ["KO", "AAPL"])
+def test_yahoo_api_dividends(ticker):
+    dividends = Ticker(ticker).yahoo_api_dividends(range="5y")
+    assert len(dividends) >= 8
+    assert {"amount", "currency"} <= set(dividends.columns)
+    assert (dividends["amount"] > 0).all()
+    assert dividends.index.is_monotonic_increasing
+
+
+def test_yahoo_api_splits():
+    splits = Ticker("AAPL").yahoo_api_splits()
+    # Apple's 4:1 split on 2020-08-31.
+    assert "4:1" in set(splits["splitRatio"])
+    assert {"numerator", "denominator", "splitRatio"} <= set(splits.columns)
+
+
+def test_yahoo_api_capital_gains_for_stock_is_empty_or_valid():
+    gains = Ticker("AAPL").yahoo_api_capital_gains(range="5y")
+    assert gains.empty or "amount" in gains.columns
+
+
 @pytest.mark.parametrize(
     "ticker, frequency, format, period1, period2",
     [

@@ -370,6 +370,98 @@ class YahooAPI(TickerBase):
 
         return pd.DataFrame(row)
 
+    def _yahoo_api_chart_events(
+        self, event: Literal["dividends", "splits", "capitalGains"], range: str
+    ) -> pd.DataFrame:
+        """
+        Get one corporate-action event series from the Yahoo chart endpoint
+
+        Args:
+        ----------------
+        event (str): "dividends", "splits" or "capitalGains"
+        range (str): The range to retrieve, e.g. "5y" or "max"
+
+        Returns:
+        ----------------
+        pd.DataFrame: One row per event, oldest first, indexed by event date (UTC).
+        Empty if the security has no events of this type in the range.
+        """
+        # A monthly interval keeps the price payload small; events are returned
+        # in full regardless of the bar interval.
+        url = (
+            f"{config.BASE_URL}/chart/{self.ticker}"
+            f"?range={range}&interval=1mo&events=div,splits,capitalGains"
+        )
+        result = self.get_response(url).json()["chart"]["result"][0]
+        currency = result.get("meta", {}).get("currency")
+        events = result.get("events", {}).get(event, {})
+
+        frame = pd.DataFrame(list(events.values()))
+        if frame.empty:
+            return frame
+        frame["date"] = pd.to_datetime(frame["date"], unit="s", utc=True)
+        if event != "splits" and "currency" not in frame:
+            frame["currency"] = currency
+        return frame.sort_values("date").set_index("date")
+
+    def yahoo_api_dividends(
+        self,
+        range: Literal["1y", "2y", "5y", "10y", "ytd", "max"] = "max",
+    ) -> pd.DataFrame:
+        """
+        Get the dividend history from Yahoo Finance
+
+        Args:
+        ----------------
+        range (str): The range of history to retrieve
+        valid values are "1y", "2y", "5y", "10y", "ytd", "max"
+
+        Returns:
+        ----------------
+        pd.DataFrame: One row per dividend, indexed by ex-dividend date (UTC),
+        with columns ``amount`` and ``currency``. Empty if no dividends were paid.
+        """
+        return self._yahoo_api_chart_events("dividends", range)
+
+    def yahoo_api_splits(
+        self,
+        range: Literal["1y", "2y", "5y", "10y", "ytd", "max"] = "max",
+    ) -> pd.DataFrame:
+        """
+        Get the stock split history from Yahoo Finance
+
+        Args:
+        ----------------
+        range (str): The range of history to retrieve
+        valid values are "1y", "2y", "5y", "10y", "ytd", "max"
+
+        Returns:
+        ----------------
+        pd.DataFrame: One row per split, indexed by split date (UTC), with
+        columns ``numerator``, ``denominator`` and ``splitRatio`` (e.g. "4:1").
+        Empty if the stock never split.
+        """
+        return self._yahoo_api_chart_events("splits", range)
+
+    def yahoo_api_capital_gains(
+        self,
+        range: Literal["1y", "2y", "5y", "10y", "ytd", "max"] = "max",
+    ) -> pd.DataFrame:
+        """
+        Get capital gain distributions from Yahoo Finance (ETFs and mutual funds)
+
+        Args:
+        ----------------
+        range (str): The range of history to retrieve
+        valid values are "1y", "2y", "5y", "10y", "ytd", "max"
+
+        Returns:
+        ----------------
+        pd.DataFrame: One row per distribution, indexed by date (UTC), with
+        columns ``amount`` and ``currency``. Empty for most stocks.
+        """
+        return self._yahoo_api_chart_events("capitalGains", range)
+
     def plot_yahoo_api_income_statement(
         self,
         frequency: Literal["annual", "quarterly"] = "annual",
