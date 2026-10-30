@@ -3,12 +3,27 @@ Use with Claude
 
 Stockdex includes a local, read-only `Model Context Protocol
 <https://modelcontextprotocol.io>`_ (MCP) server, so Claude can look up stock
-data for you. It provides three tools:
+data for you. It provides 16 read-only tools:
 
-* ``get_prices``: historical daily OHLCV bars from Yahoo Finance
-* ``get_financial_statement``: income statement, cash flow and balance sheet
-  metrics from Yahoo Finance
-* ``get_dividends``: dividend history from Digrin
+* ``search_ticker``: find ticker symbols for a company name
+* ``get_quotes``: current quotes for up to 20 symbols
+* ``get_prices``: daily open, high, low, close and volume, up to 1 year
+* ``get_financial_statement``: annual or quarterly income statement, cash flow or balance sheet, up to 5 years
+* ``get_key_statistics``: market cap, P/E, beta, 52-week range, margins and analyst price targets
+* ``get_valuation_history``: market cap, enterprise value and valuation ratios over time
+* ``get_company_profile``: business summary, sector, executives and related tickers
+* ``get_analyst_estimates``: EPS and revenue estimates, recommendations, rating changes and EPS surprises
+* ``get_earnings_calendar``: next earnings date, estimates and dividend dates
+* ``get_holders``: institutional and fund holders, ownership breakdown and insider transactions
+* ``get_sec_filings``: recent SEC filings with links
+* ``get_dividends``: dividend history (Digrin by default, Yahoo Finance as an alternative or fallback)
+* ``get_splits``: stock split history
+* ``get_options_chain``: calls and puts for one expiration date
+* ``get_fund_holdings``: ETF and fund top holdings, sector weights and asset allocation
+* ``get_fund_profile``: ETF and fund fees, category and performance vs category
+
+All data comes from Yahoo Finance, except dividends, which come from
+Digrin by default.
 
 The server runs on your computer and needs no API key. Requests go to Yahoo
 Finance and Digrin, and results you use in a conversation are sent to Claude.
@@ -76,6 +91,11 @@ Arguments and limits
   ``^GSPC`` or ``GC=F``.
 * **limit** sets how many rows come back (1–500, default 20, newest first).
   Output is also capped at 256 KiB.
+* **Datasets**: tools such as ``get_key_statistics`` and ``get_holders``
+  take a ``dataset`` argument that selects one view; each tool lists its
+  allowed values and default.
+* **Dividends** use ``source`` ``digrin`` (default), ``yahoo`` or ``auto``
+  (Digrin, falling back to Yahoo Finance).
 * **Prices** use ``range`` ``1mo`` (default), ``3mo``, ``6mo`` or ``1y`` at a
   daily interval. These are historical bars, not real-time quotes.
 * **Financial statements**:
@@ -101,6 +121,7 @@ Every call returns a JSON envelope. Check ``ok`` first, then use
 
 * Statement values are raw provider numbers with **unknown currency and units**.
 * ``null`` means the value is missing, not zero.
+* Fractions are not percentages: a yield or margin of ``0.031`` is 3.1%.
 * Only one provider request runs at a time. Respect provider rate limits and
   terms of use.
 * The data isn't guaranteed to be accurate and is not investment advice.

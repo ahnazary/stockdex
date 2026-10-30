@@ -12,6 +12,8 @@ import anyio  # noqa: E402
 from mcp import ClientSession  # noqa: E402
 from mcp.client.stdio import StdioServerParameters, stdio_client  # noqa: E402
 
+from tests.claude.conftest import EXPECTED_TOOLS  # noqa: E402
+
 
 def test_stdio_tools(tmp_path):
     async def exercise():
@@ -27,17 +29,27 @@ def test_stdio_tools(tmp_path):
                 async with ClientSession(read, write) as session:
                     await session.initialize()
                     listing = await session.list_tools()
-                    assert {t.name for t in listing.tools} == {
-                        "get_prices",
-                        "get_financial_statement",
-                        "get_dividends",
-                    }
+                    assert {t.name for t in listing.tools} == EXPECTED_TOOLS
                     for tool in listing.tools:
                         assert tool.annotations.read_only_hint is True
                         assert tool.annotations.destructive_hint is False
+                        if "limit" not in tool.input_schema["properties"]:
+                            # get_quotes is bounded by its symbol list instead.
+                            symbols = tool.input_schema["properties"]["symbols"]
+                            assert symbols["maxItems"] == 20
+                            continue
                         limit_schema = tool.input_schema["properties"]["limit"]
-                        assert limit_schema["minimum"] == 1
-                        assert limit_schema["maximum"] == 500
+                        # Optional limits are anyOf[int-with-bounds, null].
+                        bounded = next(
+                            (
+                                s
+                                for s in limit_schema.get("anyOf", [])
+                                if "minimum" in s
+                            ),
+                            limit_schema,
+                        )
+                        assert bounded["minimum"] == 1
+                        assert bounded["maximum"] in (25, 500)
                     for name in (
                         "get_prices",
                         "get_financial_statement",
@@ -50,6 +62,11 @@ def test_stdio_tools(tmp_path):
                             json.loads(result.content[0].text)
                             == result.structured_content
                         )
+                    found = await session.call_tool(
+                        "search_ticker", {"query": "bayerische motoren"}
+                    )
+                    assert not found.is_error
+                    assert found.structured_content["records"][0]["symbol"] == "BMW.DE"
                     error = await session.call_tool(
                         "get_prices", {"ticker": "https://bad"}
                     )
@@ -140,7 +157,7 @@ def test_legacy_stdio_handshake(tmp_path):
             await send(
                 {"jsonrpc": "2.0", "id": 2, "method": "tools/list", "params": {}}
             )
-            assert len((await receive(2))["result"]["tools"]) == 3
+            assert len((await receive(2))["result"]["tools"]) == len(EXPECTED_TOOLS)
             await send(
                 {
                     "jsonrpc": "2.0",
