@@ -5,6 +5,7 @@ The main Ticker class inherits from this class
 
 from datetime import datetime
 from typing import Literal, Union
+from urllib.parse import quote as requests_quote
 
 import pandas as pd
 import plotly.express as px
@@ -1085,6 +1086,188 @@ class YahooAPI(TickerBase):
             **annual(annual_returns.get("returnsCat")),
         }
         return pd.DataFrame({"fund": fund, "category": category})
+
+    def yahoo_api_option_expirations(self) -> list:
+        """
+        Get the available option expiration dates
+
+        Returns:
+        ----------------
+        list: Expiration dates as UTC timestamps, nearest first. Empty if the
+        security has no listed options.
+        """
+        results = (
+            self.get_response(f"{config.OPTIONS_URL}/{self.ticker}")
+            .json()
+            .get("optionChain", {})
+            .get("result")
+            or []
+        )
+        dates = results[0].get("expirationDates", []) if results else []
+        return [pd.to_datetime(d, unit="s", utc=True) for d in sorted(dates)]
+
+    def yahoo_api_options_chain(
+        self,
+        expiration: Union[str, datetime, None] = None,
+        option_type: Literal["calls", "puts", "both"] = "both",
+    ) -> pd.DataFrame:
+        """
+        Get the options chain for one expiration date
+
+        Args:
+        ----------------
+        expiration (str | datetime | None): Expiration date, e.g.
+        "2026-11-20". Must be one of ``yahoo_api_option_expirations()``.
+        Default is the nearest expiration.
+
+        option_type (str): "calls", "puts" or "both" (default)
+
+        Returns:
+        ----------------
+        pd.DataFrame: One row per contract with ``optionType`` ("call" or
+        "put"), ``contractSymbol``, ``strike``, ``lastPrice``, ``bid``,
+        ``ask``, ``change``, ``percentChange``, ``volume``, ``openInterest``,
+        ``impliedVolatility``, ``inTheMoney``, ``expiration`` and
+        ``lastTradeDate`` (UTC timestamps). Empty if there are no options.
+        """
+        url = f"{config.OPTIONS_URL}/{self.ticker}"
+        if expiration is not None:
+            timestamp = pd.Timestamp(expiration)
+            if timestamp.tzinfo is None:
+                timestamp = timestamp.tz_localize("UTC")
+            url += f"?date={int(timestamp.timestamp())}"
+
+        results = (
+            self.get_response(url).json().get("optionChain", {}).get("result") or []
+        )
+        chains = results[0].get("options", []) if results else []
+        if not chains:
+            return pd.DataFrame()
+
+        kinds = ("calls", "puts") if option_type == "both" else (option_type,)
+        frames = []
+        for kind in kinds:
+            frame = pd.DataFrame(chains[0].get(kind) or [])
+            if not frame.empty:
+                frame.insert(0, "optionType", kind[:-1])
+                frames.append(frame)
+        if not frames:
+            return pd.DataFrame()
+
+        chain = pd.concat(frames, ignore_index=True)
+        for column in ("expiration", "lastTradeDate"):
+            if column in chain:
+                chain[column] = pd.to_datetime(chain[column], unit="s", utc=True)
+        return chain
+
+    @staticmethod
+    def yahoo_api_quotes(symbols: Union[str, list]) -> pd.DataFrame:
+        """
+        Get current quotes for several symbols in one request
+
+        Args:
+        ----------------
+        symbols (str | list): One symbol or a list, e.g. ["AAPL", "MSFT"]
+
+        Returns:
+        ----------------
+        pd.DataFrame: One row per symbol, indexed by symbol, with price,
+        change, volume, market cap, 52-week range, P/E, dividend yield and
+        market state. Symbols Yahoo does not recognise are left out.
+
+        Raises:
+        ----------------
+        ValueError: If no symbols are given
+        """
+        if isinstance(symbols, str):
+            symbols = [symbols]
+        symbols = [s.strip().upper() for s in symbols if s and s.strip()]
+        if not symbols:
+            raise ValueError("Provide at least one symbol")
+
+        url = f"{config.QUOTE_URL}?symbols={','.join(symbols)}"
+        results = (
+            YahooAPI().get_response(url).json().get("quoteResponse", {}).get("result")
+            or []
+        )
+        frame = pd.DataFrame(results)
+        if frame.empty:
+            return frame
+        for column in ("regularMarketTime", "preMarketTime", "postMarketTime"):
+            if column in frame:
+                frame[column] = pd.to_datetime(frame[column], unit="s", utc=True)
+        return frame.set_index("symbol")
+
+    @staticmethod
+    def yahoo_api_search(query: str, limit: int = 10) -> pd.DataFrame:
+        """
+        Search Yahoo Finance for symbols matching a company name or ticker
+
+        Args:
+        ----------------
+        query (str): Company name or partial symbol, e.g. "apple" or "BMW"
+        limit (int): Maximum number of results, 1–50 (default 10)
+
+        Returns:
+        ----------------
+        pd.DataFrame: Best match first, with ``symbol``, ``shortname``,
+        ``longname``, ``quoteType`` (EQUITY, ETF, INDEX, ...), ``exchange``,
+        ``exchDisp``, ``sector`` and ``industry`` where available
+
+        Raises:
+        ----------------
+        ValueError: If the query is empty or the limit is out of range
+        """
+        if not query or not query.strip():
+            raise ValueError("query must not be empty")
+        if not 1 <= limit <= 50:
+            raise ValueError("limit must be between 1 and 50")
+
+        params = (
+            f"q={requests_quote(query.strip())}&quotesCount={limit}"
+            "&newsCount=0&listsCount=0&enableFuzzyQuery=false"
+        )
+        quotes = (
+            YahooAPI()
+            .get_response(f"{config.SEARCH_URL}?{params}")
+            .json()
+            .get("quotes")
+            or []
+        )
+        columns = [
+            "symbol",
+            "shortname",
+            "longname",
+            "quoteType",
+            "exchange",
+            "exchDisp",
+            "sector",
+            "industry",
+        ]
+        frame = pd.DataFrame(quotes)
+        if frame.empty:
+            return pd.DataFrame(columns=columns)
+        return frame[[c for c in columns if c in frame]]
+
+    def yahoo_api_similar_symbols(self) -> pd.DataFrame:
+        """
+        Get symbols Yahoo Finance recommends as similar to this one
+
+        Returns:
+        ----------------
+        pd.DataFrame: One row per related symbol with ``symbol`` and a
+        relevance ``score``, highest first
+        """
+        results = (
+            self.get_response(f"{config.RECOMMENDATIONS_URL}/{self.ticker}")
+            .json()
+            .get("finance", {})
+            .get("result")
+            or []
+        )
+        related = results[0].get("recommendedSymbols", []) if results else []
+        frame = pd.DataFrame(related, columns=["symbol", "score"])
+        return frame.sort_values("score", ascending=False).reset_index(drop=True)
 
     def plot_yahoo_api_income_statement(
         self,

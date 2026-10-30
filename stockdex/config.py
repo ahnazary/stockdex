@@ -538,3 +538,11 @@ QUOTE_SUMMARY_MODULES = [
     "fundProfile",
     "fundPerformance",
 ]
+
+# Other Yahoo Finance endpoints.
+OPTIONS_URL = "https://query2.finance.yahoo.com/v7/finance/options"
+QUOTE_URL = "https://query1.finance.yahoo.com/v7/finance/quote"
+SEARCH_URL = "https://query2.finance.yahoo.com/v1/finance/search"
+RECOMMENDATIONS_URL = (
+    "https://query2.finance.yahoo.com/v6/finance/recommendationsbysymbol"
+)

@@ -212,6 +212,32 @@ def test_yahoo_api_fund_methods_empty_for_stock():
     assert stock.yahoo_api_fund_performance().empty
 
 
+def test_yahoo_api_options_chain():
+    ticker = Ticker("AAPL")
+    expirations = ticker.yahoo_api_option_expirations()
+    assert len(expirations) > 3
+    chain = ticker.yahoo_api_options_chain(expirations[1])
+    assert {"call", "put"} == set(chain["optionType"])
+    assert (chain["expiration"] == expirations[1]).all()
+
+
+def test_yahoo_api_quotes():
+    quotes = Ticker.yahoo_api_quotes(["AAPL", "MSFT"])
+    assert {"AAPL", "MSFT"} == set(quotes.index)
+    assert (quotes["regularMarketPrice"] > 0).all()
+
+
+def test_yahoo_api_search():
+    results = Ticker.yahoo_api_search("apple", limit=5)
+    assert "AAPL" in set(results["symbol"])
+
+
+def test_yahoo_api_similar_symbols():
+    similar = Ticker("AAPL").yahoo_api_similar_symbols()
+    assert len(similar) > 0
+    assert similar["score"].is_monotonic_decreasing
+
+
 @pytest.mark.parametrize(
     "ticker, frequency, format, period1, period2",
     [
