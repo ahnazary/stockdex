@@ -10,7 +10,7 @@ from bs4 import BeautifulSoup
 from curl_cffi import requests
 
 from stockdex.config import MACROTRENDS_BASE_URL, RESPONSE_TIMEOUT
-from stockdex.exceptions import RateLimitError
+from stockdex.exceptions import ProviderBlockedError, RateLimitError
 from stockdex.lib import get_user_agent
 
 
@@ -50,6 +50,9 @@ class TickerBase:
     # Timestamp of last non-Yahoo request to throttle external API calls
     _last_external_request_time: float = 0.0
     _external_request_delay: float = 5.0  # seconds between non-Yahoo requests
+    # How often to retry an HTTP 403 (bot protection) and how long to wait
+    forbidden_retries: int = 5
+    forbidden_retry_delay: float = 10.0
 
     def get_response(self, url: str) -> requests.Response:
         is_yahoo = "yahoo.com" in url
@@ -86,8 +89,8 @@ class TickerBase:
             raise RateLimitError(url, response.headers.get("Retry-After"))
 
         if response.status_code == 403:
-            for _ in range(5):
-                time.sleep(10)
+            for _ in range(self.forbidden_retries):
+                time.sleep(self.forbidden_retry_delay)
                 response = self.session.get(
                     url,
                     headers=headers,
@@ -98,6 +101,11 @@ class TickerBase:
                     TickerBase._last_external_request_time = time.time()
                 if response.status_code == 200:
                     return response
+                if response.status_code == 429:
+                    raise RateLimitError(url, response.headers.get("Retry-After"))
+
+        if response.status_code in (401, 403):
+            raise ProviderBlockedError(url, response.status_code)
 
         raise RuntimeError(
             f"Failed to fetch URL (status {response.status_code}): {url}"

@@ -62,6 +62,9 @@ Every result is a JSON envelope. Check `ok` first.
 - On errors (`invalid_input`, `busy`, `rate_limited`, `network_error`,
   `no_data`, `provider_schema_error`, `provider_error`), explain the error and
   stop. Don't retry in a loop, and don't make up replacement figures.
+- `provider_blocked` (the website refused the request) and `layout_changed`
+  (a scraped page changed) are about the website, not the company. If the
+  tool has a `source` argument, you may try another source once.
 
 ## Ground rules
 

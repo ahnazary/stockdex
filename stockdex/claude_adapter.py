@@ -14,7 +14,12 @@ import pandas as pd
 from curl_cffi.requests.exceptions import RequestException
 
 from stockdex import Ticker, config
-from stockdex.exceptions import NoDataError, RateLimitError
+from stockdex.exceptions import (
+    LayoutChangedError,
+    NoDataError,
+    ProviderBlockedError,
+    RateLimitError,
+)
 
 MAX_BYTES = 256 * 1024
 MAX_ROWS = 500
@@ -35,6 +40,10 @@ DEFAULT_METRICS = {
 }
 _PROVIDER_LOCK = threading.Lock()
 _SOURCES = {"dividends": "digrin"}
+# The MCP should answer quickly; give bot-protected sites one short retry
+# instead of the library default of five ten-second waits.
+FORBIDDEN_RETRIES = 1
+FORBIDDEN_RETRY_DELAY = 2.0
 # Optional "^" prefix for indices (^GSPC) and "=" for futures/FX (GC=F, EURUSD=X).
 _SYMBOL = re.compile(r"\^?[A-Z0-9]+(?:[.=-][A-Z0-9]+)*", re.ASCII)
 # Placeholder Yahoo parsers emit when a field is absent from the response.
@@ -125,6 +134,14 @@ class StockdexAdapter:
     def __init__(self, ticker_factory=Ticker, clock=None):
         self._ticker_factory = ticker_factory
         self._clock = clock or (lambda: datetime.now(timezone.utc))
+
+    def _provider(self, symbol):
+        provider = self._ticker_factory(ticker=symbol)
+        # Instance attributes only; library users keep the class defaults.
+        if hasattr(provider, "forbidden_retries"):
+            provider.forbidden_retries = FORBIDDEN_RETRIES
+            provider.forbidden_retry_delay = FORBIDDEN_RETRY_DELAY
+        return provider
 
     def get_prices(self, ticker, range="1mo", limit=20):
         return self._request("prices", ticker, {"range": range, "limit": limit})
@@ -364,7 +381,7 @@ class StockdexAdapter:
                 elif operation == "quotes":
                     frame = self._quotes(parameters)
                 else:
-                    provider = self._ticker_factory(ticker=symbol)
+                    provider = self._provider(symbol)
                     frame = self._fetch(
                         provider, operation, parameters, result["warnings"]
                     )
@@ -399,6 +416,18 @@ class StockdexAdapter:
             code, message = (
                 "rate_limited",
                 "Provider rate limit reached. Wait before trying again; do not retry in a loop.",
+            )
+        except ProviderBlockedError:
+            code, message = (
+                "provider_blocked",
+                "The website refused the request, usually because of bot protection. "
+                "Try another source or try again later; do not retry in a loop.",
+            )
+        except LayoutChangedError:
+            code, message = (
+                "layout_changed",
+                "The website's page layout changed and Stockdex could not read it. "
+                "This does not mean the value is zero; try another source.",
             )
         except NoDataError:
             code, message = (

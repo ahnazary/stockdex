@@ -115,9 +115,17 @@ Reading results
 Every call returns a JSON envelope. Check ``ok`` first, then use
 ``records`` and ``columns``. The envelope also includes ``source``,
 ``retrieved_at``, ``warnings`` and ``truncated``. When a call fails,
-``error.code`` is one of ``invalid_input``, ``busy``, ``rate_limited``,
-``network_error``, ``no_data``, ``provider_schema_error`` or
-``provider_error``.
+``error.code`` is one of:
+
+* ``invalid_input``: an argument is out of range or malformed.
+* ``busy``: another request is still running.
+* ``rate_limited``: the provider asked to slow down.
+* ``provider_blocked``: the website refused the request, usually because of
+  bot protection. Try another ``source`` or try later.
+* ``layout_changed``: a scraped page no longer has the expected structure.
+  This says nothing about the value itself.
+* ``network_error``, ``no_data``, ``provider_schema_error`` or
+  ``provider_error``.
 
 * Statement values are raw provider numbers with **unknown currency and units**.
 * ``null`` means the value is missing, not zero.

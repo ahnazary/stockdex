@@ -37,6 +37,35 @@ class RateLimitError(RuntimeError):
         super().__init__(message)
 
 
+class ProviderBlockedError(RuntimeError):
+    """
+    Raised when a website keeps refusing the request (HTTP 401 or 403),
+    usually because of bot protection.
+
+    The message keeps the ``Failed to fetch URL (status N): url`` form so
+    callers that match on the status still work.
+    """
+
+    def __init__(self, url: str, status_code: int) -> None:
+        self.url = url
+        self.status_code = status_code
+        super().__init__(f"Failed to fetch URL (status {status_code}): {url}")
+
+
+class LayoutChangedError(ValueError):
+    """
+    Raised when a scraped page no longer has the structure Stockdex expects,
+    e.g. a table, header or embedded data block is missing.
+
+    This means the website changed, not that the value is zero or absent.
+    """
+
+    def __init__(self, source: str, detail: str) -> None:
+        self.source = source
+        self.detail = detail
+        super().__init__(f"{source} page layout changed: {detail}")
+
+
 class WrongSecurityType(Exception):
     """
     The exception to be shown when a method is called on the wrong security type

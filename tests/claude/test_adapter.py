@@ -14,7 +14,12 @@ from stockdex.claude_adapter import (
     _scalar,
     encode_json,
 )
-from stockdex.exceptions import NoDataError, RateLimitError
+from stockdex.exceptions import (
+    LayoutChangedError,
+    NoDataError,
+    ProviderBlockedError,
+    RateLimitError,
+)
 
 
 def test_default_metrics_are_known():
@@ -178,6 +183,8 @@ def test_missing_values(value):
     "error,code",
     [
         (RateLimitError("https://private/secret", "5"), "rate_limited"),
+        (ProviderBlockedError("https://private/secret", 403), "provider_blocked"),
+        (LayoutChangedError("Finviz", "secret"), "layout_changed"),
         (NoDataError(), "no_data"),
         (RequestException("secret"), "network_error"),
         (KeyError("secret"), "provider_schema_error"),
