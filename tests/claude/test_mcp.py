@@ -35,7 +35,7 @@ def test_stdio_tools(tmp_path):
                         assert tool.annotations.destructive_hint is False
                         limit_schema = tool.input_schema["properties"]["limit"]
                         assert limit_schema["minimum"] == 1
-                        assert limit_schema["maximum"] == 500
+                        assert limit_schema["maximum"] in (25, 500)
                     for name in (
                         "get_prices",
                         "get_financial_statement",
@@ -48,6 +48,11 @@ def test_stdio_tools(tmp_path):
                             json.loads(result.content[0].text)
                             == result.structured_content
                         )
+                    found = await session.call_tool(
+                        "search_ticker", {"query": "bayerische motoren"}
+                    )
+                    assert not found.is_error
+                    assert found.structured_content["records"][0]["symbol"] == "BMW.DE"
                     error = await session.call_tool(
                         "get_prices", {"ticker": "https://bad"}
                     )

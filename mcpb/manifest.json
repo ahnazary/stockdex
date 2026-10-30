@@ -37,6 +37,10 @@
     {
       "name": "get_dividends",
       "description": "Dividend history (ex-dividend date, payable date, amount, currency) for one ticker from Digrin."
+    },
+    {
+      "name": "search_ticker",
+      "description": "Find Yahoo Finance ticker symbols for a company name or partial ticker."
     }
   ],
   "tools_generated": false,

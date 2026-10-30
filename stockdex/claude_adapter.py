@@ -35,6 +35,10 @@ _SOURCES = {"dividends": "digrin"}
 _SYMBOL = re.compile(r"\^?[A-Z0-9]+(?:[.=-][A-Z0-9]+)*", re.ASCII)
 # Placeholder Yahoo parsers emit when a field is absent from the response.
 _UNAVAILABLE = "Data Not Available"
+# Company names and partial tickers accepted by search: letters, digits,
+# spaces and common punctuation in names, no URLs or control characters.
+_SEARCH_QUERY = re.compile(r"[\w .,&'^=()/-]{1,64}")
+MAX_SEARCH_RESULTS = 25
 # Yahoo datasets exposed through StockdexAdapter.get_dataset.
 # "record" methods return one value per field; "table" methods return rows.
 YAHOO_DATASETS = {
@@ -147,6 +151,10 @@ class StockdexAdapter:
     def get_dividends(self, ticker, limit=20):
         return self._request("dividends", ticker, {"limit": limit})
 
+    def search(self, query, limit=10):
+        """Find Yahoo Finance symbols for a company name or partial ticker."""
+        return self._request("search", None, {"query": query, "limit": limit})
+
     def get_dataset(self, ticker, dataset, limit=None):
         """
         One Yahoo Finance dataset from YAHOO_DATASETS, e.g. "profile".
@@ -157,6 +165,8 @@ class StockdexAdapter:
         return self._request("dataset", ticker, {"dataset": dataset, "limit": limit})
 
     def _validate(self, operation, ticker, parameters):
+        if operation == "search":
+            return self._validate_search(parameters)
         if (
             not isinstance(ticker, str)
             or not ticker.isascii()
@@ -230,6 +240,26 @@ class StockdexAdapter:
             parameters["metrics"] = metrics
         return ticker
 
+    @staticmethod
+    def _validate_search(parameters):
+        query = parameters["query"]
+        if (
+            not isinstance(query, str)
+            or "://" in query
+            or any(not ch.isprintable() for ch in query)
+            or not _SEARCH_QUERY.fullmatch(query.strip())
+        ):
+            raise InputError(
+                "query must be a company name or ticker of 1–64 characters, not a URL."
+            )
+        parameters["query"] = " ".join(query.split())
+        limit = parameters["limit"]
+        if type(limit) is not int or not 1 <= limit <= MAX_SEARCH_RESULTS:
+            raise InputError(
+                f"limit must be an integer from 1 to {MAX_SEARCH_RESULTS}."
+            )
+        return None
+
     def _request(self, operation, ticker, parameters):
         result = {
             "schema_version": "1.0",
@@ -259,8 +289,13 @@ class StockdexAdapter:
                 }
                 return result
             try:
-                provider = self._ticker_factory(ticker=symbol)
-                frame = self._fetch(provider, operation, parameters, result["warnings"])
+                if operation == "search":
+                    frame = self._search(parameters)
+                else:
+                    provider = self._ticker_factory(ticker=symbol)
+                    frame = self._fetch(
+                        provider, operation, parameters, result["warnings"]
+                    )
             finally:
                 _PROVIDER_LOCK.release()
             result["retrieved_at"] = self._clock().isoformat()
@@ -391,6 +426,12 @@ class StockdexAdapter:
         if operation == "dataset":
             return self._dataset(provider, parameters["dataset"])
         return self._dividends(provider.digrin_dividend, warnings)
+
+    def _search(self, parameters):
+        search = getattr(self._ticker_factory, "yahoo_api_search", None)
+        if search is None:
+            search = Ticker.yahoo_api_search
+        return search(parameters["query"], limit=parameters["limit"])
 
     @staticmethod
     def _dataset(provider, dataset):

@@ -13,6 +13,7 @@ EXPECTED_TOOLS = {
     "get_prices",
     "get_financial_statement",
     "get_dividends",
+    "search_ticker",
 }
 
 
@@ -58,6 +59,17 @@ class FakeTicker:
 
     yahoo_api_cash_flow = yahoo_api_income_statement
     yahoo_api_balance_sheet = yahoo_api_income_statement
+
+    @staticmethod
+    def yahoo_api_search(query, limit=10):
+        return pd.DataFrame(
+            {
+                "symbol": ["BMW.DE", "BMWKY"],
+                "shortname": ["BMW", "BMW ADR"],
+                "quoteType": ["EQUITY", "EQUITY"],
+                "exchange": ["GER", "PNK"],
+            }
+        ).head(limit)
 
     @property
     def digrin_dividend(self):

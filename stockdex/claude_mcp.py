@@ -109,6 +109,17 @@ def create_server(adapter=None):
         """Get the dividend history (ex-dividend date, payable date, amount, currency) for one ticker from Digrin, newest first. Missing values are null, not zero."""
         return await invoke(adapter.get_dividends, ticker=ticker, limit=limit)
 
+    @server.tool(
+        title="Search ticker symbols",
+        annotations=tool_annotations("Search ticker symbols"),
+    )
+    async def search_ticker(
+        query: str,
+        limit: Annotated[int, Field(strict=True, ge=1, le=25)] = 10,
+    ) -> CallToolResult:
+        """Find Yahoo Finance ticker symbols for a company name or partial ticker, e.g. "Bayerische Motoren" -> BMW.DE. Returns symbol, name, type (EQUITY, ETF, INDEX, ...), exchange, sector and industry, best match first. Use it before other tools when the user names a company instead of a symbol."""
+        return await invoke(adapter.search, query=query, limit=limit)
+
     return server
 
 
