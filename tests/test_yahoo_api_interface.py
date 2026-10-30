@@ -125,6 +125,33 @@ def test_yahoo_api_quote_summary():
 
 
 @pytest.mark.parametrize(
+    "method, field",
+    [
+        ("yahoo_api_profile", "sector"),
+        ("yahoo_api_market_price", "regularMarketPrice"),
+        ("yahoo_api_summary_detail", "marketCap"),
+        ("yahoo_api_key_statistics", "enterpriseValue"),
+        ("yahoo_api_financial_data", "targetMeanPrice"),
+    ],
+)
+def test_yahoo_api_company_records(method, field):
+    frame = getattr(Ticker("AAPL"), method)()
+    assert list(frame.columns) == ["AAPL"]
+    assert field in frame.index
+
+
+def test_yahoo_api_officers():
+    officers = Ticker("AAPL").yahoo_api_officers()
+    assert len(officers) > 0
+    assert {"name", "title"} <= set(officers.columns)
+
+
+def test_yahoo_api_calendar_events():
+    events = Ticker("AAPL").yahoo_api_calendar_events()
+    assert any(index.startswith("earningsDate") for index in events.index)
+
+
+@pytest.mark.parametrize(
     "ticker, frequency, format, period1, period2",
     [
         # 2 years ago

@@ -601,6 +601,204 @@ class YahooAPI(TickerBase):
             raise
         return {}
 
+    _EPOCH_FIELDS = {
+        "exDividendDate",
+        "dividendDate",
+        "lastDividendDate",
+        "lastFiscalYearEnd",
+        "nextFiscalYearEnd",
+        "mostRecentQuarter",
+        "lastSplitDate",
+        "firstTradeDateEpochUtc",
+        "regularMarketTime",
+        "preMarketTime",
+        "postMarketTime",
+        "governanceEpochDate",
+        "compensationAsOfEpochDate",
+        "sharesShortPreviousMonthDate",
+        "dateShortInterest",
+        "epochGradeDate",
+        "startDate",
+        "reportDate",
+        "latestTransDate",
+        "positionDirectDate",
+        "quarter",
+        "epochDate",
+    }
+
+    @classmethod
+    def _to_datetime(cls, key, value):
+        """Convert known epoch-second fields to UTC timestamps."""
+        if key in cls._EPOCH_FIELDS and isinstance(value, (int, float)):
+            return pd.to_datetime(value, unit="s", utc=True)
+        return value
+
+    def _quote_summary_record(
+        self, module: str, format: Literal["fmt", "raw"] = "raw", drop=()
+    ) -> pd.DataFrame:
+        """
+        One quoteSummary module as a single-column DataFrame (field -> value)
+
+        Nested values (dicts and lists) are left out; dedicated methods expose
+        the nested parts that are useful on their own.
+        """
+        data = self.yahoo_api_quote_summary(module, format).get(module, {})
+        values = {
+            key: self._to_datetime(key, value) if format == "raw" else value
+            for key, value in data.items()
+            if key not in ("maxAge", *drop) and not isinstance(value, (dict, list))
+        }
+        return pd.DataFrame.from_dict(values, orient="index", columns=[self.ticker])
+
+    def _quote_summary_table(
+        self,
+        module: str,
+        key: str,
+        format: Literal["fmt", "raw"] = "raw",
+        data: Union[dict, None] = None,
+    ) -> pd.DataFrame:
+        """
+        A list inside a quoteSummary module as a DataFrame, one row per item
+        """
+        if data is None:
+            data = self.yahoo_api_quote_summary(module, format).get(module, {})
+        rows = [
+            {
+                k: self._to_datetime(k, v) if format == "raw" else v
+                for k, v in item.items()
+                if k != "maxAge"
+            }
+            for item in data.get(key) or []
+        ]
+        return pd.DataFrame(rows)
+
+    def yahoo_api_profile(self) -> pd.DataFrame:
+        """
+        Get the company profile from Yahoo Finance
+
+        Returns:
+        ----------------
+        pd.DataFrame: Address, website, sector, industry, number of employees,
+        business summary and governance risk scores, one row per field
+        """
+        return self._quote_summary_record("assetProfile", drop=("companyOfficers",))
+
+    def yahoo_api_officers(self) -> pd.DataFrame:
+        """
+        Get the company's key executives from Yahoo Finance
+
+        Returns:
+        ----------------
+        pd.DataFrame: One row per officer with name, title, age, year born,
+        fiscal year and total pay (raw numbers)
+        """
+        return self._quote_summary_table("assetProfile", "companyOfficers")
+
+    def yahoo_api_market_price(
+        self, format: Literal["fmt", "raw"] = "raw"
+    ) -> pd.DataFrame:
+        """
+        Get the current market price block from Yahoo Finance
+
+        Includes regular, pre-market and post-market price and change,
+        market state, currency, exchange and market cap.
+
+        Args:
+        ----------------
+        format (str): "raw" for numbers and timestamps, "fmt" for display strings
+
+        Returns:
+        ----------------
+        pd.DataFrame: One row per field
+        """
+        return self._quote_summary_record("price", format)
+
+    def yahoo_api_summary_detail(
+        self, format: Literal["fmt", "raw"] = "raw"
+    ) -> pd.DataFrame:
+        """
+        Get the quote summary details from Yahoo Finance
+
+        Includes previous close, open, day and 52-week ranges, volume,
+        market cap, beta, trailing and forward P/E, dividend rate and yield,
+        and ex-dividend date.
+
+        Args:
+        ----------------
+        format (str): "raw" for numbers and timestamps, "fmt" for display strings
+
+        Returns:
+        ----------------
+        pd.DataFrame: One row per field
+        """
+        return self._quote_summary_record("summaryDetail", format)
+
+    def yahoo_api_key_statistics(
+        self, format: Literal["fmt", "raw"] = "raw"
+    ) -> pd.DataFrame:
+        """
+        Get key statistics from Yahoo Finance
+
+        Includes enterprise value, forward P/E, PEG, price/book, shares
+        outstanding and float, short interest, insider and institutional
+        ownership, book value, last split and fiscal year dates.
+
+        Args:
+        ----------------
+        format (str): "raw" for numbers and timestamps, "fmt" for display strings
+
+        Returns:
+        ----------------
+        pd.DataFrame: One row per field
+        """
+        return self._quote_summary_record("defaultKeyStatistics", format)
+
+    def yahoo_api_financial_data(
+        self, format: Literal["fmt", "raw"] = "raw"
+    ) -> pd.DataFrame:
+        """
+        Get financial data and analyst price targets from Yahoo Finance
+
+        Includes current price, analyst target high/low/mean/median,
+        recommendation, revenue, margins, cash flow, debt, return on equity
+        and growth rates.
+
+        Args:
+        ----------------
+        format (str): "raw" for numbers, "fmt" for display strings
+
+        Returns:
+        ----------------
+        pd.DataFrame: One row per field
+        """
+        return self._quote_summary_record("financialData", format)
+
+    def yahoo_api_calendar_events(self) -> pd.DataFrame:
+        """
+        Get upcoming earnings and dividend dates from Yahoo Finance
+
+        Returns:
+        ----------------
+        pd.DataFrame: One row per field: next earnings date(s), earnings call
+        date, whether the date is an estimate, EPS and revenue estimate
+        average/low/high, ex-dividend date and dividend payment date
+        """
+        data = self.yahoo_api_quote_summary("calendarEvents").get("calendarEvents", {})
+        earnings = data.get("earnings") or {}
+        values = {}
+        for key, value in earnings.items():
+            if key in ("earningsDate", "earningsCallDate"):
+                dates = [pd.to_datetime(v, unit="s", utc=True) for v in value or []]
+                for i, date in enumerate(dates):
+                    suffix = "" if len(dates) == 1 else f"_{i + 1}"
+                    values[f"{key}{suffix}"] = date
+            else:
+                values[key] = value
+        for key in ("exDividendDate", "dividendDate"):
+            if data.get(key) is not None:
+                values[key] = self._to_datetime(key, data[key])
+        return pd.DataFrame.from_dict(values, orient="index", columns=[self.ticker])
+
     def plot_yahoo_api_income_statement(
         self,
         frequency: Literal["annual", "quarterly"] = "annual",
