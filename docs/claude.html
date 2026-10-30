@@ -3,35 +3,44 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Contributing" href="contributing.html"><link rel="prev" title="Building dashboards with multiple plots" href="readme_files/plots_and_figures/building_dash_apps.html">
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="API reference" href="api_reference.html"><link rel="prev" title="Building dashboards with multiple plots" href="readme_files/plots_and_figures/building_dash_apps.html">
+        <link rel="prefetch" href="_static/stockdex_logo.png" as="image">
 
-    <!-- Generated with Sphinx 7.2.2 and Furo 2025.12.19 -->
-        <title>Use with Claude - Stockdex documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="shortcut icon" href="_static/stockdex_logo.png"><!-- Generated with Sphinx 9.0.4 and Furo 2025.12.19 -->
+        <title>Use with Claude - Stockdex</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d75fae25" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=3629b78e" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=a1c4f328" />
     
     
 
 
 <style>
   body {
-    --color-code-background: #eeffcc;
+    --color-code-background: #f0f0f0;
   --color-code-foreground: black;
+  --color-brand-primary: #0f766e;
+  --color-brand-content: #0f766e;
+  --font-stack: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   
   }
   @media not print {
     body[data-theme="dark"] {
       --color-code-background: #272822;
   --color-code-foreground: #f8f8f2;
+  --color-brand-primary: #2dd4bf;
+  --color-brand-content: #2dd4bf;
   
     }
     @media (prefers-color-scheme: dark) {
       body:not([data-theme="light"]) {
         --color-code-background: #272822;
   --color-code-foreground: #f8f8f2;
+  --color-brand-primary: #2dd4bf;
+  --color-brand-content: #2dd4bf;
   
       }
     }
@@ -163,7 +172,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">Stockdex  documentation</div></a>
+      <a href="index.html"><div class="brand">Stockdex</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -183,8 +192,11 @@
     <div class="sidebar-container">
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="_static/stockdex_logo.png" alt="Logo"/>
+  </div>
   
-  <span class="sidebar-brand-text">Stockdex  documentation</span>
+  <span class="sidebar-brand-text">Stockdex</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -192,26 +204,31 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+  <p class="caption" role="heading"><span class="caption-text">Guide</span></p>
 <ul class="current">
 <li class="toctree-l1 has-children"><a class="reference internal" href="data_sources.html">Data Sources</a><input aria-label="Toggle navigation of Data Sources" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="readme_files/raw_dataframes/yahoo_api_doc.html">Yahoo Finance (API)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="readme_files/raw_dataframes/yahoo_web_doc.html">Yahoo Finance (Website)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="readme_files/raw_dataframes/finviz_doc.html">Finviz</a></li>
 <li class="toctree-l2"><a class="reference internal" href="readme_files/raw_dataframes/digrin_doc.html">Digrin</a></li>
 <li class="toctree-l2"><a class="reference internal" href="readme_files/raw_dataframes/macrotrends_doc.html">Macrotrends</a></li>
-<li class="toctree-l2"><a class="reference internal" href="readme_files/raw_dataframes/jsutetf_doc.html">justETF</a></li>
+<li class="toctree-l2"><a class="reference internal" href="readme_files/raw_dataframes/justetf_doc.html">justETF</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="plots_and_figures.html">Plots and figures</a><input aria-label="Toggle navigation of Plots and figures" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="readme_files/plots_and_figures/macrotrends_plots.html">Macrotrends Plots</a></li>
 <li class="toctree-l2"><a class="reference internal" href="readme_files/plots_and_figures/yahoo_api_plots.html">Yahoo API Plots</a></li>
 <li class="toctree-l2"><a class="reference internal" href="readme_files/plots_and_figures/digrin_plots.html">Digrin Plots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="readme_files/plots_and_figures/finviz_plots.html">Finviz Plots</a></li>
 <li class="toctree-l2"><a class="reference internal" href="readme_files/plots_and_figures/sankey_charts.html">Sankey charts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="readme_files/plots_and_figures/building_dash_apps.html">Building dashboards with multiple plots</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Use with Claude</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 </ul>
 
@@ -233,12 +250,16 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="_sources/claude.rst.txt" title="View this page">
+  <a class="muted-link" href="https://github.com/ahnazary/stockdex/blob/main/docs/claude.rst?plain=true" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
-</div>
-<div class="theme-toggle-container theme-toggle-content">
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/ahnazary/stockdex/edit/main/docs/claude.rst" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
               <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
               <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
@@ -252,19 +273,42 @@
         </div>
         <article role="main" id="furo-main-content">
           <section id="use-with-claude">
-<h1>Use with Claude<a class="headerlink" href="#use-with-claude" title="Link to this heading"></a></h1>
+<h1>Use with Claude<a class="headerlink" href="#use-with-claude" title="Link to this heading">¶</a></h1>
 <p>Stockdex includes a local, read-only <a class="reference external" href="https://modelcontextprotocol.io">Model Context Protocol</a> (MCP) server, so Claude can look up stock
-data for you. It provides three tools:</p>
+data for you. It provides 21 read-only tools:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">get_prices</span></code>: historical daily OHLCV bars from Yahoo Finance</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">get_financial_statement</span></code>: income statement, cash flow and balance sheet
-metrics from Yahoo Finance</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">get_dividends</span></code>: dividend history from Digrin</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">search_ticker</span></code>: find ticker symbols for a company name (Yahoo Finance)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_quotes</span></code>: current quotes for up to 20 symbols (Yahoo Finance)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_prices</span></code>: daily open, high, low, close and volume, up to 1 year (Yahoo Finance)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_financial_statement</span></code>: annual or quarterly income statement, cash flow or balance sheet: up to 5 years from Yahoo Finance or about 15 from Macrotrends (Yahoo Finance / Macrotrends)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_margins_and_ratios</span></code>: gross, operating, EBITDA, pre-tax and net margin history, and key financial ratios (Macrotrends)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_key_statistics</span></code>: market cap, P/E, beta, 52-week range, margins and analyst price targets (Yahoo Finance)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_valuation_history</span></code>: market cap, enterprise value and valuation ratios over time (Yahoo Finance)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_company_profile</span></code>: business summary, sector, executives and related tickers (Yahoo Finance)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_revenue_breakdown</span></code>: annual revenue by business segment, region or product (Finviz)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_analyst_estimates</span></code>: ePS and revenue estimates, recommendations, rating changes and EPS surprises (Yahoo Finance)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_earnings_reaction</span></code>: price moves around earnings reports, EPS and revenue surprises, and estimate revisions (Finviz)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_earnings_calendar</span></code>: next earnings date, estimates and dividend dates (Yahoo Finance)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_holders</span></code>: institutional and fund holders, ownership breakdown and insider transactions (Yahoo Finance)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_insider_trades</span></code>: recent insider buys and sales with price, shares and value (Finviz)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_sec_filings</span></code>: recent SEC filings with links (Yahoo Finance)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_dividends</span></code>: dividend history (Digrin by default, Yahoo Finance as an alternative or fallback) (Digrin / Yahoo Finance)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_dividend_metrics</span></code>: payout ratio and dividend growth projections, and annual dividend, yield and payout (Digrin / Finviz)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_splits</span></code>: stock split history (Yahoo Finance)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_options_chain</span></code>: calls and puts for one expiration date (Yahoo Finance)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_fund_holdings</span></code>: eTF and fund top holdings, sector weights and asset allocation (Yahoo Finance)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_fund_profile</span></code>: eTF and fund fees, category and performance vs category (Yahoo Finance)</p></li>
 </ul>
+<p>Most data comes from Yahoo Finance. Long statement histories and margins come
+from Macrotrends, dividend metrics from Digrin and Finviz, and revenue
+breakdowns, insider trades and earnings reactions from Finviz. justETF is not
+available through the MCP server because it needs a Chrome browser; use the
+<code class="docutils literal notranslate"><span class="pre">justetf_*</span></code> methods in Python instead.</p>
 <p>The server runs on your computer and needs no API key. Requests go to Yahoo
-Finance and Digrin, and results you use in a conversation are sent to Claude.</p>
+Finance, Macrotrends, Digrin and Finviz, and results you use in a conversation
+are sent to Claude.</p>
 <section id="claude-desktop-one-click">
-<h2>Claude Desktop (one click)<a class="headerlink" href="#claude-desktop-one-click" title="Link to this heading"></a></h2>
+<h2>Claude Desktop (one click)<a class="headerlink" href="#claude-desktop-one-click" title="Link to this heading">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Download <code class="docutils literal notranslate"><span class="pre">stockdex.mcpb</span></code> from the latest
 <a class="reference external" href="https://github.com/ahnazary/stockdex/releases/latest">GitHub release</a>.</p></li>
@@ -275,7 +319,7 @@ Desktop, and click <strong>Install</strong>.</p></li>
 terminal.</p>
 </section>
 <section id="claude-code-plugin">
-<h2>Claude Code (plugin)<a class="headerlink" href="#claude-code-plugin" title="Link to this heading"></a></h2>
+<span id="id1"></span><h2>Claude Code (plugin)<a class="headerlink" href="#claude-code-plugin" title="Link to this heading">¶</a></h2>
 <p>The plugin adds the MCP server and a skill that tells Claude when and how to
 use it. It requires <a class="reference external" href="https://docs.astral.sh/uv/">uv</a>.</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>/plugin marketplace add ahnazary/stockdex
@@ -286,7 +330,7 @@ use it. It requires <a class="reference external" href="https://docs.astral.sh/u
 the last five years?”</em></p>
 </section>
 <section id="other-mcp-clients">
-<h2>Other MCP clients<a class="headerlink" href="#other-mcp-clients" title="Link to this heading"></a></h2>
+<h2>Other MCP clients<a class="headerlink" href="#other-mcp-clients" title="Link to this heading">¶</a></h2>
 <p>Any MCP client that can start a stdio server can run it with <code class="docutils literal notranslate"><span class="pre">uvx</span></code>:</p>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
 <span class="w">  </span><span class="nt">"mcpServers"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
@@ -302,7 +346,7 @@ the last five years?”</em></p>
 <code class="docutils literal notranslate"><span class="pre">command</span></code> to <code class="docutils literal notranslate"><span class="pre">stockdex-mcp</span></code>.</p>
 </section>
 <section id="command-line">
-<h2>Command line<a class="headerlink" href="#command-line" title="Link to this heading"></a></h2>
+<h2>Command line<a class="headerlink" href="#command-line" title="Link to this heading">¶</a></h2>
 <p>The same operations are also available as a JSON command-line tool:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>stockdex
 stockdex-claude<span class="w"> </span>prices<span class="w"> </span>AAPL<span class="w"> </span>--range<span class="w"> </span>3mo<span class="w"> </span>--limit<span class="w"> </span><span class="m">5</span>
@@ -312,39 +356,60 @@ stockdex-claude<span class="w"> </span>dividends<span class="w"> </span>KO
 </div>
 </section>
 <section id="arguments-and-limits">
-<h2>Arguments and limits<a class="headerlink" href="#arguments-and-limits" title="Link to this heading"></a></h2>
+<h2>Arguments and limits<a class="headerlink" href="#arguments-and-limits" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><strong>Tickers</strong> use Yahoo symbols, e.g. <code class="docutils literal notranslate"><span class="pre">AAPL</span></code>, <code class="docutils literal notranslate"><span class="pre">BRK-B</span></code>, <code class="docutils literal notranslate"><span class="pre">BMW.DE</span></code>,
 <code class="docutils literal notranslate"><span class="pre">^GSPC</span></code> or <code class="docutils literal notranslate"><span class="pre">GC=F</span></code>.</p></li>
 <li><p><strong>limit</strong> sets how many rows come back (1–500, default 20, newest first).
 Output is also capped at 256 KiB.</p></li>
+<li><p><strong>Datasets</strong>: tools such as <code class="docutils literal notranslate"><span class="pre">get_key_statistics</span></code> and <code class="docutils literal notranslate"><span class="pre">get_holders</span></code>
+take a <code class="docutils literal notranslate"><span class="pre">dataset</span></code> argument that selects one view; each tool lists its
+allowed values and default.</p></li>
+<li><p><strong>Dividends</strong> use <code class="docutils literal notranslate"><span class="pre">source</span></code> <code class="docutils literal notranslate"><span class="pre">digrin</span></code> (default), <code class="docutils literal notranslate"><span class="pre">yahoo</span></code> or <code class="docutils literal notranslate"><span class="pre">auto</span></code>
+(Digrin, falling back to Yahoo Finance).</p></li>
 <li><p><strong>Prices</strong> use <code class="docutils literal notranslate"><span class="pre">range</span></code> <code class="docutils literal notranslate"><span class="pre">1mo</span></code> (default), <code class="docutils literal notranslate"><span class="pre">3mo</span></code>, <code class="docutils literal notranslate"><span class="pre">6mo</span></code> or <code class="docutils literal notranslate"><span class="pre">1y</span></code> at a
 daily interval. These are historical bars, not real-time quotes.</p></li>
-<li><p><strong>Financial statements</strong>:</p>
+<li><p><strong>Financial statements</strong> (<code class="docutils literal notranslate"><span class="pre">get_financial_statement</span></code>):</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">statement</span></code> is <code class="docutils literal notranslate"><span class="pre">income_statement</span></code> (default), <code class="docutils literal notranslate"><span class="pre">cash_flow</span></code> or
 <code class="docutils literal notranslate"><span class="pre">balance_sheet</span></code>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">frequency</span></code> is <code class="docutils literal notranslate"><span class="pre">annual</span></code> (default) or <code class="docutils literal notranslate"><span class="pre">quarterly</span></code>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">start_date</span></code> and <code class="docutils literal notranslate"><span class="pre">end_date</span></code> are <code class="docutils literal notranslate"><span class="pre">YYYY-MM-DD</span></code>. The window can be at
-most five years, and the end date is exclusive.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">metrics</span></code> takes up to 20 names from <code class="docutils literal notranslate"><span class="pre">stockdex/config.py</span></code>, without a
-prefix, e.g. <code class="docutils literal notranslate"><span class="pre">TotalRevenue</span></code>. Output columns have an <code class="docutils literal notranslate"><span class="pre">annual</span></code> or
-<code class="docutils literal notranslate"><span class="pre">quarterly</span></code> prefix.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">start_date</span></code> and <code class="docutils literal notranslate"><span class="pre">end_date</span></code> are <code class="docutils literal notranslate"><span class="pre">YYYY-MM-DD</span></code>; the end date is
+exclusive.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">source=&quot;yahoo&quot;</span></code> (default): the window can be at most five years.
+<code class="docutils literal notranslate"><span class="pre">metrics</span></code> takes up to 20 names from <code class="docutils literal notranslate"><span class="pre">stockdex/config.py</span></code> without a
+prefix, e.g. <code class="docutils literal notranslate"><span class="pre">TotalRevenue</span></code>, and output columns have an <code class="docutils literal notranslate"><span class="pre">annual</span></code> or
+<code class="docutils literal notranslate"><span class="pre">quarterly</span></code> prefix, e.g. <code class="docutils literal notranslate"><span class="pre">annualTotalRevenue</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">source=&quot;macrotrends&quot;</span></code>: about 15 years, with no window limit.
+<code class="docutils literal notranslate"><span class="pre">metrics</span></code> takes up to 20 Macrotrends row names, e.g. <code class="docutils literal notranslate"><span class="pre">Revenue</span></code> or
+<code class="docutils literal notranslate"><span class="pre">Net</span> <span class="pre">Income</span></code> (case-insensitive), and output columns are those names
+without a prefix. Amounts are in millions of the reporting currency, but
+per-share figures such as EPS and ratios are not scaled: an EPS of
+<code class="docutils literal notranslate"><span class="pre">7.46</span></code> is 7.46 per share.</p></li>
 </ul>
 </li>
 </ul>
 </section>
 <section id="reading-results">
-<h2>Reading results<a class="headerlink" href="#reading-results" title="Link to this heading"></a></h2>
+<h2>Reading results<a class="headerlink" href="#reading-results" title="Link to this heading">¶</a></h2>
 <p>Every call returns a JSON envelope. Check <code class="docutils literal notranslate"><span class="pre">ok</span></code> first, then use
 <code class="docutils literal notranslate"><span class="pre">records</span></code> and <code class="docutils literal notranslate"><span class="pre">columns</span></code>. The envelope also includes <code class="docutils literal notranslate"><span class="pre">source</span></code>,
 <code class="docutils literal notranslate"><span class="pre">retrieved_at</span></code>, <code class="docutils literal notranslate"><span class="pre">warnings</span></code> and <code class="docutils literal notranslate"><span class="pre">truncated</span></code>. When a call fails,
-<code class="docutils literal notranslate"><span class="pre">error.code</span></code> is one of <code class="docutils literal notranslate"><span class="pre">invalid_input</span></code>, <code class="docutils literal notranslate"><span class="pre">busy</span></code>, <code class="docutils literal notranslate"><span class="pre">rate_limited</span></code>,
-<code class="docutils literal notranslate"><span class="pre">network_error</span></code>, <code class="docutils literal notranslate"><span class="pre">no_data</span></code>, <code class="docutils literal notranslate"><span class="pre">provider_schema_error</span></code> or
-<code class="docutils literal notranslate"><span class="pre">provider_error</span></code>.</p>
+<code class="docutils literal notranslate"><span class="pre">error.code</span></code> is one of:</p>
 <ul class="simple">
-<li><p>Statement values are raw provider numbers with <strong>unknown currency and units</strong>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">invalid_input</span></code>: an argument is out of range or malformed.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">busy</span></code>: another request is still running.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rate_limited</span></code>: the provider asked to slow down.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">provider_blocked</span></code>: the website refused the request, usually because of
+bot protection. Try another <code class="docutils literal notranslate"><span class="pre">source</span></code> or try later.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">layout_changed</span></code>: a scraped page no longer has the expected structure.
+This says nothing about the value itself.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">network_error</span></code>, <code class="docutils literal notranslate"><span class="pre">no_data</span></code>, <code class="docutils literal notranslate"><span class="pre">provider_schema_error</span></code> or
+<code class="docutils literal notranslate"><span class="pre">provider_error</span></code>.</p></li>
+<li><p>Yahoo Finance statement values are raw provider numbers with <strong>unknown
+currency and units</strong>. Macrotrends units are described above.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">null</span></code> means the value is missing, not zero.</p></li>
+<li><p>Fractions are not percentages: a yield or margin of <code class="docutils literal notranslate"><span class="pre">0.031</span></code> is 3.1%.</p></li>
 <li><p>Only one provider request runs at a time. Respect provider rate limits and
 terms of use.</p></li>
 <li><p>The data isn’t guaranteed to be accurate and is not investment advice.</p></li>
@@ -357,12 +422,12 @@ terms of use.</p></li>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="contributing.html">
+          <a class="next-page" href="api_reference.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Contributing</div>
+                <div class="title">API reference</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -381,7 +446,7 @@ terms of use.</p></li>
         <div class="bottom-of-page">
           <div class="left-details">
             <div class="copyright">
-                Copyright &#169; 2024, Amir Nazary
+                Copyright &#169; 2024-2026, Amir Nazary
             </div>
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             
@@ -389,7 +454,10 @@ terms of use.</p></li>
             
           </div>
           <div class="right-details">
-            
+            <div class="icons">
+              <a class="muted-link " href="https://github.com/ahnazary/stockdex" aria-label="GitHub"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg></a>
+              
+            </div>
           </div>
         </div>
         
@@ -425,13 +493,12 @@ terms of use.</p></li>
       
     </aside>
   </div>
-</div><script src="_static/jquery.js?v=5d32c60e"></script>
-    <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="_static/doctools.js?v=888ff710"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+</div><script src="_static/documentation_options.js?v=8a448e45"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/scripts/furo.js?v=46bd48cc"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/copybutton.js?v=fd10adb8"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
     </body>
 </html>

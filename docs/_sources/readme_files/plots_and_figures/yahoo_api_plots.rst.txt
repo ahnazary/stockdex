@@ -373,3 +373,25 @@ Creates an interactive plot of general financial data for a given ticker using Y
     :align: center
     :width: 80%
     :class: rounded
+
+
+Plot any DataFrame
+------------------
+
+``stockdex.lib.plot_dataframe`` is the helper behind the ``plot_*`` methods.
+Use it to chart any DataFrame with dates as the index and one column per
+series.
+
+.. code-block:: python
+
+    from stockdex import Ticker
+    from stockdex.lib import plot_dataframe
+
+    ticker = Ticker(ticker="MSFT")
+    data = ticker.yahoo_api_financials(format="raw")
+    plot_dataframe(
+        data[["annualTotalRevenue", "annualNetIncome"]],
+        title="MSFT revenue and net income",
+        logaritmic=False,
+        draw_line_chart=False,
+    )

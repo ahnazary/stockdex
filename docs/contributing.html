@@ -3,35 +3,44 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="prev" title="Use with Claude" href="claude.html">
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="prev" title="Changelog" href="changelog.html">
+        <link rel="prefetch" href="_static/stockdex_logo.png" as="image">
 
-    <!-- Generated with Sphinx 7.2.2 and Furo 2025.12.19 -->
-        <title>Contributing - Stockdex documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="shortcut icon" href="_static/stockdex_logo.png"><!-- Generated with Sphinx 9.0.4 and Furo 2025.12.19 -->
+        <title>Contributing - Stockdex</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d75fae25" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=3629b78e" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=a1c4f328" />
     
     
 
 
 <style>
   body {
-    --color-code-background: #eeffcc;
+    --color-code-background: #f0f0f0;
   --color-code-foreground: black;
+  --color-brand-primary: #0f766e;
+  --color-brand-content: #0f766e;
+  --font-stack: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   
   }
   @media not print {
     body[data-theme="dark"] {
       --color-code-background: #272822;
   --color-code-foreground: #f8f8f2;
+  --color-brand-primary: #2dd4bf;
+  --color-brand-content: #2dd4bf;
   
     }
     @media (prefers-color-scheme: dark) {
       body:not([data-theme="light"]) {
         --color-code-background: #272822;
   --color-code-foreground: #f8f8f2;
+  --color-brand-primary: #2dd4bf;
+  --color-brand-content: #2dd4bf;
   
       }
     }
@@ -163,7 +172,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">Stockdex  documentation</div></a>
+      <a href="index.html"><div class="brand">Stockdex</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -183,8 +192,11 @@
     <div class="sidebar-container">
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="_static/stockdex_logo.png" alt="Logo"/>
+  </div>
   
-  <span class="sidebar-brand-text">Stockdex  documentation</span>
+  <span class="sidebar-brand-text">Stockdex</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -192,26 +204,31 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
+  <p class="caption" role="heading"><span class="caption-text">Guide</span></p>
+<ul>
 <li class="toctree-l1 has-children"><a class="reference internal" href="data_sources.html">Data Sources</a><input aria-label="Toggle navigation of Data Sources" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="readme_files/raw_dataframes/yahoo_api_doc.html">Yahoo Finance (API)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="readme_files/raw_dataframes/yahoo_web_doc.html">Yahoo Finance (Website)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="readme_files/raw_dataframes/finviz_doc.html">Finviz</a></li>
 <li class="toctree-l2"><a class="reference internal" href="readme_files/raw_dataframes/digrin_doc.html">Digrin</a></li>
 <li class="toctree-l2"><a class="reference internal" href="readme_files/raw_dataframes/macrotrends_doc.html">Macrotrends</a></li>
-<li class="toctree-l2"><a class="reference internal" href="readme_files/raw_dataframes/jsutetf_doc.html">justETF</a></li>
+<li class="toctree-l2"><a class="reference internal" href="readme_files/raw_dataframes/justetf_doc.html">justETF</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="plots_and_figures.html">Plots and figures</a><input aria-label="Toggle navigation of Plots and figures" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="readme_files/plots_and_figures/macrotrends_plots.html">Macrotrends Plots</a></li>
 <li class="toctree-l2"><a class="reference internal" href="readme_files/plots_and_figures/yahoo_api_plots.html">Yahoo API Plots</a></li>
 <li class="toctree-l2"><a class="reference internal" href="readme_files/plots_and_figures/digrin_plots.html">Digrin Plots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="readme_files/plots_and_figures/finviz_plots.html">Finviz Plots</a></li>
 <li class="toctree-l2"><a class="reference internal" href="readme_files/plots_and_figures/sankey_charts.html">Sankey charts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="readme_files/plots_and_figures/building_dash_apps.html">Building dashboards with multiple plots</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="claude.html">Use with Claude</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Contributing</a></li>
 </ul>
 
@@ -233,12 +250,16 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="_sources/contributing.rst.txt" title="View this page">
+  <a class="muted-link" href="https://github.com/ahnazary/stockdex/blob/main/docs/contributing.rst?plain=true" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
-</div>
-<div class="theme-toggle-container theme-toggle-content">
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/ahnazary/stockdex/edit/main/docs/contributing.rst" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
               <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
               <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
@@ -252,30 +273,51 @@
         </div>
         <article role="main" id="furo-main-content">
           <section id="contributing">
-<h1>Contributing<a class="headerlink" href="#contributing" title="Link to this heading"></a></h1>
-<p>Stockdex is an open-source project, and contributions of any kind are welcome and appreciated!
-Whether you want to report a bug, suggest a new feature, improve documentation, or submit code, every contribution helps.</p>
+<h1>Contributing<a class="headerlink" href="#contributing" title="Link to this heading">¶</a></h1>
+<p>Stockdex is open source, and contributions of any kind are welcome: bug
+reports, ideas, documentation and code.</p>
 <section id="how-to-contribute">
-<h2>How to contribute<a class="headerlink" href="#how-to-contribute" title="Link to this heading"></a></h2>
+<h2>How to contribute<a class="headerlink" href="#how-to-contribute" title="Link to this heading">¶</a></h2>
 <ul class="simple">
-<li><p><strong>Issues</strong>:
-Found a bug or have an idea for an improvement? Please open an issue on GitHub and describe it clearly.</p></li>
-<li><p><strong>Discussions</strong>:
-If you’re unsure about an idea or want feedback before coding, start a discussion on the repository’s <em>Discussions</em> tab.</p></li>
-<li><p><strong>Pull Requests (PRs)</strong>:
-If you’d like to fix something directly, fork the repository and open a PR.
-Please include a short description of the change and reference any related issues.</p></li>
+<li><p><strong>Issues</strong>: found a bug or have an idea? Open an
+<a class="reference external" href="https://github.com/ahnazary/stockdex/issues">issue</a> and describe it.</p></li>
+<li><p><strong>Discussions</strong>: not sure about an idea yet? Start a thread in the
+repository’s <em>Discussions</em> tab.</p></li>
+<li><p><strong>Pull requests</strong>: fork the repository and open a PR with a short
+description of the change and any related issues.</p></li>
 </ul>
 </section>
-<section id="guidelines">
-<h2>Guidelines<a class="headerlink" href="#guidelines" title="Link to this heading"></a></h2>
-<p>There are no Guidelines :)</p>
-<div class="line-block">
-<div class="line"><br /></div>
-<div class="line"><br /></div>
+<section id="development-setup">
+<h2>Development setup<a class="headerlink" href="#development-setup" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/ahnazary/stockdex.git
+<span class="nb">cd</span><span class="w"> </span>stockdex
+pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt<span class="w"> </span>-r<span class="w"> </span>requirements_tests.txt
+pytest<span class="w"> </span>-q
+</pre></div>
 </div>
+<p>Tests marked <code class="docutils literal notranslate"><span class="pre">live</span></code> are skipped by default; run them with
+<code class="docutils literal notranslate"><span class="pre">pytest</span> <span class="pre">--run-live</span></code>. Some older tests are not marked yet and still call
+external websites (for example the Finviz, Digrin and Macrotrends interface
+tests), so <code class="docutils literal notranslate"><span class="pre">pytest</span> <span class="pre">-q</span></code> needs a network connection and can hit rate limits.
+For an offline run, use the fixture-based suites:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest<span class="w"> </span>-q<span class="w"> </span>tests/claude<span class="w"> </span>tests/test_yahoo_web_deprecated.py
+</pre></div>
+</div>
+</section>
+<section id="code-style">
+<h2>Code style<a class="headerlink" href="#code-style" title="Link to this heading">¶</a></h2>
+<p>The code is formatted with <code class="docutils literal notranslate"><span class="pre">black</span></code> and <code class="docutils literal notranslate"><span class="pre">isort</span> <span class="pre">--profile</span> <span class="pre">black</span></code> and
+checked with <code class="docutils literal notranslate"><span class="pre">ruff</span></code>.</p>
+</section>
+<section id="building-the-docs">
+<h2>Building the docs<a class="headerlink" href="#building-the-docs" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt<span class="w"> </span>-r<span class="w"> </span>requirements_sphinx.txt
+sphinx-build<span class="w"> </span>-b<span class="w"> </span>html<span class="w"> </span>docs<span class="w"> </span>docs/build
+</pre></div>
+</div>
+<p>The docs are rebuilt and published on every merge to <code class="docutils literal notranslate"><span class="pre">main</span></code>.</p>
 <p class="centered">
-<strong>❤️ Thank you in advance for your contribution ❤️</strong></p></section>
+<strong>Thank you for contributing!</strong></p></section>
 </section>
 
         </article>
@@ -284,14 +326,14 @@ Please include a short description of the change and reference any related issue
         
         <div class="related-pages">
           
-          <a class="prev-page" href="claude.html">
+          <a class="prev-page" href="changelog.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Use with Claude</div>
+                <div class="title">Changelog</div>
                 
               </div>
             </a>
@@ -299,7 +341,7 @@ Please include a short description of the change and reference any related issue
         <div class="bottom-of-page">
           <div class="left-details">
             <div class="copyright">
-                Copyright &#169; 2024, Amir Nazary
+                Copyright &#169; 2024-2026, Amir Nazary
             </div>
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             
@@ -307,7 +349,10 @@ Please include a short description of the change and reference any related issue
             
           </div>
           <div class="right-details">
-            
+            <div class="icons">
+              <a class="muted-link " href="https://github.com/ahnazary/stockdex" aria-label="GitHub"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg></a>
+              
+            </div>
           </div>
         </div>
         
@@ -327,7 +372,9 @@ Please include a short description of the change and reference any related issue
             <ul>
 <li><a class="reference internal" href="#">Contributing</a><ul>
 <li><a class="reference internal" href="#how-to-contribute">How to contribute</a></li>
-<li><a class="reference internal" href="#guidelines">Guidelines</a></li>
+<li><a class="reference internal" href="#development-setup">Development setup</a></li>
+<li><a class="reference internal" href="#code-style">Code style</a></li>
+<li><a class="reference internal" href="#building-the-docs">Building the docs</a></li>
 </ul>
 </li>
 </ul>
@@ -339,13 +386,12 @@ Please include a short description of the change and reference any related issue
       
     </aside>
   </div>
-</div><script src="_static/jquery.js?v=5d32c60e"></script>
-    <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="_static/doctools.js?v=888ff710"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+</div><script src="_static/documentation_options.js?v=8a448e45"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/scripts/furo.js?v=46bd48cc"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/copybutton.js?v=fd10adb8"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
     </body>
 </html>

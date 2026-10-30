@@ -104,7 +104,7 @@ Show the countries who have the highest share in the ETF.
     from stockdex import Ticker
 
     etf = Ticker(isin="IE00B4L5Y983", security_type="etf")
-    result = etf.justetf_holdings_sectors
+    result = etf.justetf_holdings_countries
 
 **Results:**
 
@@ -188,3 +188,18 @@ Gives basic data about the ETF. Returned fields include:
 +===+============+==================+===============+=====================+===============================+=================+===============+================+===============+===================+============================+=========================+=====================+========================+===============+===============+
 | 0 | MSCI World | Equity, World    | EUR 102,811 m | 0.20% p.a.          | Physical (Optimized sampling) | ETF             | Long-only     | No             | USD           | Currency unhedged | 16.07%                     | 25 September 2009       | Accumulating        | -                      | Ireland       | iShares       |
 +---+------------+------------------+---------------+---------------------+-------------------------------+-----------------+---------------+----------------+---------------+-------------------+----------------------------+-------------------------+---------------------+------------------------+---------------+---------------+
+
+
+Price
+~~~~~
+
+Current price of the ETF on its main exchange. Returned fields are
+``price``, ``currency``, ``date``, ``time``, ``exchange``, ``daily_change``,
+``daily_change_percent``, ``buy|sell`` and ``spread``.
+
+.. code-block:: python
+
+    from stockdex import Ticker
+
+    etf = Ticker(isin="IE00B4L5Y983", security_type="etf")
+    result = etf.justetf_price

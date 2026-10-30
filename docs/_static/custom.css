@@ -1,10 +1,64 @@
-/* Make images have rounded corners */
-img.rounded {
-  border-radius: 15px;   /* Adjust curve amount */
-  overflow: hidden;
+/* Lead paragraph on the landing page */
+p.lead,
+.lead p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: var(--color-foreground-secondary);
+  margin-bottom: 1.25rem;
 }
 
-/* Optional: subtle shadow */
+/* Badges sit on one line */
+article img[alt="PyPI version"],
+article img[alt="Code style: black"],
+article img[alt="ruff"] {
+  display: inline-block;
+  margin-right: 0.35rem;
+}
+
+/* Rounded plot screenshots */
 img.rounded {
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+}
+
+/* Cards */
+.sd-card {
+  border-radius: 12px;
+  border: 1px solid var(--color-background-border);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.sd-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-brand-primary);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.sd-card-title {
+  font-weight: 650;
+  color: var(--color-brand-content);
+}
+
+/* Code blocks */
+.highlight {
+  border-radius: 8px;
+}
+
+/* Wide result tables scroll instead of overflowing the page */
+article table.docutils {
+  display: block;
+  overflow-x: auto;
+  max-width: 100%;
+  font-size: 0.82rem;
+  border-radius: 6px;
+}
+
+article table.docutils th {
+  background: var(--color-background-secondary);
+}
+
+/* Tabs */
+.sd-tab-set > label {
+  font-weight: 600;
 }

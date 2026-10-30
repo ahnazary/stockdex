@@ -3,35 +3,44 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Yahoo Finance (Website)" href="yahoo_web_doc.html"><link rel="prev" title="Data Sources" href="../../data_sources.html">
+<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Finviz" href="finviz_doc.html"><link rel="prev" title="Data Sources" href="../../data_sources.html">
+        <link rel="prefetch" href="../../_static/stockdex_logo.png" as="image">
 
-    <!-- Generated with Sphinx 7.2.2 and Furo 2025.12.19 -->
-        <title>Yahoo Finance (API) - Stockdex documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="shortcut icon" href="../../_static/stockdex_logo.png"><!-- Generated with Sphinx 9.0.4 and Furo 2025.12.19 -->
+        <title>Yahoo Finance (API) - Stockdex</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d75fae25" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
-    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=3629b78e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=a1c4f328" />
     
     
 
 
 <style>
   body {
-    --color-code-background: #eeffcc;
+    --color-code-background: #f0f0f0;
   --color-code-foreground: black;
+  --color-brand-primary: #0f766e;
+  --color-brand-content: #0f766e;
+  --font-stack: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   
   }
   @media not print {
     body[data-theme="dark"] {
       --color-code-background: #272822;
   --color-code-foreground: #f8f8f2;
+  --color-brand-primary: #2dd4bf;
+  --color-brand-content: #2dd4bf;
   
     }
     @media (prefers-color-scheme: dark) {
       body:not([data-theme="light"]) {
         --color-code-background: #272822;
   --color-code-foreground: #f8f8f2;
+  --color-brand-primary: #2dd4bf;
+  --color-brand-content: #2dd4bf;
   
       }
     }
@@ -163,7 +172,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">Stockdex  documentation</div></a>
+      <a href="../../index.html"><div class="brand">Stockdex</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -183,8 +192,11 @@
     <div class="sidebar-container">
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../../_static/stockdex_logo.png" alt="Logo"/>
+  </div>
   
-  <span class="sidebar-brand-text">Stockdex  documentation</span>
+  <span class="sidebar-brand-text">Stockdex</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -192,26 +204,31 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+  <p class="caption" role="heading"><span class="caption-text">Guide</span></p>
 <ul class="current">
 <li class="toctree-l1 current has-children"><a class="reference internal" href="../../data_sources.html">Data Sources</a><input aria-label="Toggle navigation of Data Sources" checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Yahoo Finance (API)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="yahoo_web_doc.html">Yahoo Finance (Website)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="finviz_doc.html">Finviz</a></li>
 <li class="toctree-l2"><a class="reference internal" href="digrin_doc.html">Digrin</a></li>
 <li class="toctree-l2"><a class="reference internal" href="macrotrends_doc.html">Macrotrends</a></li>
-<li class="toctree-l2"><a class="reference internal" href="jsutetf_doc.html">justETF</a></li>
+<li class="toctree-l2"><a class="reference internal" href="justetf_doc.html">justETF</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../plots_and_figures.html">Plots and figures</a><input aria-label="Toggle navigation of Plots and figures" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../plots_and_figures/macrotrends_plots.html">Macrotrends Plots</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../plots_and_figures/yahoo_api_plots.html">Yahoo API Plots</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../plots_and_figures/digrin_plots.html">Digrin Plots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plots_and_figures/finviz_plots.html">Finviz Plots</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../plots_and_figures/sankey_charts.html">Sankey charts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../plots_and_figures/building_dash_apps.html">Building dashboards with multiple plots</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../claude.html">Use with Claude</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api_reference.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
 </ul>
 
@@ -233,12 +250,16 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="../../_sources/readme_files/raw_dataframes/yahoo_api_doc.rst.txt" title="View this page">
+  <a class="muted-link" href="https://github.com/ahnazary/stockdex/blob/main/docs/readme_files/raw_dataframes/yahoo_api_doc.rst?plain=true" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
-</div>
-<div class="theme-toggle-container theme-toggle-content">
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/ahnazary/stockdex/edit/main/docs/readme_files/raw_dataframes/yahoo_api_doc.rst" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
               <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
               <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
@@ -252,14 +273,14 @@
         </div>
         <article role="main" id="furo-main-content">
           <section id="yahoo-finance-api">
-<h1>Yahoo Finance (API)<a class="headerlink" href="#yahoo-finance-api" title="Link to this heading"></a></h1>
-<p>Following functions will extract data from Yahoo Finance API. The data includes price, income statement, cash flow, balance sheet, and financials.</p>
+<h1>Yahoo Finance (API)<a class="headerlink" href="#yahoo-finance-api" title="Link to this heading">¶</a></h1>
+<p>Following functions will extract data from Yahoo Finance API. The data includes price, corporate actions, financial statements, valuation measures, company profile, analyst estimates, ownership, SEC filings, ETF and fund data, options and search.</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>In each result dataframe, only the first 5 rows of the DataFrame are shown at most to keep the documentation concise. The actual DataFrame returned by each function may contain more rows.</p>
 </div>
 <section id="price">
-<h2>Price<a class="headerlink" href="#price" title="Link to this heading"></a></h2>
+<h2>Price<a class="headerlink" href="#price" title="Link to this heading">¶</a></h2>
 <p><strong>Parameters:</strong></p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">range</span></code>: The time period over which to retrieve historical data.</p>
@@ -392,7 +413,7 @@
 </div>
 </section>
 <section id="current-trading-period">
-<h2>Current Trading Period<a class="headerlink" href="#current-trading-period" title="Link to this heading"></a></h2>
+<h2>Current Trading Period<a class="headerlink" href="#current-trading-period" title="Link to this heading">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
 
 <span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"AMZN"</span><span class="p">)</span>
@@ -435,7 +456,7 @@
 </div>
 </section>
 <section id="income-statement">
-<h2>Income Statement<a class="headerlink" href="#income-statement" title="Link to this heading"></a></h2>
+<h2>Income Statement<a class="headerlink" href="#income-statement" title="Link to this heading">¶</a></h2>
 <p>Get the income statement for the stock</p>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -718,7 +739,7 @@
 </div>
 </section>
 <section id="cash-flow">
-<h2>Cash Flow<a class="headerlink" href="#cash-flow" title="Link to this heading"></a></h2>
+<h2>Cash Flow<a class="headerlink" href="#cash-flow" title="Link to this heading">¶</a></h2>
 <p>Get the cash flow statement for the stock</p>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -1061,7 +1082,7 @@
 </div>
 </section>
 <section id="balance-sheet">
-<h2>Balance Sheet<a class="headerlink" href="#balance-sheet" title="Link to this heading"></a></h2>
+<h2>Balance Sheet<a class="headerlink" href="#balance-sheet" title="Link to this heading">¶</a></h2>
 <p>Get the balance sheet for the stock</p>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -1500,7 +1521,7 @@
 </div>
 </section>
 <section id="financials">
-<h2>Financials<a class="headerlink" href="#financials" title="Link to this heading"></a></h2>
+<h2>Financials<a class="headerlink" href="#financials" title="Link to this heading">¶</a></h2>
 <p>Get the financials for the stock</p>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -1742,6 +1763,165 @@
 </table>
 </div>
 </section>
+<section id="dividends-splits-and-capital-gains">
+<h2>Dividends, Splits and Capital Gains<a class="headerlink" href="#dividends-splits-and-capital-gains" title="Link to this heading">¶</a></h2>
+<p>Corporate actions from the Yahoo chart endpoint. Each returns one row per
+event, indexed by the event date (UTC), oldest first, and an empty
+DataFrame if there are none.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">yahoo_api_dividends</span></code>: <code class="docutils literal notranslate"><span class="pre">amount</span></code> and <code class="docutils literal notranslate"><span class="pre">currency</span></code> per ex-dividend date</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">yahoo_api_splits</span></code>: <code class="docutils literal notranslate"><span class="pre">numerator</span></code>, <code class="docutils literal notranslate"><span class="pre">denominator</span></code> and <code class="docutils literal notranslate"><span class="pre">splitRatio</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">4:1</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">yahoo_api_capital_gains</span></code>: distributions for ETFs and mutual funds</p></li>
+</ul>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">range</span></code>: <code class="docutils literal notranslate"><span class="pre">1y</span></code>, <code class="docutils literal notranslate"><span class="pre">2y</span></code>, <code class="docutils literal notranslate"><span class="pre">5y</span></code>, <code class="docutils literal notranslate"><span class="pre">10y</span></code>, <code class="docutils literal notranslate"><span class="pre">ytd</span></code> or <code class="docutils literal notranslate"><span class="pre">max</span></code> (default)</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"KO"</span><span class="p">)</span>
+<span class="n">dividends</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_api_dividends</span><span class="p">(</span><span class="nb">range</span><span class="o">=</span><span class="s2">"5y"</span><span class="p">)</span>
+<span class="n">splits</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"AAPL"</span><span class="p">)</span><span class="o">.</span><span class="n">yahoo_api_splits</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="valuation-measures">
+<h2>Valuation Measures<a class="headerlink" href="#valuation-measures" title="Link to this heading">¶</a></h2>
+<p>Market cap, enterprise value, trailing and forward P/E, PEG, price/sales,
+price/book, EV/revenue and EV/EBITDA over time, indexed by as-of date.
+Column names carry the frequency prefix, e.g. <code class="docutils literal notranslate"><span class="pre">quarterlyPeRatio</span></code>.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">frequency</span></code>: <code class="docutils literal notranslate"><span class="pre">annual</span></code>, <code class="docutils literal notranslate"><span class="pre">quarterly</span></code> (default) or <code class="docutils literal notranslate"><span class="pre">trailing</span></code> (recent trailing-twelve-month snapshots)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">format</span></code>: <code class="docutils literal notranslate"><span class="pre">fmt</span></code> (default, e.g. <code class="docutils literal notranslate"><span class="pre">3.5T</span></code>) or <code class="docutils literal notranslate"><span class="pre">raw</span></code> (numbers)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">period1</span></code> / <code class="docutils literal notranslate"><span class="pre">period2</span></code>: start and end dates (default: the last five years)</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"AAPL"</span><span class="p">)</span>
+<span class="n">valuation</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_api_valuation_measures</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="s2">"quarterly"</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">"raw"</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="quote-summary">
+<h2>Quote Summary<a class="headerlink" href="#quote-summary" title="Link to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">yahoo_api_quote_summary</span></code> returns one or more raw modules from Yahoo’s
+quoteSummary endpoint as a dictionary. The methods below are built on it.
+Valid module names are listed in <code class="docutils literal notranslate"><span class="pre">stockdex.config.QUOTE_SUMMARY_MODULES</span></code>.
+Modules that do not apply to a security are left out, and an unknown symbol
+raises <code class="docutils literal notranslate"><span class="pre">NoDataError</span></code>.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">modules</span></code>: one module name or a list, e.g. <code class="docutils literal notranslate"><span class="pre">[&quot;price&quot;,</span> <span class="pre">&quot;financialData&quot;]</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">format</span></code>: <code class="docutils literal notranslate"><span class="pre">raw</span></code> (default, numbers and epoch timestamps) or <code class="docutils literal notranslate"><span class="pre">fmt</span></code> (display strings)</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"AAPL"</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_api_quote_summary</span><span class="p">([</span><span class="s2">"price"</span><span class="p">,</span> <span class="s2">"financialData"</span><span class="p">])</span>
+<span class="n">data</span><span class="p">[</span><span class="s2">"financialData"</span><span class="p">][</span><span class="s2">"targetMeanPrice"</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="company-and-market-data">
+<h2>Company and Market Data<a class="headerlink" href="#company-and-market-data" title="Link to this heading">¶</a></h2>
+<p>Single-record methods return one column named after the ticker, with one
+row per field. Known date fields are converted to UTC timestamps.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">yahoo_api_profile</span></code>: address, website, sector, industry, employees, business summary, governance risk scores</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">yahoo_api_officers</span></code>: key executives with title, age and total pay (one row per person)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">yahoo_api_market_price</span></code>: regular, pre- and post-market price and change, market state, currency</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">yahoo_api_summary_detail</span></code>: day and 52-week ranges, volume, market cap, beta, P/E, dividend rate and yield</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">yahoo_api_key_statistics</span></code>: enterprise value, forward P/E, PEG, shares outstanding and float, short interest</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">yahoo_api_financial_data</span></code>: analyst price targets and recommendation, revenue, margins, cash flow, debt, ROE</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">yahoo_api_calendar_events</span></code>: next earnings date(s), EPS and revenue estimates, ex-dividend and payment dates</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">yahoo_api_company_name</span></code>: the company’s full name as a string, e.g. <code class="docutils literal notranslate"><span class="pre">&quot;Apple</span> <span class="pre">Inc.&quot;</span></code></p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">yahoo_api_market_price</span></code>, <code class="docutils literal notranslate"><span class="pre">yahoo_api_summary_detail</span></code>,
+<code class="docutils literal notranslate"><span class="pre">yahoo_api_key_statistics</span></code> and <code class="docutils literal notranslate"><span class="pre">yahoo_api_financial_data</span></code> accept
+<code class="docutils literal notranslate"><span class="pre">format=&quot;fmt&quot;</span></code> for display strings.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"AAPL"</span><span class="p">)</span>
+<span class="n">profile</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_api_profile</span><span class="p">()</span>
+<span class="n">targets</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_api_financial_data</span><span class="p">()</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+    <span class="p">[</span><span class="s2">"targetLowPrice"</span><span class="p">,</span> <span class="s2">"targetMeanPrice"</span><span class="p">,</span> <span class="s2">"targetHighPrice"</span><span class="p">]</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="analyst-estimates-and-earnings">
+<h2>Analyst Estimates and Earnings<a class="headerlink" href="#analyst-estimates-and-earnings" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">yahoo_api_earnings_history</span></code>: reported vs estimated EPS and surprise for the last four quarters</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">yahoo_api_earnings_trend</span></code>: EPS and revenue estimates, EPS trend and revisions for the current and next quarter and year, with flattened columns such as <code class="docutils literal notranslate"><span class="pre">earningsEstimate_avg</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">yahoo_api_recommendation_trend</span></code>: strong buy to strong sell counts per month</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">yahoo_api_upgrades_downgrades</span></code>: analyst rating changes and price target moves, newest first</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"MSFT"</span><span class="p">)</span>
+<span class="n">trend</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_api_earnings_trend</span><span class="p">()</span>
+<span class="n">ratings</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_api_upgrades_downgrades</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="ownership-insiders-and-filings">
+<h2>Ownership, Insiders and Filings<a class="headerlink" href="#ownership-insiders-and-filings" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">yahoo_api_institutional_holders</span></code> and <code class="docutils literal notranslate"><span class="pre">yahoo_api_fund_holders</span></code>: top holders with percent held, shares, value and change</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">yahoo_api_major_holders</span></code>: insider and institutional ownership percentages</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">yahoo_api_insider_holders</span></code>: insiders and their direct positions</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">yahoo_api_insider_transactions</span></code>: recent insider buys, sales and grants, newest first</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">yahoo_api_insider_purchase_activity</span></code>: net insider buying vs selling over the reporting period</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">yahoo_api_sec_filings</span></code>: recent SEC filings with type, title and links (US-listed companies)</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"NVDA"</span><span class="p">)</span>
+<span class="n">holders</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_api_institutional_holders</span><span class="p">()</span>
+<span class="n">filings</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_api_sec_filings</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="etf-and-mutual-fund-data">
+<h2>ETF and Mutual Fund Data<a class="headerlink" href="#etf-and-mutual-fund-data" title="Link to this heading">¶</a></h2>
+<p>These return empty DataFrames for individual stocks.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">yahoo_api_fund_top_holdings</span></code>: top holdings with fraction of the fund</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">yahoo_api_fund_sector_weightings</span></code>: weight per sector, largest first</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">yahoo_api_fund_asset_allocation</span></code>: stock, bond, cash and other positions</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">yahoo_api_fund_profile</span></code>: fund family, category, expense ratio, turnover and net assets, with category averages</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">yahoo_api_fund_performance</span></code>: trailing and calendar-year total returns, fund vs category</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="n">etf</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"SPY"</span><span class="p">,</span> <span class="n">security_type</span><span class="o">=</span><span class="s2">"etf"</span><span class="p">)</span>
+<span class="n">holdings</span> <span class="o">=</span> <span class="n">etf</span><span class="o">.</span><span class="n">yahoo_api_fund_top_holdings</span><span class="p">()</span>
+<span class="n">performance</span> <span class="o">=</span> <span class="n">etf</span><span class="o">.</span><span class="n">yahoo_api_fund_performance</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="options-quotes-search-and-similar-symbols">
+<h2>Options, Quotes, Search and Similar Symbols<a class="headerlink" href="#options-quotes-search-and-similar-symbols" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">yahoo_api_option_expirations</span></code>: listed option expiration dates (UTC)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">yahoo_api_options_chain</span></code>: calls and puts for one expiration. Parameters: <code class="docutils literal notranslate"><span class="pre">expiration</span></code> (default nearest) and <code class="docutils literal notranslate"><span class="pre">option_type</span></code> (<code class="docutils literal notranslate"><span class="pre">calls</span></code>, <code class="docutils literal notranslate"><span class="pre">puts</span></code> or <code class="docutils literal notranslate"><span class="pre">both</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">yahoo_api_quotes</span></code>: current quotes for many symbols in one request (static method)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">yahoo_api_search</span></code>: find symbols by company name or partial ticker (static method). Parameters: <code class="docutils literal notranslate"><span class="pre">query</span></code> and <code class="docutils literal notranslate"><span class="pre">limit</span></code> (1–50)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">yahoo_api_similar_symbols</span></code>: related symbols with a relevance score</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"AAPL"</span><span class="p">)</span>
+<span class="n">expirations</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_api_option_expirations</span><span class="p">()</span>
+<span class="n">chain</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_api_options_chain</span><span class="p">(</span><span class="n">expirations</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">option_type</span><span class="o">=</span><span class="s2">"calls"</span><span class="p">)</span>
+
+<span class="n">quotes</span> <span class="o">=</span> <span class="n">Ticker</span><span class="o">.</span><span class="n">yahoo_api_quotes</span><span class="p">([</span><span class="s2">"AAPL"</span><span class="p">,</span> <span class="s2">"MSFT"</span><span class="p">,</span> <span class="s2">"NVDA"</span><span class="p">])</span>
+<span class="n">matches</span> <span class="o">=</span> <span class="n">Ticker</span><span class="o">.</span><span class="n">yahoo_api_search</span><span class="p">(</span><span class="s2">"bayerische motoren"</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
 </section>
 
         </article>
@@ -1749,12 +1929,12 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="yahoo_web_doc.html">
+          <a class="next-page" href="finviz_doc.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Yahoo Finance (Website)</div>
+                <div class="title">Finviz</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -1773,7 +1953,7 @@
         <div class="bottom-of-page">
           <div class="left-details">
             <div class="copyright">
-                Copyright &#169; 2024, Amir Nazary
+                Copyright &#169; 2024-2026, Amir Nazary
             </div>
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             
@@ -1781,7 +1961,10 @@
             
           </div>
           <div class="right-details">
-            
+            <div class="icons">
+              <a class="muted-link " href="https://github.com/ahnazary/stockdex" aria-label="GitHub"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg></a>
+              
+            </div>
           </div>
         </div>
         
@@ -1806,6 +1989,14 @@
 <li><a class="reference internal" href="#cash-flow">Cash Flow</a></li>
 <li><a class="reference internal" href="#balance-sheet">Balance Sheet</a></li>
 <li><a class="reference internal" href="#financials">Financials</a></li>
+<li><a class="reference internal" href="#dividends-splits-and-capital-gains">Dividends, Splits and Capital Gains</a></li>
+<li><a class="reference internal" href="#valuation-measures">Valuation Measures</a></li>
+<li><a class="reference internal" href="#quote-summary">Quote Summary</a></li>
+<li><a class="reference internal" href="#company-and-market-data">Company and Market Data</a></li>
+<li><a class="reference internal" href="#analyst-estimates-and-earnings">Analyst Estimates and Earnings</a></li>
+<li><a class="reference internal" href="#ownership-insiders-and-filings">Ownership, Insiders and Filings</a></li>
+<li><a class="reference internal" href="#etf-and-mutual-fund-data">ETF and Mutual Fund Data</a></li>
+<li><a class="reference internal" href="#options-quotes-search-and-similar-symbols">Options, Quotes, Search and Similar Symbols</a></li>
 </ul>
 </li>
 </ul>
@@ -1817,13 +2008,12 @@
       
     </aside>
   </div>
-</div><script src="../../_static/jquery.js?v=5d32c60e"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+</div><script src="../../_static/documentation_options.js?v=8a448e45"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/copybutton.js?v=fd10adb8"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
     </body>
 </html>

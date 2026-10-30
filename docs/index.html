@@ -4,34 +4,43 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Data Sources" href="data_sources.html">
+        <link rel="prefetch" href="_static/stockdex_logo.png" as="image">
 
-    <!-- Generated with Sphinx 7.2.2 and Furo 2025.12.19 -->
-        <title>Stockdex documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="shortcut icon" href="_static/stockdex_logo.png"><!-- Generated with Sphinx 9.0.4 and Furo 2025.12.19 -->
+        <title>Stockdex</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d75fae25" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=3629b78e" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=a1c4f328" />
     
     
 
 
 <style>
   body {
-    --color-code-background: #eeffcc;
+    --color-code-background: #f0f0f0;
   --color-code-foreground: black;
+  --color-brand-primary: #0f766e;
+  --color-brand-content: #0f766e;
+  --font-stack: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   
   }
   @media not print {
     body[data-theme="dark"] {
       --color-code-background: #272822;
   --color-code-foreground: #f8f8f2;
+  --color-brand-primary: #2dd4bf;
+  --color-brand-content: #2dd4bf;
   
     }
     @media (prefers-color-scheme: dark) {
       body:not([data-theme="light"]) {
         --color-code-background: #272822;
   --color-code-foreground: #f8f8f2;
+  --color-brand-primary: #2dd4bf;
+  --color-brand-content: #2dd4bf;
   
       }
     }
@@ -163,7 +172,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="#"><div class="brand">Stockdex  documentation</div></a>
+      <a href="#"><div class="brand">Stockdex</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -183,8 +192,11 @@
     <div class="sidebar-container">
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="#">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="_static/stockdex_logo.png" alt="Logo"/>
+  </div>
   
-  <span class="sidebar-brand-text">Stockdex  documentation</span>
+  <span class="sidebar-brand-text">Stockdex</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -192,26 +204,31 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+  <p class="caption" role="heading"><span class="caption-text">Guide</span></p>
 <ul>
 <li class="toctree-l1 has-children"><a class="reference internal" href="data_sources.html">Data Sources</a><input aria-label="Toggle navigation of Data Sources" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="readme_files/raw_dataframes/yahoo_api_doc.html">Yahoo Finance (API)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="readme_files/raw_dataframes/yahoo_web_doc.html">Yahoo Finance (Website)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="readme_files/raw_dataframes/finviz_doc.html">Finviz</a></li>
 <li class="toctree-l2"><a class="reference internal" href="readme_files/raw_dataframes/digrin_doc.html">Digrin</a></li>
 <li class="toctree-l2"><a class="reference internal" href="readme_files/raw_dataframes/macrotrends_doc.html">Macrotrends</a></li>
-<li class="toctree-l2"><a class="reference internal" href="readme_files/raw_dataframes/jsutetf_doc.html">justETF</a></li>
+<li class="toctree-l2"><a class="reference internal" href="readme_files/raw_dataframes/justetf_doc.html">justETF</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="plots_and_figures.html">Plots and figures</a><input aria-label="Toggle navigation of Plots and figures" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="readme_files/plots_and_figures/macrotrends_plots.html">Macrotrends Plots</a></li>
 <li class="toctree-l2"><a class="reference internal" href="readme_files/plots_and_figures/yahoo_api_plots.html">Yahoo API Plots</a></li>
 <li class="toctree-l2"><a class="reference internal" href="readme_files/plots_and_figures/digrin_plots.html">Digrin Plots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="readme_files/plots_and_figures/finviz_plots.html">Finviz Plots</a></li>
 <li class="toctree-l2"><a class="reference internal" href="readme_files/plots_and_figures/sankey_charts.html">Sankey charts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="readme_files/plots_and_figures/building_dash_apps.html">Building dashboards with multiple plots</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="claude.html">Use with Claude</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 </ul>
 
@@ -233,12 +250,16 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="_sources/index.rst.txt" title="View this page">
+  <a class="muted-link" href="https://github.com/ahnazary/stockdex/blob/main/docs/index.rst?plain=true" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
-</div>
-<div class="theme-toggle-container theme-toggle-content">
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/ahnazary/stockdex/edit/main/docs/index.rst" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
               <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
               <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
@@ -251,37 +272,149 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <a class="reference external image-reference" href="https://badge.fury.io/py/stockdex"><img alt="PyPI version" src="https://badge.fury.io/py/stockdex.svg" /></a>
-<img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg" /><img alt="Code style: isort" src="https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&amp;labelColor=ef8336" />
-<img alt="flake8" src="https://img.shields.io/badge/flake8-checked-blue" />
+          <section id="stockdex">
+<h1>Stockdex<a class="headerlink" href="#stockdex" title="Link to this heading">¶</a></h1>
+<p class="lead">Financial data from Yahoo Finance, Digrin, Finviz, Macrotrends and justETF
+as pandas DataFrames and Plotly figures, in one <code class="docutils literal notranslate"><span class="pre">Ticker</span></code> object.</p>
+<a class="reference external image-reference" href="https://pypi.org/project/stockdex/"><img alt="PyPI version" src="https://badge.fury.io/py/stockdex.svg" />
+</a>
+<img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg" />
 <img alt="ruff" src="https://img.shields.io/badge/ruff-checked-brightgreen" />
-<section id="stock-data-extractor-stockdex">
-<h1>Stock Data Extractor (Stockdex)<a class="headerlink" href="#stock-data-extractor-stockdex" title="Link to this heading"></a></h1>
-<p>Stockdex is a Python package that provides a simple interface to get financial data from various sources in pandas DataFrames and Plotly figures.</p>
-<section id="advantages-of-stockdex-over-similar-packages">
-<h2>Advantages of <code class="docutils literal notranslate"><span class="pre">Stockdex</span></code> over similar packages<a class="headerlink" href="#advantages-of-stockdex-over-similar-packages" title="Link to this heading"></a></h2>
-<ul class="simple">
-<li><p><strong>Various data sources</strong>: Data from various sources like Yahoo Finance, Digrin, Finviz, Macrotrends and JustETF (for EU ETFs).</p></li>
-<li><p><strong>Historical data</strong>: A wide time range of historical data is available.
-For example, Digrin and Macrotrends sources provide historical data over many years.</p></li>
-<li><p><strong>Numerous data categories</strong>: Various financial criteria including financial statements, earnings, dividends, stock splits, list of key executives, major shareholders, and more are available.</p></li>
-<li><p><strong>Plotting capabilities</strong>:
-Plotting financial data using bar, line, and Sankey plots is supported to some extent.
-Multiple plots can be combined into an interactive Dash app.</p></li>
-</ul>
-</section>
-<section id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h2>
-<p>Install the package using pip:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>stockdex<span class="w"> </span>-U
+<section id="install">
+<h2>Install<a class="headerlink" href="#install" title="Link to this heading">¶</a></h2>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-0" name="sd-tab-set-0" type="radio">
+<label class="sd-tab-label" for="sd-tab-item-0">
+pip</label><div class="sd-tab-content docutils">
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>stockdex
 </pre></div>
 </div>
+</div>
+<input id="sd-tab-item-1" name="sd-tab-set-0" type="radio">
+<label class="sd-tab-label" for="sd-tab-item-1">
+Claude Desktop</label><div class="sd-tab-content docutils">
+<p>Download <code class="docutils literal notranslate"><span class="pre">stockdex.mcpb</span></code> from the
+<a class="reference external" href="https://github.com/ahnazary/stockdex/releases/latest">latest release</a>
+and double-click it. See <a class="reference internal" href="claude.html"><span class="doc">Use with Claude</span></a>.</p>
+</div>
+<input id="sd-tab-item-2" name="sd-tab-set-0" type="radio">
+<label class="sd-tab-label" for="sd-tab-item-2">
+Claude Code</label><div class="sd-tab-content docutils">
+<p>Requires <a class="reference external" href="https://docs.astral.sh/uv/">uv</a>, which the plugin uses to
+start the MCP server.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>/plugin marketplace add ahnazary/stockdex
+/plugin install stockdex@stockdex
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="claude.html#claude-code-plugin"><span class="std std-ref">Claude Code (plugin)</span></a> for the full setup.</p>
+</div>
+</div>
 </section>
-<section id="walkthrough">
-<h2>Walkthrough<a class="headerlink" href="#walkthrough" title="Link to this heading"></a></h2>
-<p>This documentation provides a walkthrough of the main features of the package.</p>
-<p>You can check out <a class="reference internal" href="data_sources.html"><span class="doc">Data Sources</span></a> section for details on available data sources and their functionalities with examples.</p>
-<p>You can also check out <a class="reference internal" href="plots_and_figures.html"><span class="doc">Plots and figures</span></a> section for details on plotting functions with examples.</p>
+<section id="quick-start">
+<h2>Quick start<a class="headerlink" href="#quick-start" title="Link to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">stockdex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ticker</span>
+
+<span class="n">ticker</span> <span class="o">=</span> <span class="n">Ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="s2">"NVDA"</span><span class="p">)</span>
+
+<span class="n">income</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_api_income_statement</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="s2">"quarterly"</span><span class="p">)</span>
+<span class="n">prices</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">yahoo_api_price</span><span class="p">(</span><span class="nb">range</span><span class="o">=</span><span class="s2">"1y"</span><span class="p">,</span> <span class="n">dataGranularity</span><span class="o">=</span><span class="s2">"1d"</span><span class="p">)</span>
+<span class="n">dividends</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">digrin_dividend</span>
+<span class="n">ticker</span><span class="o">.</span><span class="n">plot_yahoo_api_income_statement</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Every method name starts with its data source, e.g. <code class="docutils literal notranslate"><span class="pre">yahoo_api_*</span></code> or
+<code class="docutils literal notranslate"><span class="pre">finviz_*</span></code>, so you always know where the numbers come from.</p>
+</section>
+<section id="data-sources">
+<h2>Data sources<a class="headerlink" href="#data-sources" title="Link to this heading">¶</a></h2>
+<div class="sd-container-fluid sd-sphinx-override sd-mb-4 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-2 sd-row-cols-md-2 sd-row-cols-lg-3 sd-g-3 sd-g-xs-3 sd-g-sm-3 sd-g-md-3 sd-g-lg-3 docutils">
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+Yahoo Finance</div>
+<p class="sd-card-text">Prices, statements, valuation, profile, analyst estimates, holders,
+SEC filings, funds, options and search.</p>
+</div>
+<a class="sd-stretched-link sd-hide-link-text reference internal" href="readme_files/raw_dataframes/yahoo_api_doc.html"><span class="doc">Yahoo Finance (API)</span></a></div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+Digrin</div>
+<p class="sd-card-text">Long dividend history, payout ratio, dividend growth and fundamentals
+over many years.</p>
+</div>
+<a class="sd-stretched-link sd-hide-link-text reference internal" href="readme_files/raw_dataframes/digrin_doc.html"><span class="doc">Digrin</span></a></div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+Macrotrends</div>
+<p class="sd-card-text">Up to 15 years of statements, margins, ratios and revenue.</p>
+</div>
+<a class="sd-stretched-link sd-hide-link-text reference internal" href="readme_files/raw_dataframes/macrotrends_doc.html"><span class="doc">Macrotrends</span></a></div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+Finviz</div>
+<p class="sd-card-text">Insider trades, revenue by segment and region, earnings and revisions.</p>
+</div>
+<a class="sd-stretched-link sd-hide-link-text reference internal" href="readme_files/raw_dataframes/finviz_doc.html"><span class="doc">Finviz</span></a></div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+justETF</div>
+<p class="sd-card-text">European ETFs by ISIN: holdings, countries, sectors and fund basics.</p>
+</div>
+<a class="sd-stretched-link sd-hide-link-text reference internal" href="readme_files/raw_dataframes/justetf_doc.html"><span class="doc">justETF</span></a></div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+Use with Claude</div>
+<p class="sd-card-text">A local MCP server so Claude can look up stock data for you.</p>
+</div>
+<a class="sd-stretched-link sd-hide-link-text reference internal" href="claude.html"><span class="doc">Use with Claude</span></a></div>
+</div>
+</div>
+</div>
+</section>
+<section id="plots">
+<h2>Plots<a class="headerlink" href="#plots" title="Link to this heading">¶</a></h2>
+<div class="sd-container-fluid sd-sphinx-override sd-mb-4 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-2 sd-row-cols-md-2 sd-row-cols-lg-2 sd-g-3 sd-g-xs-3 sd-g-sm-3 sd-g-md-3 sd-g-lg-3 docutils">
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+Charts</div>
+<p class="sd-card-text">Bar and line charts for statements, dividends and cash flow, with
+<code class="docutils literal notranslate"><span class="pre">show_plot=False</span></code> to get the figure back.</p>
+</div>
+<a class="sd-stretched-link sd-hide-link-text reference internal" href="plots_and_figures.html"><span class="doc">Plots and figures</span></a></div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+Sankey and dashboards</div>
+<p class="sd-card-text">Cash-flow Sankey charts and multi-plot Dash apps.</p>
+</div>
+<a class="sd-stretched-link sd-hide-link-text reference internal" href="readme_files/plots_and_figures/sankey_charts.html"><span class="doc">Sankey charts</span></a></div>
+</div>
+</div>
+</div>
+<div class="toctree-wrapper compound">
+</div>
 <div class="toctree-wrapper compound">
 </div>
 </section>
@@ -306,7 +439,7 @@ Multiple plots can be combined into an interactive Dash app.</p></li>
         <div class="bottom-of-page">
           <div class="left-details">
             <div class="copyright">
-                Copyright &#169; 2024, Amir Nazary
+                Copyright &#169; 2024-2026, Amir Nazary
             </div>
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             
@@ -314,7 +447,10 @@ Multiple plots can be combined into an interactive Dash app.</p></li>
             
           </div>
           <div class="right-details">
-            
+            <div class="icons">
+              <a class="muted-link " href="https://github.com/ahnazary/stockdex" aria-label="GitHub"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg></a>
+              
+            </div>
           </div>
         </div>
         
@@ -332,10 +468,13 @@ Multiple plots can be combined into an interactive Dash app.</p></li>
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">Stock Data Extractor (Stockdex)</a><ul>
-<li><a class="reference internal" href="#advantages-of-stockdex-over-similar-packages">Advantages of <code class="docutils literal notranslate"><span class="pre">Stockdex</span></code> over similar packages</a></li>
-<li><a class="reference internal" href="#installation">Installation</a></li>
-<li><a class="reference internal" href="#walkthrough">Walkthrough</a></li>
+<li><a class="reference internal" href="#">Stockdex</a><ul>
+<li><a class="reference internal" href="#install">Install</a></li>
+<li><a class="reference internal" href="#quick-start">Quick start</a></li>
+<li><a class="reference internal" href="#data-sources">Data sources</a></li>
+<li><a class="reference internal" href="#plots">Plots</a><ul>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -347,13 +486,12 @@ Multiple plots can be combined into an interactive Dash app.</p></li>
       
     </aside>
   </div>
-</div><script src="_static/jquery.js?v=5d32c60e"></script>
-    <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="_static/doctools.js?v=888ff710"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+</div><script src="_static/documentation_options.js?v=8a448e45"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/scripts/furo.js?v=46bd48cc"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/copybutton.js?v=fd10adb8"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
     </body>
 </html>
