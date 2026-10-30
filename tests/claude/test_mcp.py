@@ -33,6 +33,11 @@ def test_stdio_tools(tmp_path):
                     for tool in listing.tools:
                         assert tool.annotations.read_only_hint is True
                         assert tool.annotations.destructive_hint is False
+                        if "limit" not in tool.input_schema["properties"]:
+                            # get_quotes is bounded by its symbol list instead.
+                            symbols = tool.input_schema["properties"]["symbols"]
+                            assert symbols["maxItems"] == 20
+                            continue
                         limit_schema = tool.input_schema["properties"]["limit"]
                         # Optional limits are anyOf[int-with-bounds, null].
                         bounded = next(

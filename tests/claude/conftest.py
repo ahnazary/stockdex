@@ -23,6 +23,9 @@ EXPECTED_TOOLS = {
     "get_sec_filings",
     "get_fund_holdings",
     "get_fund_profile",
+    "get_splits",
+    "get_options_chain",
+    "get_quotes",
 }
 
 
@@ -129,6 +132,42 @@ class FakeTicker:
         return pd.DataFrame(
             {"fund": [0.1268, 0.1772], "category": [0.0514, 0.1554]},
             index=["ytd", "2025"],
+        )
+
+    def yahoo_api_dividends(self, range="max"):
+        return pd.DataFrame(
+            {"amount": [0.25, 0.26], "currency": ["USD", "USD"]},
+            index=pd.DatetimeIndex(["2025-10-02", "2026-01-02"], tz="UTC", name="date"),
+        )
+
+    def yahoo_api_splits(self, range="max"):
+        return pd.DataFrame(
+            {"numerator": [4.0], "denominator": [1.0], "splitRatio": ["4:1"]},
+            index=pd.DatetimeIndex(["2020-08-31"], tz="UTC", name="date"),
+        )
+
+    def yahoo_api_options_chain(self, expiration=None, option_type="both"):
+        self.calls.append({"expiration": expiration, "option_type": option_type})
+        kinds = ["call", "put"] if option_type == "both" else [option_type[:-1]]
+        return pd.DataFrame(
+            {
+                "optionType": kinds,
+                "strike": [350.0] * len(kinds),
+                "bid": [9.5] * len(kinds),
+                "expiration": [pd.Timestamp("2026-11-20", tz="UTC")] * len(kinds),
+                "internalField": ["x"] * len(kinds),
+            }
+        )
+
+    @staticmethod
+    def yahoo_api_quotes(symbols):
+        return pd.DataFrame(
+            {
+                "regularMarketPrice": [348.91, 530.14][: len(symbols)],
+                "currency": ["USD", "USD"][: len(symbols)],
+                "language": ["en-US", "en-US"][: len(symbols)],
+            },
+            index=pd.Index(symbols, name="symbol"),
         )
 
     @property

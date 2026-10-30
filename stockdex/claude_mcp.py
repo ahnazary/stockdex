@@ -105,9 +105,15 @@ def create_server(adapter=None):
         title="Get dividend history",
         annotations=tool_annotations("Get dividend history"),
     )
-    async def get_dividends(ticker: str, limit: RowLimit = 20) -> CallToolResult:
-        """Get the dividend history (ex-dividend date, payable date, amount, currency) for one ticker from Digrin, newest first. Missing values are null, not zero."""
-        return await invoke(adapter.get_dividends, ticker=ticker, limit=limit)
+    async def get_dividends(
+        ticker: str,
+        limit: RowLimit = 20,
+        source: Literal["digrin", "yahoo", "auto"] = "digrin",
+    ) -> CallToolResult:
+        """Get the dividend history for one ticker, newest first. source="digrin" (default) returns ex-dividend date, payable date, amount and currency from Digrin; "yahoo" returns ex-dividend date, amount and currency from Yahoo Finance; "auto" tries Digrin and falls back to Yahoo Finance if Digrin is unavailable. The result's source field names the provider used. Missing values are null, not zero."""
+        return await invoke(
+            adapter.get_dividends, ticker=ticker, limit=limit, source=source
+        )
 
     @server.tool(
         title="Search ticker symbols",
@@ -261,6 +267,43 @@ def create_server(adapter=None):
         return await invoke(
             adapter.get_dataset, ticker=ticker, dataset=dataset, limit=limit
         )
+
+    @server.tool(
+        title="Get stock splits",
+        annotations=tool_annotations("Get stock splits"),
+    )
+    async def get_splits(ticker: str, limit: RowLimit = 20) -> CallToolResult:
+        """Get the stock split history for one ticker from Yahoo Finance, newest first: split date, numerator, denominator and ratio such as "4:1"."""
+        return await invoke(adapter.get_splits, ticker=ticker, limit=limit)
+
+    @server.tool(
+        title="Get options chain",
+        annotations=tool_annotations("Get options chain"),
+    )
+    async def get_options_chain(
+        ticker: str,
+        expiration: Optional[str] = None,
+        option_type: Literal["calls", "puts", "both"] = "both",
+        limit: Annotated[int, Field(strict=True, ge=1, le=500)] = 100,
+    ) -> CallToolResult:
+        """Get listed options for one ticker from Yahoo Finance for one expiration date (YYYY-MM-DD, default nearest): contract symbol, type, strike, last price, bid, ask, volume, open interest, implied volatility and whether it is in the money. Data may be delayed; not for trading decisions."""
+        return await invoke(
+            adapter.get_options_chain,
+            ticker=ticker,
+            expiration=expiration,
+            option_type=option_type,
+            limit=limit,
+        )
+
+    @server.tool(
+        title="Get current quotes",
+        annotations=tool_annotations("Get current quotes"),
+    )
+    async def get_quotes(
+        symbols: Annotated[list[str], Field(min_length=1, max_length=20)],
+    ) -> CallToolResult:
+        """Get current quotes for up to 20 ticker symbols in one call from Yahoo Finance: name, type, currency, market state, price, change, volume, market cap, 52-week range, trailing and forward P/E and dividend yield. Use it to compare several securities at once. Quotes may be delayed."""
+        return await invoke(adapter.get_quotes, symbols=symbols)
 
     return server
 

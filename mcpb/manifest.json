@@ -36,7 +36,7 @@
     },
     {
       "name": "get_dividends",
-      "description": "Dividend history (ex-dividend date, payable date, amount, currency) for one ticker from Digrin."
+      "description": "Dividend history from Digrin, or Yahoo Finance as an alternative or fallback."
     },
     {
       "name": "search_ticker",
@@ -77,6 +77,18 @@
     {
       "name": "get_fund_profile",
       "description": "Fund family, category, expense ratio and performance vs category for ETFs and mutual funds from Yahoo Finance."
+    },
+    {
+      "name": "get_splits",
+      "description": "Stock split history from Yahoo Finance."
+    },
+    {
+      "name": "get_options_chain",
+      "description": "Options chain for one expiration date from Yahoo Finance."
+    },
+    {
+      "name": "get_quotes",
+      "description": "Current quotes for up to 20 symbols from Yahoo Finance."
     }
   ],
   "tools_generated": false,

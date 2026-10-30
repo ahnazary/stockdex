@@ -21,6 +21,9 @@ MAX_ROWS = 500
 PRICE_RANGES = ("1mo", "3mo", "6mo", "1y")
 STATEMENTS = ("income_statement", "cash_flow", "balance_sheet")
 VALUATION_FREQUENCIES = ("annual", "quarterly", "trailing")
+DIVIDEND_SOURCES = ("digrin", "yahoo", "auto")
+OPTION_TYPES = ("calls", "puts", "both")
+MAX_QUOTE_SYMBOLS = 20
 DEFAULT_METRICS = {
     "income_statement": ["TotalRevenue", "NetIncome", "BasicEPS"],
     "cash_flow": ["OperatingCashFlow", "FreeCashFlow", "CapitalExpenditure"],
@@ -149,8 +152,28 @@ class StockdexAdapter:
             },
         )
 
-    def get_dividends(self, ticker, limit=20):
-        return self._request("dividends", ticker, {"limit": limit})
+    def get_dividends(self, ticker, limit=20, source="digrin"):
+        """
+        Dividend history. ``source`` is "digrin" (default), "yahoo", or
+        "auto" (Digrin first, Yahoo if Digrin is rate limited or unavailable).
+        """
+        return self._request("dividends", ticker, {"limit": limit, "source": source})
+
+    def get_splits(self, ticker, limit=20):
+        """Stock split history from Yahoo Finance, newest first."""
+        return self._request("splits", ticker, {"limit": limit})
+
+    def get_options_chain(self, ticker, expiration=None, option_type="both", limit=100):
+        """Options chain for one expiration (nearest by default)."""
+        return self._request(
+            "options",
+            ticker,
+            {"expiration": expiration, "option_type": option_type, "limit": limit},
+        )
+
+    def get_quotes(self, symbols):
+        """Current quotes for up to 20 symbols in one request."""
+        return self._request("quotes", None, {"symbols": symbols})
 
     def get_valuation_history(self, ticker, frequency="quarterly", limit=20):
         """Market cap, enterprise value and valuation ratios over time."""
@@ -174,6 +197,8 @@ class StockdexAdapter:
     def _validate(self, operation, ticker, parameters):
         if operation == "search":
             return self._validate_search(parameters)
+        if operation == "quotes":
+            return self._validate_quotes(parameters)
         if (
             not isinstance(ticker, str)
             or not ticker.isascii()
@@ -198,6 +223,15 @@ class StockdexAdapter:
             or not 1 <= parameters["limit"] <= MAX_ROWS
         ):
             raise InputError("limit must be an integer from 1 to 500.")
+        if operation == "dividends":
+            if parameters.get("source", "digrin") not in DIVIDEND_SOURCES:
+                raise InputError("source must be digrin, yahoo or auto.")
+            parameters.setdefault("source", "digrin")
+        if operation == "options":
+            if parameters["option_type"] not in OPTION_TYPES:
+                raise InputError("option_type must be calls, puts or both.")
+            if parameters["expiration"] is not None:
+                parameters["expiration"] = _date(parameters["expiration"]).isoformat()
         if operation == "valuation":
             if parameters["frequency"] not in VALUATION_FREQUENCIES:
                 raise InputError("frequency must be annual, quarterly or trailing.")
@@ -251,6 +285,32 @@ class StockdexAdapter:
         return ticker
 
     @staticmethod
+    def _validate_quotes(parameters):
+        symbols = parameters["symbols"]
+        if isinstance(symbols, str):
+            symbols = [symbols]
+        if not isinstance(symbols, list) or not 1 <= len(symbols) <= MAX_QUOTE_SYMBOLS:
+            raise InputError(
+                f"symbols must be a list of 1 to {MAX_QUOTE_SYMBOLS} ticker symbols."
+            )
+        cleaned = []
+        for symbol in symbols:
+            if (
+                not isinstance(symbol, str)
+                or not symbol.isascii()
+                or not 1 <= len(symbol) <= 20
+                or not _SYMBOL.fullmatch(symbol.upper())
+            ):
+                raise InputError(
+                    "Each symbol must be a ticker such as AAPL, BMW.DE or ^GSPC."
+                )
+            if symbol.upper() not in cleaned:
+                cleaned.append(symbol.upper())
+        parameters["symbols"] = cleaned
+        parameters["limit"] = len(cleaned)
+        return None
+
+    @staticmethod
     def _validate_search(parameters):
         query = parameters["query"]
         if (
@@ -301,6 +361,8 @@ class StockdexAdapter:
             try:
                 if operation == "search":
                     frame = self._search(parameters)
+                elif operation == "quotes":
+                    frame = self._quotes(parameters)
                 else:
                     provider = self._ticker_factory(ticker=symbol)
                     frame = self._fetch(
@@ -309,6 +371,8 @@ class StockdexAdapter:
             finally:
                 _PROVIDER_LOCK.release()
             result["retrieved_at"] = self._clock().isoformat()
+            if operation == "dividends":
+                result["source"] = frame.attrs.get("source", "digrin")
             if frame.empty:
                 raise NoDataError()
             if not frame.columns.is_unique:
@@ -435,6 +499,10 @@ class StockdexAdapter:
             return frame.sort_values("date", ascending=False, kind="stable")
         if operation == "dataset":
             return self._dataset(provider, parameters["dataset"])
+        if operation == "splits":
+            return self._events(provider.yahoo_api_splits(), "split_date")
+        if operation == "options":
+            return self._options(provider, parameters)
         if operation == "valuation":
             frame = provider.yahoo_api_valuation_measures(
                 frequency=parameters["frequency"], format="raw"
@@ -452,7 +520,95 @@ class StockdexAdapter:
                 "trading currency; ratios are unitless."
             )
             return frame.sort_values("date", ascending=False).reset_index(drop=True)
-        return self._dividends(provider.digrin_dividend, warnings)
+        return self._dividends_with_source(provider, parameters, warnings)
+
+    def _dividends_with_source(self, provider, parameters, warnings):
+        source = parameters.get("source", "digrin")
+        if source == "yahoo":
+            return self._yahoo_dividends(provider)
+        try:
+            frame = self._dividends(provider.digrin_dividend, warnings)
+        except (RateLimitError, RequestException, ValueError, RuntimeError):
+            if source != "auto":
+                raise
+            frame = pd.DataFrame()
+        if frame.empty and source == "auto":
+            warnings.append(
+                "Digrin was unavailable or empty; dividends come from Yahoo Finance."
+            )
+            return self._yahoo_dividends(provider)
+        frame.attrs["source"] = "digrin"
+        return frame
+
+    def _yahoo_dividends(self, provider):
+        frame = self._events(provider.yahoo_api_dividends(), "ex_dividend_date")
+        frame.attrs["source"] = "yahoo_api"
+        return frame
+
+    @staticmethod
+    def _events(frame, date_column):
+        if frame.empty:
+            return frame
+        frame = frame.rename_axis(date_column).reset_index()
+        frame[date_column] = pd.to_datetime(frame[date_column], utc=True).dt.strftime(
+            "%Y-%m-%d"
+        )
+        return frame.sort_values(date_column, ascending=False).reset_index(drop=True)
+
+    @staticmethod
+    def _options(provider, parameters):
+        frame = provider.yahoo_api_options_chain(
+            expiration=parameters["expiration"],
+            option_type=parameters["option_type"],
+        )
+        if frame.empty:
+            return frame
+        keep = [
+            "optionType",
+            "contractSymbol",
+            "strike",
+            "lastPrice",
+            "bid",
+            "ask",
+            "change",
+            "percentChange",
+            "volume",
+            "openInterest",
+            "impliedVolatility",
+            "inTheMoney",
+            "expiration",
+            "lastTradeDate",
+            "currency",
+        ]
+        return frame[[c for c in keep if c in frame]].reset_index(drop=True)
+
+    def _quotes(self, parameters):
+        quotes = getattr(self._ticker_factory, "yahoo_api_quotes", None)
+        if quotes is None:
+            quotes = Ticker.yahoo_api_quotes
+        frame = quotes(parameters["symbols"])
+        if frame.empty:
+            return frame
+        keep = [
+            "shortName",
+            "quoteType",
+            "currency",
+            "exchange",
+            "marketState",
+            "regularMarketPrice",
+            "regularMarketChange",
+            "regularMarketChangePercent",
+            "regularMarketVolume",
+            "regularMarketTime",
+            "marketCap",
+            "fiftyTwoWeekLow",
+            "fiftyTwoWeekHigh",
+            "trailingPE",
+            "forwardPE",
+            "dividendYield",
+        ]
+        frame = frame[[c for c in keep if c in frame]]
+        return frame.rename_axis("symbol").reset_index()
 
     def _search(self, parameters):
         search = getattr(self._ticker_factory, "yahoo_api_search", None)
