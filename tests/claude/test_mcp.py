@@ -12,6 +12,8 @@ import anyio  # noqa: E402
 from mcp import ClientSession  # noqa: E402
 from mcp.client.stdio import StdioServerParameters, stdio_client  # noqa: E402
 
+from tests.claude.conftest import EXPECTED_TOOLS  # noqa: E402
+
 
 def test_stdio_tools(tmp_path):
     async def exercise():
@@ -27,11 +29,7 @@ def test_stdio_tools(tmp_path):
                 async with ClientSession(read, write) as session:
                     await session.initialize()
                     listing = await session.list_tools()
-                    assert {t.name for t in listing.tools} == {
-                        "get_prices",
-                        "get_financial_statement",
-                        "get_dividends",
-                    }
+                    assert {t.name for t in listing.tools} == EXPECTED_TOOLS
                     for tool in listing.tools:
                         assert tool.annotations.read_only_hint is True
                         assert tool.annotations.destructive_hint is False
@@ -140,7 +138,7 @@ def test_legacy_stdio_handshake(tmp_path):
             await send(
                 {"jsonrpc": "2.0", "id": 2, "method": "tools/list", "params": {}}
             )
-            assert len((await receive(2))["result"]["tools"]) == 3
+            assert len((await receive(2))["result"]["tools"]) == len(EXPECTED_TOOLS)
             await send(
                 {
                     "jsonrpc": "2.0",

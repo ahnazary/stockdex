@@ -12,6 +12,7 @@ pytest.importorskip("mcp")
 import anyio  # noqa: E402
 
 from stockdex.claude_mcp import create_server  # noqa: E402
+from tests.claude.conftest import EXPECTED_TOOLS  # noqa: E402
 
 
 @pytest.fixture(scope="module")
@@ -20,7 +21,7 @@ def tools():
 
 
 def test_every_tool_declares_required_annotations(tools):
-    assert len(tools) == 3
+    assert {tool.name for tool in tools} == EXPECTED_TOOLS
     for tool in tools:
         assert tool.title, tool.name
         assert tool.annotations.title == tool.title

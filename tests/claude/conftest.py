@@ -8,6 +8,13 @@ from curl_cffi import requests
 
 from stockdex.claude_adapter import StockdexAdapter
 
+# Every MCP tool the server must expose. Add new tools here and in claude_mcp.
+EXPECTED_TOOLS = {
+    "get_prices",
+    "get_financial_statement",
+    "get_dividends",
+}
+
 
 @pytest.fixture(autouse=True)
 def deny_network(monkeypatch):

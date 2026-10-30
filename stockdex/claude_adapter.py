@@ -30,10 +30,39 @@ DEFAULT_METRICS = {
     ],
 }
 _PROVIDER_LOCK = threading.Lock()
+_SOURCES = {"dividends": "digrin"}
 # Optional "^" prefix for indices (^GSPC) and "=" for futures/FX (GC=F, EURUSD=X).
 _SYMBOL = re.compile(r"\^?[A-Z0-9]+(?:[.=-][A-Z0-9]+)*", re.ASCII)
 # Placeholder Yahoo parsers emit when a field is absent from the response.
 _UNAVAILABLE = "Data Not Available"
+# Yahoo datasets exposed through StockdexAdapter.get_dataset.
+# "record" methods return one value per field; "table" methods return rows.
+YAHOO_DATASETS = {
+    "profile": ("yahoo_api_profile", "record"),
+    "officers": ("yahoo_api_officers", "table"),
+    "market_price": ("yahoo_api_market_price", "record"),
+    "summary": ("yahoo_api_summary_detail", "record"),
+    "key_statistics": ("yahoo_api_key_statistics", "record"),
+    "financial_data": ("yahoo_api_financial_data", "record"),
+    "earnings_calendar": ("yahoo_api_calendar_events", "record"),
+    "earnings_history": ("yahoo_api_earnings_history", "table"),
+    "estimates": ("yahoo_api_earnings_trend", "table"),
+    "recommendations": ("yahoo_api_recommendation_trend", "table"),
+    "upgrades_downgrades": ("yahoo_api_upgrades_downgrades", "table"),
+    "institutional_holders": ("yahoo_api_institutional_holders", "table"),
+    "fund_holders": ("yahoo_api_fund_holders", "table"),
+    "ownership_breakdown": ("yahoo_api_major_holders", "record"),
+    "insiders": ("yahoo_api_insider_holders", "table"),
+    "insider_transactions": ("yahoo_api_insider_transactions", "table"),
+    "insider_activity": ("yahoo_api_insider_purchase_activity", "record"),
+    "sec_filings": ("yahoo_api_sec_filings", "table"),
+    "fund_top_holdings": ("yahoo_api_fund_top_holdings", "table"),
+    "fund_sectors": ("yahoo_api_fund_sector_weightings", "table"),
+    "fund_asset_allocation": ("yahoo_api_fund_asset_allocation", "record"),
+    "fund_profile": ("yahoo_api_fund_profile", "record"),
+    "fund_performance": ("yahoo_api_fund_performance", "table"),
+    "similar_symbols": ("yahoo_api_similar_symbols", "table"),
+}
 _AMOUNT = re.compile(
     r"(?P<amount>[+-]?(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?)"
     r"\s+(?P<currency>[A-Z]{3})(?:\s*\([+-]?\d+(?:\.\d+)?%\))?"
@@ -50,6 +79,10 @@ def encode_json(value):
 
 
 def _scalar(value):
+    if isinstance(value, (list, tuple)):
+        return [_scalar(item) for item in value]
+    if isinstance(value, dict):
+        return {str(key): _scalar(item) for key, item in value.items()}
     if value is None or pd.isna(value):
         return None
     if isinstance(value, np.generic):
@@ -114,6 +147,15 @@ class StockdexAdapter:
     def get_dividends(self, ticker, limit=20):
         return self._request("dividends", ticker, {"limit": limit})
 
+    def get_dataset(self, ticker, dataset, limit=None):
+        """
+        One Yahoo Finance dataset from YAHOO_DATASETS, e.g. "profile".
+
+        Record datasets return ``field``/``value`` rows and by default every
+        field; table datasets return their rows, 20 by default.
+        """
+        return self._request("dataset", ticker, {"dataset": dataset, "limit": limit})
+
     def _validate(self, operation, ticker, parameters):
         if (
             not isinstance(ticker, str)
@@ -126,6 +168,14 @@ class StockdexAdapter:
             raise InputError(
                 "Use a ticker symbol, e.g. AAPL, BRK-B, BMW.DE, ^GSPC or GC=F; not a URL."
             )
+        if operation == "dataset":
+            if parameters["dataset"] not in YAHOO_DATASETS:
+                raise InputError(
+                    "dataset must be one of: " + ", ".join(sorted(YAHOO_DATASETS))
+                )
+            if parameters["limit"] is None:
+                kind = YAHOO_DATASETS[parameters["dataset"]][1]
+                parameters["limit"] = MAX_ROWS if kind == "record" else 20
         if (
             type(parameters["limit"]) is not int
             or not 1 <= parameters["limit"] <= MAX_ROWS
@@ -186,7 +236,7 @@ class StockdexAdapter:
             "ok": False,
             "operation": operation,
             "ticker": None,
-            "source": "digrin" if operation == "dividends" else "yahoo_api",
+            "source": _SOURCES.get(operation, "yahoo_api"),
             "retrieved_at": None,
             "parameters": {},
             "columns": [],
@@ -338,7 +388,24 @@ class StockdexAdapter:
                 "Raw provider values; currency/units are not supplied by this interface. Do not assume all metrics are monetary. End date is exclusive."
             )
             return frame.sort_values("date", ascending=False, kind="stable")
+        if operation == "dataset":
+            return self._dataset(provider, parameters["dataset"])
         return self._dividends(provider.digrin_dividend, warnings)
+
+    @staticmethod
+    def _dataset(provider, dataset):
+        method, kind = YAHOO_DATASETS[dataset]
+        frame = getattr(provider, method)()
+        if frame.empty:
+            return frame
+        if kind == "record":
+            frame = frame.iloc[:, :1].copy()
+            frame.columns = ["value"]
+            return frame.rename_axis("field").reset_index()
+        if not isinstance(frame.index, pd.RangeIndex):
+            name = frame.index.name or "key"
+            frame = frame.rename_axis(name).reset_index()
+        return frame.reset_index(drop=True)
 
     @staticmethod
     def _dividends(frame, warnings):
