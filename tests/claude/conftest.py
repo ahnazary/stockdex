@@ -17,6 +17,8 @@ EXPECTED_TOOLS = {
     "get_company_profile",
     "get_key_statistics",
     "get_valuation_history",
+    "get_analyst_estimates",
+    "get_earnings_calendar",
 }
 
 
@@ -89,6 +91,17 @@ class FakeTicker:
                 f"{frequency}PeRatio": [33.1, 35.0],
             },
             index=["2026-03-31", "2026-06-30"],
+        )
+
+    def yahoo_api_earnings_trend(self):
+        return pd.DataFrame(
+            {"period": ["0q", "+1q"], "earningsEstimate_avg": [1.98, 2.1]}
+        )
+
+    def yahoo_api_calendar_events(self):
+        return pd.DataFrame(
+            {self.ticker: [pd.Timestamp("2026-11-02 20:00", tz="UTC"), 1.98]},
+            index=["earningsDate", "earningsAverage"],
         )
 
     @property

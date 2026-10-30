@@ -167,6 +167,36 @@ def create_server(adapter=None):
             limit=limit,
         )
 
+    @server.tool(
+        title="Get analyst estimates",
+        annotations=tool_annotations("Get analyst estimates"),
+    )
+    async def get_analyst_estimates(
+        ticker: str,
+        dataset: Literal[
+            "estimates", "recommendations", "upgrades_downgrades", "earnings_history"
+        ] = "estimates",
+        limit: Optional[RowLimit] = None,
+    ) -> CallToolResult:
+        """Get analyst coverage for one ticker from Yahoo Finance. dataset="estimates" (default): EPS and revenue estimates, EPS trend and revisions for the current and next quarter and year. "recommendations": strong buy to strong sell counts per month. "upgrades_downgrades": rating changes and price-target moves by firm, newest first. "earnings_history": reported vs estimated EPS and surprise for the last four quarters."""
+        return await invoke(
+            adapter.get_dataset, ticker=ticker, dataset=dataset, limit=limit
+        )
+
+    @server.tool(
+        title="Get earnings calendar",
+        annotations=tool_annotations("Get earnings calendar"),
+    )
+    async def get_earnings_calendar(
+        ticker: str,
+        dataset: Literal["earnings_calendar"] = "earnings_calendar",
+        limit: Optional[RowLimit] = None,
+    ) -> CallToolResult:
+        """Get upcoming events for one ticker from Yahoo Finance: next earnings date(s) and call time, whether the date is an estimate, EPS and revenue estimate average/low/high, ex-dividend date and dividend payment date. Dates are ISO 8601 UTC."""
+        return await invoke(
+            adapter.get_dataset, ticker=ticker, dataset=dataset, limit=limit
+        )
+
     return server
 
 

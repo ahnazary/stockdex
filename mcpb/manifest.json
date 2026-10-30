@@ -53,6 +53,14 @@
     {
       "name": "get_valuation_history",
       "description": "Market cap, enterprise value and valuation ratios over time from Yahoo Finance."
+    },
+    {
+      "name": "get_analyst_estimates",
+      "description": "Analyst EPS and revenue estimates, recommendations, rating changes and earnings surprises from Yahoo Finance."
+    },
+    {
+      "name": "get_earnings_calendar",
+      "description": "Next earnings date and estimates, ex-dividend and dividend payment dates from Yahoo Finance."
     }
   ],
   "tools_generated": false,
