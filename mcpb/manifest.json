@@ -2,7 +2,7 @@
   "manifest_version": "0.4",
   "name": "stockdex",
   "display_name": "Stockdex",
-  "version": "1.3.1",
+  "version": "1.4.0",
   "description": "Read-only stock prices, financial statements and dividends from Yahoo Finance and Digrin.",
   "long_description": "Stockdex gives Claude three read-only tools for public market data: daily price history (open, high, low, close, volume) and income statement, cash flow and balance sheet figures from Yahoo Finance, and dividend history from Digrin. No account or API key is needed.\n\n**Privacy:** Stockdex runs on your computer. It sends only the ticker symbol and request parameters (such as date range or metric names) to Yahoo Finance and Digrin, and returns their responses to Claude. It does not collect, store or transmit personal data or conversation content, and it does not use telemetry.\n\n**Example prompts**\n- \"How has Microsoft's stock price moved over the last 6 months?\"\n- \"Show Apple's annual revenue, net income and EPS for the last five years.\"\n- \"What dividends has Coca-Cola (KO) paid recently?\"\n\nStockdex is not investment advice. Data comes from third-party providers and may be delayed, incomplete or rate-limited.",
   "author": {
