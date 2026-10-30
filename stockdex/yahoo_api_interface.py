@@ -11,7 +11,7 @@ import plotly.express as px
 
 from stockdex import config
 from stockdex.config import VALID_DATA_SOURCES, VALID_SECURITY_TYPES
-from stockdex.exceptions import FieldNotExists
+from stockdex.exceptions import FieldNotExists, NoDataError
 from stockdex.lib import plot_dataframe
 from stockdex.ticker_base import TickerBase
 
@@ -502,6 +502,104 @@ class YahooAPI(TickerBase):
         columns ``amount`` and ``currency``. Empty for most stocks.
         """
         return self._yahoo_api_chart_events("capitalGains", range)
+
+    @staticmethod
+    def _unwrap(value, format: Literal["fmt", "raw"] = "raw"):
+        """
+        Replace Yahoo's ``{"raw": ..., "fmt": ...}`` wrappers with one value
+
+        Empty wrappers (``{}``), which Yahoo uses for missing values, become
+        ``None``. Nested dicts and lists are unwrapped recursively.
+        """
+        if isinstance(value, dict):
+            if "raw" in value or "fmt" in value:
+                # Fall back to whichever representation Yahoo did send.
+                return value.get(format, value.get("raw", value.get("fmt")))
+            if not value:
+                return None
+            return {k: YahooAPI._unwrap(v, format) for k, v in value.items()}
+        if isinstance(value, list):
+            return [YahooAPI._unwrap(v, format) for v in value]
+        return value
+
+    def yahoo_api_quote_summary(
+        self,
+        modules: Union[str, list],
+        format: Literal["fmt", "raw"] = "raw",
+    ) -> dict:
+        """
+        Get one or more modules from Yahoo's quoteSummary endpoint
+
+        This is the building block for the company, analyst, ownership and fund
+        methods. Use it directly to fetch any module listed in
+        ``stockdex.config.QUOTE_SUMMARY_MODULES``.
+
+        Args:
+        ----------------
+        modules (str | list): One module name or a list of module names,
+        e.g. ``"financialData"`` or ``["price", "summaryDetail"]``
+
+        format (str): "raw" for numbers and epoch timestamps (default),
+        "fmt" for Yahoo's human readable strings, e.g. "1.2B" or "2026-11-02"
+
+        Returns:
+        ----------------
+        dict: Module name to module data. A requested module that Yahoo does
+        not provide for this security is omitted.
+
+        Raises:
+        ----------------
+        ValueError: If a module name is not supported
+        """
+        if isinstance(modules, str):
+            modules = [modules]
+        unknown = sorted(set(modules) - set(config.QUOTE_SUMMARY_MODULES))
+        if not modules or unknown:
+            raise ValueError(
+                f"Unsupported quoteSummary module(s): {unknown or modules}. "
+                f"Valid modules: {', '.join(config.QUOTE_SUMMARY_MODULES)}"
+            )
+
+        url = (
+            f"{config.QUOTE_SUMMARY_URL}/{self.ticker}"
+            f"?modules={','.join(modules)}&formatted=true"
+        )
+        try:
+            response = self.get_response(url)
+        except RuntimeError as error:
+            # Yahoo answers 404 both for unknown symbols and when none of the
+            # requested modules apply (e.g. fund modules for a stock).
+            if "status 404" not in str(error):
+                raise
+            return self._quote_summary_not_found()
+        results = response.json()["quoteSummary"]["result"] or [{}]
+        data = results[0]
+        return {
+            module: self._unwrap(data[module], format)
+            for module in modules
+            if data.get(module) is not None
+        }
+
+    def _quote_summary_not_found(self) -> dict:
+        """
+        Decide what a quoteSummary 404 means for this ticker
+
+        Returns an empty dict when the symbol exists (the requested modules
+        just don't apply to it) and raises NoDataError when Yahoo does not
+        know the symbol at all.
+        """
+        probe = (
+            f"{config.QUOTE_SUMMARY_URL}/{self.ticker}?modules=quoteType&formatted=true"
+        )
+        try:
+            self.get_response(probe)
+        except RuntimeError as error:
+            if "status 404" in str(error):
+                raise NoDataError(
+                    f"Yahoo Finance has no quote for symbol {self.ticker}"
+                ) from None
+            raise
+        return {}
 
     def plot_yahoo_api_income_statement(
         self,

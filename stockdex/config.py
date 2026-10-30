@@ -504,3 +504,37 @@ VALUATION_COLUMNS = [
     "EnterprisesValueRevenueRatio",
     "EnterprisesValueEBITDARatio",
 ]
+
+# Yahoo quoteSummary endpoint and the modules stockdex can request from it.
+QUOTE_SUMMARY_URL = "https://query2.finance.yahoo.com/v10/finance/quoteSummary"
+QUOTE_SUMMARY_MODULES = [
+    "assetProfile",
+    "summaryProfile",
+    "summaryDetail",
+    "price",
+    "quoteType",
+    "defaultKeyStatistics",
+    "financialData",
+    "calendarEvents",
+    "earnings",
+    "earningsHistory",
+    "earningsTrend",
+    "recommendationTrend",
+    "upgradeDowngradeHistory",
+    "institutionOwnership",
+    "fundOwnership",
+    "majorHoldersBreakdown",
+    "majorDirectHolders",
+    "insiderHolders",
+    "insiderTransactions",
+    "netSharePurchaseActivity",
+    "secFilings",
+    "esgScores",
+    "industryTrend",
+    "sectorTrend",
+    "indexTrend",
+    # ETF and mutual fund modules
+    "topHoldings",
+    "fundProfile",
+    "fundPerformance",
+]

@@ -115,6 +115,15 @@ def test_yahoo_api_valuation_measures(frequency):
     assert frame.index.is_monotonic_increasing
 
 
+def test_yahoo_api_quote_summary():
+    data = Ticker("AAPL").yahoo_api_quote_summary(
+        ["price", "summaryDetail", "financialData"]
+    )
+    assert set(data) == {"price", "summaryDetail", "financialData"}
+    assert isinstance(data["financialData"]["currentPrice"], float)
+    assert data["price"]["currency"] == "USD"
+
+
 @pytest.mark.parametrize(
     "ticker, frequency, format, period1, period2",
     [
