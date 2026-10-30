@@ -48,6 +48,8 @@ Claude Desktop (one click)
 Claude Desktop installs Python and the dependencies itself. You don't need a
 terminal.
 
+.. _claude-code-plugin:
+
 Claude Code (plugin)
 --------------------
 
@@ -105,22 +107,25 @@ Arguments and limits
   allowed values and default.
 * **Dividends** use ``source`` ``digrin`` (default), ``yahoo`` or ``auto``
   (Digrin, falling back to Yahoo Finance).
-* **Statement source**: ``get_financial_statement`` takes ``source``
-  ``yahoo`` (default, up to five years, Yahoo metric names such as
-  ``TotalRevenue``) or ``macrotrends`` (about 15 years, Macrotrends row names
-  such as ``Revenue``, values in millions).
 * **Prices** use ``range`` ``1mo`` (default), ``3mo``, ``6mo`` or ``1y`` at a
   daily interval. These are historical bars, not real-time quotes.
-* **Financial statements**:
+* **Financial statements** (``get_financial_statement``):
 
   * ``statement`` is ``income_statement`` (default), ``cash_flow`` or
     ``balance_sheet``.
   * ``frequency`` is ``annual`` (default) or ``quarterly``.
-  * ``start_date`` and ``end_date`` are ``YYYY-MM-DD``. The window can be at
-    most five years, and the end date is exclusive.
-  * ``metrics`` takes up to 20 names from ``stockdex/config.py``, without a
-    prefix, e.g. ``TotalRevenue``. Output columns have an ``annual`` or
-    ``quarterly`` prefix.
+  * ``start_date`` and ``end_date`` are ``YYYY-MM-DD``; the end date is
+    exclusive.
+  * ``source="yahoo"`` (default): the window can be at most five years.
+    ``metrics`` takes up to 20 names from ``stockdex/config.py`` without a
+    prefix, e.g. ``TotalRevenue``, and output columns have an ``annual`` or
+    ``quarterly`` prefix, e.g. ``annualTotalRevenue``.
+  * ``source="macrotrends"``: about 15 years, with no window limit.
+    ``metrics`` takes up to 20 Macrotrends row names, e.g. ``Revenue`` or
+    ``Net Income`` (case-insensitive), and output columns are those names
+    without a prefix. Amounts are in millions of the reporting currency, but
+    per-share figures such as EPS and ratios are not scaled: an EPS of
+    ``7.46`` is 7.46 per share.
 
 Reading results
 ---------------
@@ -140,7 +145,8 @@ Every call returns a JSON envelope. Check ``ok`` first, then use
 * ``network_error``, ``no_data``, ``provider_schema_error`` or
   ``provider_error``.
 
-* Statement values are raw provider numbers with **unknown currency and units**.
+* Yahoo Finance statement values are raw provider numbers with **unknown
+  currency and units**. Macrotrends units are described above.
 * ``null`` means the value is missing, not zero.
 * Fractions are not percentages: a yield or margin of ``0.031`` is 3.1%.
 * Only one provider request runs at a time. Respect provider rate limits and

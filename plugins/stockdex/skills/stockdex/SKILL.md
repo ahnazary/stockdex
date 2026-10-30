@@ -60,8 +60,10 @@ With `source="macrotrends"` use Macrotrends row names instead, e.g.
 `EPS - Earnings Per Share`, `Total Assets`, `Long Term Debt`,
 `Share Holder Equity`, `Cash Flow From Operating Activities`. Matching is
 case-insensitive; an unknown name comes back null with a warning listing the
-available rows. Values are in millions. Use it when the user asks for more
-than five years of history.
+available rows. Amounts are in millions of the reporting currency, but
+per-share figures (EPS) and ratios are not scaled. There is no five-year
+window limit and output columns are not prefixed. Use it when the user asks
+for more than five years of history.
 
 ## Reading results
 
@@ -69,8 +71,9 @@ Every result is a JSON envelope. Check `ok` first.
 
 - Cite `source`, the observation dates and `retrieved_at`. Mention `truncated`
   and any `warnings`.
-- Statement values have **unknown currency and units**. Don't assume USD or
-  millions. Prices, quotes, dividends and options carry `currency`.
+- Yahoo Finance statement values have **unknown currency and units**. Don't
+  assume USD or millions. Prices, quotes, dividends and options carry
+  `currency`.
 - Fractions are not percentages: a yield, margin, holding or return of `0.031`
   means 3.1%.
 - `null` means missing, never zero. `no_data` doesn't prove zero dividends or

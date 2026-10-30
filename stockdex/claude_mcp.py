@@ -90,7 +90,7 @@ def create_server(adapter=None):
         limit: RowLimit = 20,
         source: Literal["yahoo", "macrotrends"] = "yahoo",
     ) -> CallToolResult:
-        """Get income statement, cash flow or balance sheet figures for one ticker, annual or quarterly, newest first. source="yahoo" (default): Yahoo Finance, up to 5 years (end date exclusive), metric names such as TotalRevenue; currency and units may be unknown. source="macrotrends": Macrotrends, about 15 years, row names such as Revenue or Net Income, values in millions. Up to 20 metrics; defaults cover revenue, net income, EPS, cash flow, assets, liabilities and equity."""
+        """Get income statement, cash flow or balance sheet figures for one ticker, annual or quarterly, newest first. source="yahoo" (default): Yahoo Finance, up to 5 years (end date exclusive), metric names such as TotalRevenue; currency and units may be unknown. source="macrotrends": Macrotrends, about 15 years, row names such as Revenue or Net Income, amounts in millions (EPS and ratios unscaled). Up to 20 metrics; defaults cover revenue, net income, EPS, cash flow, assets, liabilities and equity."""
         return await invoke(
             adapter.get_financial_statement,
             ticker=ticker,

@@ -389,6 +389,17 @@ class StockdexAdapter:
         """
         return self._request("dataset", ticker, {"dataset": dataset, "limit": limit})
 
+    @staticmethod
+    def _requested_source(operation, parameters, default):
+        """The provider a request asks for, before its parameters are validated"""
+        if operation == "financial_statement":
+            return {"macrotrends": "macrotrends"}.get(parameters.get("source"), default)
+        if operation == "dividend_metrics":
+            dataset = parameters.get("dataset")
+            if isinstance(dataset, str) and dataset in DIVIDEND_METRICS:
+                return DIVIDEND_METRICS[dataset][0]
+        return default
+
     def _validate(self, operation, ticker, parameters):
         if operation == "search":
             return self._validate_search(parameters)
@@ -569,6 +580,10 @@ class StockdexAdapter:
         }
         try:
             parameters = dict(parameters)
+            # Report the requested provider even when validation rejects the call
+            result["source"] = self._requested_source(
+                operation, parameters, result["source"]
+            )
             symbol = self._validate(operation, ticker, parameters)
             result.update(ticker=symbol, parameters=parameters)
             if operation == "financial_statement":
@@ -962,8 +977,6 @@ class StockdexAdapter:
         wanted = parameters["metrics"]
         found = [by_name.get(m.casefold()) for m in wanted]
         missing = [m for m, f in zip(wanted, found) if f is None]
-        if len(missing) == len(wanted):
-            raise NoDataError()
         if missing:
             warnings.append(
                 "Unavailable metrics returned as null: "
@@ -971,6 +984,8 @@ class StockdexAdapter:
                 + ". Available rows: "
                 + ", ".join(str(n) for n in frame.index[:40])
             )
+        if len(missing) == len(wanted):
+            raise NoDataError()
         rows = frame.reindex([f for f in found if f is not None]).T
         rows.columns = [m for m, f in zip(wanted, found) if f is not None]
         rows = rows.reindex(columns=wanted)
@@ -1112,7 +1127,18 @@ class StockdexAdapter:
         frame = provider.finviz_get_insider_trading()
         if frame.empty:
             return frame
-        expected = {"Insider Trading", "Relationship", "Date", "Transaction", "Cost"}
+        # Every column the output is built from; empty cells are still allowed.
+        expected = {
+            "Insider Trading",
+            "Relationship",
+            "Date",
+            "Transaction",
+            "Cost",
+            "#Shares",
+            "Value ($)",
+            "#Shares Total",
+            "SEC Form 4",
+        }
         if not expected <= set(frame.columns):
             raise LayoutChangedError("Finviz", "insider trading columns changed")
 
@@ -1130,12 +1156,10 @@ class StockdexAdapter:
                 "relationship": frame["Relationship"],
                 "transaction": frame["Transaction"],
                 "price": frame["Cost"].map(number),
-                "shares": frame.get("#Shares", pd.Series(dtype=str)).map(number),
-                "value_usd": frame.get("Value ($)", pd.Series(dtype=str)).map(number),
-                "shares_held_after": frame.get(
-                    "#Shares Total", pd.Series(dtype=str)
-                ).map(number),
-                "filed": frame.get("SEC Form 4", pd.Series(dtype=str)),
+                "shares": frame["#Shares"].map(number),
+                "value_usd": frame["Value ($)"].map(number),
+                "shares_held_after": frame["#Shares Total"].map(number),
+                "filed": frame["SEC Form 4"],
             }
         )
         warnings.append(
@@ -1163,10 +1187,11 @@ class StockdexAdapter:
                 "salesEstimate": "revenue_estimate",
                 "epsAnalysts": "eps_analysts",
             }
-            missing = {"fiscalPeriod", "epsActual", "epsEstimate"} - set(frame)
-            if missing:
+            # A missing column is a layout change; null values (e.g. upcoming
+            # reports without actuals) are fine.
+            if not set(keep) <= set(frame):
                 raise LayoutChangedError("Finviz", "earnings columns changed")
-            out = frame[[c for c in keep if c in frame]].rename(columns=keep)
+            out = frame[list(keep)].rename(columns=keep)
             out["eps_surprise_pct"] = (
                 (out["eps_actual"] - out["eps_estimate"])
                 / out["eps_estimate"].abs()
@@ -1184,13 +1209,23 @@ class StockdexAdapter:
             frame = provider.finviz_earnings_revisions_data()
             if frame.empty:
                 return frame
-            needed = {"fiscalPeriod", "estimateType", "estimateDate", "mean"}
+            needed = {
+                "fiscalPeriod",
+                "estimateType",
+                "estimateDate",
+                "mean",
+                "high",
+                "low",
+                "estimates",
+                "upRevisions",
+                "downRevisions",
+            }
             if not needed <= set(frame):
                 raise LayoutChangedError("Finviz", "revision columns changed")
-            latest = (
-                frame.sort_values("estimateDate")
-                .groupby(["fiscalPeriod", "estimateType"], as_index=False)
-                .last()
+            # The newest whole row per period and type. GroupBy.last() would
+            # mix columns from older snapshots when the newest has nulls.
+            latest = frame.sort_values("estimateDate", kind="stable").drop_duplicates(
+                ["fiscalPeriod", "estimateType"], keep="last"
             )
             out = pd.DataFrame(
                 {
@@ -1200,11 +1235,11 @@ class StockdexAdapter:
                     ),
                     "as_of": latest["estimateDate"].str[:10],
                     "mean": latest["mean"],
-                    "high": latest.get("high"),
-                    "low": latest.get("low"),
-                    "analysts": latest.get("estimates"),
-                    "up_revisions": latest.get("upRevisions"),
-                    "down_revisions": latest.get("downRevisions"),
+                    "high": latest["high"],
+                    "low": latest["low"],
+                    "analysts": latest["estimates"],
+                    "up_revisions": latest["upRevisions"],
+                    "down_revisions": latest["downRevisions"],
                 }
             )
             warnings.append(

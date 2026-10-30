@@ -79,6 +79,17 @@ def test_insider_trades_layout_change(adapter, provider, monkeypatch):
 
 
 @pytest.mark.parametrize(
+    "column", ["#Shares", "Value ($)", "#Shares Total", "SEC Form 4"]
+)
+def test_insider_trades_missing_column_is_layout_change(
+    adapter, provider, monkeypatch, column
+):
+    frame = provider.finviz_get_insider_trading().drop(columns=[column])
+    monkeypatch.setattr(provider, "finviz_get_insider_trading", lambda: frame)
+    assert adapter.get_insider_trades("AAPL")["error"]["code"] == "layout_changed"
+
+
+@pytest.mark.parametrize(
     "text, iso",
     [("Oct 27 '26", "2026-10-27"), ("Jan 02 '25", "2025-01-02")],
 )
@@ -125,6 +136,18 @@ def test_surprises(adapter):
     assert reported["revenue_actual"] == 109417.0
 
 
+@pytest.mark.parametrize(
+    "column", ["salesActual", "salesEstimate", "earningsDate", "epsAnalysts"]
+)
+def test_surprises_missing_column_is_layout_change(
+    adapter, provider, monkeypatch, column
+):
+    frame = provider.finviz_earnings_data().drop(columns=[column])
+    monkeypatch.setattr(provider, "finviz_earnings_data", lambda: frame)
+    result = adapter.get_earnings_reaction("AAPL", dataset="surprises")
+    assert result["error"]["code"] == "layout_changed"
+
+
 def test_revisions_keep_latest_per_period(adapter):
     result = adapter.get_earnings_reaction("AAPL", dataset="revisions")
     assert result["ok"]
@@ -156,6 +179,30 @@ def test_revisions_keep_latest_per_period(adapter):
             "down_revisions": 2,
         },
     ]
+
+
+@pytest.mark.parametrize(
+    "column", ["high", "low", "estimates", "upRevisions", "downRevisions"]
+)
+def test_revisions_missing_column_is_layout_change(
+    adapter, provider, monkeypatch, column
+):
+    frame = provider.finviz_earnings_revisions_data().drop(columns=[column])
+    monkeypatch.setattr(provider, "finviz_earnings_revisions_data", lambda: frame)
+    result = adapter.get_earnings_reaction("AAPL", dataset="revisions")
+    assert result["error"]["code"] == "layout_changed"
+
+
+def test_revisions_latest_row_keeps_its_nulls(adapter, provider, monkeypatch):
+    frame = provider.finviz_earnings_revisions_data()
+    # The newest EPS snapshot has no high or revision counts.
+    frame.loc[1, ["high", "upRevisions"]] = [float("nan"), float("nan")]
+    monkeypatch.setattr(provider, "finviz_earnings_revisions_data", lambda: frame)
+    result = adapter.get_earnings_reaction("AAPL", dataset="revisions")
+    eps = result["records"][0]
+    assert eps["as_of"] == "2026-10-30" and eps["mean"] == 1.9897
+    # Not filled in from the older 2026-10-26 snapshot.
+    assert eps["high"] is None and eps["up_revisions"] is None
 
 
 def test_earnings_reaction_rejects_dataset(adapter):

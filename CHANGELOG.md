@@ -18,28 +18,34 @@
 
 ### Deprecated
 
-- All `yahoo_web_*` attributes. The Yahoo Finance website scraper has been removed because every dataset it returned is available from the Yahoo Finance API. The old names still work for now: each emits a `DeprecationWarning` and returns the data from its `yahoo_api_*` replacement, with the API's column layout. They will be removed in 2.0.
+- All `yahoo_web_*` attributes, including the `yahoo_web_financials_table(url, frequency)` method. The Yahoo Finance website scraper has been removed because every dataset it returned is available from the Yahoo Finance API. The old names still work for now: each emits a `DeprecationWarning`, keeps its old security type check and returns the data from its `yahoo_api_*` replacement, with the API's column layout. They will be removed in 2.0.
 
   | Deprecated | Replacement |
   |---|---|
+  | `yahoo_web_financials_table(url, frequency)` | `yahoo_api_income_statement()`, `yahoo_api_balance_sheet()` or `yahoo_api_cash_flow()`, picked from the URL (`/financials`, `/balance-sheet`, `/cash-flow`). Other URLs raise `ValueError`. |
   | `yahoo_web_income_stmt`, `yahoo_web_balance_sheet`, `yahoo_web_cashflow` | `yahoo_api_income_statement()`, `yahoo_api_balance_sheet()`, `yahoo_api_cash_flow()` |
   | `yahoo_web_calls`, `yahoo_web_puts` | `yahoo_api_options_chain(option_type="calls" / "puts")` |
   | `yahoo_web_description`, `yahoo_web_corporate_governance` | `yahoo_api_profile()` |
   | `yahoo_web_key_executives` | `yahoo_api_officers()` |
   | `yahoo_web_major_holders`, `yahoo_web_top_institutional_holders`, `yahoo_web_top_mutual_fund_holders` | `yahoo_api_major_holders()`, `yahoo_api_institutional_holders()`, `yahoo_api_fund_holders()` |
-  | `yahoo_web_summary` | `yahoo_api_summary_detail()` |
-  | `yahoo_web_valuation_measures` | `yahoo_api_valuation_measures()` |
-  | `yahoo_web_financial_highlights`, `yahoo_web_trading_information` | `yahoo_api_financial_data()`, `yahoo_api_key_statistics()` |
-  | `yahoo_web_earnings_estimate`, `yahoo_web_revenue_estimate`, `yahoo_web_eps_trend`, `yahoo_web_eps_revisions`, `yahoo_web_growth_estimates` | `yahoo_api_earnings_trend()` |
+  | `yahoo_web_summary` | `yahoo_api_market_price()` and `yahoo_api_summary_detail()` |
+  | `yahoo_web_valuation_measures` | `yahoo_api_valuation_measures()`, plus `yahoo_api_valuation_measures(frequency="trailing")` for the current values (the alias adds them as a `Current` row) |
+  | `yahoo_web_financial_highlights` | `yahoo_api_financial_data()`, plus the fiscal year end and most recent quarter from `yahoo_api_key_statistics()` |
+  | `yahoo_web_trading_information` | `yahoo_api_key_statistics()`, plus the 52-week range, averages and dividend fields from `yahoo_api_summary_detail()` |
+  | `yahoo_web_earnings_estimate`, `yahoo_web_revenue_estimate`, `yahoo_web_eps_trend`, `yahoo_web_eps_revisions`, `yahoo_web_growth_estimates` | `yahoo_api_earnings_trend()`. The S&P 500 benchmark row of the old growth estimates table is no longer available. |
   | `yahoo_web_earnings_history` | `yahoo_api_earnings_history()` |
   | `yahoo_web_full_name` | `yahoo_api_company_name()` |
 
 ### Fixed
 
+- The default `period1` and `period2` of the Yahoo Finance API statement, valuation and plot methods are worked out on each call. Before, they were fixed when stockdex was imported, so a long-running process kept requesting the same date window.
+- Macrotrends and Finviz cache downloaded pages per `Ticker` instead of in a class-wide `lru_cache`, so long-running processes no longer keep every ticker and its pages in memory.
 - Macrotrends parses its embedded data with `json.loads` instead of `eval`, so page content is never executed.
 - Finviz methods return empty DataFrames instead of raising `IndexError` when a list is empty, e.g. `finviz_dividends_annual_data` for some tickers.
 - `finviz_overall_dividend` no longer removes the dividend lists from the cached page data, so `finviz_dividends_date_data` works after it.
 - An HTTP 429 during the 403 retry loop is raised as `RateLimitError`.
+- Digrin tables and Macrotrends margin tables raise `LayoutChangedError` when the rows no longer match the header, instead of returning an empty table. Finviz record lists with an unexpected shape are reported the same way.
+- MCP errors keep the requested `source`, e.g. `macrotrends` or `finviz`, even when the parameters are rejected.
 
 ### Removed
 
