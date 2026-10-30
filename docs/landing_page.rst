@@ -35,10 +35,15 @@ Install
 
    .. tab-item:: Claude Code
 
+      Requires `uv <https://docs.astral.sh/uv/>`_, which the plugin uses to
+      start the MCP server.
+
       .. code-block:: text
 
          /plugin marketplace add ahnazary/stockdex
          /plugin install stockdex@stockdex
+
+      See :ref:`claude-code-plugin` for the full setup.
 
 Quick start
 -----------

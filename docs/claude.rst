@@ -39,6 +39,8 @@ Claude Desktop (one click)
 Claude Desktop installs Python and the dependencies itself. You don't need a
 terminal.
 
+.. _claude-code-plugin:
+
 Claude Code (plugin)
 --------------------
 

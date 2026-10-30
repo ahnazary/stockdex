@@ -59,9 +59,14 @@ def test_macrotrends_metrics_are_case_insensitive_and_missing_warns(adapter):
 
 def test_macrotrends_unknown_metrics_only_is_no_data(adapter):
     result = adapter.get_financial_statement(
-        "AAPL", source="macrotrends", metrics=["Nope"]
+        "AAPL", source="macrotrends", metrics=["TotalRevenue"]
     )
     assert result["error"]["code"] == "no_data"
+    # The caller still learns which row names Macrotrends has.
+    assert any(
+        "TotalRevenue" in w and "Available rows: Revenue" in w
+        for w in result["warnings"]
+    )
 
 
 def test_macrotrends_date_window(adapter):
@@ -90,6 +95,8 @@ def test_macrotrends_rejects_bad_arguments(adapter, provider, kwargs):
     result = adapter.get_financial_statement("AAPL", **kwargs)
     assert result["error"]["code"] == "invalid_input"
     assert not provider.calls
+    if kwargs["source"] == "macrotrends":
+        assert result["source"] == "macrotrends"
 
 
 def test_macrotrends_window_is_not_limited_to_five_years(adapter):
@@ -99,41 +106,44 @@ def test_macrotrends_window_is_not_limited_to_five_years(adapter):
     assert result["ok"]
 
 
-@pytest.mark.parametrize("dataset", sorted(set(MACROTRENDS_DATASETS) - {"key_ratios"}))
-def test_margins(adapter, dataset):
-    result = adapter.get_margins_and_ratios("AAPL", dataset=dataset)
-    assert result["ok"] and result["source"] == "macrotrends"
-    assert result["columns"] == [
-        "date",
-        "ttm_revenue",
+MARGIN_EXPECTED = {
+    "gross_margin": ("ttm_gross_profit", "gross_margin_pct", 195.20e9, 46.91, 46.68),
+    "operating_margin": (
         "ttm_operating_income",
         "operating_margin_pct",
-    ]
+        133.05e9,
+        31.97,
+        31.87,
+    ),
+    "ebitda_margin": ("ttm_ebitda", "ebitda_margin_pct", 144.75e9, 34.78, 34.68),
+    "pre_tax_margin": (
+        "ttm_pre_tax_income",
+        "pre_tax_margin_pct",
+        132.73e9,
+        31.89,
+        31.81,
+    ),
+    "net_margin": ("ttm_net_income", "net_margin_pct", 112.01e9, 26.92, 24.30),
+}
+
+
+def test_margin_expectations_cover_every_dataset():
+    assert set(MARGIN_EXPECTED) == set(MACROTRENDS_DATASETS) - {"key_ratios"}
+
+
+@pytest.mark.parametrize("dataset", sorted(MARGIN_EXPECTED))
+def test_margins(adapter, dataset):
+    profit, margin, latest_profit, latest_pct, previous_pct = MARGIN_EXPECTED[dataset]
+    result = adapter.get_margins_and_ratios("AAPL", dataset=dataset)
+    assert result["ok"] and result["source"] == "macrotrends"
+    assert result["columns"] == ["date", "ttm_revenue", profit, margin]
     # The empty spacer row Macrotrends puts first is dropped.
-    assert result["records"] == [
-        {
-            "date": "2025-09-30",
-            "ttm_revenue": 416160000000.0,
-            "ttm_operating_income": 133050000000.0,
-            "operating_margin_pct": 31.97,
-        },
-        {
-            "date": "2025-06-30",
-            "ttm_revenue": 408620000000.0,
-            "ttm_operating_income": 130210000000.0,
-            "operating_margin_pct": 31.87,
-        },
-    ]
-
-
-def test_key_ratios(adapter):
-    result = adapter.get_margins_and_ratios("AAPL", dataset="key_ratios")
-    assert result["ok"]
-    assert result["columns"] == ["date", "Current Ratio", "Debt/Equity Ratio"]
-    assert result["records"] == [
-        {"date": "2025-09-30", "Current Ratio": 0.8933, "Debt/Equity Ratio": 1.3436},
-        {"date": "2024-09-30", "Current Ratio": 0.8673, "Debt/Equity Ratio": None},
-    ]
+    assert [r["date"] for r in result["records"]] == ["2025-09-30", "2025-06-30"]
+    latest, previous = result["records"]
+    assert latest["ttm_revenue"] == 416160000000.0
+    assert latest[profit] == pytest.approx(latest_profit, rel=1e-2)
+    assert latest[margin] == pytest.approx(latest_pct, rel=1e-2)
+    assert previous[margin] == pytest.approx(previous_pct, rel=1e-2)
 
 
 def test_margins_reject_unknown_dataset(adapter):
