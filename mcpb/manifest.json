@@ -61,6 +61,14 @@
     {
       "name": "get_earnings_calendar",
       "description": "Next earnings date and estimates, ex-dividend and dividend payment dates from Yahoo Finance."
+    },
+    {
+      "name": "get_holders",
+      "description": "Institutional and fund holders, ownership breakdown and insider transactions from Yahoo Finance."
+    },
+    {
+      "name": "get_sec_filings",
+      "description": "Recent SEC filings with form type, title and links from Yahoo Finance."
     }
   ],
   "tools_generated": false,

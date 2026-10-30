@@ -19,6 +19,8 @@ EXPECTED_TOOLS = {
     "get_valuation_history",
     "get_analyst_estimates",
     "get_earnings_calendar",
+    "get_holders",
+    "get_sec_filings",
 }
 
 
@@ -102,6 +104,18 @@ class FakeTicker:
         return pd.DataFrame(
             {self.ticker: [pd.Timestamp("2026-11-02 20:00", tz="UTC"), 1.98]},
             index=["earningsDate", "earningsAverage"],
+        )
+
+    def yahoo_api_institutional_holders(self):
+        return pd.DataFrame({"organization": ["Blackrock Inc."], "pctHeld": [0.0797]})
+
+    def yahoo_api_sec_filings(self):
+        return pd.DataFrame(
+            {
+                "date": ["2026-09-01"],
+                "type": ["8-K"],
+                "exhibits": [[{"type": "8-K", "url": "https://example.com/x"}]],
+            }
         )
 
     @property
