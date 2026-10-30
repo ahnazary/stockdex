@@ -194,6 +194,24 @@ def test_yahoo_api_ownership_records(method, field):
     assert field in frame.index
 
 
+@pytest.mark.parametrize("symbol", ["SPY", "VFIAX"])
+def test_yahoo_api_fund_methods(symbol):
+    fund = Ticker(symbol, security_type="etf")
+    assert len(fund.yahoo_api_fund_top_holdings()) > 0
+    assert fund.yahoo_api_fund_sector_weightings()["weight"].sum() > 0.9
+    assert "stockPosition" in fund.yahoo_api_fund_asset_allocation().index
+    assert "categoryName" in fund.yahoo_api_fund_profile().index
+    performance = fund.yahoo_api_fund_performance()
+    assert {"fund", "category"} == set(performance.columns)
+    assert "oneYear" in performance.index
+
+
+def test_yahoo_api_fund_methods_empty_for_stock():
+    stock = Ticker("AAPL")
+    assert stock.yahoo_api_fund_top_holdings().empty
+    assert stock.yahoo_api_fund_performance().empty
+
+
 @pytest.mark.parametrize(
     "ticker, frequency, format, period1, period2",
     [

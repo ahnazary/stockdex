@@ -963,6 +963,129 @@ class YahooAPI(TickerBase):
             frame = frame.reset_index(drop=True)
         return frame
 
+    def _fund_module(self, module: str) -> dict:
+        """Fetch one ETF/fund quoteSummary module (empty dict for stocks)."""
+        return self.yahoo_api_quote_summary(module).get(module) or {}
+
+    def yahoo_api_fund_top_holdings(self) -> pd.DataFrame:
+        """
+        Get the top holdings of an ETF or mutual fund
+
+        Returns:
+        ----------------
+        pd.DataFrame: One row per holding with ``symbol``, ``holdingName``
+        and ``holdingPercent`` (fraction of the fund, e.g. 0.083 = 8.3%).
+        Empty for individual stocks.
+        """
+        return self._quote_summary_table(
+            "topHoldings", "holdings", data=self._fund_module("topHoldings")
+        )
+
+    def yahoo_api_fund_sector_weightings(self) -> pd.DataFrame:
+        """
+        Get the sector weightings of an ETF or mutual fund
+
+        Returns:
+        ----------------
+        pd.DataFrame: One row per sector (e.g. ``technology``,
+        ``realestate``) with a ``weight`` column (fraction of the fund),
+        largest first. Empty for individual stocks.
+        """
+        weightings = self._fund_module("topHoldings").get("sectorWeightings") or []
+        weights = {
+            sector: weight
+            for item in weightings
+            for sector, weight in item.items()
+            if weight is not None
+        }
+        frame = pd.DataFrame.from_dict(weights, orient="index", columns=["weight"])
+        return frame.sort_values("weight", ascending=False)
+
+    def yahoo_api_fund_asset_allocation(self) -> pd.DataFrame:
+        """
+        Get the asset class allocation of an ETF or mutual fund
+
+        Returns:
+        ----------------
+        pd.DataFrame: One row per position type (``stockPosition``,
+        ``bondPosition``, ``cashPosition``, ``preferredPosition``,
+        ``convertiblePosition``, ``otherPosition``) with the fraction of the
+        fund. Empty for individual stocks.
+        """
+        data = self._fund_module("topHoldings")
+        values = {
+            key: value
+            for key, value in data.items()
+            if key.endswith("Position") and value is not None
+        }
+        return pd.DataFrame.from_dict(values, orient="index", columns=[self.ticker])
+
+    def yahoo_api_fund_profile(self) -> pd.DataFrame:
+        """
+        Get the profile and fees of an ETF or mutual fund
+
+        Returns:
+        ----------------
+        pd.DataFrame: One row per field: fund ``family``, ``categoryName``,
+        ``legalType``, ``annualReportExpenseRatio``,
+        ``annualHoldingsTurnover``, ``totalNetAssets`` and the category
+        averages (suffixed ``_category``). Empty for individual stocks.
+        """
+        data = self._fund_module("fundProfile")
+        values = {
+            key: value
+            for key, value in data.items()
+            if key != "maxAge" and not isinstance(value, (dict, list))
+        }
+        fees = data.get("feesExpensesInvestment") or {}
+        category = data.get("feesExpensesInvestmentCat") or {}
+        for source, suffix in ((fees, ""), (category, "_category")):
+            for key, value in source.items():
+                if value is not None and not isinstance(value, (dict, list)):
+                    values[f"{key}{suffix}"] = value
+        return pd.DataFrame.from_dict(values, orient="index", columns=[self.ticker])
+
+    def yahoo_api_fund_performance(self) -> pd.DataFrame:
+        """
+        Get trailing and annual total returns of an ETF or mutual fund
+
+        Returns:
+        ----------------
+        pd.DataFrame: Rows are periods (``ytd``, ``oneMonth``, ``threeMonth``,
+        ``oneYear``, ``threeYear``, ``fiveYear``, ``tenYear``, then calendar
+        years such as ``2025``), with ``fund`` and ``category`` return
+        columns as fractions (0.15 = 15%). Empty for individual stocks.
+        """
+        data = self._fund_module("fundPerformance")
+        if not data:
+            return pd.DataFrame()
+
+        def trailing(block):
+            return {
+                key: value
+                for key, value in (block or {}).items()
+                if key not in ("asOfDate", "lastBullMkt", "lastBearMkt")
+                and value is not None
+            }
+
+        def annual(items):
+            return {
+                str(item["year"]): item.get("annualValue")
+                for item in items or []
+                if item.get("annualValue") is not None
+            }
+
+        annual_returns = data.get("annualTotalReturns") or {}
+        fund = {
+            **trailing(data.get("trailingReturns")),
+            **annual(annual_returns.get("returns")),
+        }
+        category = {
+            **trailing(data.get("trailingReturnsCat")),
+            **annual(annual_returns.get("returnsCat")),
+        }
+        return pd.DataFrame({"fund": fund, "category": category})
+
     def plot_yahoo_api_income_statement(
         self,
         frequency: Literal["annual", "quarterly"] = "annual",
