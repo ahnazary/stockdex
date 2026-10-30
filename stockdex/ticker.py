@@ -5,14 +5,14 @@ from stockdex.justetf_interface import JustETF
 from stockdex.macrotrends_interface import MacrotrendsInterface
 from stockdex.sankey_charts import SankeyCharts
 from stockdex.yahoo_api_interface import YahooAPI
-from stockdex.yahoo_web_interface import YahooWeb
+from stockdex.yahoo_web_deprecated import YahooWebDeprecated
 
 
 class Ticker(
     YahooAPI,
     JustETF,
     DigrinInterface,
-    YahooWeb,
+    YahooWebDeprecated,
     MacrotrendsInterface,
     SankeyCharts,
     FinvizInterface,

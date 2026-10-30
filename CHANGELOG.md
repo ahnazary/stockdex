@@ -1,5 +1,39 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- `yahoo_api_company_name`: the company's full name from the Yahoo Finance API.
+
+### Deprecated
+
+- All `yahoo_web_*` attributes. The Yahoo Finance website scraper has been removed because every dataset it returned is available from the Yahoo Finance API. The old names still work for now: each emits a `DeprecationWarning` and returns the data from its `yahoo_api_*` replacement, with the API's column layout. They will be removed in 2.0.
+
+  | Deprecated | Replacement |
+  |---|---|
+  | `yahoo_web_income_stmt`, `yahoo_web_balance_sheet`, `yahoo_web_cashflow` | `yahoo_api_income_statement()`, `yahoo_api_balance_sheet()`, `yahoo_api_cash_flow()` |
+  | `yahoo_web_calls`, `yahoo_web_puts` | `yahoo_api_options_chain(option_type="calls" / "puts")` |
+  | `yahoo_web_description`, `yahoo_web_corporate_governance` | `yahoo_api_profile()` |
+  | `yahoo_web_key_executives` | `yahoo_api_officers()` |
+  | `yahoo_web_major_holders`, `yahoo_web_top_institutional_holders`, `yahoo_web_top_mutual_fund_holders` | `yahoo_api_major_holders()`, `yahoo_api_institutional_holders()`, `yahoo_api_fund_holders()` |
+  | `yahoo_web_summary` | `yahoo_api_summary_detail()` |
+  | `yahoo_web_valuation_measures` | `yahoo_api_valuation_measures()` |
+  | `yahoo_web_financial_highlights`, `yahoo_web_trading_information` | `yahoo_api_financial_data()`, `yahoo_api_key_statistics()` |
+  | `yahoo_web_earnings_estimate`, `yahoo_web_revenue_estimate`, `yahoo_web_eps_trend`, `yahoo_web_eps_revisions`, `yahoo_web_growth_estimates` | `yahoo_api_earnings_trend()` |
+  | `yahoo_web_earnings_history` | `yahoo_api_earnings_history()` |
+  | `yahoo_web_full_name` | `yahoo_api_company_name()` |
+
+### Removed
+
+- The `stockdex.yahoo_web_interface` module and the `YahooWeb` class.
+- `"yahoo_web"` from `VALID_DATA_SOURCES` and the unused `YAHOO_WEB_BASE_URL` setting.
+- The "Yahoo Finance (Website)" docs page.
+
+### Changed
+
+- Macrotrends looks up the company name through the Yahoo Finance API instead of scraping the Yahoo website.
+
 ## 1.4.0
 
 ### Added

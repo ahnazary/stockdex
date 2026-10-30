@@ -346,6 +346,7 @@ row per field. Known date fields are converted to UTC timestamps.
 - ``yahoo_api_key_statistics``: enterprise value, forward P/E, PEG, shares outstanding and float, short interest
 - ``yahoo_api_financial_data``: analyst price targets and recommendation, revenue, margins, cash flow, debt, ROE
 - ``yahoo_api_calendar_events``: next earnings date(s), EPS and revenue estimates, ex-dividend and payment dates
+- ``yahoo_api_company_name``: the company's full name as a string, e.g. ``"Apple Inc."``
 
 ``yahoo_api_market_price``, ``yahoo_api_summary_detail``,
 ``yahoo_api_key_statistics`` and ``yahoo_api_financial_data`` accept

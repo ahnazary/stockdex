@@ -714,6 +714,23 @@ class YahooAPI(TickerBase):
         """
         return self._quote_summary_record("price", format)
 
+    def yahoo_api_company_name(self) -> str:
+        """
+        Get the company's full name from Yahoo Finance
+
+        Returns:
+        ----------------
+        str: The long name, e.g. "Apple Inc.", falling back to the short name
+        and then the ticker
+        """
+        price = self.yahoo_api_market_price()
+        for field in ("longName", "shortName"):
+            if field in price.index:
+                value = price.loc[field].iloc[0]
+                if isinstance(value, str) and value.strip():
+                    return value.strip()
+        return self.ticker
+
     def yahoo_api_summary_detail(
         self, format: Literal["fmt", "raw"] = "raw"
     ) -> pd.DataFrame:

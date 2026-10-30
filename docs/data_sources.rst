@@ -11,7 +11,6 @@ Each data source has its own section with details on how to use with examples of
    :maxdepth: 1
 
    readme_files/raw_dataframes/yahoo_api_doc
-   readme_files/raw_dataframes/yahoo_web_doc
    readme_files/raw_dataframes/finviz_doc
    readme_files/raw_dataframes/digrin_doc
    readme_files/raw_dataframes/macrotrends_doc

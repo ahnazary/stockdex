@@ -35,12 +35,12 @@ class MacrotrendsInterface(TickerBase):
     @lru_cache(maxsize=None)
     def full_name(self) -> str:
         """
-        Retrieve the full name of the security.
+        Retrieve the full name of the security as a URL slug, e.g. "apple-inc"
         """
-        full_name = self.yahoo_web_full_name
-        full_name = full_name.replace(" ", "-").lower()
+        name = self.yahoo_api_company_name()
+        name = re.sub(r"[^\w\s-]", "", name).strip()
 
-        return full_name
+        return re.sub(r"\s+", "-", name).lower()
 
     def _find_table_in_url(
         self, text_to_look_for: str, soup: BeautifulSoup
