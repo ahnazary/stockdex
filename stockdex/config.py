@@ -490,3 +490,17 @@ FINANCIALS_COLUMNS = [
     "ExciseTaxes",
     "OperatingRevenue",
 ]
+
+# Valuation measures served by the fundamentals timeseries endpoint.
+# Prefix with "annual", "quarterly" or "trailing" when requesting.
+VALUATION_COLUMNS = [
+    "MarketCap",
+    "EnterpriseValue",
+    "PeRatio",
+    "ForwardPeRatio",
+    "PegRatio",
+    "PsRatio",
+    "PbRatio",
+    "EnterprisesValueRevenueRatio",
+    "EnterprisesValueEBITDARatio",
+]

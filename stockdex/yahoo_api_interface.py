@@ -296,6 +296,47 @@ class YahooAPI(TickerBase):
 
         return self.extract_dataframe(response, format)
 
+    def yahoo_api_valuation_measures(
+        self,
+        frequency: Literal["annual", "quarterly", "trailing"] = "quarterly",
+        format: Literal["fmt", "raw"] = "fmt",
+        period1: datetime = five_years_ago,
+        period2: datetime = today,
+    ) -> pd.DataFrame:
+        """
+        Get valuation measures over time for the stock
+
+        Columns are market cap, enterprise value, trailing and forward P/E,
+        PEG, price/sales, price/book, EV/revenue and EV/EBITDA, each prefixed
+        with the frequency (e.g. ``quarterlyPeRatio``).
+
+        Args:
+        ----------------
+        frequency (str): The frequency of the data to retrieve
+        valid values are "annual", "quarterly", "trailing"
+        "trailing" returns recent daily snapshots (trailing twelve months)
+
+        format (str): The format of the data to retrieve
+        valid values are "fmt", "raw"
+        if "fmt" is used, the data will be in a human readable format, e.g. 1B
+        if "raw" is used, the data will be in a raw format, e.g. 1000000000
+
+        period1 (datetime): The start date of the data to retrieve
+        default is five years ago
+
+        period2 (datetime): The end date of the data to retrieve
+        default is the current date
+
+        Returns:
+        ----------------
+        pd.DataFrame: The valuation measures, indexed by as-of date
+        """
+        url = self.build_url(frequency, period1, period2, "valuation")
+
+        response = self.get_response(url).json()["timeseries"]["result"]
+
+        return self.extract_dataframe(response, format).sort_index()
+
     def build_url(
         self,
         frequency: str,

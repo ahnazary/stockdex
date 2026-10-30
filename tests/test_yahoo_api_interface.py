@@ -104,6 +104,17 @@ def test_yahoo_api_capital_gains_for_stock_is_empty_or_valid():
     assert gains.empty or "amount" in gains.columns
 
 
+@pytest.mark.parametrize("frequency", ["annual", "quarterly", "trailing"])
+def test_yahoo_api_valuation_measures(frequency):
+    frame = Ticker("AAPL").yahoo_api_valuation_measures(
+        frequency=frequency, format="raw"
+    )
+    assert len(frame) >= 3
+    assert f"{frequency}MarketCap" in frame.columns
+    assert f"{frequency}PeRatio" in frame.columns
+    assert frame.index.is_monotonic_increasing
+
+
 @pytest.mark.parametrize(
     "ticker, frequency, format, period1, period2",
     [
