@@ -70,16 +70,7 @@ This project is licensed under the [MIT License](LICENSE).
 ## Contributing
 
 Stockdex is an open-source project, and contributions of **any kind** are welcome and appreciated!  
-Whether you want to report a bug, suggest a new feature, improve documentation, or submit code — every contribution helps.
-
-### How to contribute
-
-- **Issues**  
-  Found a bug or have an idea for an improvement? Please open an issue on GitHub and describe it clearly.
-
-- **Pull Requests (PRs)**  
-  If you’d like to fix something directly, fork the repository and open a PR.  
-  Please include a short description of the change and reference any related issues.
+Whether you want to report a bug, suggest a new feature, improve documentation, or submit code via **Pull Requests** or **Issues** — every contribution helps.
 
 ## Guidelines
 
