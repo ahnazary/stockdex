@@ -152,6 +152,21 @@ def test_yahoo_api_calendar_events():
 
 
 @pytest.mark.parametrize(
+    "method, column",
+    [
+        ("yahoo_api_earnings_history", "epsActual"),
+        ("yahoo_api_earnings_trend", "earningsEstimate_avg"),
+        ("yahoo_api_recommendation_trend", "strongBuy"),
+        ("yahoo_api_upgrades_downgrades", "firm"),
+    ],
+)
+def test_yahoo_api_analyst_tables(method, column):
+    frame = getattr(Ticker("AAPL"), method)()
+    assert len(frame) > 0
+    assert column in frame.columns
+
+
+@pytest.mark.parametrize(
     "ticker, frequency, format, period1, period2",
     [
         # 2 years ago

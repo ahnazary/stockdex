@@ -799,6 +799,76 @@ class YahooAPI(TickerBase):
                 values[key] = self._to_datetime(key, data[key])
         return pd.DataFrame.from_dict(values, orient="index", columns=[self.ticker])
 
+    def yahoo_api_earnings_history(self) -> pd.DataFrame:
+        """
+        Get reported vs estimated EPS for the last four quarters
+
+        Returns:
+        ----------------
+        pd.DataFrame: One row per quarter, oldest first, with ``quarter``
+        (UTC timestamp), ``period`` (e.g. "-4q"), ``epsActual``,
+        ``epsEstimate``, ``epsDifference``, ``surprisePercent`` and ``currency``
+        """
+        frame = self._quote_summary_table("earningsHistory", "history")
+        if not frame.empty and "quarter" in frame:
+            frame = frame.sort_values("quarter").reset_index(drop=True)
+        return frame
+
+    def yahoo_api_earnings_trend(self) -> pd.DataFrame:
+        """
+        Get analyst EPS and revenue estimates, trend and revisions
+
+        Returns:
+        ----------------
+        pd.DataFrame: One row per period ("0q" current quarter, "+1q" next
+        quarter, "0y" current year, "+1y" next year, plus long-term growth),
+        with ``endDate``, ``growth`` and flattened estimate columns:
+        ``earningsEstimate_*``, ``revenueEstimate_*``, ``epsTrend_*`` and
+        ``epsRevisions_*``
+        """
+        data = self.yahoo_api_quote_summary("earningsTrend").get("earningsTrend", {})
+        rows = []
+        for item in data.get("trend") or []:
+            row = {}
+            for key, value in item.items():
+                if key == "maxAge":
+                    continue
+                if isinstance(value, dict):
+                    for sub_key, sub_value in value.items():
+                        row[f"{key}_{sub_key}"] = sub_value
+                else:
+                    row[key] = value
+            rows.append(row)
+        return pd.DataFrame(rows)
+
+    def yahoo_api_recommendation_trend(self) -> pd.DataFrame:
+        """
+        Get analyst recommendation counts for the last few months
+
+        Returns:
+        ----------------
+        pd.DataFrame: One row per period ("0m" this month, "-1m" last month,
+        ...) with ``strongBuy``, ``buy``, ``hold``, ``sell`` and ``strongSell``
+        """
+        return self._quote_summary_table("recommendationTrend", "trend")
+
+    def yahoo_api_upgrades_downgrades(self) -> pd.DataFrame:
+        """
+        Get analyst upgrade and downgrade history
+
+        Returns:
+        ----------------
+        pd.DataFrame: One row per rating action, newest first, with
+        ``epochGradeDate`` (UTC timestamp), ``firm``, ``fromGrade``,
+        ``toGrade``, ``action`` (up, down, main, init, reit) and price target
+        changes
+        """
+        frame = self._quote_summary_table("upgradeDowngradeHistory", "history")
+        if not frame.empty and "epochGradeDate" in frame:
+            frame = frame.sort_values("epochGradeDate", ascending=False)
+            frame = frame.reset_index(drop=True)
+        return frame
+
     def plot_yahoo_api_income_statement(
         self,
         frequency: Literal["annual", "quarterly"] = "annual",
