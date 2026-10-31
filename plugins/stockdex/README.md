@@ -54,7 +54,7 @@ Requires [uv](https://docs.astral.sh/uv/). In Claude Code:
 ## What the plugin runs, sends and stores
 
 - **Runs:** the MCP server starts locally with
-  `uvx --from "stockdex[mcp]==1.5.0" stockdex-mcp`, which installs the pinned
+  `uvx --from "stockdex[mcp]==1.6.0" stockdex-mcp`, which installs the pinned
   Stockdex release from PyPI.
 - **Sends:** only ticker symbols, search text and request parameters (date
   range, statement type, metric names, dataset, row limit) to Yahoo Finance

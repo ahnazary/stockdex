@@ -1,9 +1,9 @@
 [project]
 name = "stockdex-mcpb"
-version = "1.5.0"
+version = "1.6.0"
 description = "Claude Desktop extension wrapper for the Stockdex MCP server"
 requires-python = ">=3.10"
 dependencies = [
     # Pinned to the exact release this bundle was reviewed against.
-    "stockdex[mcp]==1.5.0",
+    "stockdex[mcp]==1.6.0",
 ]
