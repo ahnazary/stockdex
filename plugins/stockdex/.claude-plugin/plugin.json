@@ -1,7 +1,7 @@
 {
   "name": "stockdex",
   "displayName": "Stockdex",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "Read-only stock data for Claude: prices, quotes, financial statements, margins and ratios, valuation, analyst estimates, earnings reactions, revenue breakdowns, holders and insider trades, SEC filings, dividends, splits, options and funds from Yahoo Finance, Macrotrends, Digrin and Finviz.",
   "author": {
     "name": "Amir Nazary",
