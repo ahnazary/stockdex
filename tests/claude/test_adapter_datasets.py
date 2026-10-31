@@ -53,7 +53,7 @@ def adapter(ticker):
 def test_every_dataset_maps_to_a_real_yahoo_method():
     for dataset, (method, kind) in YAHOO_DATASETS.items():
         assert hasattr(YahooAPI, method), (dataset, method)
-        assert kind in ("record", "table")
+        assert kind in ("record", "table", "sessions", "events", "dates")
 
 
 def test_record_dataset_becomes_field_value_rows(adapter):

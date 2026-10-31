@@ -70,9 +70,12 @@ def create_server(adapter=None):
         ticker: str,
         range: Literal["1mo", "3mo", "6mo", "1y"] = "1mo",
         limit: RowLimit = 20,
+        source: Literal["yahoo", "digrin"] = "yahoo",
     ) -> CallToolResult:
-        """Get daily historical open/high/low/close/volume prices for one ticker from Yahoo Finance, newest first. Use for price history over the last 1–12 months; not for real-time quotes."""
-        return await invoke(adapter.get_prices, ticker=ticker, range=range, limit=limit)
+        """Get historical prices for one ticker, newest first. source="yahoo" (default): daily open/high/low/close/volume from Yahoo Finance over the chosen range (1–12 months). source="digrin": monthly adjusted and real closing prices from Digrin going back decades (range is ignored). Not for real-time quotes."""
+        return await invoke(
+            adapter.get_prices, ticker=ticker, range=range, limit=limit, source=source
+        )
 
     @server.tool(
         title="Get financial statement",
@@ -81,7 +84,7 @@ def create_server(adapter=None):
     async def get_financial_statement(
         ticker: str,
         statement: Literal[
-            "income_statement", "cash_flow", "balance_sheet"
+            "income_statement", "cash_flow", "balance_sheet", "financials"
         ] = "income_statement",
         frequency: Literal["annual", "quarterly"] = "annual",
         start_date: Optional[str] = None,
@@ -90,7 +93,7 @@ def create_server(adapter=None):
         limit: RowLimit = 20,
         source: Literal["yahoo", "macrotrends"] = "yahoo",
     ) -> CallToolResult:
-        """Get income statement, cash flow or balance sheet figures for one ticker, annual or quarterly, newest first. source="yahoo" (default): Yahoo Finance, up to 5 years (end date exclusive), metric names such as TotalRevenue; currency and units may be unknown. source="macrotrends": Macrotrends, about 15 years, row names such as Revenue or Net Income, amounts in millions (EPS and ratios unscaled). Up to 20 metrics; defaults cover revenue, net income, EPS, cash flow, assets, liabilities and equity."""
+        """Get income statement, cash flow, balance sheet or (Yahoo only) financials such as EBITDA for one ticker, annual or quarterly, newest first. source="yahoo" (default): Yahoo Finance, up to 5 years (end date exclusive), metric names such as TotalRevenue; currency and units may be unknown. source="macrotrends": Macrotrends, about 15 years, row names such as Revenue or Net Income, amounts in millions (EPS and ratios unscaled). Up to 20 metrics; defaults cover revenue, net income, EPS, cash flow, assets, liabilities and equity."""
         return await invoke(
             adapter.get_financial_statement,
             ticker=ticker,
@@ -134,10 +137,12 @@ def create_server(adapter=None):
     )
     async def get_company_profile(
         ticker: str,
-        dataset: Literal["profile", "officers", "similar_symbols"] = "profile",
+        dataset: Literal[
+            "profile", "officers", "similar_symbols", "trading_hours"
+        ] = "profile",
         limit: Optional[RowLimit] = None,
     ) -> CallToolResult:
-        """Get company information for one ticker from Yahoo Finance. dataset="profile" (default): address, website, sector, industry, employee count, business summary and governance risk scores. "officers": key executives with title, age and total pay. "similar_symbols": related tickers with a relevance score."""
+        """Get company information for one ticker from Yahoo Finance. dataset="profile" (default): address, website, sector, industry, employee count, business summary and governance risk scores. "officers": key executives with title, age and total pay. "similar_symbols": related tickers with a relevance score. "trading_hours": pre, regular and post session times of the listing exchange."""
         return await invoke(
             adapter.get_dataset, ticker=ticker, dataset=dataset, limit=limit
         )
@@ -182,13 +187,21 @@ def create_server(adapter=None):
     async def get_analyst_estimates(
         ticker: str,
         dataset: Literal[
-            "estimates", "recommendations", "upgrades_downgrades", "earnings_history"
+            "estimates",
+            "recommendations",
+            "upgrades_downgrades",
+            "earnings_history",
+            "earnings_surprise",
+            "quarterly_forecast",
+            "yearly_forecast",
+            "pe_forecast",
+            "growth_forecast",
         ] = "estimates",
         limit: Optional[RowLimit] = None,
     ) -> CallToolResult:
-        """Get analyst coverage for one ticker from Yahoo Finance. dataset="estimates" (default): EPS and revenue estimates, EPS trend and revisions for the current and next quarter and year. "recommendations": strong buy to strong sell counts per month. "upgrades_downgrades": rating changes and price-target moves by firm, newest first. "earnings_history": reported vs estimated EPS and surprise for the last four quarters."""
+        """Get analyst coverage for one ticker. From Yahoo Finance: "estimates" (default) EPS/revenue estimates and trend; "recommendations" monthly buy/sell counts; "upgrades_downgrades" rating changes; "earnings_history" last four EPS surprises. From Nasdaq (Zacks consensus, US stocks): "earnings_surprise", "quarterly_forecast", "yearly_forecast" (high/low/consensus EPS, revisions), "pe_forecast" and "growth_forecast" (PEG and growth)."""
         return await invoke(
-            adapter.get_dataset, ticker=ticker, dataset=dataset, limit=limit
+            adapter.get_analyst_estimates, ticker=ticker, dataset=dataset, limit=limit
         )
 
     @server.tool(
@@ -274,9 +287,83 @@ def create_server(adapter=None):
         title="Get stock splits",
         annotations=tool_annotations("Get stock splits"),
     )
-    async def get_splits(ticker: str, limit: RowLimit = 20) -> CallToolResult:
-        """Get the stock split history for one ticker from Yahoo Finance, newest first: split date, numerator, denominator and ratio such as "4:1"."""
-        return await invoke(adapter.get_splits, ticker=ticker, limit=limit)
+    async def get_splits(
+        ticker: str,
+        limit: RowLimit = 20,
+        source: Literal["yahoo", "digrin"] = "yahoo",
+    ) -> CallToolResult:
+        """Get the stock split history for one ticker, newest first: split date and ratio such as "4:1". source="yahoo" (default) from Yahoo Finance with numerator and denominator; source="digrin" from Digrin."""
+        return await invoke(
+            adapter.get_splits, ticker=ticker, limit=limit, source=source
+        )
+
+    @server.tool(
+        title="Get option expirations",
+        annotations=tool_annotations("Get option expirations"),
+    )
+    async def get_option_expirations(
+        ticker: str, limit: Optional[RowLimit] = None
+    ) -> CallToolResult:
+        """List the listed option expiration dates for one ticker from Yahoo Finance, nearest first. Pass one of them as expiration to get_options_chain."""
+        return await invoke(
+            adapter.get_dataset,
+            ticker=ticker,
+            dataset="option_expirations",
+            limit=limit,
+        )
+
+    @server.tool(
+        title="Get ETF profile by ISIN",
+        annotations=tool_annotations("Get ETF profile by ISIN"),
+    )
+    async def get_etf_profile(
+        isin: str,
+        dataset: Literal[
+            "basics",
+            "overview",
+            "description",
+            "price",
+            "holdings",
+            "countries",
+            "sectors",
+        ] = "basics",
+        currency: Literal["EUR", "USD", "GBP", "CHF"] = "EUR",
+        limit: RowLimit = 100,
+    ) -> CallToolResult:
+        """Get data on one European-listed ETF by ISIN (e.g. IE00B4L5Y983) from justETF. "basics" (default): TER, fund size, replication, domicile, distribution policy, inception. "overview"/"description": general info and strategy text. "price": latest quote in currency. "holdings", "countries", "sectors": top weights as percentages."""
+        return await invoke(
+            adapter.get_etf_profile,
+            isin=isin,
+            dataset=dataset,
+            currency=currency,
+            limit=limit,
+        )
+
+    @server.tool(
+        title="Get quarterly fundamentals",
+        annotations=tool_annotations("Get quarterly fundamentals"),
+    )
+    async def get_quarterly_fundamentals(
+        ticker: str,
+        dataset: Literal[
+            "assets_liabilities",
+            "cash_and_debt",
+            "free_cash_flow",
+            "net_income",
+            "revenue_and_cost",
+            "expenses",
+            "shares_outstanding",
+            "estimated_eps",
+        ] = "assets_liabilities",
+        limit: RowLimit = 20,
+    ) -> CallToolResult:
+        """Get long quarterly histories for one stock from Digrin, newest first, with amounts in full units: assets vs liabilities, cash vs debt, free cash flow and stock compensation, net income, revenue vs cost of revenue, capex/R&D/G&A/S&M expenses, shares outstanding, or upcoming estimated EPS. Covers more years than Yahoo Finance."""
+        return await invoke(
+            adapter.get_quarterly_fundamentals,
+            ticker=ticker,
+            dataset=dataset,
+            limit=limit,
+        )
 
     @server.tool(
         title="Get options chain",
@@ -320,10 +407,12 @@ def create_server(adapter=None):
             "pre_tax_margin",
             "net_margin",
             "key_ratios",
+            "revenue_annual",
+            "revenue_quarterly",
         ] = "operating_margin",
         limit: RowLimit = 20,
     ) -> CallToolResult:
-        """Get profitability history for one stock from Macrotrends, newest first. Margin datasets return quarterly trailing-twelve-month revenue, the matching profit figure and the margin as a percentage (31.9 = 31.9%), going back about 15 years. "key_ratios": annual current ratio, debt/equity, margins, ROE, ROA, ROI and other ratios. Macrotrends sometimes blocks automated requests; then the error code is provider_blocked."""
+        """Get profitability history for one stock from Macrotrends, newest first. Margin datasets return quarterly trailing-twelve-month revenue, the matching profit figure and the margin as a percentage (31.9 = 31.9%), going back about 15 years. "key_ratios": annual ratios such as debt/equity, ROE and ROA. "revenue_annual"/"revenue_quarterly": revenue history in millions. Macrotrends sometimes blocks automated requests; then the error code is provider_blocked."""
         return await invoke(
             adapter.get_margins_and_ratios, ticker=ticker, dataset=dataset, limit=limit
         )
@@ -341,10 +430,11 @@ def create_server(adapter=None):
             "growth_10y",
             "annual",
             "summary",
+            "ex_dividend_dates",
         ] = "payout_ratio",
         limit: RowLimit = 20,
     ) -> CallToolResult:
-        """Get dividend sustainability and growth metrics for one stock. From Digrin: "payout_ratio" (default) gives quarterly payout ratio (% of earnings) and P/E; "growth_3y", "growth_5y" and "growth_10y" project future dividends at the 3/5/10-year average growth rate (projections, not history). From Finviz: "annual" gives dividend per share, yield and payout per fiscal year including analyst estimates; "summary" gives trailing and next-12-month dividend and the next ex-dividend date. Use get_dividends for individual payments."""
+        """Get dividend sustainability and growth metrics for one stock. From Digrin: "payout_ratio" (default) gives quarterly payout ratio (% of earnings) and P/E; "growth_3y", "growth_5y" and "growth_10y" project future dividends at the 3/5/10-year average growth rate (projections, not history). From Finviz: "annual" gives dividend per share, yield and payout per fiscal year including analyst estimates; "summary" gives trailing and next-12-month dividend and the next ex-dividend date; "ex_dividend_dates" lists ex-dates with ordinary and special amounts. Use get_dividends for individual payments."""
         return await invoke(
             adapter.get_dividend_metrics, ticker=ticker, dataset=dataset, limit=limit
         )
@@ -377,10 +467,12 @@ def create_server(adapter=None):
     )
     async def get_earnings_reaction(
         ticker: str,
-        dataset: Literal["price_reaction", "surprises", "revisions"] = "price_reaction",
+        dataset: Literal[
+            "price_reaction", "surprises", "revisions", "annual"
+        ] = "price_reaction",
         limit: RowLimit = 12,
     ) -> CallToolResult:
-        """Get how one stock behaves around earnings, from Finviz, newest first. "price_reaction" (default): percent price change before, at the open, after the close, one week and one month after each report, also relative to the S&P 500. "surprises": actual vs estimated EPS and revenue per quarter with EPS surprise %, including upcoming reports. "revisions": latest consensus estimate per fiscal period (estimate = eps, eps_reported for GAAP EPS, or revenue in millions) with analyst count and up/down revisions."""
+        """Get how one stock behaves around earnings, from Finviz, newest first. "price_reaction" (default): percent price change before, at the open, after the close, one week and one month after each report, also relative to the S&P 500. "surprises": actual vs estimated EPS and revenue per quarter with EPS surprise %, including upcoming reports. "revisions": latest consensus estimate per fiscal period (estimate = eps, eps_reported for GAAP EPS, or revenue in millions) with analyst count and up/down revisions. "annual": actual vs estimated EPS and sales per fiscal year since about 2010 with P/E and P/S."""
         return await invoke(
             adapter.get_earnings_reaction, ticker=ticker, dataset=dataset, limit=limit
         )

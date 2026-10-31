@@ -1,12 +1,14 @@
 """
 Interface for NASDAQ stock data
+
+Reads the JSON API behind nasdaq.com (``api.nasdaq.com``); no browser needed.
 """
 
 import pandas as pd
 
-from stockdex.config import NASDAQ_BASE_URL, VALID_SECURITY_TYPES
-from stockdex.lib import check_security_type, get_user_agent
-from stockdex.selenium_interface import selenium_interface
+from stockdex.config import NASDAQ_API_URL, VALID_SECURITY_TYPES
+from stockdex.exceptions import LayoutChangedError, NoDataError
+from stockdex.lib import check_security_type, instance_cache
 from stockdex.ticker_base import TickerBase
 
 
@@ -21,9 +23,54 @@ class NASDAQInterface(TickerBase):
         self.ticker = ticker
         self.security_type = security_type
 
-        self.request_headers = {
-            "User-Agent": get_user_agent()[0],
-        }
+    @instance_cache
+    def _nasdaq_data(self, path: str) -> dict:
+        """
+        The ``data`` object of one Nasdaq API endpoint, fetched once
+
+        Args:
+        ----------------
+        path (str): e.g. "company/AAPL/earnings-surprise"
+
+        Raises:
+        ----------------
+        NoDataError: Nasdaq has no data for the ticker
+        LayoutChangedError: The response is not the expected JSON envelope
+        """
+        check_security_type(security_type=self.security_type, valid_types=["stock"])
+
+        response = self.get_response(
+            f"{NASDAQ_API_URL}/{path}", headers={"Accept": "application/json"}
+        )
+        try:
+            payload = response.json()
+        except ValueError as error:
+            raise LayoutChangedError("Nasdaq", f"{path} is not JSON") from error
+        if not isinstance(payload, dict):
+            raise LayoutChangedError("Nasdaq", f"{path} has no data object")
+        data = payload.get("data")
+        if not data:
+            raise NoDataError(f"Nasdaq has no data for the ticker {self.ticker}")
+        return data
+
+    @staticmethod
+    def _nasdaq_table(table: dict, name: str) -> pd.DataFrame:
+        """
+        A Nasdaq ``{"headers": {key: label}, "rows": [...]}`` table as a
+        DataFrame whose columns are the header labels, in header order
+        """
+        if not isinstance(table, dict) or not isinstance(table.get("headers"), dict):
+            raise LayoutChangedError("Nasdaq", f"{name} table has no headers")
+        headers = table["headers"]
+        rows = table.get("rows") or []
+        return pd.DataFrame(
+            [[row.get(key) for key in headers] for row in rows],
+            columns=list(headers.values()),
+        )
+
+    def _earnings_forecast(self, key: str) -> pd.DataFrame:
+        data = self._nasdaq_data(f"analyst/{self.ticker.upper()}/earnings-forecast")
+        return self._nasdaq_table(data.get(key), key)
 
     @property
     def quarterly_earnings_surprise(self) -> pd.DataFrame:
@@ -32,7 +79,7 @@ class NASDAQInterface(TickerBase):
 
         Returns:
         ----------------
-        pd.DataFrame: Quarterly earnings surprise data
+        pd.DataFrame: Quarterly earnings surprise data, newest first
         The columns might include:
         - 'Fiscal Quarter End'
         - 'Date Reported'
@@ -40,33 +87,10 @@ class NASDAQInterface(TickerBase):
         - 'Consensus EPS* Forecast'
         - '% Surprise'
         """
-        check_security_type(security_type=self.security_type, valid_types=["stock"])
-
-        url = f"{NASDAQ_BASE_URL}/{self.ticker.lower()}/earnings"
-
-        # build selenium interface object if not already built
-        if not hasattr(self, "selenium_interface"):
-            self.selenium_interface = selenium_interface(use_custom_user_agent=True)
-
-        soup = self.selenium_interface.get_html_content(url)
-
-        earnings_table = soup.find("table", {"class": "earnings-surprise__table"})
-        columns = earnings_table.find(
-            "tr", {"class": "earnings-surprise__header"}
-        ).find_all("th")
-        columns = [column.text for column in columns]
-
-        data = []
-        table_body = earnings_table.find(
-            "tbody", {"class": "earnings-surprise__table-body"}
+        data = self._nasdaq_data(f"company/{self.ticker.upper()}/earnings-surprise")
+        return self._nasdaq_table(
+            data.get("earningsSurpriseTable"), "earnings surprise"
         )
-        for row in table_body.find_all("tr"):
-            row_data_th = [cell.text for cell in row.find_all("th")]
-            row_data_td = [cell.text for cell in row.find_all("td")]
-            row_data = row_data_th + row_data_td
-            data.append(row_data)
-
-        return pd.DataFrame(data, columns=columns)
 
     @property
     def yearly_earnings_forecast(self) -> pd.DataFrame:
@@ -81,48 +105,11 @@ class NASDAQInterface(TickerBase):
         - Consensus EPS* Forecast
         - High EPS* Forecast
         - Low EPS* Forecast
-        - Number Of Estimates
-        - Over The Last 4 Weeks Number Of Revisions - Up
-        - Over The Last 4 Weeks Number Of Revisions - Down
+        - Number of Estimates
+        - Over the Last 4 Weeks Number of Revisions - Up
+        - Over the Last 4 Weeks Number of Revisions - Down
         """
-        check_security_type(security_type=self.security_type, valid_types=["stock"])
-
-        url = f"{NASDAQ_BASE_URL}/{self.ticker.lower()}/earnings"
-
-        # build selenium interface object if not already built
-        if not hasattr(self, "selenium_interface"):
-            self.selenium_interface = selenium_interface(use_custom_user_agent=True)
-
-        soup = self.selenium_interface.get_html_content(url)
-
-        # with open("earnings.html", "w") as f:
-        #     f.write(str(soup.prettify()))
-
-        # parent_div = self.find_parent_by_text(
-        #     soup=soup, tag="h2", text="Yearly Earnings Forecast"
-        # ).parent.parent
-
-        # table = parent_div.find("div", {"part": "table-row"})
-
-        # earnings_table = soup.find("div", {"class": "jupiter22-earnings-forecast"})
-        earnings_table = soup.find("table", {"class": "earnings-forecast__table"})
-
-        columns = earnings_table.find(
-            "tr", {"class": "earnings-forecast__header"}
-        ).find_all("th")
-        columns = [column.text for column in columns]
-
-        data = []
-        table_body = earnings_table.find(
-            "tbody", {"class": "earnings-forecast__table-body"}
-        )
-        for row in table_body.find_all("tr"):
-            row_data_th = [cell.text for cell in row.find_all("th")]
-            row_data_td = [cell.text for cell in row.find_all("td")]
-            row_data = row_data_th + row_data_td
-            data.append(row_data)
-
-        return pd.DataFrame(data, columns=columns)
+        return self._earnings_forecast("yearlyForecast")
 
     @property
     def quarterly_earnings_forecast(self) -> pd.DataFrame:
@@ -137,39 +124,14 @@ class NASDAQInterface(TickerBase):
         - Consensus EPS* Forecast
         - High EPS* Forecast
         - Low EPS* Forecast
-        - Number Of Estimates
-        - Over The Last 4 Weeks Number Of Revisions - Up
-        - Over The Last 4 Weeks Number Of Revisions - Down
+        - Number of Estimates
+        - Over the Last 4 Weeks Number of Revisions - Up
+        - Over the Last 4 Weeks Number of Revisions - Down
         """
-        check_security_type(security_type=self.security_type, valid_types=["stock"])
+        return self._earnings_forecast("quarterlyForecast")
 
-        url = f"{NASDAQ_BASE_URL}/{self.ticker.lower()}/earnings"
-
-        # build selenium interface object if not already built
-        if not hasattr(self, "selenium_interface"):
-            self.selenium_interface = selenium_interface(use_custom_user_agent=True)
-
-        soup = self.selenium_interface.get_html_content(url)
-        earnings_table = soup.find_all("table", {"class": "earnings-forecast__table"})[
-            1
-        ]
-
-        columns = earnings_table.find(
-            "tr", {"class": "earnings-forecast__header"}
-        ).find_all("th")
-        columns = [column.text for column in columns]
-
-        data = []
-        table_body = earnings_table.find(
-            "tbody", {"class": "earnings-forecast__table-body"}
-        )
-        for row in table_body.find_all("tr"):
-            row_data_th = [cell.text for cell in row.find_all("th")]
-            row_data_td = [cell.text for cell in row.find_all("td")]
-            row_data = row_data_th + row_data_td
-            data.append(row_data)
-
-        return pd.DataFrame(data, columns=columns)
+    def _peg_data(self) -> dict:
+        return self._nasdaq_data(f"analyst/{self.ticker.upper()}/peg-ratio")
 
     @property
     def price_to_earnings_ratio(self) -> pd.DataFrame:
@@ -178,26 +140,19 @@ class NASDAQInterface(TickerBase):
 
         Returns:
         ----------------
-        pd.DataFrame: Price to earnings ratio data
+        pd.DataFrame: Price to earnings ratio per fiscal year, indexed by
+        period label such as "2025 Actual" or "2026 Estimates", with the
+        column "Price to Earnings Ratio"
         """
-        check_security_type(security_type=self.security_type, valid_types=["stock"])
+        chart = (self._peg_data().get("per") or {}).get("peRatioChart")
+        if not isinstance(chart, list):
+            raise LayoutChangedError("Nasdaq", "P/E ratio chart not found")
 
-        url = f"{NASDAQ_BASE_URL}/{self.ticker.lower()}/price-earnings-peg-ratios"
-
-        # build selenium interface object if not already built
-        if not hasattr(self, "selenium_interface"):
-            self.selenium_interface = selenium_interface(use_custom_user_agent=True)
-
-        soup = self.selenium_interface.get_html_content(url)
-
-        table = soup.find("tbody", {"class": "price-earnings-peg-ratios__table-body"})
-        index, value = [], []
-
-        for row in table.find_all("tr"):
-            index.append(row.find("th").text)
-            value.append(row.find("td").text)
-
-        return pd.DataFrame(value, index=index, columns=["Price to Earnings Ratio"])
+        return pd.DataFrame(
+            [point.get("y") for point in chart],
+            index=[point.get("x") for point in chart],
+            columns=["Price to Earnings Ratio"],
+        )
 
     @property
     def forecast_peg_rate(self) -> pd.DataFrame:
@@ -206,27 +161,26 @@ class NASDAQInterface(TickerBase):
 
         Returns:
         ----------------
-        pd.DataFrame: Forecast price to earning growth rate data
+        pd.DataFrame: Forecast earnings growth rate (percent) per fiscal year,
+        indexed by year, with the column
+        "Forecast Price to Earning Growth Rate". The 12-month forward PEG
+        ratio is the row "Forecast 12 Month Forward PEG Ratio".
         """
+        data = self._peg_data()
+        chart = (data.get("gr") or {}).get("peGrowthChart")
+        if not isinstance(chart, list):
+            raise LayoutChangedError("Nasdaq", "P/E growth chart not found")
 
-        check_security_type(security_type=self.security_type, valid_types=["stock"])
-
-        url = f"{NASDAQ_BASE_URL}/{self.ticker.lower()}/price-earnings-peg-ratios"
-
-        # build selenium interface object if not already built
-        if not hasattr(self, "selenium_interface"):
-            self.selenium_interface = selenium_interface(use_custom_user_agent=True)
-
-        soup = self.selenium_interface.get_html_content(url)
-
-        table = soup.find_all(
-            "tbody", {"class": "price-earnings-peg-ratios__table-body"}
-        )[1]
         index, value = [], []
+        for point in chart:
+            if point.get("z") == "Growth":
+                index.append(point.get("x"))
+                value.append(point.get("y"))
 
-        for row in table.find_all("tr"):
-            index.append(row.find("th").text)
-            value.append(row.find("td").text)
+        pegr = data.get("pegr") or {}
+        if pegr.get("pegValue") is not None:
+            index.append(pegr.get("label") or "Forecast 12 Month Forward PEG Ratio")
+            value.append(pegr["pegValue"])
 
         return pd.DataFrame(
             value, index=index, columns=["Forecast Price to Earning Growth Rate"]

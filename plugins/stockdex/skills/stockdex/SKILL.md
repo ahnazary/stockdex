@@ -7,8 +7,10 @@ description: Fetch public market data with the Stockdex MCP tools - price histor
 
 Use the `stockdex` MCP tools for read-only financial data. They fetch from
 Yahoo Finance (most data), Macrotrends (long statement history, margins and
-ratios), Digrin (dividends, payout and growth) and Finviz (revenue breakdowns,
-insider trades, earnings reactions, annual dividends) on the user's machine.
+ratios), Digrin (dividends, payout and growth, long quarterly fundamentals and
+monthly prices), Finviz (revenue breakdowns, insider trades, earnings
+reactions, annual dividends), Nasdaq (Zacks consensus forecasts) and justETF
+(European ETFs by ISIN) on the user's machine.
 Macrotrends sometimes blocks automated requests (`provider_blocked`); fall back
 to the Yahoo Finance source for statements when that happens.
 
@@ -18,21 +20,24 @@ to the Yahoo Finance source for statements when that happens.
 |---|---|---|
 | Company name, no ticker | `search_ticker` | `query`, `limit` 1–25 |
 | Current price, compare several | `get_quotes` | `symbols`: 1–20 tickers |
-| Price history | `get_prices` | `range`: `1mo` (default), `3mo`, `6mo`, `1y` |
+| Price history | `get_prices` | `range`: `1mo` (default), `3mo`, `6mo`, `1y`; `source`: `yahoo` (daily) or `digrin` (monthly, decades) |
+| Long quarterly balance sheet, cash flow, expenses, shares | `get_quarterly_fundamentals` | `dataset`: `assets_liabilities` (default), `cash_and_debt`, `free_cash_flow`, `net_income`, `revenue_and_cost`, `expenses`, `shares_outstanding`, `estimated_eps` (Digrin) |
 | Revenue, earnings, cash flow, balance sheet | `get_financial_statement` | `statement`, `frequency`, `start_date`/`end_date`, `metrics`, `source`: `yahoo` (default, ≤5 years) or `macrotrends` (~15 years) |
 | Market cap, P/E, beta, margins, price targets | `get_key_statistics` | `dataset`: `summary` (default), `key_statistics`, `financial_data`, `market_price` |
 | P/E, EV/EBITDA, market cap over time | `get_valuation_history` | `frequency`: `annual`, `quarterly` (default), `trailing` |
-| What the company does, executives, peers | `get_company_profile` | `dataset`: `profile` (default), `officers`, `similar_symbols` |
-| Analyst estimates, ratings, EPS surprises | `get_analyst_estimates` | `dataset`: `estimates` (default), `recommendations`, `upgrades_downgrades`, `earnings_history` |
+| What the company does, executives, peers | `get_company_profile` | `dataset`: `profile` (default), `officers`, `similar_symbols`, `trading_hours` |
+| Analyst estimates, ratings, EPS surprises | `get_analyst_estimates` | `dataset`: `estimates` (default), `recommendations`, `upgrades_downgrades`, `earnings_history`; Nasdaq: `earnings_surprise`, `quarterly_forecast`, `yearly_forecast`, `pe_forecast`, `growth_forecast` |
 | Next earnings or dividend date | `get_earnings_calendar` | `ticker` |
 | Who owns it, insider trades | `get_holders` | `dataset`: `institutional_holders` (default), `fund_holders`, `ownership_breakdown`, `insiders`, `insider_transactions`, `insider_activity` |
 | Latest insider buys and sales with price and value | `get_insider_trades` | `ticker` (Finviz, US listings) |
 | Revenue by segment, region or product | `get_revenue_breakdown` | `dataset`: `segment` (default), `region`, `product` |
-| Stock move after earnings, EPS surprises, estimate revisions | `get_earnings_reaction` | `dataset`: `price_reaction` (default), `surprises`, `revisions` |
+| Stock move after earnings, EPS surprises, estimate revisions | `get_earnings_reaction` | `dataset`: `price_reaction` (default), `surprises`, `revisions`, `annual` (since ~2010) |
 | 10-K, 10-Q, 8-K | `get_sec_filings` | `ticker` (US listings) |
 | Dividends | `get_dividends` | `source`: `digrin` (default), `yahoo`, `auto` |
-| Payout ratio, dividend growth, yield per year | `get_dividend_metrics` | `dataset`: `payout_ratio` (default), `growth_3y`, `growth_5y`, `growth_10y` (Digrin projections), `annual`, `summary` (Finviz) |
-| Stock splits | `get_splits` | `ticker` |
+| Payout ratio, dividend growth, yield per year | `get_dividend_metrics` | `dataset`: `payout_ratio` (default), `growth_3y`, `growth_5y`, `growth_10y` (Digrin projections), `annual`, `summary`, `ex_dividend_dates` (Finviz) |
+| Stock splits | `get_splits` | `source`: `yahoo` (default) or `digrin` |
+| European ETF by ISIN: TER, size, price, holdings, countries, sectors | `get_etf_profile` | `isin`, `dataset`: `basics` (default), `overview`, `description`, `price`, `holdings`, `countries`, `sectors`; `currency` |
+| Option expiration dates | `get_option_expirations` | `ticker` |
 | Options | `get_options_chain` | `expiration` `YYYY-MM-DD` (default nearest), `option_type`: `calls`, `puts`, `both` |
 | ETF/fund holdings, sectors, allocation | `get_fund_holdings` | `dataset`: `fund_top_holdings` (default), `fund_sectors`, `fund_asset_allocation` |
 | ETF/fund fees and returns | `get_fund_profile` | `dataset`: `fund_profile` (default), `fund_performance` |
@@ -50,6 +55,7 @@ Defaults:
 - `income_statement`: `TotalRevenue`, `NetIncome`, `BasicEPS`
 - `cash_flow`: `OperatingCashFlow`, `FreeCashFlow`, `CapitalExpenditure`
 - `balance_sheet`: `TotalAssets`, `TotalLiabilitiesNetMinorityInterest`, `StockholdersEquity`
+- `financials` (Yahoo only): `EBITDA`, `EBIT`, `NormalizedEBITDA`
 
 For anything else, look up the exact name in
 [reference/metrics.md](reference/metrics.md). Pass names unprefixed; output

@@ -1,0 +1,31 @@
+{
+ "latestQuote": {
+  "raw": 129.62,
+  "localized": "129.62"
+ },
+ "latestQuoteDate": "2026-10-30",
+ "previousQuote": {
+  "raw": 131.55,
+  "localized": "131.55"
+ },
+ "previousQuoteDate": "2026-10-29",
+ "dtdPrc": {
+  "raw": -1.47,
+  "localized": "-1.47"
+ },
+ "dtdAmt": {
+  "raw": -1.93,
+  "localized": "-1.93"
+ },
+ "quoteTradingVenue": "XETRA",
+ "quoteLowHigh": {
+  "low": {
+   "raw": 107.06,
+   "localized": "107.06"
+  },
+  "high": {
+   "raw": 131.96,
+   "localized": "131.96"
+  }
+ }
+}

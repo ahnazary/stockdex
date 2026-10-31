@@ -54,21 +54,28 @@ class TickerBase:
     forbidden_retries: int = 5
     forbidden_retry_delay: float = 10.0
 
-    def get_response(self, url: str) -> requests.Response:
+    def get_response(self, url: str, headers: dict = None) -> requests.Response:
+        """
+        GET ``url`` with the shared session
+
+        ``headers`` are merged into the default headers, e.g.
+        ``{"Accept": "application/json"}`` for JSON APIs that also serve XML.
+        """
         is_yahoo = "yahoo.com" in url
+        extra_headers = headers or {}
 
         if is_yahoo:
             if self._yahoo_crumb is None:
                 self._yahoo_crumb = self._get_yahoo_crumb()
             params = {"crumb": self._yahoo_crumb}
-            headers = self.request_headers
+            headers = {**self.request_headers, **extra_headers}
         else:
             # Throttle non-Yahoo requests to avoid rate limiting
             elapsed = time.time() - TickerBase._last_external_request_time
             if elapsed < self._external_request_delay:
                 time.sleep(self._external_request_delay - elapsed)
             params = {}
-            headers = {"User-Agent": get_user_agent()}
+            headers = {"User-Agent": get_user_agent(), **extra_headers}
 
         response = self.session.get(
             url,

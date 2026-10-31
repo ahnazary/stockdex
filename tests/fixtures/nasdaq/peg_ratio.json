@@ -1,0 +1,63 @@
+{
+ "data": {
+  "pegr": {
+   "label": "Forecast 12 Month Forward PEG Ratio",
+   "text": "Investors are always looking for companies with good growth prospects selling at attractive prices. One popular statistic used to identify such stocks is the PEG ratio - which is simply the Price Earnings ratio divided by the growth rate. In this case we use the forecasted growth rate (based on the consensus of professional analysts) and forecasted earnings over the next 12 months. In theory, the lower the PEG ratio the better - implying that you are paying less for future earnings growth. The PEG ratio for this company is based on expected earnings for the next twelve months",
+   "pegValue": 2.99
+  },
+  "per": {
+   "peRatioChart": [
+    {
+     "x": "2025 Actual",
+     "y": 46.2
+    },
+    {
+     "x": "2026 Estimates",
+     "y": 39.39
+    },
+    {
+     "x": "2027 Estimates",
+     "y": 35.9
+    },
+    {
+     "x": "2028 Estimates",
+     "y": 31.44
+    }
+   ],
+   "label": "Price/Earnings Ratio",
+   "text": "Price/Earnings Ratio is a widely used stock evaluation measure. For a security, the Price/Earnings Ratio is given by dividing the Last Sale Price by the Average EPS (Earnings Per Share) Estimate for the specified fiscal time period.",
+   "dataProvider": "Data Provider: Zacks Investment Research"
+  },
+  "gr": {
+   "peGrowthChart": [
+    {
+     "z": "Growth",
+     "x": "2026",
+     "y": 17.31
+    },
+    {
+     "z": "Growth",
+     "x": "2027",
+     "y": 9.66
+    },
+    {
+     "z": "P/E Ratios",
+     "x": "2026",
+     "y": 39.39
+    },
+    {
+     "z": "P/E Ratios",
+     "x": "2027",
+     "y": 35.9
+    }
+   ],
+   "title": "Forecast P/E Growth Rates"
+  }
+ },
+ "message": null,
+ "status": {
+  "rCode": 200,
+  "bCodeMessage": null,
+  "developerMessage": null
+ }
+}

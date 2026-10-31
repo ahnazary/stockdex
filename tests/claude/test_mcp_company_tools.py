@@ -51,7 +51,12 @@ def test_mcp_tools_expose_only_their_datasets():
 
     tools = {t.name: t for t in anyio.run(create_server(adapter=None).list_tools)}
     profile = tools["get_company_profile"].input_schema["properties"]["dataset"]
-    assert set(profile["enum"]) == {"profile", "officers", "similar_symbols"}
+    assert set(profile["enum"]) == {
+        "profile",
+        "officers",
+        "similar_symbols",
+        "trading_hours",
+    }
     stats = tools["get_key_statistics"].input_schema["properties"]["dataset"]
     assert set(stats["enum"]) == {
         "summary",

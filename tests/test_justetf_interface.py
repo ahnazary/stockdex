@@ -56,8 +56,9 @@ def test_justetf_general_info_wrong_security_type() -> None:
 @pytest.mark.parametrize(
     "isin, expected",
     [
-        ("IE00B4L5Y983", "A0RPWH"),
-        ("IE00B53SZB19", "A0YEDL"),
+        # justETF now shows the exchange ticker where it used to show the WKN
+        ("IE00B4L5Y983", "IWDA"),
+        ("IE00B53SZB19", "CSNDX"),
     ],
 )
 def test_justetf_wkn(isin: str, expected: str) -> None:
