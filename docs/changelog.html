@@ -274,8 +274,8 @@
         <article role="main" id="furo-main-content">
           <section id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading">¶</a></h1>
-<section id="unreleased">
-<h2>Unreleased<a class="headerlink" href="#unreleased" title="Link to this heading">¶</a></h2>
+<section id="id1">
+<h2>1.6.0<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
 <section id="added">
 <h3>Added<a class="headerlink" href="#added" title="Link to this heading">¶</a></h3>
 <ul class="simple">
@@ -312,10 +312,10 @@
 </ul>
 </section>
 </section>
-<section id="id1">
-<h2>1.5.0<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
 <section id="id2">
-<h3>Added<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<h2>1.5.0<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<section id="id3">
+<h3>Added<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>MCP tools for Claude (5 new, 21 in total):</p>
 <ul>
@@ -403,16 +403,16 @@
 <li><p>MCP errors keep the requested <code class="docutils literal notranslate"><span class="pre">source</span></code>, e.g. <code class="docutils literal notranslate"><span class="pre">macrotrends</span></code> or <code class="docutils literal notranslate"><span class="pre">finviz</span></code>, even when the parameters are rejected.</p></li>
 </ul>
 </section>
-<section id="id3">
-<h3>Removed<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<section id="id4">
+<h3>Removed<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>The <code class="docutils literal notranslate"><span class="pre">stockdex.yahoo_web_interface</span></code> module and the <code class="docutils literal notranslate"><span class="pre">YahooWeb</span></code> class.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;yahoo_web&quot;</span></code> from <code class="docutils literal notranslate"><span class="pre">VALID_DATA_SOURCES</span></code> and the unused <code class="docutils literal notranslate"><span class="pre">YAHOO_WEB_BASE_URL</span></code> setting.</p></li>
 <li><p>The “Yahoo Finance (Website)” docs page.</p></li>
 </ul>
 </section>
-<section id="id4">
-<h3>Changed<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<section id="id5">
+<h3>Changed<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Macrotrends looks up the company name through the Yahoo Finance API instead of scraping the Yahoo website.</p></li>
 <li><p>The Claude skill, plugin README, docs and Desktop extension describe the new tools and sources. justETF stays out of the MCP server because it needs a Chrome browser.</p></li>
@@ -421,10 +421,10 @@
 </ul>
 </section>
 </section>
-<section id="id5">
-<h2>1.4.0<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
 <section id="id6">
-<h3>Added<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<h2>1.4.0<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h2>
+<section id="id7">
+<h3>Added<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Yahoo Finance API: <code class="docutils literal notranslate"><span class="pre">yahoo_api_dividends</span></code>, <code class="docutils literal notranslate"><span class="pre">yahoo_api_splits</span></code> and <code class="docutils literal notranslate"><span class="pre">yahoo_api_capital_gains</span></code> from the chart endpoint’s corporate-action events.</p></li>
 <li><p>Yahoo Finance API: <code class="docutils literal notranslate"><span class="pre">yahoo_api_valuation_measures</span></code> with market cap, enterprise value, P/E, forward P/E, PEG, P/S, P/B and EV ratios over time (annual, quarterly or trailing).</p></li>
@@ -441,17 +441,17 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">get_dividends</span></code> accepts <code class="docutils literal notranslate"><span class="pre">source=&quot;yahoo&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">source=&quot;auto&quot;</span></code> (Digrin with Yahoo Finance fallback). The default is still Digrin.</p></li>
 </ul>
 </section>
-<section id="id7">
-<h3>Changed<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<section id="id8">
+<h3>Changed<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>The Claude skill, plugin README, docs and Desktop extension description cover the new tools.</p></li>
 </ul>
 </section>
 </section>
-<section id="id8">
-<h2>1.3.1<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h2>
 <section id="id9">
-<h3>Changed<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
+<h2>1.3.1<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h2>
+<section id="id10">
+<h3>Changed<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>MCP tools now declare a <code class="docutils literal notranslate"><span class="pre">title</span></code> and full annotations (<code class="docutils literal notranslate"><span class="pre">readOnlyHint</span></code>, <code class="docutils literal notranslate"><span class="pre">destructiveHint</span></code>, <code class="docutils literal notranslate"><span class="pre">idempotentHint</span></code>, <code class="docutils literal notranslate"><span class="pre">openWorldHint</span></code>), and their descriptions state exactly what each tool returns and where the data comes from. This follows Anthropic’s Software Directory Policy.</p></li>
 <li><p>The Claude Code plugin moved to <code class="docutils literal notranslate"><span class="pre">plugins/stockdex/</span></code>, with its own README and LICENSE, and pins <code class="docutils literal notranslate"><span class="pre">stockdex[mcp]==1.3.1</span></code> exactly. The install commands stay the same.</p></li>
@@ -459,10 +459,10 @@
 </ul>
 </section>
 </section>
-<section id="id10">
-<h2>1.3.0<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h2>
 <section id="id11">
-<h3>Added<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h3>
+<h2>1.3.0<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h2>
+<section id="id12">
+<h3>Added<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Local read-only MCP server (<code class="docutils literal notranslate"><span class="pre">stockdex-mcp</span></code>, install with <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">&quot;stockdex[mcp]&quot;</span></code>) with <code class="docutils literal notranslate"><span class="pre">get_prices</span></code>, <code class="docutils literal notranslate"><span class="pre">get_financial_statement</span></code> and <code class="docutils literal notranslate"><span class="pre">get_dividends</span></code> tools.</p></li>
 <li><p>JSON command-line tool <code class="docutils literal notranslate"><span class="pre">stockdex-claude</span></code> for the same operations.</p></li>
@@ -470,104 +470,104 @@
 <li><p>Claude Desktop extension <code class="docutils literal notranslate"><span class="pre">stockdex.mcpb</span></code>, attached to GitHub releases.</p></li>
 </ul>
 </section>
-<section id="id12">
-<h3>Fixed<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h3>
+<section id="id13">
+<h3>Fixed<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">digrin_dividend</span></code> raises a clear <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> when Digrin’s page layout changes, instead of an <code class="docutils literal notranslate"><span class="pre">AttributeError</span></code>. Rows that don’t match the table header are skipped.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-e</span> <span class="pre">.</span></code> now works from a fresh clone without <code class="docutils literal notranslate"><span class="pre">__version__.py</span></code>.</p></li>
 </ul>
 </section>
-<section id="id13">
-<h3>Changed<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h3>
+<section id="id14">
+<h3>Changed<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Minimum Python version is now 3.9, matching the existing <code class="docutils literal notranslate"><span class="pre">pandas&gt;=2.2.3</span></code> requirement.</p></li>
 </ul>
 </section>
 </section>
-<section id="id14">
-<h2>1.2.7<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h2>
 <section id="id15">
-<h3>Fixed<a class="headerlink" href="#id15" title="Link to this heading">¶</a></h3>
+<h2>1.2.7<a class="headerlink" href="#id15" title="Link to this heading">¶</a></h2>
+<section id="id16">
+<h3>Fixed<a class="headerlink" href="#id16" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Fixed <code class="docutils literal notranslate"><span class="pre">yahoo_api_financials</span></code> (and related income statement, balance sheet, cash flow methods) dropping recent years’ data (2024, 2025) due to using the last column’s date index when constructing the DataFrame.</p></li>
 </ul>
 </section>
 </section>
-<section id="id16">
-<h2>1.2.6<a class="headerlink" href="#id16" title="Link to this heading">¶</a></h2>
 <section id="id17">
-<h3>Fixed<a class="headerlink" href="#id17" title="Link to this heading">¶</a></h3>
+<h2>1.2.6<a class="headerlink" href="#id17" title="Link to this heading">¶</a></h2>
+<section id="id18">
+<h3>Fixed<a class="headerlink" href="#id18" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">yahoo_web_balance_sheet</span></code>, <code class="docutils literal notranslate"><span class="pre">yahoo_web_cashflow</span></code>, and <code class="docutils literal notranslate"><span class="pre">yahoo_web_income_stmt</span></code> now return <strong>all rows</strong> including expandable/hidden rows from Yahoo Finance by fetching data via the Yahoo timeseries API instead of only scraping the visible HTML rows.</p></li>
 </ul>
 </section>
 </section>
-<section id="id18">
-<h2>1.0.8<a class="headerlink" href="#id18" title="Link to this heading">¶</a></h2>
 <section id="id19">
-<h3>Added<a class="headerlink" href="#id19" title="Link to this heading">¶</a></h3>
+<h2>1.0.8<a class="headerlink" href="#id19" title="Link to this heading">¶</a></h2>
+<section id="id20">
+<h3>Added<a class="headerlink" href="#id20" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Added <code class="docutils literal notranslate"><span class="pre">macrotrends_revenue</span></code> method to fetch quarterly and annual revenue data from <code class="docutils literal notranslate"><span class="pre">macrotrends</span></code> website.</p></li>
 </ul>
 </section>
 </section>
-<section id="id20">
-<h2>1.0.5<a class="headerlink" href="#id20" title="Link to this heading">¶</a></h2>
 <section id="id21">
-<h3>Fixed<a class="headerlink" href="#id21" title="Link to this heading">¶</a></h3>
+<h2>1.0.5<a class="headerlink" href="#id21" title="Link to this heading">¶</a></h2>
+<section id="id22">
+<h3>Fixed<a class="headerlink" href="#id22" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Fixed bug with selenium driver path.</p></li>
 </ul>
 </section>
 </section>
-<section id="id22">
-<h2>1.0.4<a class="headerlink" href="#id22" title="Link to this heading">¶</a></h2>
 <section id="id23">
-<h3>Added<a class="headerlink" href="#id23" title="Link to this heading">¶</a></h3>
+<h2>1.0.4<a class="headerlink" href="#id23" title="Link to this heading">¶</a></h2>
+<section id="id24">
+<h3>Added<a class="headerlink" href="#id24" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Added <code class="docutils literal notranslate"><span class="pre">justetf_price</span></code> method to fetch price data from <code class="docutils literal notranslate"><span class="pre">justetf</span></code> website.</p></li>
 <li><p>fix bugs in <code class="docutils literal notranslate"><span class="pre">yahoo_web</span></code> module.</p></li>
 </ul>
 </section>
 </section>
-<section id="id24">
-<h2>1.0.2<a class="headerlink" href="#id24" title="Link to this heading">¶</a></h2>
 <section id="id25">
-<h3>Added<a class="headerlink" href="#id25" title="Link to this heading">¶</a></h3>
+<h2>1.0.2<a class="headerlink" href="#id25" title="Link to this heading">¶</a></h2>
+<section id="id26">
+<h3>Added<a class="headerlink" href="#id26" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Added <code class="docutils literal notranslate"><span class="pre">ruff</span></code>as link to the project.</p></li>
 </ul>
 </section>
-<section id="id26">
-<h3>Fixed<a class="headerlink" href="#id26" title="Link to this heading">¶</a></h3>
+<section id="id27">
+<h3>Fixed<a class="headerlink" href="#id27" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Fix path to chrome driver in selenium module.</p></li>
 <li><p>Fix yahoo web financials, balance sheet, and cash flow data.</p></li>
 </ul>
 </section>
-<section id="id27">
-<h3>Changed<a class="headerlink" href="#id27" title="Link to this heading">¶</a></h3>
-</section>
-</section>
 <section id="id28">
-<h2>1.0.0<a class="headerlink" href="#id28" title="Link to this heading">¶</a></h2>
+<h3>Changed<a class="headerlink" href="#id28" title="Link to this heading">¶</a></h3>
+</section>
+</section>
 <section id="id29">
-<h3>Added<a class="headerlink" href="#id29" title="Link to this heading">¶</a></h3>
+<h2>1.0.0<a class="headerlink" href="#id29" title="Link to this heading">¶</a></h2>
+<section id="id30">
+<h3>Added<a class="headerlink" href="#id30" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Added <code class="docutils literal notranslate"><span class="pre">plotly</span></code> and <code class="docutils literal notranslate"><span class="pre">dash</span></code> modules to plot financial data and create dash app.</p></li>
 </ul>
 </section>
-<section id="id30">
-<h3>Fixed<a class="headerlink" href="#id30" title="Link to this heading">¶</a></h3>
-</section>
 <section id="id31">
-<h3>Changed<a class="headerlink" href="#id31" title="Link to this heading">¶</a></h3>
-</section>
+<h3>Fixed<a class="headerlink" href="#id31" title="Link to this heading">¶</a></h3>
 </section>
 <section id="id32">
-<h2>0.7.0<a class="headerlink" href="#id32" title="Link to this heading">¶</a></h2>
+<h3>Changed<a class="headerlink" href="#id32" title="Link to this heading">¶</a></h3>
+</section>
+</section>
 <section id="id33">
-<h3>Added<a class="headerlink" href="#id33" title="Link to this heading">¶</a></h3>
+<h2>0.7.0<a class="headerlink" href="#id33" title="Link to this heading">¶</a></h2>
+<section id="id34">
+<h3>Added<a class="headerlink" href="#id34" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Added following properties to yahoo web module:</p>
 <ul>
@@ -581,27 +581,27 @@
 </li>
 </ul>
 </section>
-<section id="id34">
-<h3>Fixed<a class="headerlink" href="#id34" title="Link to this heading">¶</a></h3>
-</section>
 <section id="id35">
-<h3>Changed<a class="headerlink" href="#id35" title="Link to this heading">¶</a></h3>
-</section>
+<h3>Fixed<a class="headerlink" href="#id35" title="Link to this heading">¶</a></h3>
 </section>
 <section id="id36">
-<h2>0.6.0<a class="headerlink" href="#id36" title="Link to this heading">¶</a></h2>
+<h3>Changed<a class="headerlink" href="#id36" title="Link to this heading">¶</a></h3>
+</section>
+</section>
 <section id="id37">
-<h3>Added<a class="headerlink" href="#id37" title="Link to this heading">¶</a></h3>
+<h2>0.6.0<a class="headerlink" href="#id37" title="Link to this heading">¶</a></h2>
+<section id="id38">
+<h3>Added<a class="headerlink" href="#id38" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Module for <code class="docutils literal notranslate"><span class="pre">´macrotrends</span></code> website to fetch data.</p></li>
 <li><p>methods for extracting basic and margin related data from <code class="docutils literal notranslate"><span class="pre">macrotrends</span></code> website.</p></li>
 </ul>
 </section>
-<section id="id38">
-<h3>Fixed<a class="headerlink" href="#id38" title="Link to this heading">¶</a></h3>
-</section>
 <section id="id39">
-<h3>Changed<a class="headerlink" href="#id39" title="Link to this heading">¶</a></h3>
+<h3>Fixed<a class="headerlink" href="#id39" title="Link to this heading">¶</a></h3>
+</section>
+<section id="id40">
+<h3>Changed<a class="headerlink" href="#id40" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Some log messages are changed.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">TickerFactory</span></code> class is removed and <code class="docutils literal notranslate"><span class="pre">Ticker</span></code> class is used to create <code class="docutils literal notranslate"><span class="pre">Ticker</span></code> objects.</p></li>
@@ -609,45 +609,45 @@
 </ul>
 </section>
 </section>
-<section id="id40">
-<h2>0.5.0<a class="headerlink" href="#id40" title="Link to this heading">¶</a></h2>
 <section id="id41">
-<h3>Added<a class="headerlink" href="#id41" title="Link to this heading">¶</a></h3>
+<h2>0.5.0<a class="headerlink" href="#id41" title="Link to this heading">¶</a></h2>
+<section id="id42">
+<h3>Added<a class="headerlink" href="#id42" title="Link to this heading">¶</a></h3>
 <p>– <code class="docutils literal notranslate"><span class="pre">data_source</span></code> in the <code class="docutils literal notranslate"><span class="pre">TickerFactory</span></code> class to specify the source of the data.
 – <code class="docutils literal notranslate"><span class="pre">WrongSecurityType</span></code> exception class to raise an exception when the security type is not valid.</p>
 </section>
-<section id="id42">
-<h3>Fixed<a class="headerlink" href="#id42" title="Link to this heading">¶</a></h3>
+<section id="id43">
+<h3>Fixed<a class="headerlink" href="#id43" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Bug with <code class="docutils literal notranslate"><span class="pre">isin</span></code> field in all classes.</p></li>
 </ul>
 </section>
-<section id="id43">
-<h3>Changed<a class="headerlink" href="#id43" title="Link to this heading">¶</a></h3>
+<section id="id44">
+<h3>Changed<a class="headerlink" href="#id44" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Removed <code class="docutils literal notranslate"><span class="pre">nasdaq</span></code> module as the website keeps changing its structure.</p></li>
 <li><p>Instead of <code class="docutils literal notranslate"><span class="pre">Ticker</span></code> class, <code class="docutils literal notranslate"><span class="pre">TickerFactory</span></code> class is used to create <code class="docutils literal notranslate"><span class="pre">Ticker</span></code> objects.</p></li>
 </ul>
 </section>
 </section>
-<section id="id44">
-<h2>0.4.0<a class="headerlink" href="#id44" title="Link to this heading">¶</a></h2>
 <section id="id45">
-<h3>Added<a class="headerlink" href="#id45" title="Link to this heading">¶</a></h3>
+<h2>0.4.0<a class="headerlink" href="#id45" title="Link to this heading">¶</a></h2>
+<section id="id46">
+<h3>Added<a class="headerlink" href="#id46" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>More methods for fetching data from <code class="docutils literal notranslate"><span class="pre">NASDAQ</span></code> website.</p></li>
 <li><p>More methods for fetching data from <code class="docutils literal notranslate"><span class="pre">JustETF</span></code> website.</p></li>
 <li><p>Separate module for yahoo finance web related functions.</p></li>
 </ul>
 </section>
-<section id="id46">
-<h3>Fixed<a class="headerlink" href="#id46" title="Link to this heading">¶</a></h3>
+<section id="id47">
+<h3>Fixed<a class="headerlink" href="#id47" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Bug with <code class="docutils literal notranslate"><span class="pre">security_type</span></code> field in all classes.</p></li>
 </ul>
 </section>
-<section id="id47">
-<h3>Changed<a class="headerlink" href="#id47" title="Link to this heading">¶</a></h3>
+<section id="id48">
+<h3>Changed<a class="headerlink" href="#id48" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">Ticker</span></code> class now accepts <code class="docutils literal notranslate"><span class="pre">isin</span></code> and <code class="docutils literal notranslate"><span class="pre">security_type</span></code> as arguments.</p></li>
 </ul>
@@ -714,89 +714,89 @@
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Changelog</a><ul>
-<li><a class="reference internal" href="#unreleased">Unreleased</a><ul>
+<li><a class="reference internal" href="#id1">1.6.0</a><ul>
 <li><a class="reference internal" href="#added">Added</a></li>
 <li><a class="reference internal" href="#changed">Changed</a></li>
 <li><a class="reference internal" href="#removed">Removed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id1">1.5.0</a><ul>
-<li><a class="reference internal" href="#id2">Added</a></li>
+<li><a class="reference internal" href="#id2">1.5.0</a><ul>
+<li><a class="reference internal" href="#id3">Added</a></li>
 <li><a class="reference internal" href="#deprecated">Deprecated</a></li>
 <li><a class="reference internal" href="#fixed">Fixed</a></li>
-<li><a class="reference internal" href="#id3">Removed</a></li>
-<li><a class="reference internal" href="#id4">Changed</a></li>
+<li><a class="reference internal" href="#id4">Removed</a></li>
+<li><a class="reference internal" href="#id5">Changed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id5">1.4.0</a><ul>
-<li><a class="reference internal" href="#id6">Added</a></li>
-<li><a class="reference internal" href="#id7">Changed</a></li>
+<li><a class="reference internal" href="#id6">1.4.0</a><ul>
+<li><a class="reference internal" href="#id7">Added</a></li>
+<li><a class="reference internal" href="#id8">Changed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id8">1.3.1</a><ul>
-<li><a class="reference internal" href="#id9">Changed</a></li>
+<li><a class="reference internal" href="#id9">1.3.1</a><ul>
+<li><a class="reference internal" href="#id10">Changed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id10">1.3.0</a><ul>
-<li><a class="reference internal" href="#id11">Added</a></li>
-<li><a class="reference internal" href="#id12">Fixed</a></li>
-<li><a class="reference internal" href="#id13">Changed</a></li>
+<li><a class="reference internal" href="#id11">1.3.0</a><ul>
+<li><a class="reference internal" href="#id12">Added</a></li>
+<li><a class="reference internal" href="#id13">Fixed</a></li>
+<li><a class="reference internal" href="#id14">Changed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id14">1.2.7</a><ul>
-<li><a class="reference internal" href="#id15">Fixed</a></li>
+<li><a class="reference internal" href="#id15">1.2.7</a><ul>
+<li><a class="reference internal" href="#id16">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id16">1.2.6</a><ul>
-<li><a class="reference internal" href="#id17">Fixed</a></li>
+<li><a class="reference internal" href="#id17">1.2.6</a><ul>
+<li><a class="reference internal" href="#id18">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id18">1.0.8</a><ul>
-<li><a class="reference internal" href="#id19">Added</a></li>
+<li><a class="reference internal" href="#id19">1.0.8</a><ul>
+<li><a class="reference internal" href="#id20">Added</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id20">1.0.5</a><ul>
-<li><a class="reference internal" href="#id21">Fixed</a></li>
+<li><a class="reference internal" href="#id21">1.0.5</a><ul>
+<li><a class="reference internal" href="#id22">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id22">1.0.4</a><ul>
-<li><a class="reference internal" href="#id23">Added</a></li>
+<li><a class="reference internal" href="#id23">1.0.4</a><ul>
+<li><a class="reference internal" href="#id24">Added</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id24">1.0.2</a><ul>
-<li><a class="reference internal" href="#id25">Added</a></li>
-<li><a class="reference internal" href="#id26">Fixed</a></li>
-<li><a class="reference internal" href="#id27">Changed</a></li>
+<li><a class="reference internal" href="#id25">1.0.2</a><ul>
+<li><a class="reference internal" href="#id26">Added</a></li>
+<li><a class="reference internal" href="#id27">Fixed</a></li>
+<li><a class="reference internal" href="#id28">Changed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id28">1.0.0</a><ul>
-<li><a class="reference internal" href="#id29">Added</a></li>
-<li><a class="reference internal" href="#id30">Fixed</a></li>
-<li><a class="reference internal" href="#id31">Changed</a></li>
+<li><a class="reference internal" href="#id29">1.0.0</a><ul>
+<li><a class="reference internal" href="#id30">Added</a></li>
+<li><a class="reference internal" href="#id31">Fixed</a></li>
+<li><a class="reference internal" href="#id32">Changed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id32">0.7.0</a><ul>
-<li><a class="reference internal" href="#id33">Added</a></li>
-<li><a class="reference internal" href="#id34">Fixed</a></li>
-<li><a class="reference internal" href="#id35">Changed</a></li>
+<li><a class="reference internal" href="#id33">0.7.0</a><ul>
+<li><a class="reference internal" href="#id34">Added</a></li>
+<li><a class="reference internal" href="#id35">Fixed</a></li>
+<li><a class="reference internal" href="#id36">Changed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id36">0.6.0</a><ul>
-<li><a class="reference internal" href="#id37">Added</a></li>
-<li><a class="reference internal" href="#id38">Fixed</a></li>
-<li><a class="reference internal" href="#id39">Changed</a></li>
+<li><a class="reference internal" href="#id37">0.6.0</a><ul>
+<li><a class="reference internal" href="#id38">Added</a></li>
+<li><a class="reference internal" href="#id39">Fixed</a></li>
+<li><a class="reference internal" href="#id40">Changed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id40">0.5.0</a><ul>
-<li><a class="reference internal" href="#id41">Added</a></li>
-<li><a class="reference internal" href="#id42">Fixed</a></li>
-<li><a class="reference internal" href="#id43">Changed</a></li>
+<li><a class="reference internal" href="#id41">0.5.0</a><ul>
+<li><a class="reference internal" href="#id42">Added</a></li>
+<li><a class="reference internal" href="#id43">Fixed</a></li>
+<li><a class="reference internal" href="#id44">Changed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id44">0.4.0</a><ul>
-<li><a class="reference internal" href="#id45">Added</a></li>
-<li><a class="reference internal" href="#id46">Fixed</a></li>
-<li><a class="reference internal" href="#id47">Changed</a></li>
+<li><a class="reference internal" href="#id45">0.4.0</a><ul>
+<li><a class="reference internal" href="#id46">Added</a></li>
+<li><a class="reference internal" href="#id47">Fixed</a></li>
+<li><a class="reference internal" href="#id48">Changed</a></li>
 </ul>
 </li>
 </ul>
