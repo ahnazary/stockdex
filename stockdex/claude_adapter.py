@@ -15,8 +15,12 @@ import pandas as pd
 from curl_cffi.requests.exceptions import RequestException
 
 from stockdex import Ticker, config
-from stockdex.exceptions import (LayoutChangedError, NoDataError,
-                                 ProviderBlockedError, RateLimitError)
+from stockdex.exceptions import (
+    LayoutChangedError,
+    NoDataError,
+    ProviderBlockedError,
+    RateLimitError,
+)
 
 MAX_BYTES = 256 * 1024
 MAX_ROWS = 500
@@ -347,9 +351,9 @@ def _attribute(provider, name, *args):
 
 
 def _digrin_amount(value):
-    """'383.3 billion' -> 383300000000.0, '-' -> None."""
+    """'383.3 billion' -> 383300000000.0; '-', '?' and 'N/A' -> None."""
     text = _text(value)
-    if text in (None, "-", "—"):
+    if text in (None, "-", "—", "?", "N/A"):
         return None
     match = _DIGRIN_AMOUNT.fullmatch(text.replace("$", ""))
     if not match:
@@ -1199,10 +1203,12 @@ class StockdexAdapter:
             return out
         if dataset == "basics":
             frame = provider.justetf_basics
+            if frame.empty:
+                return frame
             rows = [
                 {"field": _text(k), "value": _text(v)} for k, v in frame.iloc[0].items()
             ]
-            return pd.DataFrame(rows) if not frame.empty else frame
+            return pd.DataFrame(rows)
         if dataset == "overview":
             frame = provider.justetf_general_info
             rows = []
@@ -1826,24 +1832,30 @@ class StockdexAdapter:
 
     @staticmethod
     def _macrotrends_revenue(provider, frequency, warnings):
-        frame = getattr(provider, f"macrotrends_revenue_{frequency}")
+        # Two columns with ticker-specific titles such as
+        # "Amazon Quarterly Revenue (Millions of US $)": the period (a year for
+        # annual, an ISO date for quarterly) and the amount ("$167,702").
+        frame = provider.macrotrends_revenue(frequency=frequency)
         if frame.empty:
             return frame
-        if not {"Date", "Revenue"} <= set(frame.columns):
+        if frame.shape[1] != 2:
             raise LayoutChangedError("Macrotrends", "revenue table columns changed")
-        out = pd.DataFrame(
-            {
-                "fiscal_year": frame["Date"].map(
-                    lambda v: _fiscal_year(v) if v else None
-                ),
-                "period_end": frame["Date"].map(
-                    lambda v: str(v)[:10] if isinstance(v, str) else None
-                ),
-                "revenue": frame["Revenue"].map(_money),
-            }
-        )
+        periods, amounts = frame.iloc[:, 0], frame.iloc[:, 1]
+        if frequency == "annual":
+            years = pd.to_numeric(periods, errors="coerce")
+            if years.isna().any():
+                raise LayoutChangedError("Macrotrends", "revenue years changed")
+            out = pd.DataFrame({"fiscal_year": years.astype(int).values})
+            key = "fiscal_year"
+        else:
+            dates = pd.to_datetime(periods, errors="coerce", format="%Y-%m-%d")
+            if dates.isna().any():
+                raise LayoutChangedError("Macrotrends", "revenue dates changed")
+            out = pd.DataFrame({"period_end": dates.dt.strftime("%Y-%m-%d").values})
+            key = "period_end"
+        out["revenue_millions"] = amounts.map(_money).values
         warnings.append(
-            "Annual revenue from Macrotrends in the reporting currency (not "
-            "millions)."
+            f"{frequency.capitalize()} revenue from Macrotrends in millions of "
+            "the reporting currency."
         )
-        return out.sort_values("fiscal_year", ascending=False).reset_index(drop=True)
+        return out.sort_values(key, ascending=False).reset_index(drop=True)

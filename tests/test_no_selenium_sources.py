@@ -7,8 +7,7 @@ from types import SimpleNamespace
 import pandas as pd
 import pytest
 
-from stockdex.exceptions import (LayoutChangedError, NoDataError,
-                                 WrongSecurityType)
+from stockdex.exceptions import LayoutChangedError, NoDataError, WrongSecurityType
 from stockdex.justetf_interface import JUSTETF_PRICE_COLUMNS
 from stockdex.ticker import Ticker
 

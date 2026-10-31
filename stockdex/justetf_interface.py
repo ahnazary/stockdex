@@ -7,8 +7,7 @@ from typing import Callable, Union
 import pandas as pd
 from bs4 import BeautifulSoup
 
-from stockdex.config import (JUSTETF_API_URL, JUSTETF_BASE_URL,
-                             VALID_SECURITY_TYPES)
+from stockdex.config import JUSTETF_API_URL, JUSTETF_BASE_URL, VALID_SECURITY_TYPES
 from stockdex.exceptions import LayoutChangedError, NoDataError, NoISINError
 from stockdex.lib import check_security_type, instance_cache
 from stockdex.ticker_base import TickerBase

@@ -7,8 +7,12 @@ import pandas as pd
 import pytest
 
 from stockdex import Ticker
-from stockdex.exceptions import (LayoutChangedError, NoDataError,
-                                 ProviderBlockedError, RateLimitError)
+from stockdex.exceptions import (
+    LayoutChangedError,
+    NoDataError,
+    ProviderBlockedError,
+    RateLimitError,
+)
 from stockdex.ticker_base import TickerBase
 
 
