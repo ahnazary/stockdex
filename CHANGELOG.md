@@ -1,5 +1,30 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- MCP tools (3 new, 24 in total):
+  - `get_etf_profile` (justETF): basics, overview, description, price, top holdings, countries and sectors of a European ETF by ISIN.
+  - `get_quarterly_fundamentals` (Digrin): long quarterly histories of assets vs liabilities, cash and debt, free cash flow, net income, revenue vs cost, expenses, shares outstanding and estimated EPS.
+  - `get_option_expirations` (Yahoo Finance): listed option expiration dates.
+- New datasets on existing tools:
+  - `get_analyst_estimates`: Nasdaq `earnings_surprise`, `quarterly_forecast`, `yearly_forecast`, `pe_forecast` and `growth_forecast`.
+  - `get_dividend_metrics`: Finviz `ex_dividend_dates`.
+  - `get_earnings_reaction`: Finviz `annual` EPS and sales since about 2010.
+  - `get_margins_and_ratios`: Macrotrends `revenue_annual` and `revenue_quarterly`.
+  - `get_prices` and `get_splits`: `source="digrin"` (monthly prices going back decades).
+  - `get_financial_statement`: `statement="financials"` (Yahoo Finance).
+  - `get_company_profile`: `trading_hours`.
+
+### Changed
+
+- justETF and Nasdaq methods use plain HTTP requests (justETF quote API, api.nasdaq.com JSON). Method names and return types are unchanged; the Nasdaq methods work again.
+
+### Removed
+
+- Selenium, `selenium_interface.py` and the bundled 15 MB `chromedriver_linux64`.
+
 ## 1.5.0
 
 ### Added

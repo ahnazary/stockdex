@@ -37,5 +37,12 @@ def test_tool_names_and_descriptions(tools):
         # Each description names its data source.
         assert any(
             source in tool.description
-            for source in ("Yahoo Finance", "Digrin", "Macrotrends", "Finviz")
+            for source in (
+                "Yahoo Finance",
+                "Digrin",
+                "Macrotrends",
+                "Finviz",
+                "justETF",
+                "Nasdaq",
+            )
         ), tool.name

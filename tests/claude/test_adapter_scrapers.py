@@ -1,10 +1,7 @@
 """The MCP adapter makes bot-protected sites fail fast."""
 
-from stockdex.claude_adapter import (
-    FORBIDDEN_RETRIES,
-    FORBIDDEN_RETRY_DELAY,
-    StockdexAdapter,
-)
+from stockdex.claude_adapter import (FORBIDDEN_RETRIES, FORBIDDEN_RETRY_DELAY,
+                                     StockdexAdapter)
 from stockdex.ticker_base import TickerBase
 from tests.claude.conftest import FakeTicker
 

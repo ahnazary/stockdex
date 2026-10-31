@@ -1,0 +1,68 @@
+{
+ "data": {
+  "symbol": "aapl",
+  "chart": [
+   {
+    "x": "1785369600",
+    "y": "0.03"
+   },
+   {
+    "x": "1777507200",
+    "y": "0.09"
+   },
+   {
+    "x": "1769644800",
+    "y": "0.19"
+   },
+   {
+    "x": "1761782400",
+    "y": "0.12"
+   }
+  ],
+  "earningsSurpriseTable": {
+   "headers": {
+    "fiscalQtrEnd": "Fiscal Quarter End",
+    "dateReported": "Date Reported",
+    "eps": "Earnings Per Share*",
+    "consensusForecast": "Consensus EPS* Forecast",
+    "percentageSurprise": "% Surprise"
+   },
+   "rows": [
+    {
+     "fiscalQtrEnd": "Jun 2026",
+     "dateReported": "7/30/2026",
+     "eps": 1.91,
+     "consensusForecast": "1.88",
+     "percentageSurprise": "1.6"
+    },
+    {
+     "fiscalQtrEnd": "Mar 2026",
+     "dateReported": "4/30/2026",
+     "eps": 2.01,
+     "consensusForecast": "1.92",
+     "percentageSurprise": "4.69"
+    },
+    {
+     "fiscalQtrEnd": "Dec 2025",
+     "dateReported": "1/29/2026",
+     "eps": 2.84,
+     "consensusForecast": "2.65",
+     "percentageSurprise": "7.17"
+    },
+    {
+     "fiscalQtrEnd": "Sep 2025",
+     "dateReported": "10/30/2025",
+     "eps": 1.85,
+     "consensusForecast": "1.73",
+     "percentageSurprise": "6.94"
+    }
+   ]
+  }
+ },
+ "message": null,
+ "status": {
+  "rCode": 200,
+  "bCodeMessage": null,
+  "developerMessage": null
+ }
+}

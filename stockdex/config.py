@@ -6,7 +6,9 @@ RESPONSE_TIMEOUT = 10
 RETRY_AFTER_TIMEOUT = 2
 
 VALID_SECURITY_TYPES = Literal["stock", "etf", "cryptocurrency", "index", "commodity"]
-VALID_DATA_SOURCES = Literal["yahoo_api", "justetf", "digrin", "finviz", "macrotrends"]
+VALID_DATA_SOURCES = Literal[
+    "yahoo_api", "justetf", "digrin", "finviz", "macrotrends", "nasdaq"
+]
 
 BASE_URL = "https://query2.finance.yahoo.com/v8/finance"
 
@@ -14,7 +16,9 @@ FUNDAMENTALS_BASE_URL = (
     "https://query2.finance.yahoo.com/ws/fundamentals-timeseries/v1/finance/timeseries"
 )
 JUSTETF_BASE_URL = "https://www.justetf.com/en"
+JUSTETF_API_URL = "https://www.justetf.com/api"
 NASDAQ_BASE_URL = "https://www.nasdaq.com/market-activity/stocks"
+NASDAQ_API_URL = "https://api.nasdaq.com/api"
 DIGRIN_BASE_URL = "https://www.digrin.com/stocks/detail"
 MACROTRENDS_BASE_URL = "https://www.macrotrends.net/stocks/charts"
 FINVIZ_BASE_URL = "https://finviz.com/quote.ashx?t="

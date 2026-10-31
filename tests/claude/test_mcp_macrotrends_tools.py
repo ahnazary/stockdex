@@ -2,12 +2,9 @@
 
 import pytest
 
-from stockdex.claude_adapter import (
-    MACROTRENDS_DATASETS,
-    MACROTRENDS_DEFAULT_METRICS,
-    _money,
-    _percent,
-)
+from stockdex.claude_adapter import (MACROTRENDS_DATASETS,
+                                     MACROTRENDS_DEFAULT_METRICS, _money,
+                                     _percent)
 from stockdex.exceptions import ProviderBlockedError
 
 

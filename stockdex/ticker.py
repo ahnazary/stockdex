@@ -3,6 +3,7 @@ from stockdex.digrin_interface import DigrinInterface
 from stockdex.finviz_interface import FinvizInterface
 from stockdex.justetf_interface import JustETF
 from stockdex.macrotrends_interface import MacrotrendsInterface
+from stockdex.nasdaq_interface import NASDAQInterface
 from stockdex.sankey_charts import SankeyCharts
 from stockdex.yahoo_api_interface import YahooAPI
 from stockdex.yahoo_web_deprecated import YahooWebDeprecated
@@ -16,6 +17,7 @@ class Ticker(
     MacrotrendsInterface,
     SankeyCharts,
     FinvizInterface,
+    NASDAQInterface,
 ):
     """
     Class for the Ticker

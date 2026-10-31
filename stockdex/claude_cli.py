@@ -3,12 +3,8 @@
 import argparse
 import sys
 
-from stockdex.claude_adapter import (
-    PRICE_RANGES,
-    STATEMENTS,
-    StockdexAdapter,
-    encode_json,
-)
+from stockdex.claude_adapter import (PRICE_RANGES, STATEMENTS, StockdexAdapter,
+                                     encode_json)
 
 
 def main(argv=None, adapter=None):

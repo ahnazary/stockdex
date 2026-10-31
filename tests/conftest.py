@@ -51,7 +51,9 @@ def cache_live_digrin_requests():
     response_cache = {}
     circuit = {"rate_limit": None, "macrotrends_blocked": None}
 
-    def cached_get_response(self, url):
+    def cached_get_response(self, url, **kwargs):
+        if kwargs:
+            return original_get_response(self, url, **kwargs)
         if url.startswith(MACROTRENDS_BASE_URL):
             if circuit["macrotrends_blocked"] is not None:
                 pytest.skip(

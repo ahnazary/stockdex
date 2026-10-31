@@ -2,14 +2,34 @@
 Module for extracting ETF data from JustETF website
 """
 
+from typing import Callable, Union
+
 import pandas as pd
 from bs4 import BeautifulSoup
 
-from stockdex.config import JUSTETF_BASE_URL, VALID_SECURITY_TYPES
-from stockdex.exceptions import NoISINError
-from stockdex.lib import check_security_type
-from stockdex.selenium_interface import selenium_interface
+from stockdex.config import (JUSTETF_API_URL, JUSTETF_BASE_URL,
+                             VALID_SECURITY_TYPES)
+from stockdex.exceptions import LayoutChangedError, NoDataError, NoISINError
+from stockdex.lib import check_security_type, instance_cache
 from stockdex.ticker_base import TickerBase
+
+# Columns of ``justetf_price``. justETF's quote API has no time of day,
+# bid/ask or spread, so those columns are kept for compatibility and are None.
+JUSTETF_PRICE_COLUMNS = [
+    "price",
+    "currency",
+    "date",
+    "time",
+    "exchange",
+    "daily_change",
+    "daily_change_percent",
+    "buy|sell",
+    "spread",
+    "previous_close",
+    "previous_date",
+    "52_week_low",
+    "52_week_high",
+]
 
 
 class JustETF(TickerBase):
@@ -25,6 +45,36 @@ class JustETF(TickerBase):
         if not isin or isin == "":
             raise NoISINError("No ISIN provided, please provide an ISIN")
 
+    @instance_cache
+    def _justetf_profile_soup(self) -> BeautifulSoup:
+        """
+        Download the ETF profile page once per instance
+
+        Every profile section (overview, basics, holdings, countries,
+        sectors, description) is in the static HTML of this page.
+
+        Raises:
+        ----------------
+        NoDataError: justETF has no ETF with this ISIN (it redirects unknown
+        ISINs to its search page)
+        """
+        check_security_type(self.security_type, valid_types=["etf"])
+
+        url = f"{JUSTETF_BASE_URL}/etf-profile.html?isin={self.isin}"
+        response = self.get_response(url)
+
+        if "etf-profile.html" not in str(getattr(response, "url", url)):
+            raise NoDataError(f"justETF has no ETF with the ISIN {self.isin}")
+
+        return BeautifulSoup(response.text, "html.parser")
+
+    def _justetf_find(self, finder: Callable, section: str):
+        """Run ``finder`` on the profile page; a missing section is a layout change"""
+        element = finder(self._justetf_profile_soup())
+        if element is None:
+            raise LayoutChangedError("justETF", f"{section} section not found")
+        return element
+
     @property
     def justetf_general_info(self) -> pd.DataFrame:
         """
@@ -33,17 +83,13 @@ class JustETF(TickerBase):
         """
         check_security_type(self.security_type, valid_types=["etf"])
 
-        url = f"{JUSTETF_BASE_URL}/etf-profile.html?isin={self.isin}"
-        response = self.get_response(url)
-
-        soup = BeautifulSoup(response.text, "html.parser")
+        general_info = self._justetf_find(
+            lambda soup: soup.find("div", {"class": "data-overview mt-4 mb-3"}),
+            "overview",
+        )
 
         data_df = pd.DataFrame()
-
-        general_info = soup.find("div", {"class": "data-overview mt-4 mb-3"})
-        labels = general_info.find_all("div", {"class": "vallabel"})
-
-        for label in labels:
+        for label in general_info.find_all("div", {"class": "vallabel"}):
             column = label.text.replace(" ", "")
             value = label.find_next_sibling("div").text
 
@@ -54,19 +100,17 @@ class JustETF(TickerBase):
     @property
     def justetf_wkn(self) -> str:
         """
-        Get the WKN of the ETF
+        Get the identifier justETF shows next to the ISIN
+
+        This is the WKN for ETFs listed in Germany; for some ETFs justETF
+        shows the exchange ticker (e.g. ``IWDA``) instead.
         """
         check_security_type(self.security_type, valid_types=["etf"])
 
-        url = f"{JUSTETF_BASE_URL}/etf-profile.html?isin={self.isin}"
-        response = self.get_response(url)
-
-        soup = BeautifulSoup(response.text, "html.parser")
-
         # <span class="d-inline-block" id="etf_identifier_1">A0RPWH</span>
-        wkn = soup.find("span", {"id": "etf_identifier_1"}).text
-
-        return wkn
+        return self._justetf_find(
+            lambda soup: soup.find("span", {"id": "etf_identifier_1"}), "identifier"
+        ).text
 
     @property
     def justetf_description(self) -> str:
@@ -75,14 +119,9 @@ class JustETF(TickerBase):
         """
         check_security_type(self.security_type, valid_types=["etf"])
 
-        url = f"{JUSTETF_BASE_URL}/etf-profile.html?isin={self.isin}"
-        response = self.get_response(url)
-
-        soup = BeautifulSoup(response.text, "html.parser")
-
-        description = soup.find("div", {"id": "etf-description"}).text
-
-        return description
+        return self._justetf_find(
+            lambda soup: soup.find("div", {"id": "etf-description"}), "description"
+        ).text
 
     @property
     def justetf_basics(self) -> pd.DataFrame:
@@ -95,33 +134,53 @@ class JustETF(TickerBase):
         - Legal structure
         - Replication
 
-        Args:
-        ----------------
-        isin (str): ISIN of the ETF
-
         Returns:
         ----------------
         pd.DataFrame: DataFrame containing the basic information of the ETF
         """
         check_security_type(self.security_type, valid_types=["etf"])
 
-        url = f"{JUSTETF_BASE_URL}/etf-profile.html?isin={self.isin}#basics"
-
-        # build selenium interface object if not already built
-        if not hasattr(self, "selenium_interface"):
-            self.selenium_interface = selenium_interface()
-
-        soup = self.selenium_interface.get_html_content(url)
+        table = self._justetf_find(
+            lambda soup: soup.find("table", {"class": "table etf-data-table"}),
+            "basics",
+        )
 
         data_df = pd.DataFrame()
-
-        table = soup.find("table", {"class": "table etf-data-table"})
-
         for row in table.find_all("tr"):
             column = row.find_all("td")
+            if len(column) < 2:
+                continue
             data_df[column[0].text.strip()] = [column[1].text.strip()]
 
         return data_df
+
+    def _justetf_weights(self, heading: str, index_name: str) -> pd.DataFrame:
+        """
+        Read a two-column weight table that follows an ``<h3>`` heading
+
+        Returns:
+        ----------------
+        pd.DataFrame: indexed by ``index_name``, one column "shares in percent"
+        """
+        check_security_type(self.security_type, valid_types=["etf"])
+
+        def finder(soup):
+            title = soup.find(lambda tag: tag.name == "h3" and heading in tag.text)
+            table = title.find_next("table") if title else None
+            return table.find("tbody") if table else None
+
+        table_body = self._justetf_find(finder, heading)
+
+        names, shares_percent = [], []
+        for row in table_body.find_all("tr"):
+            columns = row.find_all("td")
+            if len(columns) < 2:
+                continue
+            names.append(columns[0].text.strip())
+            shares_percent.append(columns[1].text.strip())
+
+        data_df = pd.DataFrame({index_name: names, "shares in percent": shares_percent})
+        return data_df.set_index(index_name)
 
     @property
     def justetf_holdings_companies(self) -> pd.DataFrame:
@@ -132,198 +191,104 @@ class JustETF(TickerBase):
         - company name
         - shares in percent
 
-        Args:
-        ----------------
-        isin (str): ISIN of the ETF
-
         Returns:
         ----------------
         pd.DataFrame: DataFrame containing the holdings of the ETF
         """
-        check_security_type(self.security_type, valid_types=["etf"])
-
-        url = f"{JUSTETF_BASE_URL}/etf-profile.html?isin={self.isin}#holdings"
-
-        # build selenium interface object if not already built
-        if not hasattr(self, "selenium_interface"):
-            self.selenium_interface = selenium_interface()
-
-        soup = self.selenium_interface.get_html_content(url)
-
-        data_df = pd.DataFrame()
-        companies = []
-        shares_percent = []
-
-        table_body = (
-            soup.find(lambda tag: tag.name == "h3" and "Top 10 Holdings" in tag.text)
-            .find_next("table")
-            .find("tbody")
-        )
-
-        for row in table_body.find_all("tr"):
-            columns = row.find_all("td")
-            companies.append(columns[0].text.strip())
-            shares_percent.append(columns[1].text.strip())
-
-        data_df["company name"] = companies
-        data_df["shares in percent"] = shares_percent
-        data_df.set_index("company name", inplace=True)
-
-        return data_df
+        return self._justetf_weights("Top 10 Holdings", "company name")
 
     @property
     def justetf_holdings_countries(self) -> pd.DataFrame:
         """
-        Get the top 10 holdings of the ETF by countries
+        Get the holdings of the ETF by countries
 
         columns may include:
         - country name
         - shares in percent
 
-        Args:
-        ----------------
-        isin (str): ISIN of the ETF
-
         Returns:
         ----------------
         pd.DataFrame: DataFrame containing the holdings of the ETF
         """
-        check_security_type(self.security_type, valid_types=["etf"])
-
-        url = f"{JUSTETF_BASE_URL}/etf-profile.html?isin={self.isin}#holdings"
-
-        # build selenium interface object if not already built
-        if not hasattr(self, "selenium_interface"):
-            self.selenium_interface = selenium_interface()
-
-        soup = self.selenium_interface.get_html_content(url)
-
-        data_df = pd.DataFrame()
-        countries = []
-        shares_percent = []
-
-        table_body = (
-            soup.find(lambda tag: tag.name == "h3" and "Countries" in tag.text)
-            .find_next("table")
-            .find("tbody")
-        )
-
-        for row in table_body.find_all("tr"):
-            columns = row.find_all("td")
-            countries.append(columns[0].text.strip())
-            shares_percent.append(columns[1].text.strip())
-
-        data_df["country name"] = countries
-        data_df["shares in percent"] = shares_percent
-        data_df.set_index("country name", inplace=True)
-
-        return data_df
+        return self._justetf_weights("Countries", "country name")
 
     @property
     def justetf_holdings_sectors(self) -> pd.DataFrame:
         """
-        Get the top 10 holdings of the ETF by sectors
+        Get the holdings of the ETF by sectors
 
         columns may include:
         - sector name
         - shares in percent
 
-        Args:
-        ----------------
-        isin (str): ISIN of the ETF
-
         Returns:
         ----------------
         pd.DataFrame: DataFrame containing the holdings of the ETF
         """
-        check_security_type(self.security_type, valid_types=["etf"])
-
-        url = f"{JUSTETF_BASE_URL}/etf-profile.html?isin={self.isin}#holdings"
-
-        # build selenium interface object if not already built
-        if not hasattr(self, "selenium_interface"):
-            self.selenium_interface = selenium_interface()
-
-        soup = self.selenium_interface.get_html_content(url)
-
-        data_df = pd.DataFrame()
-        sectors = []
-        shares_percent = []
-
-        table_body = (
-            soup.find(lambda tag: tag.name == "h3" and "Sectors" in tag.text)
-            .find_next("table")
-            .find("tbody")
-        )
-
-        for row in table_body.find_all("tr"):
-            columns = row.find_all("td")
-            sectors.append(columns[0].text.strip())
-            shares_percent.append(columns[1].text.strip())
-
-        data_df["sector name"] = sectors
-        data_df["shares in percent"] = shares_percent
-        data_df.set_index("sector name", inplace=True)
-
-        return data_df
+        return self._justetf_weights("Sectors", "sector name")
 
     @property
     def justetf_price(self) -> pd.DataFrame:
         """
-        Get the basic pricing information of the ETF
+        Get the latest quote of the ETF in EUR
 
-        The returned frame has the columns ``price``, ``currency``, ``date``,
-        ``time``, ``exchange``, ``daily_change``, ``daily_change_percent``,
-        ``buy|sell`` and ``spread``.
+        Same as ``justetf_quote("EUR")``.
+        """
+        return self.justetf_quote()
+
+    @instance_cache
+    def justetf_quote(self, currency: str = "EUR") -> pd.DataFrame:
+        """
+        Get the latest quote of the ETF from justETF's quote API
+
+        Args:
+        ----------------
+        currency (str): Currency of the quote, e.g. "EUR", "USD", "GBP", "CHF"
 
         Returns:
         ----------------
-        pd.DataFrame: DataFrame containing the pricing information
+        pd.DataFrame: One row with the columns in ``JUSTETF_PRICE_COLUMNS``:
+        ``price``, ``currency``, ``date`` (YYYY-MM-DD), ``time`` (None),
+        ``exchange``, ``daily_change``, ``daily_change_percent``,
+        ``buy|sell`` (None), ``spread`` (None), ``previous_close``,
+        ``previous_date``, ``52_week_low`` and ``52_week_high``.
+        Prices are numbers, not localized strings.
         """
-        df = pd.DataFrame()
+        check_security_type(self.security_type, valid_types=["etf"])
+        currency = str(currency).upper()
 
-        url = f"{JUSTETF_BASE_URL}/etf-profile.html?isin={self.isin}"
-        # build selenium interface object if not already built
-        if not hasattr(self, "selenium_interface"):
-            self.selenium_interface = selenium_interface()
-
-        x_path = '//*[@id="profile-tabs"]/ul/li[1]/a'
-        soup = self.selenium_interface.just_etf_get_html_after_click(url, x_path)
-
-        # write into file
-        with open("justetf.html", "w", encoding="utf-8") as file:
-            file.write(str(soup))
-
-        # <div class="col-xs-7">
-        div_price = soup.find("div", {"class": "col-xs-7"})
-        price_currency = div_price.find_all("span")[0].text
-        price = div_price.find_all("span")[1].text
-
-        df["price"] = [price]
-        df["currency"] = [price_currency]
-
-        datetime_and_exchange = div_price.find("div", {"class": "vallabel"}).text.split(
-            " "
+        url = (
+            f"{JUSTETF_API_URL}/etfs/{self.isin}/quote"
+            f"?locale=en&currency={currency}&isin={self.isin}"
         )
+        response = self.get_response(url, headers={"Accept": "application/json"})
+        try:
+            data = response.json()
+        except ValueError as error:
+            raise LayoutChangedError("justETF", "quote is not JSON") from error
+        if not isinstance(data, dict) or "latestQuote" not in data:
+            raise NoDataError(f"justETF has no quote for the ISIN {self.isin}")
 
-        df["date"] = [datetime_and_exchange[0]]
-        df["time"] = [datetime_and_exchange[1]]
-        df["exchange"] = [datetime_and_exchange[2]]
+        def raw(value: Union[dict, None]):
+            return value.get("raw") if isinstance(value, dict) else None
 
-        div_daily_change = soup.find("div", {"class": "col-xs-5"})
-        daily_change = div_daily_change.find_all("span")[0].text
-        daily_change_percent = div_daily_change.find_all("span")[1].text
+        low_high = data.get("quoteLowHigh") or {}
+        row = {
+            "price": raw(data.get("latestQuote")),
+            "currency": currency,
+            "date": data.get("latestQuoteDate"),
+            "time": None,
+            "exchange": data.get("quoteTradingVenue"),
+            "daily_change": raw(data.get("dtdAmt")),
+            "daily_change_percent": raw(data.get("dtdPrc")),
+            "buy|sell": None,
+            "spread": None,
+            "previous_close": raw(data.get("previousQuote")),
+            "previous_date": data.get("previousQuoteDate"),
+            "52_week_low": raw(low_high.get("low")),
+            "52_week_high": raw(low_high.get("high")),
+        }
+        if row["price"] is None:
+            raise NoDataError(f"justETF has no quote for the ISIN {self.isin}")
 
-        df["daily_change"] = [daily_change]
-        df["daily_change_percent"] = [daily_change_percent]
-
-        # buy | sell
-        buy_sell = soup.find("div", {"class": "d-inline-flex gap-1"}).text.split()
-        buy_sell = " | ".join(buy_sell)
-        df["buy|sell"] = [buy_sell]
-
-        # spread
-        spread = soup.find("span", {"class": "val2"}).text
-        df["spread"] = [spread]
-
-        return df
+        return pd.DataFrame([row], columns=JUSTETF_PRICE_COLUMNS)

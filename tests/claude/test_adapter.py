@@ -7,19 +7,10 @@ import pytest
 from curl_cffi.requests.exceptions import RequestException
 
 from stockdex import config
-from stockdex.claude_adapter import (
-    _PROVIDER_LOCK,
-    DEFAULT_METRICS,
-    StockdexAdapter,
-    _scalar,
-    encode_json,
-)
-from stockdex.exceptions import (
-    LayoutChangedError,
-    NoDataError,
-    ProviderBlockedError,
-    RateLimitError,
-)
+from stockdex.claude_adapter import (_PROVIDER_LOCK, DEFAULT_METRICS,
+                                     StockdexAdapter, _scalar, encode_json)
+from stockdex.exceptions import (LayoutChangedError, NoDataError,
+                                 ProviderBlockedError, RateLimitError)
 
 
 def test_default_metrics_are_known():

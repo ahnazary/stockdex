@@ -38,6 +38,11 @@ def test_analyst_tool_schema():
         "recommendations",
         "upgrades_downgrades",
         "earnings_history",
+        "earnings_surprise",
+        "quarterly_forecast",
+        "yearly_forecast",
+        "pe_forecast",
+        "growth_forecast",
     }
     calendar = tools["get_earnings_calendar"].input_schema["properties"]["dataset"]
     assert calendar.get("enum", [calendar.get("const")]) == ["earnings_calendar"]

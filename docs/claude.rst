@@ -3,38 +3,40 @@ Use with Claude
 
 Stockdex includes a local, read-only `Model Context Protocol
 <https://modelcontextprotocol.io>`_ (MCP) server, so Claude can look up stock
-data for you. It provides 21 read-only tools:
+data for you. It provides 24 read-only tools:
 
 * ``search_ticker``: find ticker symbols for a company name (Yahoo Finance)
 * ``get_quotes``: current quotes for up to 20 symbols (Yahoo Finance)
-* ``get_prices``: daily open, high, low, close and volume, up to 1 year (Yahoo Finance)
-* ``get_financial_statement``: annual or quarterly income statement, cash flow or balance sheet: up to 5 years from Yahoo Finance or about 15 from Macrotrends (Yahoo Finance / Macrotrends)
-* ``get_margins_and_ratios``: gross, operating, EBITDA, pre-tax and net margin history, and key financial ratios (Macrotrends)
+* ``get_prices``: daily open, high, low, close and volume, up to 1 year, or monthly prices going back decades (Yahoo Finance / Digrin)
+* ``get_financial_statement``: annual or quarterly income statement, cash flow, balance sheet or financials (EBITDA, EBIT): up to 5 years from Yahoo Finance or about 15 from Macrotrends (Yahoo Finance / Macrotrends)
+* ``get_margins_and_ratios``: gross, operating, EBITDA, pre-tax and net margin history, key financial ratios and revenue history (Macrotrends)
+* ``get_quarterly_fundamentals``: long quarterly histories of assets, liabilities, cash, debt, free cash flow, net income, expenses and shares outstanding (Digrin)
 * ``get_key_statistics``: market cap, P/E, beta, 52-week range, margins and analyst price targets (Yahoo Finance)
 * ``get_valuation_history``: market cap, enterprise value and valuation ratios over time (Yahoo Finance)
 * ``get_company_profile``: business summary, sector, executives and related tickers (Yahoo Finance)
 * ``get_revenue_breakdown``: annual revenue by business segment, region or product (Finviz)
-* ``get_analyst_estimates``: ePS and revenue estimates, recommendations, rating changes and EPS surprises (Yahoo Finance)
-* ``get_earnings_reaction``: price moves around earnings reports, EPS and revenue surprises, and estimate revisions (Finviz)
+* ``get_analyst_estimates``: ePS and revenue estimates, recommendations, rating changes and EPS surprises, plus Zacks consensus surprises, quarterly and yearly forecasts, P/E and growth forecasts (Yahoo Finance / Nasdaq)
+* ``get_earnings_reaction``: price moves around earnings reports, EPS and revenue surprises, estimate revisions and annual EPS and sales since about 2010 (Finviz)
 * ``get_earnings_calendar``: next earnings date, estimates and dividend dates (Yahoo Finance)
 * ``get_holders``: institutional and fund holders, ownership breakdown and insider transactions (Yahoo Finance)
 * ``get_insider_trades``: recent insider buys and sales with price, shares and value (Finviz)
 * ``get_sec_filings``: recent SEC filings with links (Yahoo Finance)
 * ``get_dividends``: dividend history (Digrin by default, Yahoo Finance as an alternative or fallback) (Digrin / Yahoo Finance)
-* ``get_dividend_metrics``: payout ratio and dividend growth projections, and annual dividend, yield and payout (Digrin / Finviz)
-* ``get_splits``: stock split history (Yahoo Finance)
+* ``get_dividend_metrics``: payout ratio and dividend growth projections, and annual dividend, yield and payout, and ex-dividend dates (Digrin / Finviz)
+* ``get_splits``: stock split history (Yahoo Finance / Digrin)
+* ``get_option_expirations``: listed option expiration dates (Yahoo Finance)
 * ``get_options_chain``: calls and puts for one expiration date (Yahoo Finance)
+* ``get_etf_profile``: basics, price, top holdings, countries and sectors of a European ETF by ISIN (justETF)
 * ``get_fund_holdings``: eTF and fund top holdings, sector weights and asset allocation (Yahoo Finance)
 * ``get_fund_profile``: eTF and fund fees, category and performance vs category (Yahoo Finance)
 
 Most data comes from Yahoo Finance. Long statement histories and margins come
-from Macrotrends, dividend metrics from Digrin and Finviz, and revenue
-breakdowns, insider trades and earnings reactions from Finviz. justETF is not
-available through the MCP server because it needs a Chrome browser; use the
-``justetf_*`` methods in Python instead.
+from Macrotrends, long quarterly fundamentals and dividend metrics from Digrin,
+revenue breakdowns, insider trades and earnings reactions from Finviz,
+consensus forecasts from Nasdaq, and European ETF data from justETF.
 
 The server runs on your computer and needs no API key. Requests go to Yahoo
-Finance, Macrotrends, Digrin and Finviz, and results you use in a conversation
+Finance, Macrotrends, Digrin, Finviz, Nasdaq and justETF, and results you use in a conversation
 are sent to Claude.
 
 Claude Desktop (one click)
