@@ -311,18 +311,18 @@ below are the mixins it is built from, one per data source.</p>
 <li><p><strong>ticker</strong> (<em>str</em>)</p></li>
 <li><p><strong>isin</strong> (<em>str</em>)</p></li>
 <li><p><strong>security_type</strong> (<em>Literal</em><em>[</em><em>'stock'</em><em>, </em><em>'etf'</em><em>, </em><em>'cryptocurrency'</em><em>, </em><em>'index'</em><em>, </em><em>'commodity'</em><em>]</em>)</p></li>
-<li><p><strong>data_source</strong> (<em>Literal</em><em>[</em><em>'yahoo_api'</em><em>, </em><em>'justetf'</em><em>, </em><em>'digrin'</em><em>, </em><em>'finviz'</em><em>, </em><em>'macrotrends'</em><em>]</em>)</p></li>
+<li><p><strong>data_source</strong> (<em>Literal</em><em>[</em><em>'yahoo_api'</em><em>, </em><em>'justetf'</em><em>, </em><em>'digrin'</em><em>, </em><em>'finviz'</em><em>, </em><em>'macrotrends'</em><em>, </em><em>'nasdaq'</em><em>]</em>)</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="stockdex.yahoo_api_interface.YahooAPI.today">
-<span class="sig-name descname"><span class="pre">today</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">datetime.datetime(2026,</span> <span class="pre">10,</span> <span class="pre">30,</span> <span class="pre">22,</span> <span class="pre">36,</span> <span class="pre">25,</span> <span class="pre">835365)</span></span><a class="headerlink" href="#stockdex.yahoo_api_interface.YahooAPI.today" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">today</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">datetime.datetime(2026,</span> <span class="pre">10,</span> <span class="pre">31,</span> <span class="pre">17,</span> <span class="pre">25,</span> <span class="pre">24,</span> <span class="pre">676695)</span></span><a class="headerlink" href="#stockdex.yahoo_api_interface.YahooAPI.today" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="stockdex.yahoo_api_interface.YahooAPI.five_years_ago">
-<span class="sig-name descname"><span class="pre">five_years_ago</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">datetime.datetime(2021,</span> <span class="pre">10,</span> <span class="pre">30,</span> <span class="pre">22,</span> <span class="pre">36,</span> <span class="pre">25,</span> <span class="pre">835365)</span></span><a class="headerlink" href="#stockdex.yahoo_api_interface.YahooAPI.five_years_ago" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">five_years_ago</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">datetime.datetime(2021,</span> <span class="pre">10,</span> <span class="pre">31,</span> <span class="pre">17,</span> <span class="pre">25,</span> <span class="pre">24,</span> <span class="pre">676695)</span></span><a class="headerlink" href="#stockdex.yahoo_api_interface.YahooAPI.five_years_ago" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -2265,7 +2265,9 @@ genral information includes TER, distribution policy, replication method, etc.</
 <dl class="py property">
 <dt class="sig sig-object py" id="stockdex.justetf_interface.JustETF.justetf_wkn">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">justetf_wkn</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#stockdex.justetf_interface.JustETF.justetf_wkn" title="Link to this definition">¶</a></dt>
-<dd><p>Get the WKN of the ETF</p>
+<dd><p>Get the identifier justETF shows next to the ISIN</p>
+<p>This is the WKN for ETFs listed in Germany; for some ETFs justETF
+shows the exchange ticker (e.g. <code class="docutils literal notranslate"><span class="pre">IWDA</span></code>) instead.</p>
 </dd></dl>
 
 <dl class="py property">
@@ -2284,11 +2286,7 @@ genral information includes TER, distribution policy, replication method, etc.</
 - Legal structure
 - Replication</p>
 <section id="id85">
-<h3>Args:<a class="headerlink" href="#id85" title="Link to this heading">¶</a></h3>
-<p>isin (str): ISIN of the ETF</p>
-</section>
-<section id="id86">
-<h3>Returns:<a class="headerlink" href="#id86" title="Link to this heading">¶</a></h3>
+<h3>Returns:<a class="headerlink" href="#id85" title="Link to this heading">¶</a></h3>
 <p>pd.DataFrame: DataFrame containing the basic information of the ETF</p>
 </section>
 </dd></dl>
@@ -2300,12 +2298,8 @@ genral information includes TER, distribution policy, replication method, etc.</
 <p>columns may include:
 - company name
 - shares in percent</p>
-<section id="id87">
-<h3>Args:<a class="headerlink" href="#id87" title="Link to this heading">¶</a></h3>
-<p>isin (str): ISIN of the ETF</p>
-</section>
-<section id="id88">
-<h3>Returns:<a class="headerlink" href="#id88" title="Link to this heading">¶</a></h3>
+<section id="id86">
+<h3>Returns:<a class="headerlink" href="#id86" title="Link to this heading">¶</a></h3>
 <p>pd.DataFrame: DataFrame containing the holdings of the ETF</p>
 </section>
 </dd></dl>
@@ -2313,16 +2307,12 @@ genral information includes TER, distribution policy, replication method, etc.</
 <dl class="py property">
 <dt class="sig sig-object py" id="stockdex.justetf_interface.JustETF.justetf_holdings_countries">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">justetf_holdings_countries</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">DataFrame</span></span><a class="headerlink" href="#stockdex.justetf_interface.JustETF.justetf_holdings_countries" title="Link to this definition">¶</a></dt>
-<dd><p>Get the top 10 holdings of the ETF by countries</p>
+<dd><p>Get the holdings of the ETF by countries</p>
 <p>columns may include:
 - country name
 - shares in percent</p>
-<section id="id89">
-<h3>Args:<a class="headerlink" href="#id89" title="Link to this heading">¶</a></h3>
-<p>isin (str): ISIN of the ETF</p>
-</section>
-<section id="id90">
-<h3>Returns:<a class="headerlink" href="#id90" title="Link to this heading">¶</a></h3>
+<section id="id87">
+<h3>Returns:<a class="headerlink" href="#id87" title="Link to this heading">¶</a></h3>
 <p>pd.DataFrame: DataFrame containing the holdings of the ETF</p>
 </section>
 </dd></dl>
@@ -2330,16 +2320,12 @@ genral information includes TER, distribution policy, replication method, etc.</
 <dl class="py property">
 <dt class="sig sig-object py" id="stockdex.justetf_interface.JustETF.justetf_holdings_sectors">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">justetf_holdings_sectors</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">DataFrame</span></span><a class="headerlink" href="#stockdex.justetf_interface.JustETF.justetf_holdings_sectors" title="Link to this definition">¶</a></dt>
-<dd><p>Get the top 10 holdings of the ETF by sectors</p>
+<dd><p>Get the holdings of the ETF by sectors</p>
 <p>columns may include:
 - sector name
 - shares in percent</p>
-<section id="id91">
-<h3>Args:<a class="headerlink" href="#id91" title="Link to this heading">¶</a></h3>
-<p>isin (str): ISIN of the ETF</p>
-</section>
-<section id="id92">
-<h3>Returns:<a class="headerlink" href="#id92" title="Link to this heading">¶</a></h3>
+<section id="id88">
+<h3>Returns:<a class="headerlink" href="#id88" title="Link to this heading">¶</a></h3>
 <p>pd.DataFrame: DataFrame containing the holdings of the ETF</p>
 </section>
 </dd></dl>
@@ -2347,14 +2333,35 @@ genral information includes TER, distribution policy, replication method, etc.</
 <dl class="py property">
 <dt class="sig sig-object py" id="stockdex.justetf_interface.JustETF.justetf_price">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">justetf_price</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">DataFrame</span></span><a class="headerlink" href="#stockdex.justetf_interface.JustETF.justetf_price" title="Link to this definition">¶</a></dt>
-<dd><p>Get the basic pricing information of the ETF</p>
-<p>The returned frame has the columns <code class="docutils literal notranslate"><span class="pre">price</span></code>, <code class="docutils literal notranslate"><span class="pre">currency</span></code>, <code class="docutils literal notranslate"><span class="pre">date</span></code>,
-<code class="docutils literal notranslate"><span class="pre">time</span></code>, <code class="docutils literal notranslate"><span class="pre">exchange</span></code>, <code class="docutils literal notranslate"><span class="pre">daily_change</span></code>, <code class="docutils literal notranslate"><span class="pre">daily_change_percent</span></code>,
-<code class="docutils literal notranslate"><span class="pre">buy|sell</span></code> and <code class="docutils literal notranslate"><span class="pre">spread</span></code>.</p>
-<section id="id93">
-<h3>Returns:<a class="headerlink" href="#id93" title="Link to this heading">¶</a></h3>
-<p>pd.DataFrame: DataFrame containing the pricing information</p>
+<dd><p>Get the latest quote of the ETF in EUR</p>
+<p>Same as <code class="docutils literal notranslate"><span class="pre">justetf_quote(&quot;EUR&quot;)</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="stockdex.justetf_interface.JustETF.justetf_quote">
+<span class="sig-name descname"><span class="pre">justetf_quote</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">currency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'EUR'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stockdex/justetf_interface.html#JustETF.justetf_quote"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.justetf_interface.JustETF.justetf_quote" title="Link to this definition">¶</a></dt>
+<dd><p>Get the latest quote of the ETF from justETF’s quote API</p>
+<section id="id89">
+<h3>Args:<a class="headerlink" href="#id89" title="Link to this heading">¶</a></h3>
+<p>currency (str): Currency of the quote, e.g. “EUR”, “USD”, “GBP”, “CHF”</p>
 </section>
+<section id="id90">
+<h3>Returns:<a class="headerlink" href="#id90" title="Link to this heading">¶</a></h3>
+<p>pd.DataFrame: One row with the columns in <code class="docutils literal notranslate"><span class="pre">JUSTETF_PRICE_COLUMNS</span></code>:
+<code class="docutils literal notranslate"><span class="pre">price</span></code>, <code class="docutils literal notranslate"><span class="pre">currency</span></code>, <code class="docutils literal notranslate"><span class="pre">date</span></code> (YYYY-MM-DD), <code class="docutils literal notranslate"><span class="pre">time</span></code> (None),
+<code class="docutils literal notranslate"><span class="pre">exchange</span></code>, <code class="docutils literal notranslate"><span class="pre">daily_change</span></code>, <code class="docutils literal notranslate"><span class="pre">daily_change_percent</span></code>,
+<code class="docutils literal notranslate"><span class="pre">buy|sell</span></code> (None), <code class="docutils literal notranslate"><span class="pre">spread</span></code> (None), <code class="docutils literal notranslate"><span class="pre">previous_close</span></code>,
+<code class="docutils literal notranslate"><span class="pre">previous_date</span></code>, <code class="docutils literal notranslate"><span class="pre">52_week_low</span></code> and <code class="docutils literal notranslate"><span class="pre">52_week_high</span></code>.
+Prices are numbers, not localized strings.</p>
+</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>currency</strong> (<em>str</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>DataFrame</em></p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -2374,8 +2381,8 @@ genral information includes TER, distribution policy, replication method, etc.</
 <dt class="sig sig-object py" id="stockdex.sankey_charts.SankeyCharts.plot_sankey_chart">
 <span class="sig-name descname"><span class="pre">plot_sankey_chart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'annual'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period_ago</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stockdex/sankey_charts.html#SankeyCharts.plot_sankey_chart"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stockdex.sankey_charts.SankeyCharts.plot_sankey_chart" title="Link to this definition">¶</a></dt>
 <dd><p>Main function to plot the sankey chart</p>
-<section id="id94">
-<h3>Args:<a class="headerlink" href="#id94" title="Link to this heading">¶</a></h3>
+<section id="id91">
+<h3>Args:<a class="headerlink" href="#id91" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>frequency: str</dt><dd><p>The frequency of the data to be used. It can be either “annual” or “quarterly”.
 Default is “annual”</p>
@@ -2385,8 +2392,8 @@ the data for 3 periods ago will be used (annual or quarterly based on the freque
 </dd>
 </dl>
 </section>
-<section id="id95">
-<h3>Returns:<a class="headerlink" href="#id95" title="Link to this heading">¶</a></h3>
+<section id="id92">
+<h3>Returns:<a class="headerlink" href="#id92" title="Link to this heading">¶</a></h3>
 <p>None</p>
 </section>
 <dl class="field-list simple">
@@ -2774,6 +2781,7 @@ e.g. a table, header or embedded data block is missing.</p>
 <li><a class="reference internal" href="#stockdex.justetf_interface.JustETF.justetf_holdings_countries"><code class="docutils literal notranslate"><span class="pre">JustETF.justetf_holdings_countries</span></code></a></li>
 <li><a class="reference internal" href="#stockdex.justetf_interface.JustETF.justetf_holdings_sectors"><code class="docutils literal notranslate"><span class="pre">JustETF.justetf_holdings_sectors</span></code></a></li>
 <li><a class="reference internal" href="#stockdex.justetf_interface.JustETF.justetf_price"><code class="docutils literal notranslate"><span class="pre">JustETF.justetf_price</span></code></a></li>
+<li><a class="reference internal" href="#stockdex.justetf_interface.JustETF.justetf_quote"><code class="docutils literal notranslate"><span class="pre">JustETF.justetf_quote()</span></code></a></li>
 </ul>
 </li>
 </ul>

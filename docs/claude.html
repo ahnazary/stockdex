@@ -275,37 +275,39 @@
           <section id="use-with-claude">
 <h1>Use with Claude<a class="headerlink" href="#use-with-claude" title="Link to this heading">¶</a></h1>
 <p>Stockdex includes a local, read-only <a class="reference external" href="https://modelcontextprotocol.io">Model Context Protocol</a> (MCP) server, so Claude can look up stock
-data for you. It provides 21 read-only tools:</p>
+data for you. It provides 24 read-only tools:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">search_ticker</span></code>: find ticker symbols for a company name (Yahoo Finance)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">get_quotes</span></code>: current quotes for up to 20 symbols (Yahoo Finance)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">get_prices</span></code>: daily open, high, low, close and volume, up to 1 year (Yahoo Finance)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">get_financial_statement</span></code>: annual or quarterly income statement, cash flow or balance sheet: up to 5 years from Yahoo Finance or about 15 from Macrotrends (Yahoo Finance / Macrotrends)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">get_margins_and_ratios</span></code>: gross, operating, EBITDA, pre-tax and net margin history, and key financial ratios (Macrotrends)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_prices</span></code>: daily open, high, low, close and volume, up to 1 year, or monthly prices going back decades (Yahoo Finance / Digrin)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_financial_statement</span></code>: annual or quarterly income statement, cash flow, balance sheet or financials (EBITDA, EBIT): up to 5 years from Yahoo Finance or about 15 from Macrotrends (Yahoo Finance / Macrotrends)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_margins_and_ratios</span></code>: gross, operating, EBITDA, pre-tax and net margin history, key financial ratios and revenue history (Macrotrends)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_quarterly_fundamentals</span></code>: long quarterly histories of assets, liabilities, cash, debt, free cash flow, net income, expenses and shares outstanding (Digrin)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">get_key_statistics</span></code>: market cap, P/E, beta, 52-week range, margins and analyst price targets (Yahoo Finance)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">get_valuation_history</span></code>: market cap, enterprise value and valuation ratios over time (Yahoo Finance)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">get_company_profile</span></code>: business summary, sector, executives and related tickers (Yahoo Finance)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">get_revenue_breakdown</span></code>: annual revenue by business segment, region or product (Finviz)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">get_analyst_estimates</span></code>: ePS and revenue estimates, recommendations, rating changes and EPS surprises (Yahoo Finance)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">get_earnings_reaction</span></code>: price moves around earnings reports, EPS and revenue surprises, and estimate revisions (Finviz)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_analyst_estimates</span></code>: ePS and revenue estimates, recommendations, rating changes and EPS surprises, plus Zacks consensus surprises, quarterly and yearly forecasts, P/E and growth forecasts (Yahoo Finance / Nasdaq)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_earnings_reaction</span></code>: price moves around earnings reports, EPS and revenue surprises, estimate revisions and annual EPS and sales since about 2010 (Finviz)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">get_earnings_calendar</span></code>: next earnings date, estimates and dividend dates (Yahoo Finance)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">get_holders</span></code>: institutional and fund holders, ownership breakdown and insider transactions (Yahoo Finance)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">get_insider_trades</span></code>: recent insider buys and sales with price, shares and value (Finviz)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">get_sec_filings</span></code>: recent SEC filings with links (Yahoo Finance)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">get_dividends</span></code>: dividend history (Digrin by default, Yahoo Finance as an alternative or fallback) (Digrin / Yahoo Finance)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">get_dividend_metrics</span></code>: payout ratio and dividend growth projections, and annual dividend, yield and payout (Digrin / Finviz)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">get_splits</span></code>: stock split history (Yahoo Finance)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_dividend_metrics</span></code>: payout ratio and dividend growth projections, and annual dividend, yield and payout, and ex-dividend dates (Digrin / Finviz)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_splits</span></code>: stock split history (Yahoo Finance / Digrin)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_option_expirations</span></code>: listed option expiration dates (Yahoo Finance)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">get_options_chain</span></code>: calls and puts for one expiration date (Yahoo Finance)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_etf_profile</span></code>: basics, price, top holdings, countries and sectors of a European ETF by ISIN (justETF)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">get_fund_holdings</span></code>: eTF and fund top holdings, sector weights and asset allocation (Yahoo Finance)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">get_fund_profile</span></code>: eTF and fund fees, category and performance vs category (Yahoo Finance)</p></li>
 </ul>
 <p>Most data comes from Yahoo Finance. Long statement histories and margins come
-from Macrotrends, dividend metrics from Digrin and Finviz, and revenue
-breakdowns, insider trades and earnings reactions from Finviz. justETF is not
-available through the MCP server because it needs a Chrome browser; use the
-<code class="docutils literal notranslate"><span class="pre">justetf_*</span></code> methods in Python instead.</p>
+from Macrotrends, long quarterly fundamentals and dividend metrics from Digrin,
+revenue breakdowns, insider trades and earnings reactions from Finviz,
+consensus forecasts from Nasdaq, and European ETF data from justETF.</p>
 <p>The server runs on your computer and needs no API key. Requests go to Yahoo
-Finance, Macrotrends, Digrin and Finviz, and results you use in a conversation
+Finance, Macrotrends, Digrin, Finviz, Nasdaq and justETF, and results you use in a conversation
 are sent to Claude.</p>
 <section id="claude-desktop-one-click">
 <h2>Claude Desktop (one click)<a class="headerlink" href="#claude-desktop-one-click" title="Link to this heading">¶</a></h2>
