@@ -124,3 +124,17 @@ Plots
       :link-type: doc
 
       Cash-flow Sankey charts and multi-plot Dash apps.
+
+Disclaimer
+----------
+
+Stockdex is an independent, unofficial open-source project. It is **not
+affiliated with, endorsed by, or sponsored by Yahoo Inc.** or any other data
+provider it supports. "Yahoo" and "Yahoo Finance" are trademarks of Yahoo Inc.
+and are used here only to identify the data source.
+
+Stockdex does not host, store or redistribute any data. All data belongs to its
+respective providers, and you are responsible for complying with each
+provider's terms of use (e.g. `Yahoo's Terms of Service
+<https://legal.yahoo.com/us/en/yahoo/terms/otos/index.html>`_). Stockdex is
+intended for personal, research and educational use only.
