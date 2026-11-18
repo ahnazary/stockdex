@@ -63,6 +63,12 @@ Stockdex ships a local, read-only MCP server with 24 tools so Claude can fetch p
 
 See [Use with Claude](https://ahnazary.github.io/stockdex/claude.html) for arguments, limits and output format.
 
+## Disclaimer
+
+Stockdex is an independent, unofficial open-source project. It is **not affiliated with, endorsed by, or sponsored by Yahoo, Nasdaq, Digrin, Macrotrends, JustETF, Finviz** or any other data provider it supports. All product names, trademarks and registered trademarks (including "Yahoo" and "Yahoo Finance") belong to their respective owners and are used here only to identify the data sources.
+
+Stockdex does not host, store or redistribute any data. All data belongs to its respective providers, and you are responsible for complying with each provider's terms of use (e.g. [Yahoo's Terms of Service](https://legal.yahoo.com/us/en/yahoo/terms/otos/index.html)). Stockdex is intended for personal, research and educational use only.
+
 ## License
 
 This project is licensed under the [MIT License](LICENSE).

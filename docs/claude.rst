@@ -154,3 +154,8 @@ Every call returns a JSON envelope. Check ``ok`` first, then use
 * Only one provider request runs at a time. Respect provider rate limits and
   terms of use.
 * The data isn't guaranteed to be accurate and is not investment advice.
+* Stockdex is an independent, unofficial project and is not affiliated with,
+  endorsed by, or sponsored by Yahoo, Nasdaq, Digrin, Macrotrends, JustETF,
+  Finviz or any other data provider. Data
+  belongs to its providers; you are responsible for following their terms of
+  use. Intended for personal, research and educational use only.
