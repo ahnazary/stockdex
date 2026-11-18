@@ -11,7 +11,7 @@
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d75fae25" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=6a604523" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=a1c4f328" />
     
@@ -284,22 +284,22 @@ as pandas DataFrames and Plotly figures, in one <code class="docutils literal no
 <h2>Install<a class="headerlink" href="#install" title="Link to this heading">¶</a></h2>
 <div class="sd-tab-set docutils">
 <input checked="checked" id="sd-tab-item-0" name="sd-tab-set-0" type="radio">
-<label class="sd-tab-label" for="sd-tab-item-0">
-pip</label><div class="sd-tab-content docutils">
+<label aria-controls="sd-tab-item-0-content" class="sd-tab-label" for="sd-tab-item-0">
+pip</label><div class="sd-tab-content docutils" id="sd-tab-item-0-content">
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>stockdex
 </pre></div>
 </div>
 </div>
 <input id="sd-tab-item-1" name="sd-tab-set-0" type="radio">
-<label class="sd-tab-label" for="sd-tab-item-1">
-Claude Desktop</label><div class="sd-tab-content docutils">
+<label aria-controls="sd-tab-item-1-content" class="sd-tab-label" for="sd-tab-item-1">
+Claude Desktop</label><div class="sd-tab-content docutils" id="sd-tab-item-1-content">
 <p>Download <code class="docutils literal notranslate"><span class="pre">stockdex.mcpb</span></code> from the
 <a class="reference external" href="https://github.com/ahnazary/stockdex/releases/latest">latest release</a>
 and double-click it. See <a class="reference internal" href="claude.html"><span class="doc">Use with Claude</span></a>.</p>
 </div>
 <input id="sd-tab-item-2" name="sd-tab-set-0" type="radio">
-<label class="sd-tab-label" for="sd-tab-item-2">
-Claude Code</label><div class="sd-tab-content docutils">
+<label aria-controls="sd-tab-item-2-content" class="sd-tab-label" for="sd-tab-item-2">
+Claude Code</label><div class="sd-tab-content docutils" id="sd-tab-item-2-content">
 <p>Requires <a class="reference external" href="https://docs.astral.sh/uv/">uv</a>, which the plugin uses to
 start the MCP server.</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>/plugin marketplace add ahnazary/stockdex
@@ -413,6 +413,19 @@ Sankey and dashboards</div>
 </div>
 </div>
 </div>
+</section>
+<section id="disclaimer">
+<h2>Disclaimer<a class="headerlink" href="#disclaimer" title="Link to this heading">¶</a></h2>
+<p>Stockdex is an independent, unofficial open-source project. It is <strong>not
+affiliated with, endorsed by, or sponsored by Yahoo, Nasdaq, Digrin,
+Macrotrends, JustETF, Finviz</strong> or any other data provider it supports. All
+product names, trademarks and registered trademarks (including “Yahoo” and
+“Yahoo Finance”) belong to their respective owners and are used here only to
+identify the data sources.</p>
+<p>Stockdex does not host, store or redistribute any data. All data belongs to its
+respective providers, and you are responsible for complying with each
+provider’s terms of use (e.g. <a class="reference external" href="https://legal.yahoo.com/us/en/yahoo/terms/otos/index.html">Yahoo’s Terms of Service</a>). Stockdex is
+intended for personal, research and educational use only.</p>
 <div class="toctree-wrapper compound">
 </div>
 <div class="toctree-wrapper compound">
@@ -472,7 +485,8 @@ Sankey and dashboards</div>
 <li><a class="reference internal" href="#install">Install</a></li>
 <li><a class="reference internal" href="#quick-start">Quick start</a></li>
 <li><a class="reference internal" href="#data-sources">Data sources</a></li>
-<li><a class="reference internal" href="#plots">Plots</a><ul>
+<li><a class="reference internal" href="#plots">Plots</a></li>
+<li><a class="reference internal" href="#disclaimer">Disclaimer</a><ul>
 </ul>
 </li>
 </ul>
@@ -492,6 +506,6 @@ Sankey and dashboards</div>
     <script src="_static/scripts/furo.js?v=46bd48cc"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="_static/copybutton.js?v=fd10adb8"></script>
-    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="_static/design-tabs.js?v=fcb327ea"></script>
     </body>
 </html>
