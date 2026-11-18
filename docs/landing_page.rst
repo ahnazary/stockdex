@@ -129,9 +129,11 @@ Disclaimer
 ----------
 
 Stockdex is an independent, unofficial open-source project. It is **not
-affiliated with, endorsed by, or sponsored by Yahoo Inc.** or any other data
-provider it supports. "Yahoo" and "Yahoo Finance" are trademarks of Yahoo Inc.
-and are used here only to identify the data source.
+affiliated with, endorsed by, or sponsored by Yahoo, Nasdaq, Digrin,
+Macrotrends, JustETF, Finviz** or any other data provider it supports. All
+product names, trademarks and registered trademarks (including "Yahoo" and
+"Yahoo Finance") belong to their respective owners and are used here only to
+identify the data sources.
 
 Stockdex does not host, store or redistribute any data. All data belongs to its
 respective providers, and you are responsible for complying with each

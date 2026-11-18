@@ -92,6 +92,7 @@ Stockdex is not investment advice. Data comes from third-party providers and
 may be delayed, incomplete or unavailable.
 
 Stockdex is an independent, unofficial project and is not affiliated with,
-endorsed by, or sponsored by Yahoo Inc. or any other data provider. Data
+endorsed by, or sponsored by Yahoo, Nasdaq, Digrin, Macrotrends, JustETF,
+Finviz or any other data provider. Data
 belongs to its providers, and you are responsible for following their terms of
 use. Intended for personal, research and educational use only.
