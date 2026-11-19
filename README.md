@@ -15,6 +15,11 @@ Full documentation: [ahnazary.github.io/stockdex](https://ahnazary.github.io/sto
 
 Stockdex is a Python package that provides a simple interface to get financial data from various sources in pandas DataFrames and Plotly figures.
 
+> [!IMPORTANT]
+> Stockdex is **not** affiliated with, endorsed by, or vetted by Yahoo, Nasdaq, Digrin, Macrotrends, JustETF, Finviz or any other data provider. It is an independent open-source tool intended for personal, research and educational use only.
+>
+> **You are responsible for following each data provider's terms of use** (e.g. [Yahoo's Terms of Service](https://legal.yahoo.com/us/en/yahoo/terms/otos/index.html)) for your rights to use any data you download. All trademarks belong to their respective owners. See [Disclaimer](#disclaimer).
+
 <br />
 
 
